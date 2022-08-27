@@ -1,0 +1,1 @@
+user_detail.blade.php
