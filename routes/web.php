@@ -42,7 +42,8 @@ Route::get('/dashboard',[UserController::class, 'dashboard'])->name('dashboard')
 Route::get('/get_user',[UserController::class, 'get_user'])->name('get_user');
 Route::post('/change_user_status',[UserController::class, 'change_user_status'])->name('change_user_status');
 Route::get('/profile',[UserController::class, 'profile'])->name('profile');
-Route::get('/user',[UserController::class, 'user'])->name('user');
+Route::get('/user/{id}/',[UserController::class, 'user'])->name('user');
+Route::get('/approve_user/{id}/',[UserController::class, 'approve_user'])->name('approve_user');
 Route::post('/user_search',[UserController::class, 'user_search'])->name('user_search');
 Route::post('/save_profile',[UserController::class, 'save_profile'])->name('save_profile');
 //Dashboard end

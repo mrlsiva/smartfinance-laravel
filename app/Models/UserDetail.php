@@ -12,4 +12,19 @@ class UserDetail extends Model
     protected $fillable = [
         'user_id','address','city','pincode','email','phone','aadhaar_no','pan_card_no','avatar','aadhaar_card','pan_card'
     ];
+
+    public function getAvatarAttribute($value)
+    {
+        return $value ? url('storage/app/public/'.config('path.avatar').$value ): null;
+    }
+
+    public function getAadhaarAttribute($value)
+    {
+        return $value ? url('storage/app/public/'.config('path.aadhaar_card').$value ): null;
+    }
+
+    public function getPanAttribute($value)
+    {
+        return $value ? url('storage/app/public/'.config('path.pan_card').$value ): null;
+    }
 }

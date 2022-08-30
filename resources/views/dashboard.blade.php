@@ -183,10 +183,17 @@
                                             <td class="">
                                                 <div class="d-flex align-items-center">
                                                     <div class="symbol symbol-45px me-5">
+                                                        @php
+                                                            $user_detail = App\Models\UserDetail::where('user_id',$user->id)->first();
+                                                        @endphp
+                                                        @if($user_detail != NULL)
+                                                            <img src="{{ $user_detail->avatar}}" alt="" />
+                                                        @else
                                                         <img src="{{ asset('public/assets/media/avatars/blank.png') }}" alt="" />
+                                                        @endif
                                                     </div>
                                                     <div class="d-flex justify-content-start flex-column">
-                                                        <a href="{{route('user')}}" class="text-dark fw-bolder text-hover-primary fs-6">{{$user->first_name}} {{$user->last_name}}</a>
+                                                        <a href="{{route('user', ['id' => $user->id])}}" class="text-dark fw-bolder text-hover-primary fs-6">{{$user->first_name}} {{$user->last_name}}</a>
                                                         <span class="text-muted fw-bold text-muted d-block fs-7">#{{$user->id}}</span>
                                                     </div>
                                                 </div>
@@ -339,7 +346,7 @@
                                                     <img src="{{ asset('public/assets/media/avatars/blank.png') }}" alt="" />
                                                 </div>
                                                 <div class="d-flex justify-content-start flex-column">
-                                                    <a href="{{route('user')}}" class="text-dark fw-bolder text-hover-primary fs-6">Siva</a>
+                                                    <a href="#" class="text-dark fw-bolder text-hover-primary fs-6">Siva</a>
                                                     <span class="text-muted fw-bold text-muted d-block fs-7">+91 9994090424</span>
                                                 </div>
                                             </div>
@@ -436,7 +443,7 @@
                                     <!--end::Avatar-->
                                     <!--begin::Details-->
                                     <div class="ms-5">
-                                        <a href="{{route('user')}}" class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2"><input class="text-hover-primary" type="text" readonly="" name="user_name" id="user_name" style="border: none;outline: none;"></a>
+                                        <div class=""><input  type="text" readonly="" name="user_name" id="user_name" style="border: none;outline: none;"></div>
                                         <div class=""><input type="text" readonly="" name="user_email" id="user_email" style="border: none;outline: none;color: #a1a5b7;width: 100%;"></div>
                                     </div>
                                     <!--end::Details-->

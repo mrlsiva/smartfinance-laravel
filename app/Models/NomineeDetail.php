@@ -12,4 +12,9 @@ class NomineeDetail extends Model
     protected $fillable = [
         'user_id','name','relationship','age','aadhaar_no','aadhar'
     ];
+
+    public function getAadhaarAttribute($value)
+    {
+        return $value ? url('storage/app/public/'.config('path.aadhaar_card').$value ): null;
+    }
 }

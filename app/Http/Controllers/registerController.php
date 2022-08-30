@@ -40,7 +40,7 @@ class registerController extends Controller
             'is_finanace' => 0,
             'is_tax' => 0,
             'is_active' => 0,
-            'is_lock' => 1,
+            'is_lock' => 0,
             'is_delete' => 0,
             'password' => \Hash::make($request->password),
         ]);

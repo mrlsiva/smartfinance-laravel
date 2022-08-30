@@ -65,20 +65,29 @@ class UserController extends Controller
 
     public function profile(){
 
-        $role_id = Auth::user()->role_id;
-        if($role_id == '3'){
-            $user = Auth::user();
-            return view('user_profile')->with('user',$user);
-
-        }else{
-            $user = Auth::user();
-            return view('profile')->with('user',$user);
-        }
+        $user = Auth::user();
+        $user_detail = UserDetail::where('user_id',$user->id)->first();
+        $bank_detail = BankDetail::where('user_id',$user->id)->first();
+        $nominee_detail = NomineeDetail::where('user_id',$user->id)->first();
+        return view('user_profile')->with('user',$user)->with('user_detail',$user_detail)->with('bank_detail',$bank_detail)->with('nominee_detail',$nominee_detail);
     }
 
-    public function user(){
+    public function user($id){
 
-        return view('user_detail');
+        $user = User::where('id', $id)->first();
+        $user_detail = UserDetail::where('user_id',$user->id)->first();
+        $bank_detail = BankDetail::where('user_id',$user->id)->first();
+        $nominee_detail = NomineeDetail::where('user_id',$user->id)->first();
+
+        return view('user_detail')->with('user',$user)->with('user_detail',$user_detail)->with('bank_detail',$bank_detail)->with('nominee_detail',$nominee_detail);
+        
+    }
+
+    public function approve_user($id){
+
+        DB::table('users')->where('id',$id)->update(['is_active' => 1]);
+
+         return redirect(route('user', ['id' => $id]));
         
     }
 
