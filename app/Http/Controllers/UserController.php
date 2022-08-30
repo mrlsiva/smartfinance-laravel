@@ -3,8 +3,16 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Storage;
 use App\Models\User;
+use App\Models\UserDetail;
+use App\Models\BankDetail;
+use App\Models\NomineeDetail;
+use Image;
 use DB;
 
 class UserController extends Controller
@@ -72,5 +80,74 @@ class UserController extends Controller
 
         return view('user_detail');
         
+    }
+
+    public function save_profile(Request $request)
+    {
+        $id = Auth::user()->id;
+        $user_detail = UserDetail::create([
+            'user_id' => $id,
+            'address' => $request->address,
+            'city' => $request->city,
+            'pincode' => $request->pincode,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'aadhaar_no' => $request->aadhaar_no,
+            'pan_card_no' => $request->pan_card_no,
+        ]);
+        //Avatar
+        $image = $request->file('avatar');
+        $rand_name = time() . Str::random(12);
+        $filename = $rand_name . '.jpg';
+        $photo = Image::make($image)->encode('jpg', 80);
+        Storage::disk('public')->put(config('path.avatar').$filename, $photo);
+        $user_detail->avatar = $filename;
+        $user_detail->save();
+
+        //Aadhar Card
+        $image = $request->file('aadhaar_card');
+        $rand_name = time() . Str::random(12);
+        $filename = $rand_name . '.jpg';
+        $photo = Image::make($image)->encode('jpg', 80);
+        Storage::disk('public')->put(config('path.aadhaar_card').$filename, $photo);
+        $user_detail->aadhaar = $filename;
+        $user_detail->save();
+        
+        //Pan Card
+        $image = $request->file('pan_card');
+        $rand_name = time() . Str::random(12);
+        $filename = $rand_name . '.jpg';
+        $photo = Image::make($image)->encode('jpg', 80);
+        Storage::disk('public')->put(config('path.pan_card').$filename, $photo);
+        $user_detail->pan = $filename;
+        $user_detail->save();
+
+        $bank_detail = BankDetail::create([
+            'user_id' => $id,
+            'name' => $request->holder_name,
+            'number' => $request->account_no,
+            'ifsc_code' => $request->ifsc_code,
+            'branch' => $request->branch,
+            'city' => $request->city,
+        ]);
+
+        $nominee_detail = NomineeDetail::create([
+            'user_id' => $id,
+            'name' => $request->nominee_name,
+            'relationship' => $request->relationship,
+            'age' => $request->age,
+            'aadhaar_no' => $request->nominee_aadhaar_no,
+        ]);
+
+        //Aadhar Card
+        $image = $request->file('nominee_aadhar');
+        $rand_name = time() . Str::random(12);
+        $filename = $rand_name . '.jpg';
+        $photo = Image::make($image)->encode('jpg', 80);
+        Storage::disk('public')->put(config('path.aadhaar_card').$filename, $photo);
+        $nominee_detail->aadhaar = $filename;
+        $nominee_detail->save();
+
+        return redirect('dashboard');
     }
 }

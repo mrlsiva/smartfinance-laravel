@@ -167,12 +167,12 @@
                                 <thead>
                                     <tr class="fw-bolder text-muted">
                                         <th class="">User</th>
-                                        <th class="text-center">Role</th>
-                                        <th class="text-center">Smart Finanace</th>
-                                        <th class="text-center">Taxation</th>
-                                        <th class="text-center">Progress</th>
-                                        <th class="text-center">Status</th>
-                                        <th class="text-center">Actions</th>
+                                        <th class="">Role</th>
+                                        <th class="">Smart Finanace</th>
+                                        <th class="">Taxation</th>
+                                        <th class="">Progress</th>
+                                        <th class="">Status</th>
+                                        <th class="">Actions</th>
                                     </tr>
                                 </thead>
                                 <!--end::Table head-->
@@ -191,31 +191,31 @@
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td class="text-center">
+                                            <td class="">
                                                 {{$user->role->name}}
                                             </td>
-                                            <td class="text-center">
+                                            <td class="">
                                                  @if($user->is_finanace == 0)
                                                     <span>No</span>
                                                 @else
                                                     <span>Yes</span>
                                                 @endif
                                             </td>
-                                            <td class="text-center">
+                                            <td class="">
                                                 @if($user->is_tax == 0)
                                                     <span>No</span>
                                                 @else
                                                     <span>Yes</span>
                                                 @endif
                                             </td>
-                                            <td class="text-center">
+                                            <td class="">
                                                 @if($user->is_active == 0)
                                                     <span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span>
                                                 @else
                                                     <span class="badge py-3 px-4 fs-7 badge-light-success">Approved</span>
                                                 @endif
                                             </td>
-                                            <td class="text-center">
+                                            <td class="">
                                                 @if($user->is_lock == 0)
                                                     <span class="badge py-3 px-4 fs-7 badge-light-success">Active</span>
                                                 @else
@@ -223,15 +223,15 @@
                                                 @endif
                                             </td>
                                             @if($user->role_id == 1)
-                                                <td class="text-center">
+                                                <td class="">
                                                     <div class=" flex-shrink-0">
-                                                        <button type="button"  class="btn  btn-primary mb-5" onclick="super_admin()"><i class="fas fa-pencil-alt" id="fa"></i>Edit</button>
+                                                        <button type="button"  class="btn  btn-light mb-5" onclick="super_admin()"><i class="fas fa-pencil-alt" id="fa"></i></button>
                                                     </div>
                                                 </td>
                                             @else
-                                                <td class="text-center">
+                                                <td class="">
                                                     <div class=" flex-shrink-0">
-                                                        <button type="button" id="kt_sign_in_submit" class="btn  btn-primary mb-5" data-system_id="{{$user->id}}" name="edit"><i class="fas fa-pencil-alt" id="fa"></i>Edit</button> 
+                                                        <button type="button" id="kt_sign_in_submit" class="btn  btn-light mb-5" data-system_id="{{$user->id}}" name="edit"><i class="fas fa-pencil-alt" id="fa"></i></button> 
                                                     </div>
                                                 </td>
                                             @endif
@@ -319,13 +319,13 @@
                                 <!--begin::Table row-->
                                 <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                     <th class="">Customer</th>
-                                    <th class="text-center">INVESTMENT DATE</th>
+                                    <th class="">INVESTMENT DATE</th>
 
-                                    <th class="text-center">TOTAL AMOUNT INVESTED</th>
-                                    <th class="text-center">RATE OF INTEREST</th>
-                                    <th class="text-center">Profit</th>
-                                    <th class="text-center">Status</th>
-                                    <th class="text-center"></th>               
+                                    <th class="">TOTAL AMOUNT INVESTED</th>
+                                    <th class="">RATE OF INTEREST</th>
+                                    <th class="">Profit</th>
+                                    <th class="">Status</th>
+                                    <th class=""></th>               
                                 </tr>
                                 <!--end::Table row-->
                             </thead>
@@ -344,19 +344,19 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class="text-center">13 June 2022, 11:52 pm</td>
+                                        <td class="">13 June 2022, 11:52 pm</td>
                                         <!-- <td class="text-end">3000000</td> -->
-                                        <td class="text-center">
+                                        <td class="">
                                             <a href="" class="text-dark text-hover-primary">3000000</a>
                                         </td>
-                                        <td class="text-center">3%</td>
-                                        <td class="text-center">
+                                        <td class="">3%</td>
+                                        <td class="">
                                             <span class="text-dark fw-bolder">Rs. 60000</span>
                                         </td>
-                                        <td class="text-center">
+                                        <td class="">
                                             <span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span>
                                         </td>
-                                        <td class="text-center">
+                                        <td class="">
                                             <a href="#" class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary">
                                                 <!--begin::Svg Icon | path: icons/duotune/arrows/arr064.svg-->
                                                 <span class="svg-icon svg-icon-2">

@@ -110,6 +110,12 @@
             <!--end::Col-->
         </div>
         <!--end::Row-->
+
+        @php
+            $user = Auth::guard('web')->user();
+            $detail = DB::table('user_details')->where('user_id',$user->id)->first();
+        @endphp
+        @if($detail)
         <!--begin::Row-->
         <div class="row gy-5 g-xl-8 mt-xl-5">
             <!--begin::Col-->
@@ -159,11 +165,11 @@
                                 <thead>
                                     <tr class="fw-bolder text-muted">
                                         <th class="">INVESTMEN AMOUNT</th>
-                                        <th class="text-center">INVESTED DATE</th>
-                                        <th class="text-center">RATE OF INTEREST</th>
-                                        <th class="text-center">FIRST PAYMENT DATE</th>
-                                        <th class="text-center">STATUS</th>
-                                        <th class="text-center">ACTION</th>
+                                        <th class="">INVESTED DATE</th>
+                                        <th class="">RATE OF INTEREST</th>
+                                        <th class="">FIRST PAYMENT DATE</th>
+                                        <th class="">STATUS</th>
+                                        <th class="">ACTION</th>
                                     </tr>
                                 </thead>
                                 <!--end::Table head-->
@@ -174,21 +180,21 @@
                                 		<td class="">
                                 			300000.00
                                 		</td>
-                                		<td class="text-center">
+                                		<td class="">
                                 			2022-08-26
                                 		</td>
-                                		<td class="text-center">
+                                		<td class="">
                                 			4.00%
                                 		</td>
-                                		<td class="text-center">
+                                		<td class="">
                                 			2022-09-26
                                 		</td>
-                                		<td class="text-center">
+                                		<td class="">
                                 			<span class="badge py-3 px-4 fs-7 badge-light-success">Approved</span>
                                 		</td>
-                                		<td class="text-center">
+                                		<td class="">
                                 			<div class=" flex-shrink-0">
-                                				<button type="button"  class="btn  btn-primary mb-5" > <i class="fa fa-eye" id="fa"></i>View More</button>
+                                				<button type="button"  class="btn  btn-light mb-5" > <i class="fa fa-eye" id="fa"></i></button>
                                 			</div>
                                 		</td>   
                                 	</tr>
@@ -266,30 +272,28 @@
                             <!--begin::Table head-->
                             <thead>
                                 <!--begin::Table row-->
-                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="text-center">INVESTMENT AMOUNT</th>
-                                    <th class="text-center">RATE OF INTEREST</th>
-                                    <th class="text-center">INTEREST</th>
-                                    <th class="text-center">ORIGINAL PAYMENT DATE</th>
-                                    <th class="text-center">NEW PAYMENT DATE</th>
-                                    <th class="text-center">ACTION</th>               
+                                <tr class="fw-bolder text-muted">
+                                    <th class="">INVESTMENT AMOUNT</th>
+                                    <th class="">RATE OF INTEREST</th>
+                                    <th class="">INTEREST</th>
+                                    <th class="">ORIGINAL PAYMENT DATE</th>
+                                    <th class="">NEW PAYMENT DATE</th>
+                                    <th class="">ACTION</th>               
                                 </tr>
                                 <!--end::Table row-->
                             </thead>
                             <!--end::Table head-->
                             <!--begin::Table body-->
-                                <tbody class="fw-bolder text-gray-600">
+                                <tbody class="">
                                     <tr>
-                                        <td class="text-center">RS.500000</td>
-                                        <td class="text-center">4.00%</td>
-                                        <td class="text-center">RS.200000.00</td>
-                                        <td class="text-center">2022-10-26</td>
-                                        <td class="text-center">
-                                           <input type="date">
-                                        </td>
-                                        <td class="text-center">
+                                        <td class="">RS.500000</td>
+                                        <td class="">4.00%</td>
+                                        <td class="">RS.200000.00</td>
+                                        <td class="">2022-10-26</td>
+                                        <td class="">2022-11-26</td>
+                                        <td class="">
                                            <div class=" flex-shrink-0">
-                                                <button type="button"  class="btn  btn-primary mb-5" ><i class="fas fa-pencil-alt" id="fa"></i>Update</button>
+                                                <button type="button"  class="btn  btn-light mb-5" ><i class="fas fa-pencil-alt" id="fa"></i></button>
                                             </div>
                                         </td>
                                     </tr>
@@ -304,8 +308,908 @@
             </div>
         </div>
         <!--end::Row-->
+        @else
+        <div class="row">
+            <div class="card">
+                <!--begin::Card body-->
+                <div class="card-body">
+                    <!--begin::Heading-->
+                    <div class="card-px text-center pt-15 pb-15">
+                        <!--begin::Title-->
+                        <h2 class="fs-2x fw-bolder mb-0">Create a Profile</h2>
+                        <!--end::Title-->
+                        <!--begin::Description-->
+                        <p class="text-gray-400 fs-4 fw-bold py-7">Click on the below button to create your profile </p>
+                        <!--end::Description-->
+                        <!--begin::Action-->
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_create_project" style="color: white;">Create Profile</button>
+                            <!--end::Action-->
+                    </div>
+                    <!--end::Heading-->
+                    <!--begin::Illustration-->
+                    <div class="text-center pb-15 px-5">
+                        <img src="{{ asset('public/assets/media/illustrations/sigma-1/6.png') }}" alt="" class="mw-100 h-200px h-sm-325px" />
+                    </div>
+                        <!--end::Illustration-->
+                </div>
+                    <!--end::Card body-->
+            </div>
+        </div>
+        @endif
     </div>
     <!--end::Post-->
 </div>
 <!--end::Container-->
+
+
+
+<!--begin::Modal - Create Profile-->
+<div class="modal fade" id="kt_modal_create_project" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog modal-fullscreen p-9">
+        <!--begin::Modal content-->
+        <div class="modal-content modal-rounded">
+            <!--begin::Modal header-->
+            <div class="modal-header">
+                <!--begin::Modal title-->
+                <h2>Create Profile</h2>
+                <!--end::Modal title-->
+                <!--begin::Close-->
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
+                            <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="black" />
+                        </svg>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--end::Modal header-->
+            <!--begin::Modal body-->
+            <div class="modal-body scroll-y m-5">
+                <!--begin::Stepper-->
+                <div class="stepper stepper-links d-flex flex-column" id="kt_modal_create_project_stepper">
+                    <!--begin::Container-->
+                    <div class="container">
+                        <!--begin::Nav-->
+                        <div class="stepper-nav justify-content-center py-2">
+                            <!--begin::Step 1-->
+                            <div class="stepper-item me-5 me-md-15 current" data-kt-stepper-element="nav" id="personal_details" >
+                                <h3 class="stepper-title">Personal details</h3>
+                            </div>
+                            <!--end::Step 1-->
+                            <!--begin::Step 2-->
+                            <div class="stepper-item me-5 me-md-15  " data-kt-stepper-element="nav" id="additional_details" >
+                                <h3 class="stepper-title">Additional details</h3>
+                            </div>
+                            <!--end::Step 2-->
+                            <!--begin::Step 3-->
+                            <div class="stepper-item me-5 me-md-15" data-kt-stepper-element="nav" id="bank_details">
+                                <h3 class="stepper-title">Bank details</h3>
+                            </div>
+                            <!--end::Step 3-->
+                            <!--begin::Step 4-->
+                            <div class="stepper-item me-5 me-md-15 " data-kt-stepper-element="nav" id="nominee_details">
+                                <h3 class="stepper-title">Nominee details</h3>
+                            </div>
+                            <!--end::Step 4-->
+                        </div>
+                        <!--end::Nav-->
+                        <!--begin::Form-->
+                        <form id="profile" method="POST" action="{{route('save_profile')}}" enctype="multipart/form-data">
+                        @csrf
+                            <div class="error" id="error">   
+                            </div>
+                            <!--begin::Personal-->
+                            <div class="current" id="personal"data-kt-stepper-element="content">
+                                <!--begin::Wrapper-->
+                                <div class="w-100">
+                                    <!--begin::Heading-->
+                                    <div class="pb-12">
+                                        <!--begin::Title-->
+                                        <h1 class="fw-bolder text-dark">Personal details</h1>
+                                        <!--end::Title-->
+                                        <!--begin::Description-->
+                                    </div>
+                                    <!--end::Heading-->
+                                    <!--begin::Input group-->
+                                    <!-- <div class="fv-row mb-8"> -->
+                                        <!--begin::Label-->
+                                        <!-- <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                            <span class="required">Amount To Deposit(Min 1Lakh)</span>
+                                            <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Amount To Deposit(Min 1Lakh)"></i>
+                                        </label> -->
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <!-- <input type="number" class="form-control form-control-solid" placeholder="Amount To Deposit" value="" id="amount" name="amount" /> -->
+                                        <!--end::Input-->
+                                    <!-- </div> -->
+                                    <!--end::Input group-->
+                                    <!--begin::Input group-->
+                                    <div class="fv-row mb-8">
+                                        <!--begin::Label-->
+                                        <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                            <span class="required">Address</span>
+                                            <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Address"></i>
+                                        </label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <input type="text" class="form-control form-control-solid" placeholder="Address" value="" name="address" id="address" />
+                                        <!--end::Input-->
+                                    </div>
+                                    <!--end::Input group-->
+                                    <!--begin::Input group-->
+                                    <div class="fv-row mb-8">
+                                        <!--begin::Label-->
+                                        <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                            <span class="required">City</span>
+                                            <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="City"></i>
+                                        </label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <input type="text" class="form-control form-control-solid" placeholder="City" value="" name="city" id="city" />
+                                        <!--end::Input-->
+                                    </div>
+                                    <!--end::Input group-->
+                                    <!--begin::Input group-->
+                                    <div class="fv-row mb-8">
+                                        <!--begin::Label-->
+                                        <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                            <span class="required">Pincode</span>
+                                            <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Pincode"></i>
+                                        </label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <input type="number" class="form-control form-control-solid" placeholder="Pincode" value="" name="pincode" id="pincode" />
+                                        <!--end::Input-->
+                                    </div>
+                                    <!--end::Input group-->
+                                    <!--begin::Input group-->
+                                    <div class="fv-row mb-8">
+                                        <!--begin::Label-->
+                                        <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                            <span class="">Email</span>
+                                            <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Email"></i>
+                                        </label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <input type="email" class="form-control form-control-solid" placeholder="Email" value="" name="email" id="email" />
+                                        <!--end::Input-->
+                                    </div>
+                                    <!--end::Input group-->
+                                    <!--begin::Input group-->
+                                    <!-- <div class="fv-row mb-8"> -->
+                                        <!--begin::Label-->
+                                        <!-- <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                            <span class="required">Transaction ID</span>
+                                            <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Transaction ID"></i>
+                                        </label> -->
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <!-- <input type="number" class="form-control form-control-solid" placeholder="Transaction ID" value="" name="transaction_id" id="transaction_id" /> -->
+                                        <!--end::Input-->
+                                    <!-- </div> -->
+                                    <!--end::Input group-->
+                                    <!--begin::Input group-->
+                                    <!-- <div class="fv-row mb-8"> -->
+                                        <!--begin::Label-->
+                                        <!-- <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                            <span class="required">Payment Copy</span>
+                                            <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Payment Copy"></i>
+                                        </label> -->
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <!-- <input type="file" class="form-control form-control-solid custom-file-input" id="payment_copy" placeholder="Payment Copy" value="" name="payment_copy" accept="image/*" />
+                                        <div class="d-flex justify-content-center mt-3">
+                                            <img id="preview-image-payment_copy" style="max-height: 200px;">
+                                        </div> -->
+                                    
+                                        <!--end::Input-->
+                                    <!-- </div> -->
+                                    <!--end::Input group-->
+                                    <!--begin::Actions-->
+                                    <div class="d-flex justify-content-end">
+                                        <button type="button" class="btn btn-lg btn-primary"  onclick="additional_next()">Next</button>
+                                    </div>
+                                    <!--end::Actions-->
+                                   
+                                </div>
+                                <!--end::Wrapper-->
+                            </div>
+                            <!--end::Personal-->
+                            <!--begin::Personal-->
+                            <div class="" id="additional" data-kt-stepper-element="content">
+                                <!--begin::Wrapper-->
+                                <div class="w-100">
+                                    <!--begin::Heading-->
+                                    <div class="pb-12">
+                                        <!--begin::Title-->
+                                        <h1 class="fw-bolder text-dark">Additional details</h1>
+                                        <!--end::Title-->
+                                        <!--begin::Description-->
+                                    </div>
+                                    <!--end::Heading-->
+                                    <!--begin::Input group-->
+                                    <div class="fv-row mb-8">
+                                        <!--begin::Label-->
+                                        <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                            <span class="required">Mobile No</span>
+                                            <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Mobile No"></i>
+                                        </label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <input type="number" class="form-control form-control-solid" placeholder="Mobile No" value="" name="phone" id="phone" />
+                                        <!--end::Input-->
+                                    </div>
+                                    <!--end::Input group-->
+                                    <!--begin::Input group-->
+                                    <div class="fv-row mb-8">
+                                        <!--begin::Label-->
+                                        <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                            <span class="required">Aadhaar No</span>
+                                            <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Aadhaar No"></i>
+                                        </label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <input type="" class="form-control form-control-solid" placeholder="Aadhaar No" value="" name="aadhaar_no" id="aadhaar_no" />
+                                        <!--end::Input-->
+                                    </div>
+                                    <!--end::Input group-->
+                                    <!--begin::Input group-->
+                                    <div class="fv-row mb-8">
+                                        <!--begin::Label-->
+                                        <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                            <span class="required">Pan Card No</span>
+                                            <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Pan Card No"></i>
+                                        </label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <input type="text" class="form-control form-control-solid" placeholder="Pan Card No" value="" name="pan_card_no" id="pan_card_no" />
+                                        <!--end::Input-->
+                                    </div>
+                                    <!--end::Input group-->
+                                    <!--begin::Input group-->
+                                    <div class="fv-row mb-8">
+                                        <!--begin::Label-->
+                                        <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                            <span class="required">Avatar</span>
+                                            <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Profile Photo"></i>
+                                        </label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <input type="file" class="form-control form-control-solid custom-file-input" id="avatar" placeholder="Avatar" value="" name="avatar" accept="image/*" />
+                                        <div class="d-flex justify-content-center mt-3">
+                                            <img id="preview-image-avatar" style="max-height: 200px;">
+                                        </div>
+                                    
+                                        <!--end::Input-->
+                                    </div>
+                                    <!--end::Input group-->
+                                    <!--begin::Input group-->
+                                    <div class="fv-row mb-8">
+                                        <!--begin::Label-->
+                                        <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                            <span class="required">Aadhaar Card</span>
+                                            <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Aadhaar Card"></i>
+                                        </label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <input type="file" class="form-control form-control-solid custom-file-input" id="aadhaar_card" placeholder="Aadhaar Card" value="" name="aadhaar_card" accept="image/*" />
+                                        <div class="d-flex justify-content-center mt-3">
+                                            <img id="preview-image-aadhaar_card" style="max-height: 200px;">
+                                        </div>
+                                    
+                                        <!--end::Input-->
+                                    </div>
+                                    <!--end::Input group-->
+                                    <!--begin::Input group-->
+                                    <div class="fv-row mb-8">
+                                        <!--begin::Label-->
+                                        <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                            <span class="required">Pan Card</span>
+                                            <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Pan Card"></i>
+                                        </label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <input type="file" class="form-control form-control-solid custom-file-input" id="pan_card" placeholder="Pan Card" value="" name="pan_card" accept="image/*" />
+                                        <div class="d-flex justify-content-center mt-3">
+                                            <img id="preview-image-pan_card" style="max-height: 200px;">
+                                        </div>
+                                    
+                                        <!--end::Input-->
+                                    </div>
+                                    <!--end::Input group-->
+
+                                    <!--begin::Actions-->
+                                    <div class="d-flex flex-stack">
+                                        <button type="button" class="btn btn-lg btn-primary me-3" onclick="personal_previous()">Personal Details</button>
+                                        <button type="button" class="btn btn-lg btn-primary" onclick="bank_next()">Next</button>
+                                    </div>
+                                    <!--end::Actions-->
+                                </div>
+                                <!--end::Wrapper-->
+                            </div>
+                            <!--end::Personal-->
+                            <!--begin::Personal-->
+                            <div class="" id="bank" data-kt-stepper-element="content">
+                                <!--begin::Wrapper-->
+                                <div class="w-100">
+                                    <!--begin::Heading-->
+                                    <div class="pb-12">
+                                        <!--begin::Title-->
+                                        <h1 class="fw-bolder text-dark">Bank Details</h1>
+                                        <!--end::Title-->
+                                        <!--begin::Description-->
+                                    </div>
+                                    <!--end::Heading-->
+                                    <!--begin::Input group-->
+                                    <div class="fv-row mb-8">
+                                        <!--begin::Label-->
+                                        <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                            <span class="required">Account Holder Name</span>
+                                            <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Account Holder Name"></i>
+                                        </label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <input type="text" class="form-control form-control-solid" placeholder="Account Holder Name" value="" name="holder_name" id="holder_name" />
+                                        <!--end::Input-->
+                                    </div>
+                                    <!--end::Input group-->
+                                    <!--begin::Input group-->
+                                    <div class="fv-row mb-8">
+                                        <!--begin::Label-->
+                                        <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                            <span class="required">Account No</span>
+                                            <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Account No"></i>
+                                        </label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <input type="number" class="form-control form-control-solid" placeholder="Account No" value="" name="account_no" id="account_no" />
+                                        <!--end::Input-->
+                                    </div>
+                                    <!--end::Input group-->
+                                    <!--begin::Input group-->
+                                    <div class="fv-row mb-8">
+                                        <!--begin::Label-->
+                                        <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                            <span class="required">IFSC Code</span>
+                                            <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="IFSC Code"></i>
+                                        </label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <input type="text" class="form-control form-control-solid" placeholder="IFSC Code" value="" name="ifsc_code" id="ifsc_code" />
+                                        <!--end::Input-->
+                                    </div>
+                                    <!--end::Input group-->
+                                    <!--begin::Input group-->
+                                    <div class="fv-row mb-8">
+                                        <!--begin::Label-->
+                                        <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                            <span class="required">Branch</span>
+                                            <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Branch"></i>
+                                        </label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <input type="text" class="form-control form-control-solid" placeholder="Branch" value="" name="branch" id="branch" />
+                                        <!--end::Input-->
+                                    </div>
+                                    <!--end::Input group-->
+                                    <!--begin::Input group-->
+                                    <div class="fv-row mb-8">
+                                        <!--begin::Label-->
+                                        <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                            <span class="required">City</span>
+                                            <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="City"></i>
+                                        </label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <input type="text" class="form-control form-control-solid" placeholder="City" value="" name="city" id="city" />
+                                        <!--end::Input-->
+                                    </div>
+                                    <!--end::Input group-->
+                                    <!--begin::Input group-->
+                                    <!-- <div class="fv-row mb-8"> -->
+                                        <!--begin::Label-->
+                                        <!-- <label class="required fs-6 fw-bold mb-2">Account Type</label> -->
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <!-- <select class="form-select form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="Select..." name="type" id="type">
+                                            <option value="current">Current</option>
+                                            <option value="saving">Saving</option>
+                                        </select> -->
+                                        <!--end::Input-->
+                                    <!-- </div> -->
+                                    <!--end::Input group-->
+                                    <!--begin::Actions-->
+                                    <div class="d-flex flex-stack">
+                                        <button type="button" class="btn btn-lg btn-primary me-3" onclick="additional_previous()">Additional Details</button>
+                                        <button type="button" class="btn btn-lg btn-primary" onclick="nominee_next()">Next</button>
+                                    </div>
+                                    <!--end::Actions-->
+                                </div>
+                                <!--end::Wrapper-->
+                            </div>
+                            <!--end::Personal-->
+                            <!--begin::Personal-->
+                            <div class="" id="nominee" data-kt-stepper-element="content">
+                                <!--begin::Wrapper-->
+                                <div class="w-100">
+                                    <!--begin::Heading-->
+                                    <div class="pb-12">
+                                        <!--begin::Title-->
+                                        <h1 class="fw-bolder text-dark">Nominee Details</h1>
+                                        <!--end::Title-->
+                                        <!--begin::Description-->
+                                    </div>
+                                    <!--end::Heading-->
+                                    <!--begin::Input group-->
+                                    <div class="fv-row mb-8">
+                                        <!--begin::Label-->
+                                        <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                            <span class="required">Nominee Name</span>
+                                            <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Nominee Name"></i>
+                                        </label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <input type="text" class="form-control form-control-solid" placeholder="Nominee Name" value="" name="nominee_name" id="nominee_name" />
+                                        <!--end::Input-->
+                                    </div>
+                                    <!--end::Input group-->
+                                    <!--begin::Input group-->
+                                    <div class="fv-row mb-8">
+                                        <!--begin::Label-->
+                                        <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                            <span class="required">Relationship</span>
+                                            <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Relationship"></i>
+                                        </label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <input type="text" class="form-control form-control-solid" placeholder="Relationship" value="" name="relationship" id="relationship" />
+                                        <!--end::Input-->
+                                    </div>
+                                    <!--end::Input group-->
+                                    <!--begin::Input group-->
+                                    <div class="fv-row mb-8">
+                                        <!--begin::Label-->
+                                        <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                            <span class="required">Nominee Age</span>
+                                            <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Nominee Age"></i>
+                                        </label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <input type="number" class="form-control form-control-solid" placeholder="Nominee Age" value="" name="age" id="age" />
+                                        <!--end::Input-->
+                                    </div>
+                                    <!--end::Input group-->
+                                    <!--begin::Input group-->
+                                    <div class="fv-row mb-8">
+                                        <!--begin::Label-->
+                                        <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                            <span class="required">Nominee Aadhaar Number</span>
+                                            <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Nominee Aadhaar Number"></i>
+                                        </label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <input type="text" class="form-control form-control-solid" placeholder="Nominee Aadhaar Number" value="" name="nominee_aadhaar_no" id="nominee_aadhaar_no" />
+                                        <!--end::Input-->
+                                    </div>
+                                    <!--end::Input group-->
+                                    <!--begin::Input group-->
+                                    <!-- <div class="fv-row mb-8"> -->
+                                        <!--begin::Label-->
+                                        <!-- <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                            <span class="required">Nominee Photo</span>
+                                            <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Nominee Photo<"></i>
+                                        </label> -->
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <!-- <input type="file" class="form-control form-control-solid custom-file-input" id="nominee_photo" placeholder="Nominee Photo" value="" name="nominee_photo" accept="image/*" />
+                                        <div class="d-flex justify-content-center mt-3">
+                                            <img id="preview-image-nominee_photo" style="max-height: 200px;">
+                                        </div> -->
+                                    
+                                        <!--end::Input-->
+                                    <!-- </div> -->
+                                    <!--end::Input group-->
+                                    <!--begin::Input group-->
+                                    <div class="fv-row mb-8">
+                                        <!--begin::Label-->
+                                        <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                            <span class="required">Nominee Aadhar Card</span>
+                                            <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Nominee Aadhar Card<"></i>
+                                        </label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <input type="file" class="form-control form-control-solid custom-file-input" id="nominee_aadhar" placeholder="Nominee Aadhar Card" value="" name="nominee_aadhar" accept="image/*" />
+                                        <div class="d-flex justify-content-center mt-3">
+                                            <img id="preview-image-nominee_aadhar" style="max-height: 200px;">
+                                        </div>
+                                    
+                                        <!--end::Input-->
+                                    </div>
+                                    <!--end::Input group-->
+                                    
+                                    
+                                    <!--begin::Actions-->
+                                    <div class="d-flex flex-stack">
+                                        <button type="button" class="btn btn-lg btn-primary me-3" onclick="bank_previous()">Bank Details</button>
+                                        <button type="button" class="btn btn-lg btn-primary me-3" onclick="final()">Finish</button>
+                                       
+                                    </div>
+                                    <!--end::Actions--><br><br>
+                                    <div style="display:none;" id="submit" >
+                                        <div class="alert alert-success" role="alert">
+                                            <span class="d-flex justify-content-center fs-6 fw-bold">Click submit to save your data</span>
+                                        </div>
+                                        <div class="d-flex justify-content-center" > 
+                                            <button type="submit" class="btn btn-lg btn-success" >Submit</button> 
+                                        </div>
+                                    </div>
+                                    
+
+                                </div>
+                                <!--end::Wrapper-->
+                            </div>
+                            <!--end::Personal-->
+                        </form>
+                        <!--end::Form-->
+                    </div>
+                    <!--begin::Container-->
+                </div>
+                <!--end::Stepper-->
+            </div>
+            <!--end::Modal body-->
+        </div>
+        <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+</div>
+<!--end::Modal - Create Project-->
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+<script type="text/javascript">
+
+    function additional_next() {
+        var alertText = "";
+        // if (!document.getElementById("amount").value) {
+        //     alertText = alertText+"Amount is required";
+        // }
+        // var amount = document.getElementById("amount").value;
+        // if(amount){
+        //    if(amount < 100000)
+        //     {
+        //         alertText = alertText+"<br>Minimum amount should be 1,00000";
+        //     } 
+        // }
+        if (!document.getElementById("address").value) {
+            alertText = alertText+"Address is required";
+        }
+        if (!document.getElementById("city").value) {
+            alertText = alertText+"<br>City is required";
+        }
+        if (!document.getElementById("pincode").value) {
+            alertText = alertText+"<br>Pincode is required";
+        }
+        var pincode = document.getElementById("pincode").value;
+        if(pincode){
+            format = new RegExp("^[1-9][0-9]{5}$");
+            if(!format.test(pincode))
+            {
+                alertText = alertText+"<br>Pincode should be in format 123456";
+            } 
+        }
+        var email = document.getElementById("email").value;
+        if(email){
+            format = /^[a-zA-Z0-9\._-]+@[a-zA-Z0-9-]{2,}[.][a-zA-Z]{2,4}$/;
+            if(!format.test(email))
+            {
+                alertText = alertText+"<br>Email should be in format example@domain.com";
+            } 
+        }
+        // if (!document.getElementById("transaction_id").value) {
+        //     alertText = alertText+"<br>Transaction ID is required";
+        // }
+        // if (!document.getElementById("payment_copy").value) {
+        //     alertText = alertText+"<br>Payment Copy is required";
+        // }
+
+        if (alertText != "") {
+            var div = document.getElementById("error");
+            div.innerHTML = '';
+            div.style.display = "block";
+            $( ".error" ).html('');
+            var html ='<div class="alert alert-danger" role="alert">'+alertText+'</div>';
+             $('.error').html(html);
+        }
+        else{
+            var div = document.getElementById("error");
+            div.innerHTML = '';
+            div.style.display = "none";
+            document.getElementById("personal_details").classList.remove("current");
+            document.getElementById("additional_details").classList.add("current");
+            document.getElementById("personal").classList.remove("current");
+            document.getElementById("additional").classList.add("current");
+        }
+    }
+
+    function personal_previous() {
+        var div = document.getElementById("error");
+        div.innerHTML = '';
+        div.style.display = "none";
+        document.getElementById("personal_details").classList.add("current");
+        document.getElementById("additional_details").classList.remove("current");
+        document.getElementById("personal").classList.add("current");
+        document.getElementById("additional").classList.remove("current");
+    }
+
+    function bank_next() {
+
+        var alertText = "";
+        //Mobile
+        if (!document.getElementById("phone").value) {
+            alertText = alertText+"Mobile number is required";
+        }
+        var phone = document.getElementById("phone").value;
+        if(phone){
+            format = /^\d{10}$/;
+            if(!format.test(phone))
+            {
+                alertText = alertText+"<br>Mobile Number should be in 10 digits";
+            } 
+        }
+        //Aadhar Number
+        if (!document.getElementById("aadhaar_no").value) {
+            alertText = alertText+"<br>Aadhaar number is required";
+        }
+        var aadhaar_no = document.getElementById("aadhaar_no").value;
+        if(aadhaar_no){
+            format = /^[2-9]{1}[0-9]{3}\s{1}[0-9]{4}\s{1}[0-9]{4}$/;
+            if(!format.test(aadhaar_no))
+            {
+                alertText = alertText+"<br>Aadhaar number is not valid";
+            } 
+        }
+        //Pan Number
+        if (!document.getElementById("pan_card_no").value) {
+            alertText = alertText+"<br>Pan card number is required";
+        }
+        var pan_card_no = document.getElementById("pan_card_no").value;
+        if(pan_card_no){
+            format = /([A-Z]){5}([0-9]){4}([A-Z]){1}$/;
+            if(!format.test(pan_card_no))
+            {
+                alertText = alertText+"<br>Pan card number is not valid";
+            } 
+        }
+        //Avatar
+        if (!document.getElementById("avatar").value) {
+            alertText = alertText+"<br>User photo is required";
+        }
+        //Aadhaar Card
+        if (!document.getElementById("aadhaar_card").value) {
+            alertText = alertText+"<br>Aadhaar card photo is required";
+        }
+        //Pan Card
+        if (!document.getElementById("pan_card").value) {
+            alertText = alertText+"<br>Pan card photo is required";
+        }
+
+        if (alertText != "") {
+            var div = document.getElementById("error");
+            div.innerHTML = '';
+            div.style.display = "block";
+            $( ".error" ).html('');
+            var html ='<div class="alert alert-danger" role="alert">'+alertText+'</div>';
+             $('.error').html(html);
+        }
+        else{
+            var div = document.getElementById("error");
+            div.innerHTML = '';
+            div.style.display = "none";
+            document.getElementById("bank_details").classList.add("current");
+            document.getElementById("additional_details").classList.remove("current");
+            document.getElementById("bank").classList.add("current");
+            document.getElementById("additional").classList.remove("current");
+        }
+    }
+
+    function additional_previous() {
+        var div = document.getElementById("error");
+        div.innerHTML = '';
+        div.style.display = "none";
+        document.getElementById("bank_details").classList.remove("current");
+        document.getElementById("additional_details").classList.add("current");
+        document.getElementById("bank").classList.remove("current");
+        document.getElementById("additional").classList.add("current");
+        
+    }
+
+    function nominee_next() {
+        var alertText = "";
+        //Holder Name
+        if (!document.getElementById("holder_name").value) {
+            alertText = alertText+"Account Name is required";
+        }
+        //Account Number
+        if (!document.getElementById("account_no").value) {
+            alertText = alertText+"<br>Account Number is required";
+        }
+        //IFSC code
+        if (!document.getElementById("ifsc_code").value) {
+            alertText = alertText+"<br>IFSC code is required";
+        }
+        var ifsc_code = document.getElementById("ifsc_code").value;
+        if(ifsc_code){
+            format = /^[A-Z]{4}0[0-9]{6}$/;
+            if(!format.test(ifsc_code))
+            {
+                alertText = alertText+"<br>IFSC code is not valid";
+            } 
+        }
+        //Branch
+        if (!document.getElementById("branch").value) {
+            alertText = alertText+"<br>Branch is required";
+        }
+        //Branch
+        if (!document.getElementById("city").value) {
+            alertText = alertText+"<br>City is required";
+        }
+
+        if (alertText != "") {
+            var div = document.getElementById("error");
+            div.innerHTML = '';
+            div.style.display = "block";
+            $( ".error" ).html('');
+            var html ='<div class="alert alert-danger" role="alert">'+alertText+'</div>';
+             $('.error').html(html);
+        }
+        else{
+            var div = document.getElementById("error");
+            div.innerHTML = '';
+            div.style.display = "none";
+            document.getElementById("nominee_details").classList.add("current");
+            document.getElementById("bank_details").classList.remove("current");
+            document.getElementById("nominee").classList.add("current");
+            document.getElementById("bank").classList.remove("current");
+        }
+    }
+
+    function bank_previous() {
+        var div = document.getElementById("error");
+        div.innerHTML = '';
+        div.style.display = "none";
+        document.getElementById("nominee_details").classList.remove("current");
+        document.getElementById("bank_details").classList.add("current");
+        document.getElementById("nominee").classList.remove("current");
+        document.getElementById("bank").classList.add("current");
+        
+    }
+
+    function final() {
+        var alertText = "";
+        //Nominee Name
+        if (!document.getElementById("nominee_name").value) {
+            alertText = alertText+"Name is required";
+        }
+        //Relationship
+        if (!document.getElementById("relationship").value) {
+            alertText = alertText+"<br>Relationship is required";
+        }
+        //Age
+        if (!document.getElementById("age").value) {
+            alertText = alertText+"<br>Age is required";
+        }
+        //Aadhar Number
+        if (!document.getElementById("nominee_aadhaar_no").value) {
+            alertText = alertText+"<br>Aadhaar number is required";
+        }
+        var nominee_aadhaar_no = document.getElementById("nominee_aadhaar_no").value;
+        if(nominee_aadhaar_no){
+            format = /^[2-9]{1}[0-9]{3}\s{1}[0-9]{4}\s{1}[0-9]{4}$/;
+            if(!format.test(nominee_aadhaar_no))
+            {
+                alertText = alertText+"<br>Aadhaar number is not valid";
+            } 
+        }
+        //Aadhar card
+        if (!document.getElementById("nominee_aadhar").value) {
+            alertText = alertText+"<br>Aadhaar card is required";
+        }
+
+        if (alertText != "") {
+            var div = document.getElementById("error");
+            div.innerHTML = '';
+            div.style.display = "block";
+            $( ".error" ).html('');
+            var html ='<div class="alert alert-danger" role="alert">'+alertText+'</div>';
+             $('.error').html(html);
+        }
+        else{
+
+            $('#submit').show();
+        }
+    }
+
+
+
+</script>
+
+<!-- <script type="text/javascript">
+    $(document).ready(function (e) {
+        $('#payment_copy').change(function(){
+            let reader = new FileReader();
+            reader.onload = (e) => { 
+                $('#preview-image-payment_copy').attr('src', e.target.result); 
+            }
+            reader.readAsDataURL(this.files[0]); 
+       });
+    });
+</script> -->
+
+<script type="text/javascript">    
+    $(document).ready(function (e) { 
+       $('#avatar').change(function(){   
+            let reader = new FileReader();
+            reader.onload = (e) => { 
+                $('#preview-image-avatar').attr('src', e.target.result); 
+            }
+            reader.readAsDataURL(this.files[0]); 
+       });
+
+    });
+</script>
+
+<script type="text/javascript">    
+    $(document).ready(function (e) {
+       
+       $('#aadhaar_card').change(function(){   
+            let reader = new FileReader();
+            reader.onload = (e) => { 
+                $('#preview-image-aadhaar_card').attr('src', e.target.result); 
+            }
+            reader.readAsDataURL(this.files[0]); 
+       });
+
+    });
+</script>
+
+<script type="text/javascript">    
+    $(document).ready(function (e) {
+       $('#pan_card').change(function(){   
+            let reader = new FileReader();
+            reader.onload = (e) => { 
+                $('#preview-image-pan_card').attr('src', e.target.result); 
+            }
+            reader.readAsDataURL(this.files[0]); 
+       });
+    });
+</script>
+
+<!-- <script type="text/javascript">    
+    $(document).ready(function (e) {
+       $('#nominee_photo').change(function(){   
+            let reader = new FileReader();
+            reader.onload = (e) => { 
+                $('#preview-image-nominee_photo').attr('src', e.target.result); 
+            }
+            reader.readAsDataURL(this.files[0]); 
+       });
+    });
+</script> -->
+
+<script type="text/javascript">    
+    $(document).ready(function (e) {
+       $('#nominee_aadhar').change(function(){   
+            let reader = new FileReader();
+            reader.onload = (e) => { 
+                $('#preview-image-nominee_aadhar').attr('src', e.target.result); 
+            }
+            reader.readAsDataURL(this.files[0]); 
+       });
+    });
+</script>
 @endsection
