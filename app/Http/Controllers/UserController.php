@@ -44,9 +44,25 @@ class UserController extends Controller
         $role_id = $request->role;
         $is_lock = $request->status;
         $is_active = $request->progress;
-        DB::table('users')->where('id',$id)->update(['role_id' => $role_id,'is_lock' => $is_lock,'is_active' => $is_active]);
+        $is_profile_verified = $request->profile;
 
-        return redirect('dashboard');
+        if($role_id != 3){
+            $is_profile_verified = DB::table('users')->where('id',$id)->select('is_profile_verified')->first()->is_profile_verified;
+            if($is_profile_verified == 0){
+
+                 return redirect()->back()->with('alert', 'Cant able to change role user to admin, profile completion is not yet done!!');
+
+            }
+            else{
+                DB::table('users')->where('id',$id)->update(['role_id' => $role_id,'is_lock' => $is_lock,'is_active' => $is_active,'is_profile_verified' => $is_profile_verified]);
+                return redirect()->back()->with('alert', 'Successfully Updated!!');
+            }
+        }
+        else{
+            DB::table('users')->where('id',$id)->update(['role_id' => $role_id,'is_lock' => $is_lock,'is_active' => $is_active,'is_profile_verified' => $is_profile_verified]);
+            return redirect()->back()->with('alert', 'Successfully Updated!!');
+        }
+        
     }
 
     public function user_search(Request $request) 
@@ -91,6 +107,14 @@ class UserController extends Controller
         
     }
 
+    public function approve_user_profile($id){
+
+        DB::table('users')->where('id',$id)->update(['is_profile_verified' => 1]);
+
+         return redirect(route('user', ['id' => $id]));
+        
+    }
+
     public function save_profile(Request $request)
     {
         $id = Auth::user()->id;
@@ -99,8 +123,6 @@ class UserController extends Controller
             'address' => $request->address,
             'city' => $request->city,
             'pincode' => $request->pincode,
-            'email' => $request->email,
-            'phone' => $request->phone,
             'aadhaar_no' => $request->aadhaar_no,
             'pan_card_no' => $request->pan_card_no,
         ]);

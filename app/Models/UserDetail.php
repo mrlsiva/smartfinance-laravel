@@ -10,7 +10,7 @@ class UserDetail extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id','address','city','pincode','email','phone','aadhaar_no','pan_card_no','avatar','aadhaar_card','pan_card'
+        'user_id','address','city','pincode','aadhaar_no','pan_card_no','avatar','aadhaar_card','pan_card'
     ];
 
     public function getAvatarAttribute($value)

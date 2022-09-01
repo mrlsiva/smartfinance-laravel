@@ -8,13 +8,13 @@
 		<!--begin::Page title-->
 		<div class="page-title d-flex flex-column me-3">
 			<!--begin::Title-->
-			<h1 class="d-flex text-white fw-bolder my-1 fs-3">Account Overview</h1>
+			<h1 class="d-flex text-white fw-bolder my-1 fs-3">Account Overview-{{$user->role->name}}</h1>
 			<!--end::Title-->
 			<!--begin::Breadcrumb-->
 			<ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
 				<!--begin::Item-->
 				<li class="breadcrumb-item text-white opacity-75">
-					<a href="{{route('dashboard')}}" class="text-white text-hover-primary">Home</a>
+					<a href="{{route('dashboard')}}" class="text-white text-hover-primary">Dashboard</a>
 				</li>
 				<!--end::Item-->
 				<!--begin::Item-->
@@ -63,7 +63,7 @@
 								<!--begin::Name-->
 								<div class="d-flex align-items-center mb-2">
 									<span class="text-gray-900 fs-2 fw-bolder me-1">{{$user->first_name}} {{$user->last_name}}</span>
-									@if($user->is_active == 1 )
+									@if($user->is_profile_verified == 1 )
 										<!--begin::Svg Icon | path: icons/duotune/general/gen026.svg-->
 										<span class="svg-icon svg-icon-1 svg-icon-primary">
 											<svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24">
@@ -239,7 +239,7 @@
 						<!--end::Label-->
 						<!--begin::Col-->
 						<div class="col-lg-8">
-							<span class="fw-bolder fs-6 text-gray-800">{{$user->first_name}} {{$user->last_name}}</span>
+							<span class="fs-6 text-gray-800">{{$user->first_name}} {{$user->last_name}}</span>
 						</div>
 						<!--end::Col-->
 					</div>
@@ -251,7 +251,7 @@
 						<!--end::Label-->
 						<!--begin::Col-->
 						<div class="col-lg-8 fv-row">
-							<span class="fw-bold text-gray-800 fs-6">{{$user->email}}</span>
+							<span class="text-gray-800 fs-6">{{$user->email}}</span>
 						</div>
 						<!--end::Col-->
 					</div>
@@ -265,7 +265,7 @@
 						<!--end::Label-->
 						<!--begin::Col-->
 						<div class="col-lg-8 d-flex align-items-center">
-							<span class="fw-bolder fs-6 text-gray-800 me-2">@if($user_detail == NULL) - @else+91 {{$user_detail->phone}}@endif</span>
+							<span class="fs-6 text-gray-800 me-2">+91 {{$user->phone}}</span>
 						</div>
 						<!--end::Col-->
 					</div>
@@ -279,7 +279,7 @@
 						<!--end::Label-->
 						<!--begin::Col-->
 						<div class="col-lg-8 d-flex align-items-center">
-							<span class="fw-bolder fs-6 text-gray-800 me-2">@if($user_detail == NULL) - @else{{$user_detail->address}}@endif</span>
+							<span class="fs-6 text-gray-800 me-2">@if($user_detail == NULL) - @else{{$user_detail->address}}@endif</span>
 						</div>
 						<!--end::Col-->
 					</div>
@@ -293,7 +293,7 @@
 						<!--end::Label-->
 						<!--begin::Col-->
 						<div class="col-lg-8 d-flex align-items-center">
-							<span class="fw-bolder fs-6 text-gray-800 me-2">@if($user_detail == NULL) - @else{{$user_detail->city}}@endif</span>
+							<span class="fs-6 text-gray-800 me-2">@if($user_detail == NULL) - @else{{$user_detail->city}}@endif</span>
 						</div>
 						<!--end::Col-->
 					</div>
@@ -307,26 +307,38 @@
 						<!--end::Label-->
 						<!--begin::Col-->
 						<div class="col-lg-8 d-flex align-items-center">
-							<span class="fw-bolder fs-6 text-gray-800 me-2">@if($user_detail == NULL) - @else{{$user_detail->pincode}}@endif</span>
+							<span class="fs-6 text-gray-800 me-2">@if($user_detail == NULL) - @else{{$user_detail->pincode}}@endif</span>
 						</div>
 						<!--end::Col-->
 					</div>
 					<!--end::Input group-->
-					<!--begin::Input group-->
-					<div class="row mb-7">
-						<!--begin::Label-->
-						<label class="col-lg-4 fw-bold text-muted">Alternate Email
-							
-						</label>
-						<!--end::Label-->
-						<!--begin::Col-->
-						<div class="col-lg-8 d-flex align-items-center">
-							<span class="fw-bolder fs-6 text-gray-800 me-2">@if($user_detail == NULL) - @else{{$user_detail->email}}@endif</span>
+					@if($user_detail != NULL && $user->is_profile_verified == 0)
+						<!--begin::Notice-->
+						<div class="notice d-flex bg-light-warning rounded border-warning border border-dashed p-6">
+							<!--begin::Icon-->
+							<!--begin::Svg Icon | path: icons/duotune/general/gen044.svg-->
+							<span class="svg-icon svg-icon-2tx svg-icon-warning me-4">
+								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+									<rect opacity="0.3" x="2" y="2" width="20" height="20" rx="10" fill="black" />
+									<rect x="11" y="14" width="7" height="2" rx="1" transform="rotate(-90 11 14)" fill="black" />
+									<rect x="11" y="17" width="2" height="2" rx="1" transform="rotate(-90 11 17)" fill="black" />
+								</svg>
+							</span>
+							<!--end::Svg Icon-->
+							<!--end::Icon-->
+							<!--begin::Wrapper-->
+							<div class="d-flex flex-stack flex-grow-1">
+								<!--begin::Content-->
+								<div class="fw-bold">
+									<h4 class="text-gray-900 fw-bolder">Attention!</h4>
+									<div class="fs-6 text-gray-700">Your profile is under verification.</div>
+								</div>
+								<!--end::Content-->
+							</div>
+							<!--end::Wrapper-->
 						</div>
-						<!--end::Col-->
-					</div>
-					<!--end::Input group-->
-					
+						<!--end::Notice-->
+					@endif
 				</div>
 				<!--end::Card body-->
 			</div>
@@ -356,7 +368,7 @@
 						<!--end::Label-->
 						<!--begin::Col-->
 						<div class="col-lg-8">
-							<span class="fw-bolder fs-6 text-gray-800">@if($user_detail == NULL) - @else{{$user_detail->aadhaar_no}}@endif</span>
+							<span class="fs-6 text-gray-800">@if($user_detail == NULL) - @else{{$user_detail->aadhaar_no}}@endif</span>
 						</div>
 						<!--end::Col-->
 					</div>
@@ -368,7 +380,7 @@
 						<!--end::Label-->
 						<!--begin::Col-->
 						<div class="col-lg-8 fv-row">
-							<span class="fw-bold text-gray-800 fs-6">@if($user_detail == NULL) - @else{{$user_detail->pan_card_no}}@endif</span>
+							<span class="text-gray-800 fs-6">@if($user_detail == NULL) - @else{{$user_detail->pan_card_no}}@endif</span>
 						</div>
 						<!--end::Col-->
 					</div>
@@ -382,7 +394,7 @@
 						<label class="col-lg-4 fw-bold fs-6  text-muted">Aadhaar Card</label>
 						<!--end::Label-->
 						<!--begin::Label-->
-						<label class="col-lg-4 fw-bold fs-6 text-center text-muted">Pan Card</label>
+						<label class="col-lg-4 fw-bold fs-6  text-muted">Pan Card</label>
 						<!--end::Label-->
 					</div>
 					<!--end::Input group-->
@@ -406,7 +418,7 @@
 								@endif
 							</div>
 						</div>
-						<div class="col-lg-4 text-center">
+						<div class="col-lg-4 ">
 							<div class="symbol symbol-100px symbol-lg-160px symbol-fixed position-relative">
 								@if($user_detail == NULL) 
 								<img src="{{ asset('public/assets/media/misc/image.png') }}" alt="image" />
@@ -446,7 +458,7 @@
 						<!--end::Label-->
 						<!--begin::Col-->
 						<div class="col-lg-8">
-							<span class="fw-bolder fs-6 text-gray-800">@if($bank_detail == NULL) - @else{{$bank_detail->name}}@endif</span>
+							<span class="fs-6 text-gray-800">@if($bank_detail == NULL) - @else{{$bank_detail->name}}@endif</span>
 						</div>
 						<!--end::Col-->
 					</div>
@@ -458,7 +470,7 @@
 						<!--end::Label-->
 						<!--begin::Col-->
 						<div class="col-lg-8 fv-row">
-							<span class="fw-bold text-gray-800 fs-6">@if($bank_detail == NULL) - @else{{$bank_detail->number}}@endif</span>
+							<span class="text-gray-800 fs-6">@if($bank_detail == NULL) - @else{{$bank_detail->number}}@endif</span>
 						</div>
 						<!--end::Col-->
 					</div>
@@ -470,7 +482,7 @@
 						<!--end::Label-->
 						<!--begin::Col-->
 						<div class="col-lg-8 fv-row">
-							<span class="fw-bold text-gray-800 fs-6">@if($bank_detail == NULL) - @else{{$bank_detail->ifsc_code}}@endif</span>
+							<span class="text-gray-800 fs-6">@if($bank_detail == NULL) - @else{{$bank_detail->ifsc_code}}@endif</span>
 						</div>
 						<!--end::Col-->
 					</div>
@@ -482,7 +494,7 @@
 						<!--end::Label-->
 						<!--begin::Col-->
 						<div class="col-lg-8 fv-row">
-							<span class="fw-bold text-gray-800 fs-6">@if($bank_detail == NULL) - @else{{$bank_detail->branch}}@endif</span>
+							<span class="text-gray-800 fs-6">@if($bank_detail == NULL) - @else{{$bank_detail->branch}}@endif</span>
 						</div>
 						<!--end::Col-->
 					</div>
@@ -494,7 +506,7 @@
 						<!--end::Label-->
 						<!--begin::Col-->
 						<div class="col-lg-8 fv-row">
-							<span class="fw-bold text-gray-800 fs-6">@if($bank_detail == NULL) - @else{{$bank_detail->city}}@endif</span>
+							<span class="text-gray-800 fs-6">@if($bank_detail == NULL) - @else{{$bank_detail->city}}@endif</span>
 						</div>
 						<!--end::Col-->
 					</div>
@@ -528,7 +540,7 @@
 						<!--end::Label-->
 						<!--begin::Col-->
 						<div class="col-lg-8">
-							<span class="fw-bolder fs-6 text-gray-800">@if($nominee_detail == NULL) - @else{{$nominee_detail->name}}@endif</span>
+							<span class="fs-6 text-gray-800">@if($nominee_detail == NULL) - @else{{$nominee_detail->name}}@endif</span>
 						</div>
 						<!--end::Col-->
 					</div>
@@ -540,7 +552,7 @@
 						<!--end::Label-->
 						<!--begin::Col-->
 						<div class="col-lg-8 fv-row">
-							<span class="fw-bold text-gray-800 fs-6">@if($nominee_detail == NULL) - @else{{$nominee_detail->relationship}}@endif</span>
+							<span class="text-gray-800 fs-6">@if($nominee_detail == NULL) - @else{{$nominee_detail->relationship}}@endif</span>
 						</div>
 						<!--end::Col-->
 					</div>
@@ -552,7 +564,7 @@
 						<!--end::Label-->
 						<!--begin::Col-->
 						<div class="col-lg-8 fv-row">
-							<span class="fw-bold text-gray-800 fs-6">@if($nominee_detail == NULL) - @else{{$nominee_detail->age}}@endif</span>
+							<span class="text-gray-800 fs-6">@if($nominee_detail == NULL) - @else{{$nominee_detail->age}}@endif</span>
 						</div>
 						<!--end::Col-->
 					</div>
@@ -564,7 +576,7 @@
 						<!--end::Label-->
 						<!--begin::Col-->
 						<div class="col-lg-8 fv-row">
-							<span class="fw-bold text-gray-800 fs-6">@if($nominee_detail == NULL) - @else{{$nominee_detail->aadhaar_no}}@endif</span>
+							<span class="text-gray-800 fs-6">@if($nominee_detail == NULL) - @else{{$nominee_detail->aadhaar_no}}@endif</span>
 						</div>
 						<!--end::Col-->
 					</div>
@@ -593,6 +605,7 @@
 			</div>
 		</div>
 		<!--end::nominee View-->
+
 		<!--begin::Row-->
 		<div class="row gy-5 g-xl-8">
 			<div class="col-xl-12 mb-5 mb-xl-10">
