@@ -37,7 +37,7 @@ Route::get('/sign_in',[loginController::class, 'sign_in'])->name('sign_in');
 Route::post('/login',[loginController::class, 'login'])->name('login');
 //Login End
 
-//Dashboard
+//User Management
 Route::get('/dashboard',[UserController::class, 'dashboard'])->name('dashboard');
 Route::get('/get_user',[UserController::class, 'get_user'])->name('get_user');
 Route::post('/change_user_status',[UserController::class, 'change_user_status'])->name('change_user_status');
@@ -47,7 +47,8 @@ Route::get('/approve_user/{id}/',[UserController::class, 'approve_user'])->name(
 Route::get('/approve_user_profile/{id}/',[UserController::class, 'approve_user_profile'])->name('approve_user_profile');
 Route::post('/user_search',[UserController::class, 'user_search'])->name('user_search');
 Route::post('/save_profile',[UserController::class, 'save_profile'])->name('save_profile');
-//Dashboard end
+Route::post('/edit_profile',[UserController::class, 'edit_profile'])->name('edit_profile');
+//User Management end
 
 
 //Logout

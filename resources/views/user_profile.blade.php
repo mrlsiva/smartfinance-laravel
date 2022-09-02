@@ -368,7 +368,16 @@
 						<!--end::Label-->
 						<!--begin::Col-->
 						<div class="col-lg-8">
-							<span class="fs-6 text-gray-800">@if($user_detail == NULL) - @else{{$user_detail->aadhaar_no}}@endif</span>
+							<span class="fs-6 text-gray-800">
+								@if($user_detail == NULL)
+								 - 
+								@else
+									@php
+										$aadhaar_no = implode("-", str_split($user_detail->aadhaar_no, 4));
+									@endphp
+									{{$aadhaar_no}}
+								@endif
+							</span>
 						</div>
 						<!--end::Col-->
 					</div>
@@ -576,7 +585,16 @@
 						<!--end::Label-->
 						<!--begin::Col-->
 						<div class="col-lg-8 fv-row">
-							<span class="text-gray-800 fs-6">@if($nominee_detail == NULL) - @else{{$nominee_detail->aadhaar_no}}@endif</span>
+							<span class="text-gray-800 fs-6">
+								@if($nominee_detail == NULL)
+									- 
+								@else
+									@php
+										$nominee_aadhaar_no = implode("-", str_split($nominee_detail->aadhaar_no, 4));
+									@endphp
+									{{$nominee_aadhaar_no}}
+								@endif
+							</span>
 						</div>
 						<!--end::Col-->
 					</div>

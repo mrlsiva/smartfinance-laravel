@@ -26,7 +26,10 @@ class UserController extends Controller
 
         }else{
             $users = User::where('is_delete',0)->orderBy('id','Desc')->simplePaginate(10);
-            return view('dashboard')->with('users',$users);
+            $user_count = User::where('is_active',0)->orWhere('is_profile_verified',0)->count();
+            $search_txt = ' ';
+            $status = ' ';
+            return view('dashboard')->with('users',$users)->with('user_count',$user_count)->with('search_txt', $search_txt)->with('status', $status);
         }
         
     }
@@ -67,16 +70,70 @@ class UserController extends Controller
 
     public function user_search(Request $request) 
     { 
-        $search=$request->search; 
+        $search=$request->search;
+        $status=$request->status;
         if($search) {
-            $users = User::where('first_name', 'like', '%'.$search.'%')->orWhere('last_name', 'like', '%'.$search.'%')->where('is_delete',0)->orderBy('id','Desc')->simplePaginate(10);
+            if($status){
+                if($status == 'approved'){
+                    $users = User::where('first_name', 'like', '%'.$search.'%')->orWhere('last_name', 'like', '%'.$search.'%')->where('is_active',1)->where('is_delete',0)->orderBy('id','Desc')->simplePaginate(10);
+                }
+                elseif ($status == 'pending') {
+                    $users = User::where('first_name', 'like', '%'.$search.'%')->orWhere('last_name', 'like', '%'.$search.'%')->where('is_active',0)->where('is_delete',0)->orderBy('id','Desc')->simplePaginate(10);
+                }
+                elseif ($status == 'verified') {
+                    $users = User::where('first_name', 'like', '%'.$search.'%')->orWhere('last_name', 'like', '%'.$search.'%')->where('is_profile_verified',1)->where('is_delete',0)->orderBy('id','Desc')->simplePaginate(10);
+                }
+                elseif ($status == 'un_verified') {
+                    $users = User::where('first_name', 'like', '%'.$search.'%')->orWhere('last_name', 'like', '%'.$search.'%')->where('is_profile_verified',0)->where('is_delete',0)->orderBy('id','Desc')->simplePaginate(10);
+                }
+                elseif ($status == 'active') {
+                    $users = User::where('first_name', 'like', '%'.$search.'%')->orWhere('last_name', 'like', '%'.$search.'%')->where('is_lock',0)->where('is_delete',0)->orderBy('id','Desc')->simplePaginate(10);
+                }
+                elseif ($status == 'locked') {
+                    $users = User::where('first_name', 'like', '%'.$search.'%')->orWhere('last_name', 'like', '%'.$search.'%')->where('is_lock',1)->where('is_delete',0)->orderBy('id','Desc')->simplePaginate(10);
+                }
+                $search_txt = $search;
+                $status = $status;
+            }
+            else{
+                $users = User::where('first_name', 'like', '%'.$search.'%')->orWhere('last_name', 'like', '%'.$search.'%')->where('is_delete',0)->orderBy('id','Desc')->simplePaginate(10);
+                $search_txt = $search;
+                $status = ' ';
+            }
         }
         else{
-            $users = User::where('is_delete',0)->orderBy('id','Desc')->simplePaginate(10);
+            if($status){
+                if($status == 'approved'){
+                    $users = User::where('is_active',1)->where('is_delete',0)->orderBy('id','Desc')->simplePaginate(10);
+                }
+                elseif ($status == 'pending') {
+                    $users = User::where('is_active',0)->where('is_delete',0)->orderBy('id','Desc')->simplePaginate(10);
+                }
+                elseif ($status == 'verified') {
+                    $users = User::where('is_profile_verified',1)->where('is_delete',0)->orderBy('id','Desc')->simplePaginate(10);
+                }
+                elseif ($status == 'un_verified') {
+                    $users = User::where('is_profile_verified',0)->where('is_delete',0)->orderBy('id','Desc')->simplePaginate(10);
+                }
+                elseif ($status == 'active') {
+                    $users = User::where('is_lock',0)->where('is_delete',0)->orderBy('id','Desc')->simplePaginate(10);
+                }
+                elseif ($status == 'locked') {
+                    $users = User::where('is_lock',1)->where('is_delete',0)->orderBy('id','Desc')->simplePaginate(10);
+                }
+
+                $search_txt = ' ';
+                $status = $status;
+            }
+            else{
+                $users = User::where('is_delete',0)->orderBy('id','Desc')->simplePaginate(10);
+                $search_txt = ' ';
+                $status = ' ';
+
+            }        
         }
-
-
-        return view('dashboard')->with('users',$users);     
+        $user_count = User::where('is_active',0)->orWhere('is_profile_verified',0)->count();
+        return view('dashboard')->with('users',$users)->with('search_txt', $search_txt)->with('status', $status)->with('user_count', $user_count);     
     }
 
     public function profile(){
@@ -117,6 +174,9 @@ class UserController extends Controller
 
     public function save_profile(Request $request)
     {
+        $aadhaar_no = implode("-", str_split($request->aadhaar_no, 4));
+        $nominee_aadhaar_no = implode("-", str_split($request->nominee_aadhaar_no, 4));
+
         $id = Auth::user()->id;
         $user_detail = UserDetail::create([
             'user_id' => $id,
@@ -180,5 +240,103 @@ class UserController extends Controller
         $nominee_detail->save();
 
         return redirect('dashboard');
+    }
+
+    public function edit_profile(Request $request)
+    {
+        $type = $request->type;
+        $user_id = $request->user_id;
+        if($type == 'basic'){
+            $validatedData = $request->validate([
+                'first_name' => 'required',
+                'email' => 'required|email',
+                'phone' => 'required|numeric|digits:10',
+                'address' => 'required',
+                'city' => 'required',
+                'pincode' => 'required|digits:6',
+            ]);
+            DB::table('users')->where('id',$user_id)->update(['first_name' => $request->first_name,'last_name' => $request->last_name,'email' => $request->email,'phone' => $request->phone]);
+
+            DB::table('user_details')->where('user_id',$user_id)->update(['address' => $request->address,'city' => $request->city,'pincode' => $request->pincode]);
+            return redirect()->back();
+        }
+        if($type == 'additional'){
+            $validatedData = $request->validate([
+                'aadhaar_no' => 'required|numeric|digits:12',
+                'pan_card_no' => 'required|regex:/([A-Z]){5}([0-9]){4}([A-Z]){1}$/',
+                'avatar' => 'image|mimes:jpg,png,jpeg,svg',
+                'aadhaar_card' => 'image|mimes:jpg,png,jpeg,svg',
+                'pan_card' => 'image|mimes:jpg,png,jpeg,svg',
+            ]);
+            
+
+            DB::table('user_details')->where('user_id',$user_id)->update(['aadhaar_no' => $request->aadhaar_no,'pan_card_no' => $request->pan_card_no]);
+
+            if($request->avatar != NULL){
+                $image = $request->file('avatar');
+                $rand_name = time() . Str::random(12);
+                $filename = $rand_name . '.jpg';
+                $photo = Image::make($image)->encode('jpg', 80);
+                Storage::disk('public')->put(config('path.avatar').$filename, $photo);
+                DB::table('user_details')->where('user_id',$user_id)->update(['avatar' => $filename]);
+            }
+
+            if($request->aadhaar_card != NULL) {  
+                //Aadhar Card
+                $image = $request->file('aadhaar_card');
+                $rand_name = time() . Str::random(12);
+                $filename = $rand_name . '.jpg';
+                $photo = Image::make($image)->encode('jpg', 80);
+                Storage::disk('public')->put(config('path.aadhaar_card').$filename, $photo);
+                DB::table('user_details')->where('user_id',$user_id)->update(['aadhaar' => $filename]);
+            }
+            
+            if($request->pan_card != NULL){
+                //Pan Card
+                $image = $request->file('pan_card');
+                $rand_name = time() . Str::random(12);
+                $filename = $rand_name . '.jpg';
+                $photo = Image::make($image)->encode('jpg', 80);
+                Storage::disk('public')->put(config('path.pan_card').$filename, $photo);
+                DB::table('user_details')->where('user_id',$user_id)->update(['pan' => $filename]);
+            }
+            return redirect()->back();
+        }
+        if($type == 'basic'){
+            $validatedData = $request->validate([
+                'holder_name' => 'required',
+                'account_no' => 'required|numeric',
+                'ifsc_code' => 'required|regex:/^[A-Z]{4}0[0-9]{6}$/',
+                'branch' => 'required',
+                'city' => 'required', 
+            ]);
+
+            DB::table('bank_details')->where('user_id',$user_id)->update(['name' => $request->holder_name,'number' => $request->account_no,'ifsc_code' => $request->ifsc_code,'branch' => $request->branch,'city' => $request->city]);
+            return redirect()->back();
+        } 
+        if($type == 'nominee'){
+            $validatedData = $request->validate([
+                'nominee_name' => 'required',
+                'relationship' => 'required',
+                'age' => 'required|numeric',
+                'nominee_aadhaar_no' => 'required|numeric|digits:12',
+                'nominee_aadhar' => 'image|mimes:jpg,png,jpeg,svg', 
+            ]);
+
+            DB::table('nominee_details')->where('user_id',$user_id)->update(['name' => $request->nominee_name,'relationship' => $request->relationship,'age' => $request->age,'aadhaar_no' => $request->nominee_aadhaar_no]);
+
+            if($request->nominee_aadhar != NULL){
+                //Aadhar Card
+                $image = $request->file('nominee_aadhar');
+                $rand_name = time() . Str::random(12);
+                $filename = $rand_name . '.jpg';
+                $photo = Image::make($image)->encode('jpg', 80);
+                Storage::disk('public')->put(config('path.aadhaar_card').$filename, $photo);
+                DB::table('nominee_details')->where('user_id',$user_id)->update(['aadhaar' => $filename]);
+                
+            }
+            return redirect()->back();
+        }
+
     }
 }

@@ -13,7 +13,7 @@
                 <ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
                     
                     <!--begin::Item-->
-                    <li class="breadcrumb-item text-white opacity-75">Dashboards</li>
+                    <li class="breadcrumb-item text-white opacity-75"><a class="text-hover-primary text-white opacity-75" href="{{route('dashboard')}}">Dashboards</a></li>
                     <!--end::Item-->        
                 </ul>
                 <!--end::Breadcrumb-->
@@ -996,7 +996,7 @@
         }
         var aadhaar_no = document.getElementById("aadhaar_no").value;
         if(aadhaar_no){
-            format = /^[2-9]{1}[0-9]{3}\s{1}[0-9]{4}\s{1}[0-9]{4}$/;
+            format = /^\d{12}$/;
             if(!format.test(aadhaar_no))
             {
                 alertText = alertText+"<br>Aadhaar number is not valid";
@@ -1138,7 +1138,7 @@
         }
         var nominee_aadhaar_no = document.getElementById("nominee_aadhaar_no").value;
         if(nominee_aadhaar_no){
-            format = /^[2-9]{1}[0-9]{3}\s{1}[0-9]{4}\s{1}[0-9]{4}$/;
+            format = /^\d{12}$/;
             if(!format.test(nominee_aadhaar_no))
             {
                 alertText = alertText+"<br>Aadhaar number is not valid";

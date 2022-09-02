@@ -13,7 +13,7 @@
                 <ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
                     
                     <!--begin::Item-->
-                    <li class="breadcrumb-item text-white opacity-75">Dashboard</li>
+                    <li class="breadcrumb-item text-white opacity-75"><a class="text-hover-primary text-white opacity-75" href="{{route('dashboard')}}">Dashboard</a></li>
                     <!--end::Item-->        
                 </ul>
                 <!--end::Breadcrumb-->
@@ -53,7 +53,7 @@
                                             </span>            
                                         </div>
                                         <span class="symbol symbol-50px">
-                                            <span class="px-3 py-1 fs-5 fw-bolder bg-info text-white">{{$users->count()}}</span>
+                                            <span class="px-3 py-1 fs-5 fw-bolder bg-info text-white">{{$user_count}}</span>
                                         </span>
                                     </div>
                                     <a href="#" onclick="user()" class="text-dark fw-bold fs-6">User Management</a>
@@ -146,37 +146,54 @@
                             <span class="card-label fw-bolder text-dark">User Management</span>
                             <span class="text-gray-400 mt-1 fw-bold fs-6">Avg. 10 customers added per day</span>
                         </h3>
-                        <div class="card-toolbar" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover" title="Search by user name">
+                        
                             <!--begin::Search-->
                             <div class="position-relative my-1">
                                 <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
-                                
                                 <!--end::Svg Icon-->
                                 <form class="form w-100" novalidate="novalidate" id="kt_sign_in_form" method="post" action="{{route('user_search')}}" enctype="multipart/form-data">
                                     @csrf
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <input type="text" data-kt-table-widget-4="search" class="form-control w-150px fs-7 ps-12" placeholder="Search" name="search" id="search" />
-                                        </div>
-                                        <div class="col-md-1">
-                                        </div>
-                                        <div class="col-md-5">
-                                            <button type="submit"  class="btn btn-light"><i class="fa fa-search" id="fa"></i></button>
-                                        </div>
+                                    <div class="d-flex align-items-center fw-bolder">
+                                        <div class="text-muted fs-7 me-2">Status</div>
+                                        <!--begin::Select-->
+                                        @if($status == ' ')
+                                        <select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px" data-kt-table-widget-4="filter_status" name="status">
+                                            <option></option>
+                                            <option value="" selected="selected">Show All</option>
+                                            <option value="approved">Approved</option>
+                                            <option value="pending">Pending</option>
+                                            <option value="verified">Verified</option>
+                                            <option value="un_verified">Un Verified</option>
+                                            <option value="active">Active</option>
+                                            <option value="locked">Locked</option>
+                                        </select>
+                                        @else
+                                        <select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px"data-kt-table-widget-4="filter_status" name="status">
+                                            <option></option>
+                                            <option value="">Show All</option>
+                                            <option value="approved" {{($status == 'approved')?"selected":""}} >Approved</option>
+                                            <option value="pending" {{($status == 'pending')?"selected":""}}>Pending</option>
+                                            <option value="verified" {{($status == 'verified')?"selected":""}} >Verified</option>
+                                            <option value="un_verified" {{($status == 'un_verified')?"selected":""}}>Un Verified</option>
+                                            <option value="active" {{($status == 'active')?"selected":""}}>Active</option>
+                                            <option value="locked" {{($status == 'locked')?"selected":""}}>Locked</option>
+
+                                        </select>
+                                        @endif
+                                        <!--end::Select-->
+                                        @if($search_txt == ' ')
+                                        <input type="text" data-kt-table-widget-4="search" class="form-control w-150px fs-7 ps-12" placeholder="Search" name="search" />
+                                        @else
+                                        <input type="text" data-kt-table-widget-4="search" class="form-control w-150px fs-7 ps-12" placeholder="Search" name="search" value="{{$search_txt}}" />
+                                        @endif
+                                        &nbsp;&nbsp;&nbsp;
+                                        <button type="submit"  class="btn btn-light"><i class="fa fa-search" id="fa"></i></button>
+                                        
                                     </div>
                                 </form>
                             </div>
                             <!--end::Search-->
-                            <!-- <a href="#" class="btn btn-sm btn-light btn-active-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_invite_friends">
-                                <span class="svg-icon svg-icon-3">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                        <rect opacity="0.5" x="11.364" y="20.364" width="16" height="2" rx="1" transform="rotate(-90 11.364 20.364)" fill="black" />
-                                        <rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="black" />
-                                    </svg>
-                                </span>
-                                User Management 
-                            </a> -->
-                        </div>
+                        
                     </div>
                     <!--end::Header-->
                     <!--begin::Body-->
@@ -200,8 +217,9 @@
                                 </thead>
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
-                                <tbody>
+                                <tbody class="user_table">
                                     @foreach($users as $user)
+                                    
                                         <tr>                               
                                             <td class="">
                                                 <div class="d-flex align-items-center">
@@ -273,6 +291,7 @@
                                                 </td>
                                             @endif
                                         </tr>
+                                    
                                     @endforeach
                                 </tbody>
                                 <!--end::Table body-->
@@ -1272,7 +1291,7 @@
         }
         var aadhaar_no = document.getElementById("aadhaar_no").value;
         if(aadhaar_no){
-            format = /^[2-9]{1}[0-9]{3}\s{1}[0-9]{4}\s{1}[0-9]{4}$/;
+            format = /^\d{12}$/;
             if(!format.test(aadhaar_no))
             {
                 alertText = alertText+"<br>Aadhaar number is not valid";
@@ -1414,7 +1433,7 @@
         }
         var nominee_aadhaar_no = document.getElementById("nominee_aadhaar_no").value;
         if(nominee_aadhaar_no){
-            format = /^[2-9]{1}[0-9]{3}\s{1}[0-9]{4}\s{1}[0-9]{4}$/;
+            format = /^\d{12}$/;
             if(!format.test(nominee_aadhaar_no))
             {
                 alertText = alertText+"<br>Aadhaar number is not valid";
@@ -1665,6 +1684,8 @@
         });
     });
 </script> -->
+
+
 
 
 @endsection
