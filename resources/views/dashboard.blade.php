@@ -1185,10 +1185,7 @@
 </div>
 <!-- end::Modal -->
 
-<!--begin::Global Javascript Bundle(used by all pages)-->
-    <script src="{{ asset('public/assets/plugins/global/plugins.bundle.js') }}"></script>
-    <script src="{{ asset('public/assets/js/scripts.bundle.js') }}"></script>
-<!--end::Global Javascript Bundle-->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script type="application/javascript">
     jQuery(document).ready(function ()
     {
