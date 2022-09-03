@@ -45,9 +45,11 @@ Route::get('/profile',[UserController::class, 'profile'])->name('profile');
 Route::get('/user/{id}/',[UserController::class, 'user'])->name('user');
 Route::get('/approve_user/{id}/',[UserController::class, 'approve_user'])->name('approve_user');
 Route::get('/approve_user_profile/{id}/',[UserController::class, 'approve_user_profile'])->name('approve_user_profile');
-Route::post('/user_search',[UserController::class, 'user_search'])->name('user_search');
+Route::get('user_search',[UserController::class, 'user_search'])->name('user_search');
 Route::post('/save_profile',[UserController::class, 'save_profile'])->name('save_profile');
 Route::post('/edit_profile',[UserController::class, 'edit_profile'])->name('edit_profile');
+
+
 //User Management end
 
 

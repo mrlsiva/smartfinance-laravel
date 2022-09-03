@@ -76,73 +76,6 @@ class UserController extends Controller
         
     }
 
-    public function user_search(Request $request) 
-    { 
-        $search=$request->search;
-        $status=$request->status;
-        if($search) {
-            if($status){
-                if($status == 'approved'){
-                    $users = User::where('first_name', 'like', '%'.$search.'%')->orWhere('last_name', 'like', '%'.$search.'%')->where('is_active',1)->where('is_delete',0)->orderBy('id','Desc')->simplePaginate(10);
-                }
-                elseif ($status == 'pending') {
-                    $users = User::where('first_name', 'like', '%'.$search.'%')->orWhere('last_name', 'like', '%'.$search.'%')->where('is_active',0)->where('is_delete',0)->orderBy('id','Desc')->simplePaginate(10);
-                }
-                elseif ($status == 'verified') {
-                    $users = User::where('first_name', 'like', '%'.$search.'%')->orWhere('last_name', 'like', '%'.$search.'%')->where('is_profile_verified',1)->where('is_profile_updated',0)->where('is_delete',0)->orderBy('id','Desc')->simplePaginate(10);
-                }
-                elseif ($status == 'un_verified') {
-                    $users = User::where('first_name', 'like', '%'.$search.'%')->orWhere('last_name', 'like', '%'.$search.'%')->where('is_profile_verified',0)->orWhere('is_profile_updated',1)->where('is_delete',0)->orderBy('id','Desc')->simplePaginate(10);
-                }
-                elseif ($status == 'active') {
-                    $users = User::where('first_name', 'like', '%'.$search.'%')->orWhere('last_name', 'like', '%'.$search.'%')->where('is_lock',0)->where('is_delete',0)->orderBy('id','Desc')->simplePaginate(10);
-                }
-                elseif ($status == 'locked') {
-                    $users = User::where('first_name', 'like', '%'.$search.'%')->orWhere('last_name', 'like', '%'.$search.'%')->where('is_lock',1)->where('is_delete',0)->orderBy('id','Desc')->simplePaginate(10);
-                }
-                $search_txt = $search;
-                $status = $status;
-            }
-            else{
-                $users = User::where('first_name', 'like', '%'.$search.'%')->orWhere('last_name', 'like', '%'.$search.'%')->where('is_delete',0)->orderBy('id','Desc')->simplePaginate(10);
-                $search_txt = $search;
-                $status = ' ';
-            }
-        }
-        else{
-            if($status){
-                if($status == 'approved'){
-                    $users = User::where('is_active',1)->where('is_delete',0)->orderBy('id','Desc')->simplePaginate(10);
-                }
-                elseif ($status == 'pending') {
-                    $users = User::where('is_active',0)->where('is_delete',0)->orderBy('id','Desc')->simplePaginate(10);
-                }
-                elseif ($status == 'verified') {
-                    $users = User::where('is_profile_verified',1)->where('is_profile_updated',0)->where('is_delete',0)->orderBy('id','Desc')->simplePaginate(10);
-                }
-                elseif ($status == 'un_verified') {
-                    $users = User::where('is_profile_verified',0)->orWhere('is_profile_updated',1)->where('is_delete',0)->orderBy('id','Desc')->simplePaginate(10);
-                }
-                elseif ($status == 'active') {
-                    $users = User::where('is_lock',0)->where('is_delete',0)->orderBy('id','Desc')->simplePaginate(10);
-                }
-                elseif ($status == 'locked') {
-                    $users = User::where('is_lock',1)->where('is_delete',0)->orderBy('id','Desc')->simplePaginate(10);
-                }
-
-                $search_txt = ' ';
-                $status = $status;
-            }
-            else{
-                $users = User::where('is_delete',0)->orderBy('id','Desc')->simplePaginate(10);
-                $search_txt = ' ';
-                $status = ' ';
-
-            }        
-        }
-        $user_count = User::where('is_active',0)->orWhere('is_profile_verified',0)->count();
-        return view('dashboard')->with('users',$users)->with('search_txt', $search_txt)->with('status', $status)->with('user_count', $user_count);     
-    }
 
     public function profile(){
 
@@ -202,6 +135,10 @@ class UserController extends Controller
         Storage::disk('public')->put(config('path.avatar').$filename, $photo);
         $user_detail->avatar = $filename;
         $user_detail->save();
+
+        DB::table('users')->where('id',$user_id)->update(['avatar' => $filename]);
+
+
 
         //Aadhar Card
         $image = $request->file('aadhaar_card');
@@ -296,6 +233,7 @@ class UserController extends Controller
                 $photo = Image::make($image)->encode('jpg', 80);
                 Storage::disk('public')->put(config('path.avatar').$filename, $photo);
                 DB::table('user_details')->where('user_id',$user_id)->update(['avatar' => $filename]);
+                DB::table('users')->where('id',$user_id)->update(['avatar' => $filename]);
             }
 
             if($request->aadhaar_card != NULL) {  
@@ -355,5 +293,18 @@ class UserController extends Controller
             return redirect()->back();
         }
 
+    }
+
+    public function user_search(Request $request)
+    {
+        $search = $request->search;
+
+        if($search){
+            $users = User::join('roles','users.role_id','=','roles.id')->where('users.first_name', 'like', '%'.$search.'%')->orWhere('users.last_name', 'like', '%'.$search.'%')->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
+        }
+        else{
+            $users = User::join('roles','users.role_id','=','roles.id')->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
+        }
+        return $users;
     }
 }

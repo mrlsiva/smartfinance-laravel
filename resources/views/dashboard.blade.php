@@ -146,54 +146,46 @@
                             <span class="card-label fw-bolder text-dark">User Management</span>
                             <span class="text-gray-400 mt-1 fw-bold fs-6">Avg. 10 customers added per day</span>
                         </h3>
-                        
-                            <!--begin::Search-->
-                            <div class="position-relative my-1">
-                                <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
-                                <!--end::Svg Icon-->
-                                <form class="form w-100" novalidate="novalidate" id="kt_sign_in_form" method="post" action="{{route('user_search')}}" enctype="multipart/form-data">
-                                    @csrf
-                                    <div class="d-flex align-items-center fw-bolder">
-                                        <div class="text-muted fs-7 me-2">Status</div>
-                                        <!--begin::Select-->
-                                        @if($status == ' ')
-                                        <select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px" data-kt-table-widget-4="filter_status" name="status">
-                                            <option></option>
-                                            <option value="" selected="selected">Show All</option>
-                                            <option value="approved">Approved</option>
-                                            <option value="pending">Pending</option>
-                                            <option value="verified">Verified</option>
-                                            <option value="un_verified">Un Verified</option>
-                                            <option value="active">Active</option>
-                                            <option value="locked">Locked</option>
-                                        </select>
-                                        @else
-                                        <select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px"data-kt-table-widget-4="filter_status" name="status">
-                                            <option></option>
-                                            <option value="">Show All</option>
-                                            <option value="approved" {{($status == 'approved')?"selected":""}} >Approved</option>
-                                            <option value="pending" {{($status == 'pending')?"selected":""}}>Pending</option>
-                                            <option value="verified" {{($status == 'verified')?"selected":""}} >Verified</option>
-                                            <option value="un_verified" {{($status == 'un_verified')?"selected":""}}>Un Verified</option>
-                                            <option value="active" {{($status == 'active')?"selected":""}}>Active</option>
-                                            <option value="locked" {{($status == 'locked')?"selected":""}}>Locked</option>
-
-                                        </select>
-                                        @endif
-                                        <!--end::Select-->
-                                        @if($search_txt == ' ')
-                                        <input type="text" data-kt-table-widget-4="search" class="form-control w-150px fs-7 ps-12" placeholder="Search" name="search" />
-                                        @else
-                                        <input type="text" data-kt-table-widget-4="search" class="form-control w-150px fs-7 ps-12" placeholder="Search" name="search" value="{{$search_txt}}" />
-                                        @endif
-                                        &nbsp;&nbsp;&nbsp;
-                                        <button type="submit"  class="btn btn-light"><i class="fa fa-search" id="fa"></i></button>
-                                        
-                                    </div>
-                                </form>
+                        <!--begin::Actions-->
+                        <div class="card-toolbar">
+                            <!--begin::Filters-->
+                            <div class="d-flex flex-stack flex-wrap gap-4">
+                                <!--begin::Destination-->
+                                <!--end::Destination-->
+                                <!--begin::Status-->
+                                <div class="d-flex align-items-center fw-bolder">
+                                    <!--begin::Label-->
+                                    <div class="text-muted fs-7 me-2">Status</div>
+                                    <!--end::Label-->
+                                    <!--begin::Select-->
+                                    <select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Select an option" data-kt-table-widget-4="filter_status">
+                                        <option></option>
+                                        <option value="Show All" selected="selected">Show All</option>
+                                        <option value="Shipped">Approved</option>
+                                        <option value="Confirmed">Confirmed</option>
+                                        <option value="Rejected">Rejected</option>
+                                        <option value="Pending">Pending</option>
+                                    </select>
+                                    <!--end::Select-->
+                                </div>
+                                <!--end::Status-->
+                                <!--begin::Search-->
+                                <div class="position-relative my-1">
+                                    <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
+                                    <span class="svg-icon svg-icon-2 position-absolute top-50 translate-middle-y ms-4">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                            <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="black" />
+                                            <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="black" />
+                                        </svg>
+                                    </span>
+                                    <!--end::Svg Icon-->
+                                    <input type="text"  class="form-control w-150px fs-7 ps-12" placeholder="Search" name="search" />
+                                </div>
+                                <!--end::Search-->
                             </div>
-                            <!--end::Search-->
-                        
+                            <!--begin::Filters-->
+                        </div>
+                        <!--end::Actions-->
                     </div>
                     <!--end::Header-->
                     <!--begin::Body-->
@@ -1193,7 +1185,98 @@
 </div>
 <!-- end::Modal -->
 
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<!--begin::Global Javascript Bundle(used by all pages)-->
+    <script src="{{ asset('public/assets/plugins/global/plugins.bundle.js') }}"></script>
+    <script src="{{ asset('public/assets/js/scripts.bundle.js') }}"></script>
+<!--end::Global Javascript Bundle-->
+<script type="application/javascript">
+    jQuery(document).ready(function ()
+    {
+        jQuery('input[name="search"]').on('change',function(){
+            var search = jQuery(this).val();
+                jQuery.ajax({
+                    url : 'user_search',
+                    type: 'GET',
+                    dataType: 'json',
+                    data: { search: search},
+                    success:function(data)
+                    {
+                        console.log(data);
+                        var output = '';
+                        if(data.length > 0){
+                            for(var count = 0; count < data.length; count++)
+                            {
+                                var directory = 'user/'+data[count].id+'/';
+                                var image_url = 'storage/app/public/avatar/'+data[count].avatar+'/';
+                                output += '<tr>';
+                                if(data[count].avatar){
+                                    output += '<td><div class="d-flex align-items-center"><div class="symbol symbol-45px me-5"><img src="'+image_url+'" alt="" /></div><div class="d-flex justify-content-start flex-column"><a href="'+directory+'" class="text-dark fw-bolder text-hover-primary fs-6">'+data[count].first_name+' '+data[count].last_name+'</a><span class="text-muted fw-bold text-muted d-block fs-7">'+data[count].id+'</span></td>';
+                                    
+                                }
+                                else{
+
+                                    output += '<td><div class="d-flex align-items-center"><div class="symbol symbol-45px me-5"><img src="{{ asset('public/assets/media/avatars/blank.png') }}" alt="" /></div><div class="d-flex justify-content-start flex-column"><a href="'+directory+'" class="text-dark fw-bolder text-hover-primary fs-6">'+data[count].first_name+' '+data[count].last_name+'</a><span class="text-muted fw-bold text-muted d-block fs-7">'+data[count].id+'</span></td>';
+                                    
+                                }
+                                
+                                output += '<td>'+data[count].name+'</td>';
+                                if(data[count].is_finanace == 0){
+                                    output += '<td>No</td>';
+                                }
+                                else{
+                                    output += '<td>Yes</td>';
+                                }
+                                if(data[count].is_tax == 0){
+                                    output += '<td>No</td>';
+                                }
+                                else{
+                                    output += '<td>Yes</td>';
+                                }
+                                if(data[count].is_profile_verified == 0 || data[count].is_profile_updated == 1){
+
+                                    output += '<td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>';
+                                }
+                                else{
+                                    output += '<td><span class="badge py-3 px-4 fs-7 badge-light-success">Verified</span></td>';
+                                }
+                                if(data[count].is_active == 0){
+
+                                    output += '<td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>';
+                                }
+                                else{
+                                    output += '<td><span class="badge py-3 px-4 fs-7 badge-light-success">Approved</span></td>';
+                                }
+                                if(data[count].is_lock == 0){
+
+                                    output += '<td><span class="badge py-3 px-4 fs-7 badge-light-success">Active</span></td>';
+                                }
+                                else{
+                                    output += '<td><span class="badge py-3 px-4 fs-7 badge-light-danger">Locked</span></td>';
+                                }
+                                if(data[count].role_id == 1){
+
+                                    output += '<td><div class=" flex-shrink-0"><button type="button"  class="btn  btn-light mb-5" onclick="super_admin()"><i class="fas fa-pencil-alt" id="fa"></i></button></div></td>';
+                                }
+                                else{
+                                    output += '<td><div class=" flex-shrink-0"><button type="button" id="kt_sign_in_submit" class="btn  btn-light mb-5" data-system_id="'+data[count].id+'" name="edit"><i class="fas fa-pencil-alt" id="fa"></i></button></div></td>';
+                                }
+                                output += '</tr>';
+                            }
+                        }
+                        else
+                        {
+                           output += '<tr>';
+                           output += '<td colspan="6">No Data Found</td>';
+                           output += '</tr>';
+                       }
+                       $('tbody').html(output);
+                    }
+                });
+            
+        });
+    });
+</script>
+
 
 <script type="text/javascript">
 
