@@ -52,7 +52,7 @@
 									</button>
                                 <!--end::Mobile menu toggle-->
                                 <!--begin::Logo image-->
-                                <a href="index.html">
+                                <a href="">
                                     <img alt="Logo" src="{{ asset('public/assets/img/full-logo.png') }}" class="logo-default h-25px h-lg-30px" />
                                     <img alt="Logo" src="{{ asset('public/assets/img/full-logo.png') }}" class="logo-sticky h-20px h-lg-25px" />
                                 </a>
@@ -1028,12 +1028,12 @@
                         <!--begin::Copyright-->
                         <div class="d-flex align-items-center order-2 order-md-1">
                             <!--begin::Logo-->
-                            <a href="index.html">
+                            <a href="">
                                 <img alt="Logo" src="{{ asset('public/assets/img/logo.png') }}" class="h-15px h-md-20px" />
                             </a>
                             <!--end::Logo image-->
                             <!--begin::Logo image-->
-                            <span class="mx-5 fs-6 fw-bold text-gray-600 pt-1" href="index.html">© 2022 Smart Finance Inc.</span>
+                            <span class="mx-5 fs-6 fw-bold text-gray-600 pt-1" href="">© 2022 Smart Finance Inc.</span>
                             <!--end::Logo image-->
                         </div>
                         <!--end::Copyright-->

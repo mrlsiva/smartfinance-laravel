@@ -53,7 +53,7 @@
                         <!--end::Heaeder menu toggle-->
                         <!--begin::Header Logo-->
                         <div class="header-logo me-5 me-md-10 flex-grow-1 flex-lg-grow-0">
-                            <a class="logo-top" href="index.html">
+                            <a class="logo-top" href="{{route('dashboard')}}">
                                 <img alt="Logo" src="{{ asset('public/assets/img/logo.png') }}" class="logo-default h-25px mr-10" />
                                 <img alt="Logo" src="{{ asset('public/assets/img/logo.png') }}" class="logo-sticky h-25px mr-10" /> Smart Fnance
                             </a>
