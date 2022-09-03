@@ -225,9 +225,11 @@
 						<h3 class="fw-bolder m-0">Basic Details</h3>
 					</div>
 					<!--end::Card title-->
+					@if($user_detail != NULL)
 					<!--begin::Action-->
-					<!-- <a href="#" class="btn align-self-center">Edit Profile</a> -->
+					<a href="#" class="btn align-self-center text-hover-primary" data-bs-toggle="modal" data-bs-target="#BasicModal">Edit Profile</a>
 					<!--end::Action-->
+					@endif
 				</div>
 				<!--begin::Card header-->
 				<!--begin::Card body-->
@@ -354,9 +356,11 @@
 						<h3 class="fw-bolder m-0">Additional Details</h3>
 					</div>
 					<!--end::Card title-->
+					@if($user_detail != NULL)
 					<!--begin::Action-->
-					<!-- <a href="#" class="btn align-self-center">Edit Profile</a> -->
+					<a href="#" class="btn align-self-center" data-bs-toggle="modal" data-bs-target="#AdditionalModal">Edit Profile</a>
 					<!--end::Action-->
+					@endif
 				</div>
 				<!--begin::Card header-->
 				<!--begin::Card body-->
@@ -453,9 +457,11 @@
 						<h3 class="fw-bolder m-0">Bank Details</h3>
 					</div>
 					<!--end::Card title-->
+					@if($bank_detail != NULL)
 					<!--begin::Action-->
-					<!-- <a href="#" class="btn align-self-center">Edit Profile</a> -->
+					<a href="#" class="btn align-self-center" data-bs-toggle="modal" data-bs-target="#BankModal">Edit Profile</a>
 					<!--end::Action-->
+					@endif
 				</div>
 				<!--begin::Card header-->
 				<!--begin::Card body-->
@@ -535,9 +541,11 @@
 						<h3 class="fw-bolder m-0">Nominee Details</h3>
 					</div>
 					<!--end::Card title-->
+					@if($nominee_detail != NULL)
 					<!--begin::Action-->
-					<!-- <a href="#" class="btn align-self-center">Edit Profile</a> -->
+					<a href="#" class="btn align-self-center" data-bs-toggle="modal" data-bs-target="#NomineeModal">Edit Profile</a>
 					<!--end::Action-->
+					@endif
 				</div>
 				<!--begin::Card header-->
 				<!--begin::Card body-->
@@ -752,6 +760,571 @@
     <!--end::Post-->
 </div>
 <!--end::Container-->
+
+<!-- Basic Modal -->
+<div class="modal fade" id="BasicModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Basic Details</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<form method="post"  action="{{route('edit_profile')}}" enctype="multipart/form-data">
+				@csrf
+				<div class="modal-body" >
+					<input type="hidden" name="profile_update" value="true">
+					<input type="hidden" name="type" value="basic">
+					<input type="hidden" name="user_id" value="{{$user->id}}">
+					<div class="row">
+						<div class="col-md-6">
+							<div class="fv-row mb-8">
+								<!--begin::Label-->
+								<label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+									<span class="required">First Name</span>
+									<i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="First Name"></i>
+								</label>
+								<!--end::Label-->
+								<!--begin::Input-->
+								<input type="text" class="form-control form-control-solid @error('first_name') is-invalid @enderror" placeholder="First Name" value="{{$user->first_name}}" name="first_name" id="first_name" />
+								<!--end::Input-->
+								@error('first_name')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="fv-row mb-8">
+								<!--begin::Label-->
+								<label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+									<span class="">Last Name</span>
+								</label>
+								<!--end::Label-->
+								<!--begin::Input-->
+								<input type="text" class="form-control form-control-solid" placeholder="Last Name" value="{{$user->last_name}}" name="last_name" id="last_name" />
+								<!--end::Input-->
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="fv-row mb-8">
+								<!--begin::Label-->
+								<label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+									<span class="required">Email</span>
+									<i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Email"></i>
+								</label>
+								<!--end::Label-->
+								<!--begin::Input-->
+								<input type="email" class="form-control form-control-solid @error('email') is-invalid @enderror" placeholder="Email" value="{{$user->email}}" name="email" id="email" />
+								<!--end::Input-->
+								@error('email')
+                                    <div class="text-danger">{{ $message }}</div>
+                            	@enderror
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="fv-row mb-8">
+								<!--begin::Label-->
+								<label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+									<span class="required">Mobile</span>
+									<i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Mobile"></i>
+								</label>
+								<!--end::Label-->
+								<!--begin::Input-->
+								<input type="number" class="form-control form-control-solid  @error('phone') is-invalid @enderror" placeholder="Mobile" value="{{$user->phone}}" name="phone" id="phone" />
+								<!--end::Input-->
+								@error('phone')
+                                    <div class="text-danger">{{ $message }}</div>
+                            	@enderror
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="fv-row mb-8">
+								<!--begin::Label-->
+								<label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+									<span class="required">Address</span>
+									<i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Address"></i>
+								</label>
+								<!--end::Label-->
+								@if($user_detail == NULL)
+									<!--begin::Input-->
+									<input type="text" class="form-control form-control-solid" placeholder="Address" value="" name="address" id="address" required />
+									<!--end::Input-->
+								@else
+									<!--begin::Input-->
+									<input type="text" class="form-control form-control-solid" placeholder="Address" value="{{$user_detail->address}}" name="address" id="address" required />
+									<!--end::Input-->
+								@endif
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="fv-row mb-8">
+								<!--begin::Label-->
+								<label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+									<span class="required">City</span>
+									<i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="City"></i>
+								</label>
+								<!--end::Label-->
+								@if($user_detail == NULL)
+									<!--begin::Input-->
+									<input type="text" class="form-control form-control-solid" placeholder="City" value="" name="city" id="city" required />
+									<!--end::Input-->
+								@else
+									<!--begin::Input-->
+									<input type="text" class="form-control form-control-solid" placeholder="City" value="{{$user_detail->city}}" name="city" id="city" required />
+									<!--end::Input-->
+								@endif
+								
+							</div>
+						</div>
+					</div>
+					<div class="fv-row mb-8">
+						<!--begin::Label-->
+						<label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+							<span class="required">Pincode</span>
+							<i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Pincode"></i>
+						</label>
+						<!--end::Label-->
+						@if($user_detail == NULL)
+							<!--begin::Input-->
+							<input type="number" class="form-control form-control-solid @error('pincode') is-invalid @enderror" placeholder="Pincode" value="" name="pincode" id="pincode"   />
+							<!--end::Input-->
+							@error('pincode')
+                                <div class="text-danger">{{ $message }}</div>
+                           	@enderror
+
+						@else
+							<!--begin::Input-->
+							<input type="number" class="form-control form-control-solid @error('pincode') is-invalid @enderror" placeholder="Pincode" value="{{$user_detail->pincode}}" name="pincode" id="pincode" />
+							<!--end::Input-->
+							@error('pincode')
+                                <div class="text-danger">{{ $message }}</div>
+                           	@enderror
+						@endif
+							
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-primary">Save changes</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<!-- End Basic Modal -->
+
+<!-- Additional Modal -->
+<div class="modal fade" id="AdditionalModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Additional Details</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<form method="post"  action="{{route('edit_profile')}}" enctype="multipart/form-data">
+				@csrf
+				<div class="modal-body" >
+					<input type="hidden" name="profile_update" value="true">
+					<input type="hidden" name="type" value="additional">
+					<input type="hidden" name="user_id" value="{{$user->id}}">
+					<div class="row">
+						<div class="col-md-6">
+							<div class="fv-row mb-8">
+								<!--begin::Label-->
+								<label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+									<span class="required">Aadhaar Number</span>
+									<i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Aadhaar Number"></i>
+								</label>
+								<!--end::Label-->
+								@if($user_detail)
+									<!--begin::Input-->
+									<input type="text" class="form-control form-control-solid @error('aadhaar_no') is-invalid @enderror" placeholder="Aadhaar Number" value="{{$user_detail->aadhaar_no}}" name="aadhaar_no" id="aadhaar_no" />
+									<!--end::Input-->
+									@error('aadhaar_no')
+                                    	<div class="text-danger">{{ $message }}</div>
+                                	@enderror
+								@else
+									<!--begin::Input-->
+									<input type="text" class="form-control form-control-solid @error('aadhaar_no') is-invalid @enderror" placeholder="Aadhaar Number" value="" name="aadhaar_no" id="aadhaar_no" />
+									<!--end::Input-->
+									@error('aadhaar_no')
+                                    	<div class="text-danger">{{ $message }}</div>
+                                	@enderror
+								@endif
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="fv-row mb-8">
+								<!--begin::Label-->
+								<label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+									<span class="required">Pan Card Number</span>
+									<i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Pan Card Number"></i>
+								</label>
+								<!--end::Label-->
+								@if($user_detail)
+									<!--begin::Input-->
+									<input type="text" class="form-control form-control-solid @error('pan_card_no') is-invalid @enderror" placeholder="Pan Card Number" value="{{$user_detail->pan_card_no}}" name="pan_card_no" id="pan_card_no" />
+									<!--end::Input-->
+									@error('pan_card_no')
+                                    	<div class="text-danger">{{ $message }}</div>
+                                	@enderror
+								@else
+									<!--begin::Input-->
+									<input type="text" class="form-control form-control-solid @error('pan_card_no') is-invalid @enderror" placeholder="Pan Card Number" value="" name="pan_card_no" id="pan_card_no" />
+									<!--end::Input-->
+									@error('pan_card_no')
+                                    	<div class="text-danger">{{ $message }}</div>
+                                	@enderror
+								@endif
+							</div>
+						</div>
+					</div>
+					<!--begin::Input group-->
+					<div class="fv-row mb-7">
+						<label class="form-label fw-bolder text-dark fs-6">Profile Photo</label>
+						<!--begin::Input-->
+                        <input type="file" class="form-control form-control-solid custom-file-input" id="avatar" placeholder="Avatar" value="" name="avatar" accept="image/*" />
+                        <div class="d-flex justify-content-center mt-3">
+                        	@if($user_detail)
+                            <img src="{{ $user_detail->avatar }}" id="preview-image-avatar"  style="max-height: 200px;">
+                            @else
+                            <img id="preview-image-avatar"  style="max-height: 200px;">
+                            @endif
+                        </div>
+                        <!--end::Input-->
+					</div>
+					@error('avatar')
+					<div class="text-danger">{{ $message }}</div>
+					@enderror
+					<!--end::Input group-->
+					<!--begin::Input group-->
+					<div class="fv-row mb-7">
+						<label class="form-label fw-bolder text-dark fs-6">Aadhaar Card</label>
+						<!--begin::Input-->
+                        <input type="file" class="form-control form-control-solid custom-file-input" id="aadhaar_card" placeholder="Aadhaar Card" value="" name="aadhaar_card" accept="image/*" />
+                        <div class="d-flex justify-content-center mt-3">
+                        	@if($user_detail)
+                            <img src="{{$user_detail->aadhaar}}" id="preview-image-aadhaar_card" style="max-height: 200px;">
+                            @else
+                            <img id="preview-image-aadhaar_card" style="max-height: 200px;">
+                            @endif
+                        </div>
+                        <!--end::Input-->
+					</div>
+					@error('aadhaar_card')
+					<div class="text-danger">{{ $message }}</div>
+					@enderror
+					<!--end::Input group-->
+					<!--begin::Input group-->
+					<div class="fv-row mb-7">
+						<label class="form-label fw-bolder text-dark fs-6">Pan Card</label>
+						<!--begin::Input-->
+                        <input type="file" class="form-control form-control-solid custom-file-input" id="pan_card" placeholder="Pan Card" value="" name="pan_card" accept="image/*" />
+                        <div class="d-flex justify-content-center mt-3">
+                        	@if($user_detail)
+                             <img src="{{$user_detail->pan}}" id="preview-image-pan_card" style="max-height: 200px;">
+                            @else
+                             <img id="preview-image-pan_card" style="max-height: 200px;">
+                            @endif
+                        </div>
+                        <!--end::Input-->
+					</div>
+					@error('pan_card')
+					<div class="text-danger">{{ $message }}</div>
+					@enderror
+					<!--end::Input group-->
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-primary">Save changes</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<!-- End Additional Modal -->
+
+<!-- Bank Modal -->
+<div class="modal fade" id="BankModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Bank Details</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<form method="post"  action="{{route('edit_profile')}}" enctype="multipart/form-data">
+				@csrf
+				<div class="modal-body" >
+					<input type="hidden" name="profile_update" value="true">
+					<input type="hidden" name="type" value="bank">
+					<input type="hidden" name="user_id" value="{{$user->id}}">
+					<div class="row">
+						<div class="col-md-6">
+							<div class="fv-row mb-8">
+								<!--begin::Label-->
+								<label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+									<span class="required">Account Holder Name</span>
+									<i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Account Holder Name"></i>
+								</label>
+								<!--end::Label-->
+								@if($bank_detail)
+								<!--begin::Input-->
+								<input type="text" class="form-control form-control-solid @error('holder_name') is-invalid @enderror" placeholder="Account Holder Name" value="{{$bank_detail->name}}" name="holder_name" id="holder_name" required />
+								<!--end::Input-->
+								@else
+								<!--begin::Input-->
+								<input type="text" class="form-control form-control-solid @error('holder_name') is-invalid @enderror" placeholder="Account Holder Name" value="" name="holder_name" id="holder_name" />
+								<!--end::Input-->
+								@endif
+								@error('holder_name')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="fv-row mb-8">
+								<!--begin::Label-->
+								<label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+									<span class="required">Account No</span>
+									<i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Account No"></i>
+								</label>
+								<!--end::Label-->
+								@if($bank_detail)
+								<!--begin::Input-->
+								<input type="number" class="form-control form-control-solid @error('account_no') is-invalid @enderror" placeholder="Account No" value="{{$bank_detail->number}}" name="account_no" id="account_no" required />
+								<!--end::Input-->
+								@else
+								<!--begin::Input-->
+								<input type="text" class="form-control form-control-solid @error('account_no') is-invalid @enderror" placeholder="Account No" value="" name="account_no" id="account_no" />
+								<!--end::Input-->
+								@endif
+								@error('account_no')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="fv-row mb-8">
+								<!--begin::Label-->
+								<label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+									<span class="required">IFSC Code</span>
+									<i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="IFSC Code"></i>
+								</label>
+								<!--end::Label-->
+								@if($bank_detail)
+								<!--begin::Input-->
+								<input type="text" class="form-control form-control-solid @error('ifsc_code') is-invalid @enderror" placeholder="IFSC Code" value="{{$bank_detail->ifsc_code}}" name="ifsc_code" id="ifsc_code" required />
+								<!--end::Input-->
+								@else
+								<!--begin::Input-->
+								<input type="text" class="form-control form-control-solid @error('ifsc_code') is-invalid @enderror" placeholder="IFSC Code" value="" name="ifsc_code" id="ifsc_code" required />
+								<!--end::Input-->
+								@endif
+								@error('ifsc_code')
+                                    <div class="text-danger">{{ $message }}</div>
+                            	@enderror
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="fv-row mb-8">
+								<!--begin::Label-->
+								<label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+									<span class="required">Branch</span>
+									<i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Branch"></i>
+								</label>
+								<!--end::Label-->
+								@if($bank_detail)
+								<!--begin::Input-->
+								<input type="text" class="form-control form-control-solid  @error('branch') is-invalid @enderror" placeholder="Branch" value="{{$bank_detail->branch}}" name="branch" id="branch" required />
+								<!--end::Input-->
+								@else
+								<!--begin::Input-->
+								<input type="text" class="form-control form-control-solid  @error('branch') is-invalid @enderror" placeholder="Branch" value="" name="branch" id="branch" required />
+								<!--end::Input-->
+								@endif
+								@error('branch')
+                                    <div class="text-danger">{{ $message }}</div>
+                            	@enderror
+							</div>
+						</div>
+					</div>
+					<div class="fv-row mb-8">
+						<!--begin::Label-->
+						<label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+							<span class="required">City</span>
+							<i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="City"></i>
+						</label>
+						<!--end::Label-->
+						@if($bank_detail == NULL)
+							<!--begin::Input-->
+							<input type="text" class="form-control form-control-solid @error('city') is-invalid @enderror" placeholder="City" value="" name="city" id="city" required  />
+							<!--end::Input-->
+							
+
+						@else
+							<!--begin::Input-->
+							<input type="text" class="form-control form-control-solid @error('city') is-invalid @enderror" placeholder="City" value="{{$bank_detail->city}}" name="city" id="city" required />
+							<!--end::Input-->
+							
+						@endif
+						@error('city')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-primary">Save changes</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<!-- End Bank Modal -->
+
+<!-- Nominee Modal -->
+<div class="modal fade" id="NomineeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Nominee Details</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<form method="post"  action="{{route('edit_profile')}}" enctype="multipart/form-data">
+				@csrf
+				<div class="modal-body" >
+					<input type="hidden" name="profile_update" value="true">
+					<input type="hidden" name="type" value="nominee">
+					<input type="hidden" name="user_id" value="{{$user->id}}">
+					<div class="row">
+						<div class="col-md-6">
+							<div class="fv-row mb-8">
+								<!--begin::Label-->
+								<label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+									<span class="required">Nominee Name</span>
+									<i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Nominee Name"></i>
+								</label>
+								<!--end::Label-->
+								@if($nominee_detail)
+								<!--begin::Input-->
+								<input type="text" class="form-control form-control-solid @error('nominee_name') is-invalid @enderror" placeholder="nominee_name" value="{{$nominee_detail->name}}" name="nominee_name" id="nominee_name" required />
+								<!--end::Input-->
+								@else
+								<!--begin::Input-->
+								<input type="text" class="form-control form-control-solid @error('nominee_name') is-invalid @enderror" placeholder="Nominee Name" value="" name="nominee_name" id="nominee_name" />
+								<!--end::Input-->
+								@endif
+								@error('nominee_name')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="fv-row mb-8">
+								<!--begin::Label-->
+								<label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+									<span class="required">Relationship</span>
+									<i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Relationship"></i>
+								</label>
+								<!--end::Label-->
+								@if($nominee_detail)
+								<!--begin::Input-->
+								<input type="text" class="form-control form-control-solid @error('relationship') is-invalid @enderror" placeholder="Relationship" value="{{$nominee_detail->relationship}}" name="relationship" id="relationship" required />
+								<!--end::Input-->
+								@else
+								<!--begin::Input-->
+								<input type="text" class="form-control form-control-solid @error('relationship') is-invalid @enderror" placeholder="Relationship" value="" name="relationship" id="relationship" />
+								<!--end::Input-->
+								@endif
+								@error('relationship')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="fv-row mb-8">
+								<!--begin::Label-->
+								<label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+									<span class="required">Nominee Age</span>
+									<i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Nominee Age"></i>
+								</label>
+								<!--end::Label-->
+								@if($nominee_detail)
+								<!--begin::Input-->
+								<input type="text" class="form-control form-control-solid @error('age') is-invalid @enderror" placeholder="Nominee Age" value="{{$nominee_detail->age}}" name="age" id="age" required />
+								<!--end::Input-->
+								@else
+								<!--begin::Input-->
+								<input type="text" class="form-control form-control-solid @error('age') is-invalid @enderror" placeholder="Nominee Age" value="" name="age" id="age" required />
+								<!--end::Input-->
+								@endif
+								@error('age')
+                                    <div class="text-danger">{{ $message }}</div>
+                            	@enderror
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="fv-row mb-8">
+								<!--begin::Label-->
+								<label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+									<span class="required">Nominee Aadhaar Number</span>
+									<i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Nominee Aadhaar Number"></i>
+								</label>
+								<!--end::Label-->
+								@if($nominee_detail)
+								<!--begin::Input-->
+								<input type="text" class="form-control form-control-solid  @error('nominee_aadhaar_no') is-invalid @enderror" placeholder="Nominee Aadhaar Number" value="{{$nominee_detail->aadhaar_no}}" name="nominee_aadhaar_no" id="nominee_aadhaar_no" required />
+								<!--end::Input-->
+								@else
+								<!--begin::Input-->
+								<input type="text" class="form-control form-control-solid  @error('nominee_aadhaar_no') is-invalid @enderror" placeholder="Nominee Aadhaar Number" value="" name="nominee_aadhaar_no" id="nominee_aadhaar_no" required />
+								<!--end::Input-->
+								@endif
+								@error('nominee_aadhaar_no')
+                                    <div class="text-danger">{{ $message }}</div>
+                            	@enderror
+							</div>
+						</div>
+					</div>
+					<div class="fv-row mb-8">
+						<!--begin::Label-->
+						<label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+							<span class="required">Nominee Aadhar Card</span>
+							<i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Nominee Aadhar Card"></i>
+						</label>
+						<!--end::Label-->
+						@if($nominee_detail == NULL)
+							<input type="file" class="form-control form-control-solid custom-file-input" id="nominee_aadhar" placeholder="Nominee Aadhar Card" value="" name="nominee_aadhar" accept="image/*" />
+                            <div class="d-flex justify-content-center mt-3">
+                                <img id="preview-image-nominee_aadhar" style="max-height: 200px;">
+                            </div>
+						@else
+							<!--begin::Input-->
+							<input type="file" class="form-control form-control-solid custom-file-input" id="nominee_aadhar" placeholder="Nominee Aadhar Card" value="" name="nominee_aadhar" accept="image/*" />
+                            <div class="d-flex justify-content-center mt-3">
+                                <img src="{{$nominee_detail->aadhaar}}" id="preview-image-nominee_aadhar" style="max-height: 200px;">
+                            </div>
+							<!--end::Input-->
+							
+						@endif
+						@error('city')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-primary">Save changes</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<!-- End Nominee Modal -->
+
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script type="text/javascript">
 	function basic() {
@@ -802,6 +1375,57 @@
         $('#nominee_detail').show();
 
 	}
+</script>
+
+<script type="text/javascript">    
+    $(document).ready(function (e) { 
+       $('#avatar').change(function(){   
+            let reader = new FileReader();
+            reader.onload = (e) => { 
+                $('#preview-image-avatar').attr('src', e.target.result); 
+            }
+            reader.readAsDataURL(this.files[0]); 
+       });
+
+    });
+</script>
+
+<script type="text/javascript">    
+    $(document).ready(function (e) {
+       
+       $('#aadhaar_card').change(function(){   
+            let reader = new FileReader();
+            reader.onload = (e) => { 
+                $('#preview-image-aadhaar_card').attr('src', e.target.result); 
+            }
+            reader.readAsDataURL(this.files[0]); 
+       });
+
+    });
+</script>
+
+<script type="text/javascript">    
+    $(document).ready(function (e) {
+       $('#pan_card').change(function(){   
+            let reader = new FileReader();
+            reader.onload = (e) => { 
+                $('#preview-image-pan_card').attr('src', e.target.result); 
+            }
+            reader.readAsDataURL(this.files[0]); 
+       });
+    });
+</script>
+
+<script type="text/javascript">    
+    $(document).ready(function (e) {
+       $('#nominee_aadhar').change(function(){   
+            let reader = new FileReader();
+            reader.onload = (e) => { 
+                $('#preview-image-nominee_aadhar').attr('src', e.target.result); 
+            }
+            reader.readAsDataURL(this.files[0]); 
+       });
+    });
 </script>
 
 @endsection

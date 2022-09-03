@@ -257,7 +257,7 @@
                                                 @endif
                                             </td>
                                             <td class="">
-                                                @if($user->is_profile_verified == 0)
+                                                @if($user->is_profile_verified == 0 || $user->is_profile_updated == 1)
                                                     <span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span>
                                                 @else
                                                     <span class="badge py-3 px-4 fs-7 badge-light-success">Verified</span>
@@ -1593,7 +1593,7 @@
                         $('select[name="role"]').append('<option value="'+ '2' +'">'+ 'Admin' +'</option>');
                         $('select[name="role"]').append('<option value="'+ '3' +'" selected>'+ 'User' +'</option>');
                     }
-                    if(data.is_profile_verified == 1)
+                    if(data.is_profile_verified == 1 && data.is_profile_updated == 0)
                     {
                         jQuery('select[name="profile"]').empty();
                         $('select[name="profile"]').append('<option value="'+ '1' +'" selected>'+ 'Approved' +'</option>');

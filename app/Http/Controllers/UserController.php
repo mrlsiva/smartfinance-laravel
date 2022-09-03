@@ -58,11 +58,19 @@ class UserController extends Controller
             }
             else{
                 DB::table('users')->where('id',$id)->update(['role_id' => $role_id,'is_lock' => $is_lock,'is_active' => $is_active,'is_profile_verified' => $is_profile_verified]);
+                if($is_profile_verified == 1){
+
+                    DB::table('users')->where('id',$id)->update(['is_profile_updated' => 0]);
+                }
                 return redirect()->back()->with('alert', 'Successfully Updated!!');
             }
         }
         else{
             DB::table('users')->where('id',$id)->update(['role_id' => $role_id,'is_lock' => $is_lock,'is_active' => $is_active,'is_profile_verified' => $is_profile_verified]);
+            if($is_profile_verified == 1){
+
+                DB::table('users')->where('id',$id)->update(['is_profile_updated' => 0]);
+            }
             return redirect()->back()->with('alert', 'Successfully Updated!!');
         }
         
@@ -81,10 +89,10 @@ class UserController extends Controller
                     $users = User::where('first_name', 'like', '%'.$search.'%')->orWhere('last_name', 'like', '%'.$search.'%')->where('is_active',0)->where('is_delete',0)->orderBy('id','Desc')->simplePaginate(10);
                 }
                 elseif ($status == 'verified') {
-                    $users = User::where('first_name', 'like', '%'.$search.'%')->orWhere('last_name', 'like', '%'.$search.'%')->where('is_profile_verified',1)->where('is_delete',0)->orderBy('id','Desc')->simplePaginate(10);
+                    $users = User::where('first_name', 'like', '%'.$search.'%')->orWhere('last_name', 'like', '%'.$search.'%')->where('is_profile_verified',1)->where('is_profile_updated',0)->where('is_delete',0)->orderBy('id','Desc')->simplePaginate(10);
                 }
                 elseif ($status == 'un_verified') {
-                    $users = User::where('first_name', 'like', '%'.$search.'%')->orWhere('last_name', 'like', '%'.$search.'%')->where('is_profile_verified',0)->where('is_delete',0)->orderBy('id','Desc')->simplePaginate(10);
+                    $users = User::where('first_name', 'like', '%'.$search.'%')->orWhere('last_name', 'like', '%'.$search.'%')->where('is_profile_verified',0)->orWhere('is_profile_updated',1)->where('is_delete',0)->orderBy('id','Desc')->simplePaginate(10);
                 }
                 elseif ($status == 'active') {
                     $users = User::where('first_name', 'like', '%'.$search.'%')->orWhere('last_name', 'like', '%'.$search.'%')->where('is_lock',0)->where('is_delete',0)->orderBy('id','Desc')->simplePaginate(10);
@@ -110,10 +118,10 @@ class UserController extends Controller
                     $users = User::where('is_active',0)->where('is_delete',0)->orderBy('id','Desc')->simplePaginate(10);
                 }
                 elseif ($status == 'verified') {
-                    $users = User::where('is_profile_verified',1)->where('is_delete',0)->orderBy('id','Desc')->simplePaginate(10);
+                    $users = User::where('is_profile_verified',1)->where('is_profile_updated',0)->where('is_delete',0)->orderBy('id','Desc')->simplePaginate(10);
                 }
                 elseif ($status == 'un_verified') {
-                    $users = User::where('is_profile_verified',0)->where('is_delete',0)->orderBy('id','Desc')->simplePaginate(10);
+                    $users = User::where('is_profile_verified',0)->orWhere('is_profile_updated',1)->where('is_delete',0)->orderBy('id','Desc')->simplePaginate(10);
                 }
                 elseif ($status == 'active') {
                     $users = User::where('is_lock',0)->where('is_delete',0)->orderBy('id','Desc')->simplePaginate(10);
@@ -166,7 +174,7 @@ class UserController extends Controller
 
     public function approve_user_profile($id){
 
-        DB::table('users')->where('id',$id)->update(['is_profile_verified' => 1]);
+        DB::table('users')->where('id',$id)->update(['is_profile_verified' => 1,'is_profile_updated' => 0]);
 
          return redirect(route('user', ['id' => $id]));
         
@@ -246,6 +254,15 @@ class UserController extends Controller
     {
         $type = $request->type;
         $user_id = $request->user_id;
+        $profile_update = $request->profile_update;
+
+        if($profile_update == 'true'){
+            $role = User::where('id',$user_id)->select('role_id')->first()->role_id;
+            if($role != 1){
+                DB::table('users')->where('id',$user_id)->update(['is_profile_updated' => 1]);
+            }
+        }
+
         if($type == 'basic'){
             $validatedData = $request->validate([
                 'first_name' => 'required',

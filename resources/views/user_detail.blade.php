@@ -833,6 +833,7 @@
 			<form method="post"  action="{{route('edit_profile')}}" enctype="multipart/form-data">
 				@csrf
 				<div class="modal-body" >
+					<input type="hidden" name="profile_update" value="false">
 					<input type="hidden" name="type" value="basic">
 					<input type="hidden" name="user_id" value="{{$user->id}}">
 					<div class="row">
@@ -986,6 +987,7 @@
 			<form method="post"  action="{{route('edit_profile')}}" enctype="multipart/form-data">
 				@csrf
 				<div class="modal-body" >
+					<input type="hidden" name="profile_update" value="false">
 					<input type="hidden" name="type" value="additional">
 					<input type="hidden" name="user_id" value="{{$user->id}}">
 					<div class="row">
@@ -1115,6 +1117,7 @@
 			<form method="post"  action="{{route('edit_profile')}}" enctype="multipart/form-data">
 				@csrf
 				<div class="modal-body" >
+					<input type="hidden" name="profile_update" value="false">
 					<input type="hidden" name="type" value="bank">
 					<input type="hidden" name="user_id" value="{{$user->id}}">
 					<div class="row">
@@ -1253,6 +1256,7 @@
 			<form method="post"  action="{{route('edit_profile')}}" enctype="multipart/form-data">
 				@csrf
 				<div class="modal-body" >
+					<input type="hidden" name="profile_update" value="false">
 					<input type="hidden" name="type" value="nominee">
 					<input type="hidden" name="user_id" value="{{$user->id}}">
 					<div class="row">
