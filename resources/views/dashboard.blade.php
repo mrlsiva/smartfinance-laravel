@@ -1,5 +1,17 @@
 @extends('layouts.master')
 @section('body')
+
+<style> 
+.parent-active .col {
+    filter: grayscale(100%);
+}
+
+ .col.active {
+    filter: grayscale(0%);
+} 
+</style>parent-active
+
+
 <!--begin::Toolbar-->
     <div class="toolbar py-5 py-lg-15" id="kt_toolbar">
         <!--begin::Container-->
@@ -43,17 +55,9 @@
                         <!--begin::Stats-->
                         <div class="card-p mt-n20 position-relative">
                             <!--begin::Row-->
-                            <style> 
-                            /* .parent-active .col {
-                                filter: grayscale(100%);
-                            }
-
-                            .parent-active .col.active {
-                                filter: grayscale(0%);
-                            } */
-                            </style>
+                            
                             <div class="row g-0 parent-active">
-                                <div class="col active border-bottom border-info bg-light-info p-6 rounded-2 me-7 mb-7">                                    
+                                <div class="col active border-bottom border-info bg-light-info p-6 rounded-2 me-7 mb-7" id="user_management">                                    
                                     <div class="d-flex flex-stack flex-grow-1">
                                         <div class="d-flex flex-column me-2">
                                             <span class="svg-icon svg-icon-3x svg-icon-info d-block my-2">
@@ -67,7 +71,7 @@
                                     </div>
                                     <a href="#" onclick="user()" class="text-dark fw-bold fs-6">User Management</a>
                                 </div>
-                                <div class="col border-bottom border-warning bg-light-warning p-6 rounded-2 me-7 mb-7">                                    
+                                <div class="col border-bottom border-warning bg-light-warning p-6 rounded-2 me-7 mb-7" id="smart_finance">                                    
                                     <div class="d-flex flex-stack flex-grow-1">
                                         <div class="d-flex flex-column me-2">       
                                             <span class="svg-icon svg-icon-3x svg-icon-warning d-block my-2">
@@ -2209,11 +2213,15 @@
 
 <script type="text/javascript">
     function user() {
+        document.getElementById("user_management").classList.add("active");
+        document.getElementById("smart_finance").classList.remove("active");
         $('#user').show();
         $('#finance').hide();
     }
 
     function finance() {
+        document.getElementById("user_management").classList.remove("active");
+        document.getElementById("smart_finance").classList.add("active");
         $('#user').hide();
         $('#finance').show();
     }
