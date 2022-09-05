@@ -152,19 +152,63 @@
                             <div class="d-flex flex-stack flex-wrap gap-4">
                                 <!--begin::Destination-->
                                 <!--end::Destination-->
+                                <!--begin::Profile-->
+                                <div class="d-flex align-items-center fw-bolder">
+                                    <!--begin::Label-->
+                                    <div class="text-muted fs-7 me-2">Role</div>
+                                    <!--end::Label-->
+                                    <!--begin::Select-->
+                                    <select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Select an option" data-kt-table-widget-4="filter_status" name="role_search" id="role_search" >
+                                        <option></option>
+                                        <option value=" " selected="selected">Show All</option>
+                                        <option value="1">Super Admin</option>
+                                        <option value="2">Admin</option>
+                                        <option value="3">User</option>
+                                    </select>
+                                    <!--end::Select-->
+                                </div>
+                                <!--end::Profile-->
+                                <!--begin::Profile-->
+                                <div class="d-flex align-items-center fw-bolder">
+                                    <!--begin::Label-->
+                                    <div class="text-muted fs-7 me-2">Profile</div>
+                                    <!--end::Label-->
+                                    <!--begin::Select-->
+                                    <select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Select an option" data-kt-table-widget-4="filter_status" name="profile_search" id="profile_search" >
+                                        <option></option>
+                                        <option value=" " selected="selected">Show All</option>
+                                        <option value="1">Verified</option>
+                                        <option value="0">Pending</option>
+                                    </select>
+                                    <!--end::Select-->
+                                </div>
+                                <!--end::Profile-->
+                                <!--begin::Progress-->
+                                <div class="d-flex align-items-center fw-bolder">
+                                    <!--begin::Label-->
+                                    <div class="text-muted fs-7 me-2">Progress</div>
+                                    <!--end::Label-->
+                                    <!--begin::Select-->
+                                    <select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Select an option" data-kt-table-widget-4="filter_status" name="progress_search" id="progress_search" >
+                                        <option></option>
+                                        <option value=" " selected="selected">Show All</option>
+                                        <option value="1">Approved</option>
+                                        <option value="0">Pending</option>
+                                    </select>
+                                    <!--end::Select-->
+                                </div>
+                                <!--end::Progress-->
                                 <!--begin::Status-->
                                 <div class="d-flex align-items-center fw-bolder">
                                     <!--begin::Label-->
                                     <div class="text-muted fs-7 me-2">Status</div>
                                     <!--end::Label-->
                                     <!--begin::Select-->
-                                    <select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Select an option" data-kt-table-widget-4="filter_status">
+                                    <select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Select an option" data-kt-table-widget-4="filter_status" name="status_search" id="status_search" >
                                         <option></option>
-                                        <option value="Show All" selected="selected">Show All</option>
-                                        <option value="Shipped">Approved</option>
-                                        <option value="Confirmed">Confirmed</option>
-                                        <option value="Rejected">Rejected</option>
-                                        <option value="Pending">Pending</option>
+                                        <option value=" " selected="selected">Show All</option>
+                                        <option value="0">Active</option>
+                                        <option value="1">Locked</option>
                                     </select>
                                     <!--end::Select-->
                                 </div>
@@ -179,7 +223,7 @@
                                         </svg>
                                     </span>
                                     <!--end::Svg Icon-->
-                                    <input type="text"  class="form-control w-150px fs-7 ps-12" placeholder="Search" name="search" />
+                                    <input type="text"  class="form-control w-150px fs-7 ps-12" placeholder="Search" name="search" id="search" />
                                 </div>
                                 <!--end::Search-->
                             </div>
@@ -1186,93 +1230,555 @@
 <!-- end::Modal -->
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+<!-- search -->
+<!-- <script type="application/javascript">
+    jQuery(document).ready(function ()
+    {
+        jQuery('input[name="search"]').on('change',function(){
+            var search = jQuery(this).val();
+            var status = jQuery("#status_search").val();
+            var progress = jQuery("#progress_search").val();
+            var profile_search = jQuery("#profile_search").val();
+            var role_search = jQuery("#role_search").val();
+            console.log(search);
+            console.log(status);
+            console.log(progress);
+            console.log(profile_search);
+            console.log(role_search);
+            jQuery.ajax({
+                url : 'user_search',
+                type: 'GET',
+                dataType: 'json',
+                data: { "search": search,"status" : status,"progress" : progress,"profile" : profile_search,"role" : role_search},
+                success:function(data)
+                {
+                    console.log(data);
+                    var output = '';
+                    if(data.length > 0){
+                        for(var count = 0; count < data.length; count++)
+                        {
+                            var directory = 'user/'+data[count].id+'/';
+                            var image_url = 'storage/app/public/avatar/'+data[count].avatar+'/';
+                            output += '<tr>';
+                            if(data[count].avatar){
+                                output += '<td><div class="d-flex align-items-center"><div class="symbol symbol-45px me-5"><img src="'+image_url+'" alt="" /></div><div class="d-flex justify-content-start flex-column"><a href="'+directory+'" class="text-dark fw-bolder text-hover-primary fs-6">'+data[count].first_name+' '+data[count].last_name+'</a><span class="text-muted fw-bold text-muted d-block fs-7">'+data[count].id+'</span></td>';
+
+                            }
+                            else{
+
+                                output += '<td><div class="d-flex align-items-center"><div class="symbol symbol-45px me-5"><img src="{{ asset('public/assets/media/avatars/blank.png') }}" alt="" /></div><div class="d-flex justify-content-start flex-column"><a href="'+directory+'" class="text-dark fw-bolder text-hover-primary fs-6">'+data[count].first_name+' '+data[count].last_name+'</a><span class="text-muted fw-bold text-muted d-block fs-7">'+data[count].id+'</span></td>';
+
+                            }
+
+                            output += '<td>'+data[count].name+'</td>';
+                            if(data[count].is_finanace == 0){
+                                output += '<td>No</td>';
+                            }
+                            else{
+                                output += '<td>Yes</td>';
+                            }
+                            if(data[count].is_tax == 0){
+                                output += '<td>No</td>';
+                            }
+                            else{
+                                output += '<td>Yes</td>';
+                            }
+                            if(data[count].is_profile_verified == 0 || data[count].is_profile_updated == 1){
+
+                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>';
+                            }
+                            else{
+                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-success">Verified</span></td>';
+                            }
+                            if(data[count].is_active == 0){
+
+                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>';
+                            }
+                            else{
+                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-success">Approved</span></td>';
+                            }
+                            if(data[count].is_lock == 0){
+
+                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-success">Active</span></td>';
+                            }
+                            else{
+                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-danger">Locked</span></td>';
+                            }
+                            if(data[count].role_id == 1){
+
+                                output += '<td><div class=" flex-shrink-0"><button type="button"  class="btn  btn-light mb-5" onclick="super_admin()"><i class="fas fa-pencil-alt" id="fa"></i></button></div></td>';
+                            }
+                            else{
+                                output += '<td><div class=" flex-shrink-0"><button type="button" id="kt_sign_in_submit" class="btn  btn-light mb-5" data-system_id="'+data[count].id+'" name="edit"><i class="fas fa-pencil-alt" id="fa"></i></button></div></td>';
+                            }
+                            output += '</tr>';
+                        }
+                    }
+                    else
+                    {
+                        output += '<tr>';
+                        output += '<td colspan="6">No Data Found</td>';
+                        output += '</tr>';
+                    }
+                    $('tbody').html(output);
+                }
+            });  
+        });
+    });
+</script> -->
+
+<!-- search -->
 <script type="application/javascript">
     jQuery(document).ready(function ()
     {
         jQuery('input[name="search"]').on('change',function(){
             var search = jQuery(this).val();
-                jQuery.ajax({
-                    url : 'user_search',
-                    type: 'GET',
-                    dataType: 'json',
-                    data: { search: search},
-                    success:function(data)
-                    {
-                        console.log(data);
-                        var output = '';
-                        if(data.length > 0){
-                            for(var count = 0; count < data.length; count++)
-                            {
-                                var directory = 'user/'+data[count].id+'/';
-                                var image_url = 'storage/app/public/avatar/'+data[count].avatar+'/';
-                                output += '<tr>';
-                                if(data[count].avatar){
-                                    output += '<td><div class="d-flex align-items-center"><div class="symbol symbol-45px me-5"><img src="'+image_url+'" alt="" /></div><div class="d-flex justify-content-start flex-column"><a href="'+directory+'" class="text-dark fw-bolder text-hover-primary fs-6">'+data[count].first_name+' '+data[count].last_name+'</a><span class="text-muted fw-bold text-muted d-block fs-7">'+data[count].id+'</span></td>';
-                                    
-                                }
-                                else{
-
-                                    output += '<td><div class="d-flex align-items-center"><div class="symbol symbol-45px me-5"><img src="{{ asset('public/assets/media/avatars/blank.png') }}" alt="" /></div><div class="d-flex justify-content-start flex-column"><a href="'+directory+'" class="text-dark fw-bolder text-hover-primary fs-6">'+data[count].first_name+' '+data[count].last_name+'</a><span class="text-muted fw-bold text-muted d-block fs-7">'+data[count].id+'</span></td>';
-                                    
-                                }
-                                
-                                output += '<td>'+data[count].name+'</td>';
-                                if(data[count].is_finanace == 0){
-                                    output += '<td>No</td>';
-                                }
-                                else{
-                                    output += '<td>Yes</td>';
-                                }
-                                if(data[count].is_tax == 0){
-                                    output += '<td>No</td>';
-                                }
-                                else{
-                                    output += '<td>Yes</td>';
-                                }
-                                if(data[count].is_profile_verified == 0 || data[count].is_profile_updated == 1){
-
-                                    output += '<td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>';
-                                }
-                                else{
-                                    output += '<td><span class="badge py-3 px-4 fs-7 badge-light-success">Verified</span></td>';
-                                }
-                                if(data[count].is_active == 0){
-
-                                    output += '<td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>';
-                                }
-                                else{
-                                    output += '<td><span class="badge py-3 px-4 fs-7 badge-light-success">Approved</span></td>';
-                                }
-                                if(data[count].is_lock == 0){
-
-                                    output += '<td><span class="badge py-3 px-4 fs-7 badge-light-success">Active</span></td>';
-                                }
-                                else{
-                                    output += '<td><span class="badge py-3 px-4 fs-7 badge-light-danger">Locked</span></td>';
-                                }
-                                if(data[count].role_id == 1){
-
-                                    output += '<td><div class=" flex-shrink-0"><button type="button"  class="btn  btn-light mb-5" onclick="super_admin()"><i class="fas fa-pencil-alt" id="fa"></i></button></div></td>';
-                                }
-                                else{
-                                    output += '<td><div class=" flex-shrink-0"><button type="button" id="kt_sign_in_submit" class="btn  btn-light mb-5" data-system_id="'+data[count].id+'" name="edit"><i class="fas fa-pencil-alt" id="fa"></i></button></div></td>';
-                                }
-                                output += '</tr>';
-                            }
-                        }
-                        else
+            jQuery.ajax({
+                url : 'user_search',
+                type: 'GET',
+                dataType: 'json',
+                data: { "search": search},
+                success:function(data)
+                {
+                    console.log(data);
+                    var output = '';
+                    if(data.length > 0){
+                        for(var count = 0; count < data.length; count++)
                         {
-                           output += '<tr>';
-                           output += '<td colspan="6">No Data Found</td>';
-                           output += '</tr>';
-                       }
-                       $('tbody').html(output);
+                            var directory = 'user/'+data[count].id+'/';
+                            var image_url = 'storage/app/public/avatar/'+data[count].avatar+'/';
+                            output += '<tr>';
+                            if(data[count].avatar){
+                                output += '<td><div class="d-flex align-items-center"><div class="symbol symbol-45px me-5"><img src="'+image_url+'" alt="" /></div><div class="d-flex justify-content-start flex-column"><a href="'+directory+'" class="text-dark fw-bolder text-hover-primary fs-6">'+data[count].first_name+' '+data[count].last_name+'</a><span class="text-muted fw-bold text-muted d-block fs-7">'+data[count].id+'</span></td>';
+
+                            }
+                            else{
+
+                                output += '<td><div class="d-flex align-items-center"><div class="symbol symbol-45px me-5"><img src="{{ asset('public/assets/media/avatars/blank.png') }}" alt="" /></div><div class="d-flex justify-content-start flex-column"><a href="'+directory+'" class="text-dark fw-bolder text-hover-primary fs-6">'+data[count].first_name+' '+data[count].last_name+'</a><span class="text-muted fw-bold text-muted d-block fs-7">'+data[count].id+'</span></td>';
+
+                            }
+
+                            output += '<td>'+data[count].name+'</td>';
+                            if(data[count].is_finanace == 0){
+                                output += '<td>No</td>';
+                            }
+                            else{
+                                output += '<td>Yes</td>';
+                            }
+                            if(data[count].is_tax == 0){
+                                output += '<td>No</td>';
+                            }
+                            else{
+                                output += '<td>Yes</td>';
+                            }
+                            if(data[count].is_profile_verified == 0 || data[count].is_profile_updated == 1){
+
+                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>';
+                            }
+                            else{
+                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-success">Verified</span></td>';
+                            }
+                            if(data[count].is_active == 0){
+
+                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>';
+                            }
+                            else{
+                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-success">Approved</span></td>';
+                            }
+                            if(data[count].is_lock == 0){
+
+                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-success">Active</span></td>';
+                            }
+                            else{
+                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-danger">Locked</span></td>';
+                            }
+                            if(data[count].role_id == 1){
+
+                                output += '<td><div class=" flex-shrink-0"><button type="button"  class="btn  btn-light mb-5" onclick="super_admin()"><i class="fas fa-pencil-alt" id="fa"></i></button></div></td>';
+                            }
+                            else{
+                                output += '<td><div class=" flex-shrink-0"><button type="button" id="kt_sign_in_submit" class="btn  btn-light mb-5" data-system_id="'+data[count].id+'" name="edit"><i class="fas fa-pencil-alt" id="fa"></i></button></div></td>';
+                            }
+                            output += '</tr>';
+                        }
                     }
-                });
-            
+                    else
+                    {
+                        output += '<tr>';
+                        output += '<td colspan="6">No Data Found</td>';
+                        output += '</tr>';
+                    }
+                    $('tbody').html(output);
+                }
+            });  
         });
     });
 </script>
+
+<!-- status -->
+<script type="application/javascript">
+    jQuery(document).ready(function ()
+    {
+        jQuery('select[name="status_search"]').on('change',function(){
+            var status = jQuery(this).val();
+            var search = jQuery("#search").val();
+            jQuery.ajax({
+                url : 'user_status',
+                type: 'GET',
+                dataType: 'json',
+                data: { "search": search,"status" : status},
+                success:function(data)
+                {
+                    console.log(data);
+                    var output = '';
+                    if(data.length > 0){
+                        for(var count = 0; count < data.length; count++)
+                        {
+                            var directory = 'user/'+data[count].id+'/';
+                            var image_url = 'storage/app/public/avatar/'+data[count].avatar+'/';
+                            output += '<tr>';
+                            if(data[count].avatar){
+                                output += '<td><div class="d-flex align-items-center"><div class="symbol symbol-45px me-5"><img src="'+image_url+'" alt="" /></div><div class="d-flex justify-content-start flex-column"><a href="'+directory+'" class="text-dark fw-bolder text-hover-primary fs-6">'+data[count].first_name+' '+data[count].last_name+'</a><span class="text-muted fw-bold text-muted d-block fs-7">'+data[count].id+'</span></td>';
+
+                            }
+                            else{
+
+                                output += '<td><div class="d-flex align-items-center"><div class="symbol symbol-45px me-5"><img src="{{ asset('public/assets/media/avatars/blank.png') }}" alt="" /></div><div class="d-flex justify-content-start flex-column"><a href="'+directory+'" class="text-dark fw-bolder text-hover-primary fs-6">'+data[count].first_name+' '+data[count].last_name+'</a><span class="text-muted fw-bold text-muted d-block fs-7">'+data[count].id+'</span></td>';
+
+                            }
+
+                            output += '<td>'+data[count].name+'</td>';
+                            if(data[count].is_finanace == 0){
+                                output += '<td>No</td>';
+                            }
+                            else{
+                                output += '<td>Yes</td>';
+                            }
+                            if(data[count].is_tax == 0){
+                                output += '<td>No</td>';
+                            }
+                            else{
+                                output += '<td>Yes</td>';
+                            }
+                            if(data[count].is_profile_verified == 0 || data[count].is_profile_updated == 1){
+
+                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>';
+                            }
+                            else{
+                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-success">Verified</span></td>';
+                            }
+                            if(data[count].is_active == 0){
+
+                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>';
+                            }
+                            else{
+                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-success">Approved</span></td>';
+                            }
+                            if(data[count].is_lock == 0){
+
+                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-success">Active</span></td>';
+                            }
+                            else{
+                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-danger">Locked</span></td>';
+                            }
+                            if(data[count].role_id == 1){
+
+                                output += '<td><div class=" flex-shrink-0"><button type="button"  class="btn  btn-light mb-5" onclick="super_admin()"><i class="fas fa-pencil-alt" id="fa"></i></button></div></td>';
+                            }
+                            else{
+                                output += '<td><div class=" flex-shrink-0"><button type="button" id="kt_sign_in_submit" class="btn  btn-light mb-5" data-system_id="'+data[count].id+'" name="edit"><i class="fas fa-pencil-alt" id="fa"></i></button></div></td>';
+                            }
+                            output += '</tr>';
+                        }
+                    }
+                    else
+                    {
+                        output += '<tr>';
+                        output += '<td class= "fw-bold" colspan="6">No Data Found</td>';
+                        output += '</tr>';
+                    }
+                    $('tbody').html(output);
+                }
+            });  
+        });
+    });
+</script>
+
+<!-- progress -->
+<script type="application/javascript">
+    jQuery(document).ready(function ()
+    {
+        jQuery('select[name="progress_search"]').on('change',function(){ 
+            var progress = jQuery(this).val();
+            var search = jQuery("#search").val();
+            console.log(progress);
+            console.log(search);
+            jQuery.ajax({
+                url : 'user_progress',
+                type: 'GET',
+                dataType: 'json',
+                data: { "search": search,"progress" : progress},
+                success:function(data)
+                {
+                    console.log(data);
+                    var output = '';
+                    if(data.length > 0){
+                        for(var count = 0; count < data.length; count++)
+                        {
+                            var directory = 'user/'+data[count].id+'/';
+                            var image_url = 'storage/app/public/avatar/'+data[count].avatar+'/';
+                            output += '<tr>';
+                            if(data[count].avatar){
+                                output += '<td><div class="d-flex align-items-center"><div class="symbol symbol-45px me-5"><img src="'+image_url+'" alt="" /></div><div class="d-flex justify-content-start flex-column"><a href="'+directory+'" class="text-dark fw-bolder text-hover-primary fs-6">'+data[count].first_name+' '+data[count].last_name+'</a><span class="text-muted fw-bold text-muted d-block fs-7">'+data[count].id+'</span></td>';
+
+                            }
+                            else{
+
+                                output += '<td><div class="d-flex align-items-center"><div class="symbol symbol-45px me-5"><img src="{{ asset('public/assets/media/avatars/blank.png') }}" alt="" /></div><div class="d-flex justify-content-start flex-column"><a href="'+directory+'" class="text-dark fw-bolder text-hover-primary fs-6">'+data[count].first_name+' '+data[count].last_name+'</a><span class="text-muted fw-bold text-muted d-block fs-7">'+data[count].id+'</span></td>';
+
+                            }
+
+                            output += '<td>'+data[count].name+'</td>';
+                            if(data[count].is_finanace == 0){
+                                output += '<td>No</td>';
+                            }
+                            else{
+                                output += '<td>Yes</td>';
+                            }
+                            if(data[count].is_tax == 0){
+                                output += '<td>No</td>';
+                            }
+                            else{
+                                output += '<td>Yes</td>';
+                            }
+                            if(data[count].is_profile_verified == 0 || data[count].is_profile_updated == 1){
+
+                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>';
+                            }
+                            else{
+                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-success">Verified</span></td>';
+                            }
+                            if(data[count].is_active == 0){
+
+                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>';
+                            }
+                            else{
+                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-success">Approved</span></td>';
+                            }
+                            if(data[count].is_lock == 0){
+
+                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-success">Active</span></td>';
+                            }
+                            else{
+                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-danger">Locked</span></td>';
+                            }
+                            if(data[count].role_id == 1){
+
+                                output += '<td><div class=" flex-shrink-0"><button type="button"  class="btn  btn-light mb-5" onclick="super_admin()"><i class="fas fa-pencil-alt" id="fa"></i></button></div></td>';
+                            }
+                            else{
+                                output += '<td><div class=" flex-shrink-0"><button type="button" id="kt_sign_in_submit" class="btn  btn-light mb-5" data-system_id="'+data[count].id+'" name="edit"><i class="fas fa-pencil-alt" id="fa"></i></button></div></td>';
+                            }
+                            output += '</tr>';
+                        }
+                    }
+                    else
+                    {
+                        output += '<tr>';
+                        output += '<td class= "fw-bold" colspan="6">No Data Found</td>';
+                        output += '</tr>';
+                    }
+                    $('tbody').html(output);
+                }
+            });  
+        });
+    });
+</script>
+
+<!-- profile -->
+<script type="application/javascript">
+    jQuery(document).ready(function ()
+    {
+        jQuery('select[name="profile_search"]').on('change',function(){
+            var profile = jQuery(this).val();
+            var search = jQuery("#search").val();
+            console.log(profile);
+            console.log(search);
+            jQuery.ajax({
+                url : 'user_profile',
+                type: 'GET',
+                dataType: 'json',
+                data: { "search": search,"profile" : profile},
+                success:function(data)
+                {
+                    console.log(data);
+                    var output = '';
+                    if(data.length > 0){
+                        for(var count = 0; count < data.length; count++)
+                        {
+                            var directory = 'user/'+data[count].id+'/';
+                            var image_url = 'storage/app/public/avatar/'+data[count].avatar+'/';
+                            output += '<tr>';
+                            if(data[count].avatar){
+                                output += '<td><div class="d-flex align-items-center"><div class="symbol symbol-45px me-5"><img src="'+image_url+'" alt="" /></div><div class="d-flex justify-content-start flex-column"><a href="'+directory+'" class="text-dark fw-bolder text-hover-primary fs-6">'+data[count].first_name+' '+data[count].last_name+'</a><span class="text-muted fw-bold text-muted d-block fs-7">'+data[count].id+'</span></td>';
+
+                            }
+                            else{
+
+                                output += '<td><div class="d-flex align-items-center"><div class="symbol symbol-45px me-5"><img src="{{ asset('public/assets/media/avatars/blank.png') }}" alt="" /></div><div class="d-flex justify-content-start flex-column"><a href="'+directory+'" class="text-dark fw-bolder text-hover-primary fs-6">'+data[count].first_name+' '+data[count].last_name+'</a><span class="text-muted fw-bold text-muted d-block fs-7">'+data[count].id+'</span></td>';
+
+                            }
+
+                            output += '<td>'+data[count].name+'</td>';
+                            if(data[count].is_finanace == 0){
+                                output += '<td>No</td>';
+                            }
+                            else{
+                                output += '<td>Yes</td>';
+                            }
+                            if(data[count].is_tax == 0){
+                                output += '<td>No</td>';
+                            }
+                            else{
+                                output += '<td>Yes</td>';
+                            }
+                            if(data[count].is_profile_verified == 0 || data[count].is_profile_updated == 1){
+
+                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>';
+                            }
+                            else{
+                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-success">Verified</span></td>';
+                            }
+                            if(data[count].is_active == 0){
+
+                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>';
+                            }
+                            else{
+                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-success">Approved</span></td>';
+                            }
+                            if(data[count].is_lock == 0){
+
+                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-success">Active</span></td>';
+                            }
+                            else{
+                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-danger">Locked</span></td>';
+                            }
+                            if(data[count].role_id == 1){
+
+                                output += '<td><div class=" flex-shrink-0"><button type="button"  class="btn  btn-light mb-5" onclick="super_admin()"><i class="fas fa-pencil-alt" id="fa"></i></button></div></td>';
+                            }
+                            else{
+                                output += '<td><div class=" flex-shrink-0"><button type="button" id="kt_sign_in_submit" class="btn  btn-light mb-5" data-system_id="'+data[count].id+'" name="edit"><i class="fas fa-pencil-alt" id="fa"></i></button></div></td>';
+                            }
+                            output += '</tr>';
+                        }
+                    }
+                    else
+                    {
+                        output += '<tr>';
+                        output += '<td class= "fw-bold" colspan="6">No Data Found</td>';
+                        output += '</tr>';
+                    }
+                    $('tbody').html(output);
+                }
+            });  
+        });
+    });
+</script>
+
+<!-- role -->
+<script type="application/javascript">
+    jQuery(document).ready(function ()
+    {
+        jQuery('select[name="role_search"]').on('change',function(){
+            var role = jQuery(this).val();
+            var search = jQuery("#search").val();
+            console.log(role);
+            console.log(search);
+            jQuery.ajax({
+                url : 'user_role',
+                type: 'GET',
+                dataType: 'json',
+                data: { "search": search,"role" : role},
+                success:function(data)
+                {
+                    console.log(data);
+                    var output = '';
+                    if(data.length > 0){
+                        for(var count = 0; count < data.length; count++)
+                        {
+                            var directory = 'user/'+data[count].id+'/';
+                            var image_url = 'storage/app/public/avatar/'+data[count].avatar+'/';
+                            output += '<tr>';
+                            if(data[count].avatar){
+                                output += '<td><div class="d-flex align-items-center"><div class="symbol symbol-45px me-5"><img src="'+image_url+'" alt="" /></div><div class="d-flex justify-content-start flex-column"><a href="'+directory+'" class="text-dark fw-bolder text-hover-primary fs-6">'+data[count].first_name+' '+data[count].last_name+'</a><span class="text-muted fw-bold text-muted d-block fs-7">'+data[count].id+'</span></td>';
+
+                            }
+                            else{
+
+                                output += '<td><div class="d-flex align-items-center"><div class="symbol symbol-45px me-5"><img src="{{ asset('public/assets/media/avatars/blank.png') }}" alt="" /></div><div class="d-flex justify-content-start flex-column"><a href="'+directory+'" class="text-dark fw-bolder text-hover-primary fs-6">'+data[count].first_name+' '+data[count].last_name+'</a><span class="text-muted fw-bold text-muted d-block fs-7">'+data[count].id+'</span></td>';
+
+                            }
+
+                            output += '<td>'+data[count].name+'</td>';
+                            if(data[count].is_finanace == 0){
+                                output += '<td>No</td>';
+                            }
+                            else{
+                                output += '<td>Yes</td>';
+                            }
+                            if(data[count].is_tax == 0){
+                                output += '<td>No</td>';
+                            }
+                            else{
+                                output += '<td>Yes</td>';
+                            }
+                            if(data[count].is_profile_verified == 0 || data[count].is_profile_updated == 1){
+
+                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>';
+                            }
+                            else{
+                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-success">Verified</span></td>';
+                            }
+                            if(data[count].is_active == 0){
+
+                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>';
+                            }
+                            else{
+                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-success">Approved</span></td>';
+                            }
+                            if(data[count].is_lock == 0){
+
+                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-success">Active</span></td>';
+                            }
+                            else{
+                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-danger">Locked</span></td>';
+                            }
+                            if(data[count].role_id == 1){
+
+                                output += '<td><div class=" flex-shrink-0"><button type="button"  class="btn  btn-light mb-5" onclick="super_admin()"><i class="fas fa-pencil-alt" id="fa"></i></button></div></td>';
+                            }
+                            else{
+                                output += '<td><div class=" flex-shrink-0"><button type="button" id="kt_sign_in_submit" class="btn  btn-light mb-5" data-system_id="'+data[count].id+'" name="edit"><i class="fas fa-pencil-alt" id="fa"></i></button></div></td>';
+                            }
+                            output += '</tr>';
+                        }
+                    }
+                    else
+                    {
+                        output += '<tr>';
+                        output += '<td class= "fw-bold" colspan="6">No Data Found</td>';
+                        output += '</tr>';
+                    }
+                    $('tbody').html(output);
+                }
+            });  
+        });
+    });
+</script>
+
+
 
 
 <script type="text/javascript">
@@ -1764,8 +2270,6 @@
         });
     });
 </script> -->
-
-
 
 
 @endsection

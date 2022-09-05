@@ -295,16 +295,157 @@ class UserController extends Controller
 
     }
 
+    // public function user_search(Request $request)
+    // {
+    //     $search = $request->search;
+    //     $status = $request->status;
+    //     $progress = $request->progress;
+    //     $profile = $request->profile;
+    //     $role = $request->role;
+
+    //     if($search){
+    //         if($status != NULL){
+    //             $users = User::join('roles','users.role_id','=','roles.id')->where('users.is_lock',$status)->where('users.first_name', 'like', '%'.$search.'%')->orWhere('users.last_name', 'like', '%'.$search.'%')->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
+    //         }
+    //         elseif($progress != NULL){
+    //             $users = User::join('roles','users.role_id','=','roles.id')->where('users.is_active',$progress)->where('users.first_name', 'like', '%'.$search.'%')->orWhere('users.last_name', 'like', '%'.$search.'%')->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
+    //         }
+    //         elseif($profile != NULL){
+    //             if($profile == 1){
+    //                 $users = User::join('roles','users.role_id','=','roles.id')->where('users.is_profile_verified',$profile)->where('users.is_profile_updated','!=',$profile)->where('users.first_name', 'like', '%'.$search.'%')->orWhere('users.last_name', 'like', '%'.$search.'%')->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
+    //             }
+    //             else{
+    //                 $users = User::join('roles','users.role_id','=','roles.id')->where('users.is_profile_verified',$profile)->orWhere('users.is_profile_updated','!=',$profile)->where('users.first_name', 'like', '%'.$search.'%')->orWhere('users.last_name', 'like', '%'.$search.'%')->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
+    //             }
+    //         }
+    //         elseif($role != NULL){
+    //             $users = User::join('roles','users.role_id','=','roles.id')->where('users.role_id',$role)->where('users.first_name', 'like', '%'.$search.'%')->orWhere('users.last_name', 'like', '%'.$search.'%')->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
+    //         }
+    //         else{
+    //             $users = User::join('roles','users.role_id','=','roles.id')->where('users.first_name', 'like', '%'.$search.'%')->orWhere('users.last_name', 'like', '%'.$search.'%')->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
+    //         }
+    //     }
+    //     else{
+    //         $users = User::join('roles','users.role_id','=','roles.id')->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
+    //     }
+    //     return $users;
+    // }
+
     public function user_search(Request $request)
     {
         $search = $request->search;
 
-        if($search){
+        if($search != NULL){
+            
+            $users = User::join('roles','users.role_id','=','roles.id')->where('users.first_name', 'like', '%'.$search.'%')->orWhere('users.last_name', 'like', '%'.$search.'%')->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
+            
+        }
+        else{
+            $users = User::join('roles','users.role_id','=','roles.id')->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
+        }
+        return $users;
+    }
+
+    public function user_status(Request $request)
+    {
+        $search = $request->search;
+        $status = $request->status;
+
+        if($status != NULL){
+            if($search != NULL) {
+                $users = User::join('roles','users.role_id','=','roles.id')->where('users.is_lock',$status)->where('users.first_name', 'like', '%'.$search.'%')->orWhere('users.last_name', 'like', '%'.$search.'%')->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
+            }
+            else{
+                $users = User::join('roles','users.role_id','=','roles.id')->where('users.is_lock',$status)->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
+            }
+        }
+        elseif($search != NULL){
             $users = User::join('roles','users.role_id','=','roles.id')->where('users.first_name', 'like', '%'.$search.'%')->orWhere('users.last_name', 'like', '%'.$search.'%')->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
         }
         else{
             $users = User::join('roles','users.role_id','=','roles.id')->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
         }
+
+        return $users;
+    }
+
+    public function user_progress(Request $request)
+    {
+        $search = $request->search;
+        $progress = $request->progress;
+
+        if($progress != NULL){
+            if($search != NULL) {
+                $users = User::join('roles','users.role_id','=','roles.id')->where('users.is_active',$progress)->where('users.first_name', 'like', '%'.$search.'%')->orWhere('users.last_name', 'like', '%'.$search.'%')->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
+            }
+            else{
+                $users = User::join('roles','users.role_id','=','roles.id')->where('users.is_active',$progress)->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
+            }
+        }
+        elseif($search != NULL){
+            $users = User::join('roles','users.role_id','=','roles.id')->where('users.first_name', 'like', '%'.$search.'%')->orWhere('users.last_name', 'like', '%'.$search.'%')->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
+        }
+        else{
+            $users = User::join('roles','users.role_id','=','roles.id')->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
+        }
+
+        return $users;
+    }
+
+    public function user_profile(Request $request)
+    {
+        $search = $request->search;
+        $profile = $request->profile;
+
+        if($profile != NULL){
+            if($search != NULL) {
+
+                if($profile == 1){
+                    $users = User::join('roles','users.role_id','=','roles.id')->where('users.is_profile_verified',$profile)->where('users.is_profile_updated','!=',$profile)->where('users.first_name', 'like', '%'.$search.'%')->orWhere('users.last_name', 'like', '%'.$search.'%')->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
+                }
+                else{
+                    $users = User::join('roles','users.role_id','=','roles.id')->where('users.is_profile_verified',$profile)->orWhere('users.is_profile_updated','!=',$profile)->where('users.first_name', 'like', '%'.$search.'%')->orWhere('users.last_name', 'like', '%'.$search.'%')->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
+                }
+            }
+            else{
+                if($profile == 1){
+                    $users = User::join('roles','users.role_id','=','roles.id')->where('users.is_profile_verified',$profile)->where('users.is_profile_updated','!=',$profile)->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
+                }
+                else{
+                    $users = User::join('roles','users.role_id','=','roles.id')->where('users.is_profile_verified',$profile)->orWhere('users.is_profile_updated','!=',$profile)->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
+                }
+            }
+        }
+        elseif($search != NULL){
+            $users = User::join('roles','users.role_id','=','roles.id')->where('users.first_name', 'like', '%'.$search.'%')->orWhere('users.last_name', 'like', '%'.$search.'%')->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
+        }
+        else{
+            $users = User::join('roles','users.role_id','=','roles.id')->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
+        }
+
+        return $users;
+    }
+
+    public function user_role(Request $request)
+    {
+        $search = $request->search;
+        $role = $request->role;
+
+        if($role != NULL){
+            if($search != NULL) {
+                $users = User::join('roles','users.role_id','=','roles.id')->where('users.role_id',$role)->where('users.first_name', 'like', '%'.$search.'%')->orWhere('users.last_name', 'like', '%'.$search.'%')->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
+            }
+            else{
+                $users = User::join('roles','users.role_id','=','roles.id')->where('users.role_id',$role)->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
+            }
+        }
+        elseif($search != NULL){
+            $users = User::join('roles','users.role_id','=','roles.id')->where('users.first_name', 'like', '%'.$search.'%')->orWhere('users.last_name', 'like', '%'.$search.'%')->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
+        }
+        else{
+            $users = User::join('roles','users.role_id','=','roles.id')->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
+        }
+
         return $users;
     }
 }
