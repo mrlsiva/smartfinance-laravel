@@ -43,8 +43,17 @@
                         <!--begin::Stats-->
                         <div class="card-p mt-n20 position-relative">
                             <!--begin::Row-->
-                            <div class="row g-0">
-                                <div class="col bg-light-info p-6 rounded-2 me-7 mb-7">                                    
+                            <style> 
+                            /* .parent-active .col {
+                                filter: grayscale(100%);
+                            }
+
+                            .parent-active .col.active {
+                                filter: grayscale(0%);
+                            } */
+                            </style>
+                            <div class="row g-0 parent-active">
+                                <div class="col active border-bottom border-info bg-light-info p-6 rounded-2 me-7 mb-7">                                    
                                     <div class="d-flex flex-stack flex-grow-1">
                                         <div class="d-flex flex-column me-2">
                                             <span class="svg-icon svg-icon-3x svg-icon-info d-block my-2">
@@ -58,7 +67,7 @@
                                     </div>
                                     <a href="#" onclick="user()" class="text-dark fw-bold fs-6">User Management</a>
                                 </div>
-                                <div class="col bg-light-warning p-6 rounded-2 me-7 mb-7">                                    
+                                <div class="col border-bottom border-warning bg-light-warning p-6 rounded-2 me-7 mb-7">                                    
                                     <div class="d-flex flex-stack flex-grow-1">
                                         <div class="d-flex flex-column me-2">       
                                             <span class="svg-icon svg-icon-3x svg-icon-warning d-block my-2">
@@ -71,8 +80,7 @@
                                     </div>
                                     <a href="#" onclick="finance()" class="text-dark fw-bold fs-6">Smart Finance</a>
                                 </div>
-
-                                <div class="col bg-light-primary p-6 rounded-2 me-7 mb-7">                                    
+                                <div class="col border-bottom border-primary bg-light-primary p-6 rounded-2 me-7 mb-7">                                    
                                     <div class="d-flex flex-stack flex-grow-1">
                                         <div class="d-flex flex-column me-2">
                                             <span class="svg-icon svg-icon-3x svg-icon-primary d-block my-2">
@@ -85,7 +93,7 @@
                                     </div>
                                     <a href="#" class="text-dark fw-bold fs-6">Loan</a>
                                 </div>
-                                <div class="col bg-light-danger p-6 rounded-2 me-7 mb-7">                                    
+                                <div class="col border-bottom border-danger bg-light-danger p-6 rounded-2 me-7 mb-7">                                    
                                     <div class="d-flex flex-stack flex-grow-1">
                                         <div class="d-flex flex-column me-2">
                                             <span class="svg-icon svg-icon-3x svg-icon-danger d-block my-2">
@@ -98,7 +106,7 @@
                                     </div>
                                     <a href="#" class="text-dark fw-bold fs-6">Mutual Fund</a>
                                 </div>
-                                <div class="col bg-light-success p-6 rounded-2 me-7 mb-7">                                    
+                                <div class="col border-bottom border-success bg-light-success p-6 rounded-2 me-7 mb-7">                                    
                                     <div class="d-flex flex-stack flex-grow-1">
                                         <div class="d-flex flex-column me-2">       
                                             <span class="svg-icon svg-icon-3x svg-icon-success d-block my-2">
