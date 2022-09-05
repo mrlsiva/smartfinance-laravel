@@ -136,7 +136,7 @@ class UserController extends Controller
         $user_detail->avatar = $filename;
         $user_detail->save();
 
-        DB::table('users')->where('id',$user_id)->update(['avatar' => $filename]);
+        DB::table('users')->where('id',$id)->update(['avatar' => $filename]);
 
 
 

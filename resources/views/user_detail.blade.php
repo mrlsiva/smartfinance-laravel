@@ -232,6 +232,9 @@
 			</div>
 		</div>
 		<!--end::Navbar-->
+		@php
+    $auth = Auth::guard('web')->user();
+    @endphp 
 		<!--begin::basic View-->
 		<div id="basic_detail">
 			<div class="card mb-5 mb-xl-10" id="kt_profile_details_view">
@@ -242,7 +245,7 @@
 						<h3 class="fw-bolder m-0">Basic Details</h3>
 					</div>
 					<!--end::Card title-->
-					@if($user_detail != NULL)
+					@if($user_detail != NULL && $auth->role_id == 1)
 					<!--begin::Action-->
 					<a href="#" class="btn align-self-center text-hover-primary" data-bs-toggle="modal" data-bs-target="#BasicModal">Edit Profile</a>
 					<!--end::Action-->
@@ -426,7 +429,7 @@
 						<h3 class="fw-bolder m-0">Additional Details</h3>
 					</div>
 					<!--end::Card title-->
-					@if($user_detail != NULL)
+					@if($user_detail != NULL && $auth->role_id == 1)
 					<!--begin::Action-->
 					<a href="#" class="btn align-self-center" data-bs-toggle="modal" data-bs-target="#AdditionalModal">Edit Profile</a>
 					<!--end::Action-->
@@ -541,7 +544,7 @@
 						<h3 class="fw-bolder m-0">Bank Details</h3>
 					</div>
 					<!--end::Card title-->
-					@if($bank_detail != NULL)
+					@if($user_detail != NULL && $auth->role_id == 1)
 					<!--begin::Action-->
 					<a href="#" class="btn align-self-center" data-bs-toggle="modal" data-bs-target="#BankModal">Edit Profile</a>
 					<!--end::Action-->
@@ -553,7 +556,7 @@
 					<!--begin::Row-->
 					<div class="row mb-7">
 						<!--begin::Label-->
-						<label class="col-lg-4 fw-bold text-muted">Account Holder Name</label>
+						<label class="col-lg-4 fw-bold text-muted">Bank Account Holder Name</label>
 						<!--end::Label-->
 						<!--begin::Col-->
 						<div class="col-lg-8">
@@ -565,7 +568,7 @@
 					<!--begin::Input group-->
 					<div class="row mb-7">
 						<!--begin::Label-->
-						<label class="col-lg-4 fw-bold text-muted">Account Name</label>
+						<label class="col-lg-4 fw-bold text-muted">Account Number</label>
 						<!--end::Label-->
 						<!--begin::Col-->
 						<div class="col-lg-8 fv-row">
@@ -625,7 +628,7 @@
 						<h3 class="fw-bolder m-0">Nominee Details</h3>
 					</div>
 					<!--end::Card title-->
-					@if($nominee_detail != NULL)
+					@if($user_detail != NULL && $auth->role_id == 1)
 					<!--begin::Action-->
 					<a href="#" class="btn align-self-center" data-bs-toggle="modal" data-bs-target="#NomineeModal">Edit Profile</a>
 					<!--end::Action-->
@@ -875,8 +878,8 @@
 								<input type="text" class="form-control form-control-solid @error('first_name') is-invalid @enderror" placeholder="First Name" value="{{$user->first_name}}" name="first_name" id="first_name" />
 								<!--end::Input-->
 								@error('first_name')
-                                    <div class="text-danger">{{ $message }}</div>
-                                @enderror
+                  <div class="text-danger">{{ $message }}</div>
+                @enderror
 							</div>
 						</div>
 						<div class="col-md-6">
@@ -902,11 +905,11 @@
 								</label>
 								<!--end::Label-->
 								<!--begin::Input-->
-								<input type="email" class="form-control form-control-solid @error('email') is-invalid @enderror" placeholder="Email" value="{{$user->email}}" name="email" id="email" />
+								<input type="email" class="form-control form-control-solid @error('email') is-invalid @enderror" placeholder="Email" value="{{$user->email}}" name="email" id="email" readonly />
 								<!--end::Input-->
 								@error('email')
-                                    <div class="text-danger">{{ $message }}</div>
-                            	@enderror
+                  <div class="text-danger">{{ $message }}</div>
+                @enderror
 							</div>
 						</div>
 						<div class="col-md-6">
@@ -921,8 +924,8 @@
 								<input type="number" class="form-control form-control-solid  @error('phone') is-invalid @enderror" placeholder="Mobile" value="{{$user->phone}}" name="phone" id="phone" />
 								<!--end::Input-->
 								@error('phone')
-                                    <div class="text-danger">{{ $message }}</div>
-                            	@enderror
+                  <div class="text-danger">{{ $message }}</div>
+                @enderror
 							</div>
 						</div>
 					</div>
@@ -1151,7 +1154,7 @@
 							<div class="fv-row mb-8">
 								<!--begin::Label-->
 								<label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
-									<span class="required">Account Holder Name</span>
+									<span class="required">Bank Account Holder Name</span>
 									<i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Account Holder Name"></i>
 								</label>
 								<!--end::Label-->
@@ -1165,8 +1168,8 @@
 								<!--end::Input-->
 								@endif
 								@error('holder_name')
-                                    <div class="text-danger">{{ $message }}</div>
-                                @enderror
+                  <div class="text-danger">{{ $message }}</div>
+                 @enderror
 							</div>
 						</div>
 						<div class="col-md-6">

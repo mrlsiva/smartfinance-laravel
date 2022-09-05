@@ -839,7 +839,7 @@
                                     <div class="fv-row mb-8">
                                         <!--begin::Label-->
                                         <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
-                                            <span class="required">Account Holder Name</span>
+                                            <span class="required">Bank Account Holder Name</span>
                                             <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Account Holder Name"></i>
                                         </label>
                                         <!--end::Label-->

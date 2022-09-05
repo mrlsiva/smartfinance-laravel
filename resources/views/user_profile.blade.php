@@ -495,7 +495,7 @@
 					<!--begin::Row-->
 					<div class="row mb-7">
 						<!--begin::Label-->
-						<label class="col-lg-4 fw-bold text-muted">Account Holder Name</label>
+						<label class="col-lg-4 fw-bold text-muted">Bank Account Holder Name</label>
 						<!--end::Label-->
 						<!--begin::Col-->
 						<div class="col-lg-8">
@@ -1090,17 +1090,17 @@
 							<div class="fv-row mb-8">
 								<!--begin::Label-->
 								<label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
-									<span class="required">Account Holder Name</span>
+									<span class="required">Bank Account Holder Name</span>
 									<i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Account Holder Name"></i>
 								</label>
 								<!--end::Label-->
 								@if($bank_detail)
 								<!--begin::Input-->
-								<input type="text" class="form-control form-control-solid @error('holder_name') is-invalid @enderror" placeholder="Account Holder Name" value="{{$bank_detail->name}}" name="holder_name" id="holder_name" required />
+								<input type="text" class="form-control form-control-solid @error('holder_name') is-invalid @enderror" placeholder="Bank Account Holder Name" value="{{$bank_detail->name}}" name="holder_name" id="holder_name" required />
 								<!--end::Input-->
 								@else
 								<!--begin::Input-->
-								<input type="text" class="form-control form-control-solid @error('holder_name') is-invalid @enderror" placeholder="Account Holder Name" value="" name="holder_name" id="holder_name" />
+								<input type="text" class="form-control form-control-solid @error('holder_name') is-invalid @enderror" placeholder="Bank Account Holder Name" value="" name="holder_name" id="holder_name" />
 								<!--end::Input-->
 								@endif
 								@error('holder_name')
