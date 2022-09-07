@@ -117,252 +117,288 @@
         @php
             $user = Auth::guard('web')->user();
             $detail = DB::table('user_details')->where('user_id',$user->id)->first();
+            $finance = DB::table('smartfinances')->where('user_id',$user->id)->first();
         @endphp
-        @if($user->is_profile_verified == 1)
-        <!--begin::Row-->
-        <div class="row gy-5 g-xl-8 mt-xl-5">
-            <!--begin::Col-->
-            <!--end::Col-->
-            <!--begin::Col-->
-            <div class="col-xl-12 ">
-                <!--begin::Tables Widget 9-->
-                <div class="card card-xl-stretch mb-5 mb-xl-8">
-                    <!--begin::Header-->
-                    <div class="card-header border-0 pt-5">
-                        <h3 class="card-title align-items-start flex-column">
-                            <span class="card-label fw-bolder text-dark">Investment History</span>
-                        </h3>
-                        <div class="card-toolbar" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover" title="Search">
-                            <!--begin::Search-->
-                            <div class="position-relative my-1">
-                                
-                                <span class="svg-icon svg-icon-2 position-absolute top-50 translate-middle-y ms-4">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                        <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="black" />
-                                        <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="black" />
-                                    </svg>
-                                </span>
-                                
-                                <input type="text" data-kt-table-widget-4="search" class="form-control w-150px fs-7 ps-12" placeholder="Search" />
-                            </div>
-                            <!--end::Search-->
-                            <!-- <a href="#" class="btn btn-sm btn-light btn-active-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_invite_friends">
-                                <span class="svg-icon svg-icon-3">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                        <rect opacity="0.5" x="11.364" y="20.364" width="16" height="2" rx="1" transform="rotate(-90 11.364 20.364)" fill="black" />
-                                        <rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="black" />
-                                    </svg>
-                                </span>
-                                User Management 
-                            </a> -->
-                        </div>
-                    </div>
-                    <!--end::Header-->
-                    <!--begin::Body-->
-                    <div class="card-body py-3">
-                        <!--begin::Table container-->
-                        <div class="table-responsive">
-                            <!--begin::Table-->
-                            <table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
-                                <!--begin::Table head-->
-                                <thead>
-                                    <tr class="fw-bolder text-muted">
-                                        <th class="">INVESTMEN AMOUNT</th>
-                                        <th class="">INVESTED DATE</th>
-                                        <th class="">RATE OF INTEREST</th>
-                                        <th class="">FIRST PAYMENT DATE</th>
-                                        <th class="">STATUS</th>
-                                        <th class="">ACTION</th>
-                                    </tr>
-                                </thead>
-                                <!--end::Table head-->
-                                <!--begin::Table body-->
-                                <tbody>
 
-                                	<tr>                               
-                                		<td class="">
-                                			300000.00
-                                		</td>
-                                		<td class="">
-                                			2022-08-26
-                                		</td>
-                                		<td class="">
-                                			4.00%
-                                		</td>
-                                		<td class="">
-                                			2022-09-26
-                                		</td>
-                                		<td class="">
-                                			<span class="badge py-3 px-4 fs-7 badge-light-success">Approved</span>
-                                		</td>
-                                		<td class="">
-                                			<div class=" flex-shrink-0">
-                                				<button type="button"  class="btn  btn-light mb-5" > <i class="fa fa-eye" id="fa"></i></button>
-                                			</div>
-                                		</td>   
-                                	</tr>
-                                </tbody>
-                                <!--end::Table body-->
-                            </table>
-                            <!--end::Table-->
-                            
-                        </div>
-                        <!--end::Table container-->
-                    </div>
-                    <!--begin::Body-->
-                </div>
-                <!--end::Tables Widget 9-->
-            </div>
-            <!--end::Col-->
-        </div>
-        <!--end::Row-->
-        <!--begin::Row-->
-        <div class="row gy-5 g-xl-8">
-            <div class="col-xl-12 mb-5 mb-xl-10">
-                <!--begin::Table Widget 4-->
-                <div class="card card-flush h-xl-100">
-                    <!--begin::Card header-->
-                    <div class="card-header pt-7">
-                        <!--begin::Title-->
-                        <h3 class="card-title align-items-start flex-column">
-                            <span class="card-label fw-bolder text-dark">Monthly Returns Table</span>
-                        </h3>
-                        <!--end::Title-->
-                        <!--begin::Actions-->
-                        <div class="card-toolbar">
-                            <!--begin::Filters-->
-                            <div class="d-flex flex-stack flex-wrap gap-4">
-                                <!--begin::Destination-->
-                                <!--end::Destination-->
-                                <!--begin::Status-->
-                                <!-- <div class="d-flex align-items-center fw-bolder">
-                                    <div class="text-muted fs-7 me-2">Status</div>
-                                    <select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Select an option" data-kt-table-widget-4="filter_status">
-                                        <option></option>
-                                        <option value="Show All" selected="selected">Show All</option>
-                                        <option value="Shipped">Approved</option>
-                                        <option value="Confirmed">Confirmed</option>
-                                        <option value="Rejected">Rejected</option>
-                                        <option value="Pending">Pending</option>
-                                    </select>
-                                </div> -->
-                                <!--end::Status-->
+        @if($user->is_profile_verified == 1)
+            @if($finance != NULL)
+                <!--begin::Row-->
+                <div class="row gy-5 g-xl-8 mt-xl-5">
+                    <!--begin::Col-->
+                    <!--end::Col-->
+                    <!--begin::Col-->
+                    <div class="col-xl-12 ">
+                        <!--begin::Tables Widget 9-->
+                        <div class="card card-xl-stretch mb-5 mb-xl-8">
+                            <!--begin::Header-->
+                            <div class="card-header border-0 pt-5">
+                                <h3 class="card-title align-items-start flex-column">
+                                    <span class="card-label fw-bolder text-dark">Investment History</span>
+                                </h3>
                                 <div class="card-toolbar" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover" title="Search">
                                     <!--begin::Search-->
                                     <div class="position-relative my-1">
-                                        <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
+                                        
                                         <span class="svg-icon svg-icon-2 position-absolute top-50 translate-middle-y ms-4">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                                                 <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="black" />
                                                 <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="black" />
                                             </svg>
                                         </span>
-                                        <!--end::Svg Icon-->
+                                        
                                         <input type="text" data-kt-table-widget-4="search" class="form-control w-150px fs-7 ps-12" placeholder="Search" />
                                     </div>
                                     <!--end::Search-->
                                 </div>
                             </div>
-                            <!--begin::Filters-->
+                            <!--end::Header-->
+                            <!--begin::Body-->
+                            <div class="card-body py-3">
+                                <!--begin::Table container-->
+                                <div class="table-responsive">
+                                    <!--begin::Table-->
+                                    <table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
+                                        <!--begin::Table head-->
+                                        <thead>
+                                            <tr class="fw-bolder text-muted">
+                                                <th class="">INVESTMENT AMOUNT</th>
+                                                <th class="">INVESTED DATE</th>
+                                                <th class="">APPROVED DATE</th>
+                                                <th class="">RATE OF INTEREST</th>
+                                                <th class="">NEXT PAYMENT DATE</th>
+                                                <th class="">STATUS</th>
+                                                <th class="">ACTION</th>
+                                            </tr>
+                                        </thead>
+                                        <!--end::Table head-->
+                                        <!--begin::Table body-->
+                                        <tbody>
+                                        	@foreach($smartfinances as $smartfinance)
+                                                <tr>
+                                                    <td>Rs {{$smartfinance->amount}}</td>
+                                                    <td>{{$smartfinance->investment_date}}</td>
+                                                    @if($smartfinance->accepted_date != NULL)
+                                                        <td>{{$smartfinance->accepted_date}}</td>
+                                                    @else
+                                                        <td>-</td>
+                                                    @endif
+                                                    @if($smartfinance->percentage != NULL)
+                                                        <td>{{$smartfinance->percentage}}</td>
+                                                    @else
+                                                        <td>-</td>
+                                                    @endif
+                                                    @if($smartfinance->next_payment_date != NULL)
+                                                        <td>{{$smartfinance->next_payment_date}}</td>
+                                                    @else
+                                                        <td>-</td>
+                                                    @endif
+                                                    @if($smartfinance->is_status == 2)
+                                                        <td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>
+                                                    @elseif($smartfinance->is_status == 1)
+                                                        <td><span class="badge py-3 px-4 fs-7 badge-light-success">Approved</span></td>
+                                                    @elseif($smartfinance->is_status == 0)
+                                                        <td><span class="badge py-3 px-4 fs-7 badge-light-danger">Rejected</span></td>
+                                                    @endif
+                                                    <td>
+                                                        <div class=" flex-shrink-0">
+                                                            <button type="button"  class="btn  btn-light mb-5" ><i class="fas fa-pencil-alt" id="fa"></i></button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+
+                                            @endforeach
+                                        </tbody>
+                                        <!--end::Table body-->
+                                    </table>
+                                    <!--end::Table-->
+                                    
+                                </div>
+                                <!--end::Table container-->
+                            </div>
+                            <!--begin::Body-->
                         </div>
-                        <!--end::Actions-->
+                        <!--end::Tables Widget 9-->
                     </div>
-                    <!--end::Card header-->
+                    <!--end::Col-->
+                </div>
+                <!--end::Row-->
+                <!--begin::Row-->
+                <div class="row gy-5 g-xl-8">
+                    <div class="col-xl-12 mb-5 mb-xl-10">
+                        <!--begin::Table Widget 4-->
+                        <div class="card card-flush h-xl-100">
+                            <!--begin::Card header-->
+                            <div class="card-header pt-7">
+                                <!--begin::Title-->
+                                <h3 class="card-title align-items-start flex-column">
+                                    <span class="card-label fw-bolder text-dark">Monthly Returns Table</span>
+                                </h3>
+                                <!--end::Title-->
+                                <!--begin::Actions-->
+                                <div class="card-toolbar">
+                                    <!--begin::Filters-->
+                                    <div class="d-flex flex-stack flex-wrap gap-4">
+                                        <!--begin::Destination-->
+                                        <!--end::Destination-->
+                                        <!--begin::Status-->
+                                        <!-- <div class="d-flex align-items-center fw-bolder">
+                                            <div class="text-muted fs-7 me-2">Status</div>
+                                            <select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Select an option" data-kt-table-widget-4="filter_status">
+                                                <option></option>
+                                                <option value="Show All" selected="selected">Show All</option>
+                                                <option value="Shipped">Approved</option>
+                                                <option value="Confirmed">Confirmed</option>
+                                                <option value="Rejected">Rejected</option>
+                                                <option value="Pending">Pending</option>
+                                            </select>
+                                        </div> -->
+                                        <!--end::Status-->
+                                        <div class="card-toolbar" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover" title="Search">
+                                            <!--begin::Search-->
+                                            <div class="position-relative my-1">
+                                                <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
+                                                <span class="svg-icon svg-icon-2 position-absolute top-50 translate-middle-y ms-4">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                        <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="black" />
+                                                        <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="black" />
+                                                    </svg>
+                                                </span>
+                                                <!--end::Svg Icon-->
+                                                <input type="text" data-kt-table-widget-4="search" class="form-control w-150px fs-7 ps-12" placeholder="Search" />
+                                            </div>
+                                            <!--end::Search-->
+                                        </div>
+                                    </div>
+                                    <!--begin::Filters-->
+                                </div>
+                                <!--end::Actions-->
+                            </div>
+                            <!--end::Card header-->
+                            <!--begin::Card body-->
+                            <div class="card-body">
+                                <!--begin::Table-->
+                                <table class="table align-middle table-row-dashed fs-6 gy-3" >
+                                    <!--begin::Table head-->
+                                    <thead>
+                                        <!--begin::Table row-->
+                                        <tr class="fw-bolder text-muted">
+                                            <th class="">INVESTMENT AMOUNT</th>
+                                            <th class="">RATE OF INTEREST</th>
+                                            <th class="">INTEREST</th>
+                                            <th class="">ORIGINAL PAYMENT DATE</th>
+                                            <th class="">NEW PAYMENT DATE</th>
+                                            <th class="">ACTION</th>               
+                                        </tr>
+                                        <!--end::Table row-->
+                                    </thead>
+                                    <!--end::Table head-->
+                                    <!--begin::Table body-->
+                                        <tbody class="">
+                                            <tr>
+                                                <td class="">RS.500000</td>
+                                                <td class="">4.00%</td>
+                                                <td class="">RS.200000.00</td>
+                                                <td class="">2022-10-26</td>
+                                                <td class="">2022-11-26</td>
+                                                <td class="">
+                                                   <div class=" flex-shrink-0">
+                                                        <button type="button"  class="btn  btn-light mb-5" ><i class="fas fa-pencil-alt" id="fa"></i></button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    <!--end::Table body-->
+                                </table>
+                                <!--end::Table-->
+                            </div>
+                            <!--end::Card body-->
+                        </div>
+                        <!--end::Table Widget 4-->
+                    </div>
+                </div>
+                <!--end::Row-->
+            @else
+                <div class="row">
+                    <div class="card">
+                        <!--begin::Card body-->
+                        <div class="card-body">
+                            <!--begin::Heading-->
+                            <div class="card-px text-center pt-15 pb-15">
+                                <!--begin::Title-->
+                                <h2 class="fs-2x fw-bolder mb-0">Start Your Investment </h2>
+                                <!--end::Title-->
+                                <!--begin::Description-->
+                                <p class="text-gray-400 fs-4 fw-bold py-7">Click on the below button to start your investment </p>
+                                <!--end::Description-->
+                                <!--begin::Action-->
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_start_investment" style="color: white;">Start Investment</button>
+                                <!--end::Action-->
+                            </div>
+                            <!--end::Heading-->
+                            <!--begin::Illustration-->
+                            <div class="text-center pb-15 px-5">
+                                <img src="{{ asset('public/assets/media/illustrations/sigma-1/11.png') }}" alt="" class="mw-100 h-200px h-sm-325px" />
+                            </div>
+                            <!--end::Illustration-->
+                        </div>
+                        <!--end::Card body-->
+                    </div>
+                </div>
+            @endif
+        @elseif($detail != NULL || $user->is_profile_verified == 0 )
+            <div class="row">
+                <div class="card">
                     <!--begin::Card body-->
                     <div class="card-body">
-                        <!--begin::Table-->
-                        <table class="table align-middle table-row-dashed fs-6 gy-3" >
-                            <!--begin::Table head-->
-                            <thead>
-                                <!--begin::Table row-->
-                                <tr class="fw-bolder text-muted">
-                                    <th class="">INVESTMENT AMOUNT</th>
-                                    <th class="">RATE OF INTEREST</th>
-                                    <th class="">INTEREST</th>
-                                    <th class="">ORIGINAL PAYMENT DATE</th>
-                                    <th class="">NEW PAYMENT DATE</th>
-                                    <th class="">ACTION</th>               
-                                </tr>
-                                <!--end::Table row-->
-                            </thead>
-                            <!--end::Table head-->
-                            <!--begin::Table body-->
-                                <tbody class="">
-                                    <tr>
-                                        <td class="">RS.500000</td>
-                                        <td class="">4.00%</td>
-                                        <td class="">RS.200000.00</td>
-                                        <td class="">2022-10-26</td>
-                                        <td class="">2022-11-26</td>
-                                        <td class="">
-                                           <div class=" flex-shrink-0">
-                                                <button type="button"  class="btn  btn-light mb-5" ><i class="fas fa-pencil-alt" id="fa"></i></button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            <!--end::Table body-->
-                        </table>
-                        <!--end::Table-->
+                        <!--begin::Heading-->
+                        <div class="card-px text-center pt-15 pb-15">
+                            <!--begin::Title-->
+                            <h2 class="fs-2x fw-bolder mb-0">Profile Status</h2>
+                            <!--end::Title-->
+                            <!--begin::Description-->
+                            <p class="text-gray-400 fs-4 fw-bold py-7">Your profile is under verification</p>
+                            <!--end::Description-->
+                        </div>
+                        <!--end::Heading-->
+                        <!--begin::Illustration-->
+                        <div class="text-center pb-15 px-5">
+                            <img src="{{ asset('public/assets/media/illustrations/sigma-1/17.png') }}" alt="" class="mw-100 h-200px h-sm-325px" />
+                        </div>
+                            <!--end::Illustration-->
                     </div>
-                    <!--end::Card body-->
+                        <!--end::Card body-->
                 </div>
-                <!--end::Table Widget 4-->
             </div>
-        </div>
-        <!--end::Row-->
-        @elseif($detail)
-        <div class="row">
-            <div class="card">
-                <!--begin::Card body-->
-                <div class="card-body">
-                    <!--begin::Heading-->
-                    <div class="card-px text-center pt-15 pb-15">
-                        <!--begin::Title-->
-                        <h2 class="fs-2x fw-bolder mb-0">Profile Status</h2>
-                        <!--end::Title-->
-                        <!--begin::Description-->
-                        <p class="text-gray-400 fs-4 fw-bold py-7">Your profile is under verification</p>
-                        <!--end::Description-->
-                    </div>
-                    <!--end::Heading-->
-                    <!--begin::Illustration-->
-                    <div class="text-center pb-15 px-5">
-                        <img src="{{ asset('public/assets/media/illustrations/sigma-1/17.png') }}" alt="" class="mw-100 h-200px h-sm-325px" />
-                    </div>
-                        <!--end::Illustration-->
-                </div>
-                    <!--end::Card body-->
-            </div>
-        </div>
         @else
-        <div class="row">
-            <div class="card">
-                <!--begin::Card body-->
-                <div class="card-body">
-                    <!--begin::Heading-->
-                    <div class="card-px text-center pt-15 pb-15">
-                        <!--begin::Title-->
-                        <h2 class="fs-2x fw-bolder mb-0">Create a Profile</h2>
-                        <!--end::Title-->
-                        <!--begin::Description-->
-                        <p class="text-gray-400 fs-4 fw-bold py-7">Click on the below button to create your profile </p>
-                        <!--end::Description-->
-                        <!--begin::Action-->
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_create_project" style="color: white;">Create Profile</button>
-                            <!--end::Action-->
+            <div class="row">
+                <div class="card">
+                    <!--begin::Card body-->
+                    <div class="card-body">
+                        <!--begin::Heading-->
+                        <div class="card-px text-center pt-15 pb-15">
+                            <!--begin::Title-->
+                            <h2 class="fs-2x fw-bolder mb-0">Create a Profile</h2>
+                            <!--end::Title-->
+                            <!--begin::Description-->
+                            <p class="text-gray-400 fs-4 fw-bold py-7">Click on the below button to create your profile </p>
+                            <!--end::Description-->
+                            <!--begin::Action-->
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_create_project" style="color: white;">Create Profile</button>
+                                <!--end::Action-->
+                        </div>
+                        <!--end::Heading-->
+                        <!--begin::Illustration-->
+                        <div class="text-center pb-15 px-5">
+                            <img src="{{ asset('public/assets/media/illustrations/sigma-1/6.png') }}" alt="" class="mw-100 h-200px h-sm-325px" />
+                        </div>
+                            <!--end::Illustration-->
                     </div>
-                    <!--end::Heading-->
-                    <!--begin::Illustration-->
-                    <div class="text-center pb-15 px-5">
-                        <img src="{{ asset('public/assets/media/illustrations/sigma-1/6.png') }}" alt="" class="mw-100 h-200px h-sm-325px" />
-                    </div>
-                        <!--end::Illustration-->
+                        <!--end::Card body-->
                 </div>
-                    <!--end::Card body-->
             </div>
-        </div>
         @endif
+
+
     </div>
     <!--end::Post-->
 </div>
@@ -896,10 +932,217 @@
     </div>
     <!--end::Modal dialog-->
 </div>
-<!--end::Modal - Create Project-->
+<!--end::Modal - Create Profile-->
+
+
+<!-- begin::Modal -investment- -->
+<div class="modal fade" id="kt_modal_start_investment" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog mw-650px">
+        <!--begin::Modal content-->
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header pb-0 border-0 justify-content-end">
+                <!--begin::Close-->
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
+                            <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="black" />
+                        </svg>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--begin::Modal header-->
+            <!--begin::Modal body-->
+            <div class="modal-body scroll-y mx-5 mx-xl-18 pt-0 pb-15">
+                <!--begin::Heading-->
+
+                <!--end::Google Contacts Invite-->
+                <!--begin::Separator-->
+                <!--end::Separator-->
+                <!--begin::Textarea-->
+                <!--end::Textarea-->
+                <!--begin::Users-->
+                <div class="mb-10">
+                    <!--begin::Heading-->
+                    <div class="fs-4 fw-bolder mb-2">Smart Finance</div>
+                    <!--end::Heading-->
+                    <form class="form w-100" novalidate="novalidate" id="kt_sign_in_form" method="post" action="{{route('store_smart_finance')}}" enctype="multipart/form-data">
+                        @csrf
+
+                        <!--begin::Input group-->
+                        <div class="fv-row mb-8">
+                            <!--begin::Label-->
+                            <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                <span class="required">Select Your Plan</span>
+                                <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Plan"></i>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <select class="form-select form-select-solid form-select-sm" data-control="select2" data-hide-search="true" name="plan" id="plan">
+                                <option value="">Select</option>
+                                <option value="month">Month</option>
+                                <option value="year">Year</option>
+
+                            </select>
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+
+                        <!--begin::Input group-->
+                        <div class="fv-row mb-8" id="plan_type" style="display:none;">
+                            <!--begin::Label-->
+                            <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                <span class="required">Select Your Plan Type</span>
+                                <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Plan Type"></i>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <select class="form-select form-select-solid form-select-sm @error('plan_id') is-invalid @enderror" data-control="select2" data-hide-search="true" name="plan_id" id="plan_id">
+                                <option value="">Select</option>
+                            </select>
+                            @error('plan_id')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+
+                        <!--begin::Input group-->
+                        <div class="fv-row mb-8">
+                            <!--begin::Label-->
+                            <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                <span class="required">Investment Amount</span>
+                                <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Investment Amount"></i>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="number" class="form-control form-control-solid @error('amount') is-invalid @enderror" placeholder="Investment Amount" value="" name="amount" id="amount" />
+                            <!--end::Input-->
+                            <div class=" amount_error" id="amount_error"></div>
+                            @error('amount')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <!--end::Input group-->
+
+
+                        <!--begin::Input group-->
+                        <div class="fv-row mb-8">
+                            <!--begin::Label-->
+                            <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                <span class="required">Payment Receipt</span>
+                                <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Payment Receipt"></i>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="file" class="form-control form-control-solid custom-file-input @error('amount') is-invalid @enderror" id="bill" placeholder="Payment Receipt" value="" name="bill" accept="image/*" />
+                            <div class="d-flex justify-content-center mt-3">
+                                <img id="preview-image-bill" style="max-height: 200px;">
+                            </div>
+
+                            <!--end::Input-->
+                            @error('bill')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <!--end::Input group-->
+                        
+                        
+                        <div class="d-flex justify-content-center">
+                            <button type="submit"  class="btn  btn-primary mt-5 mb-3">Submit</button>
+                        </div>
+                    </form>
+                </div>
+                <!--end::Users-->
+                <!--begin::Notice-->
+                <!--end::Notice-->
+            </div>
+            <!--end::Modal body-->
+        </div>
+            <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+</div>
+<!-- end::Modal -investment- -->
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
+<!-- investment plan type -->
+<script type="text/javascript">
+    jQuery(document).ready(function ()
+    {
+        jQuery('select[name="plan"]').on('change',function(){
+            var plan = jQuery(this).val();
+            jQuery.ajax({
+                url : 'plan_type',
+                type: 'GET',
+                dataType: 'json',
+                data: { plan: plan},
+                success:function(data)
+                {
+                    if(plan == 'year'){
+                        console.log(data);
+                        $('#plan_type').show();
+                        jQuery('select[name="plan_id"]').empty();
+                        $('select[name="plan_id"]').append('<option value="">'+ "Select" +'</option>');
+                        jQuery.each(data, function(key,value){
+                            console.log(value)
+                            $('select[name="plan_id"]').append('<option value="'+ value.id +'">'+ value.name +'</option>');
+                        });
+                    }
+                    else{
+                        console.log(data);
+                        $('#plan_type').hide();
+                        jQuery('select[name="plan_id"]').empty();
+                        $('select[name="plan_id"]').append('<option value="">'+ "Select" +'</option>');
+                        jQuery.each(data, function(key,value){
+                            console.log(value)
+                            $('select[name="plan_id"]').append('<option value="'+ value.id +'" selected>'+ value.name +'</option>');
+                        });
+
+                    }
+                }
+            });
+            
+        });
+    });
+</script>
+
+<!-- investment amount validation -->
+<script type="text/javascript">
+    jQuery(document).ready(function ()
+    {
+        jQuery('input[name="amount"]').on('change',function(){
+            var amount = jQuery(this).val();
+            if(amount)
+            {
+                if(amount < 100000)
+                {
+                    alertText = "Minimum amount should be 1,00000";
+                    var div = document.getElementById("amount_error");
+                    div.innerHTML = '';
+                    div.style.display = "block";
+                    $( ".amount_error" ).html('');
+                    var html ='<div class="text-danger">'+alertText+'</div>';
+                    $('.amount_error').html(html);
+                } 
+                else{
+                    $('#amount_error').hide();
+
+                }
+
+            }
+
+        });
+    });
+</script>
+
+<!-- profile validation -->
 <script type="text/javascript">
 
     function additional_next() {
@@ -1162,9 +1405,6 @@
             $('#submit').show();
         }
     }
-
-
-
 </script>
 
 <!-- <script type="text/javascript">
@@ -1179,6 +1419,7 @@
     });
 </script> -->
 
+<!-- avatar -->
 <script type="text/javascript">    
     $(document).ready(function (e) { 
        $('#avatar').change(function(){   
@@ -1192,6 +1433,7 @@
     });
 </script>
 
+<!-- aadhaar card -->
 <script type="text/javascript">    
     $(document).ready(function (e) {
        
@@ -1206,6 +1448,7 @@
     });
 </script>
 
+<!-- pan card -->
 <script type="text/javascript">    
     $(document).ready(function (e) {
        $('#pan_card').change(function(){   
@@ -1230,12 +1473,26 @@
     });
 </script> -->
 
+<!-- nominee_aadhar -->
 <script type="text/javascript">    
     $(document).ready(function (e) {
        $('#nominee_aadhar').change(function(){   
             let reader = new FileReader();
             reader.onload = (e) => { 
                 $('#preview-image-nominee_aadhar').attr('src', e.target.result); 
+            }
+            reader.readAsDataURL(this.files[0]); 
+       });
+    });
+</script>
+
+<!-- bill image -->
+<script type="text/javascript">    
+    $(document).ready(function (e) {
+       $('#bill').change(function(){   
+            let reader = new FileReader();
+            reader.onload = (e) => { 
+                $('#preview-image-bill').attr('src', e.target.result); 
             }
             reader.readAsDataURL(this.files[0]); 
        });

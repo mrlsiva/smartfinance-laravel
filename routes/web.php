@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\loginController;
 use App\Http\Controllers\registerController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\smartfinanceController;
 use App\Http\Middleware\PreventBackHistory;
 
 
@@ -51,12 +52,14 @@ Route::get('user_status',[UserController::class, 'user_status'])->name('user_sta
 Route::get('user_progress',[UserController::class, 'user_progress'])->name('user_progress');
 Route::get('user_profile',[UserController::class, 'user_profile'])->name('user_profile');
 Route::get('user_role',[UserController::class, 'user_role'])->name('user_role');
-
 Route::post('/save_profile',[UserController::class, 'save_profile'])->name('save_profile');
 Route::post('/edit_profile',[UserController::class, 'edit_profile'])->name('edit_profile');
-
-
 //User Management end
+
+//Smart Finance
+Route::post('/store_smart_finance',[SmartFinanceController::class, 'store_smart_finance'])->name('store_smart_finance');
+Route::get('plan_type',[SmartFinanceController::class, 'plan_type'])->name('plan_type');
+//Smart Finance end
 
 
 //Logout

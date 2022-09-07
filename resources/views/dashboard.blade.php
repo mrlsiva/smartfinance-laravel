@@ -417,18 +417,18 @@
                     <!--begin::Card body-->
                     <div class="card-body">
                         <!--begin::Table-->
-                        <table class="table align-middle table-row-dashed fs-6 gy-3" id="kt_table_widget_4_table">
+                        <table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
                             <!--begin::Table head-->
                             <thead>
                                 <!--begin::Table row-->
                                 <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="">Customer</th>
-                                    <th class="">INVESTMENT DATE</th>
-
+                                    <th class="">CUSTOMER</th>
                                     <th class="">TOTAL AMOUNT INVESTED</th>
+                                    <th class="">INVESTMENT DATE</th>
+                                    <th class="">APPROVED DATE</th>
                                     <th class="">RATE OF INTEREST</th>
-                                    <th class="">Profit</th>
-                                    <th class="">Status</th>
+                                    <th class="">PROFIT</th>
+                                    <th class="">STATUS</th>
                                     <th class=""></th>               
                                 </tr>
                                 <!--end::Table row-->
@@ -436,30 +436,44 @@
                             <!--end::Table head-->
                             <!--begin::Table body-->
                                 <tbody class="fw-bolder text-gray-600">
+                                    @foreach($smartfinances as $smartfinance)
                                     <tr>
                                         <td>
                                             <div class="d-flex align-items-center">
                                                 <div class="symbol symbol-45px me-5">
-                                                    <img src="{{ asset('public/assets/media/avatars/blank.png') }}" alt="" />
+                                                    <img src="{{ $user_detail->avatar}}" alt="" />
                                                 </div>
                                                 <div class="d-flex justify-content-start flex-column">
-                                                    <a href="#" class="text-dark fw-bolder text-hover-primary fs-6">Siva</a>
-                                                    <span class="text-muted fw-bold text-muted d-block fs-7">+91 9994090424</span>
+                                                    <a href="#" class="text-dark fw-bolder text-hover-primary fs-6">{{$user->first_name}} {{$user->last_name}}</a>
+                                                    <span class="text-muted fw-bold text-muted d-block fs-7">#{{$user->id}}</span>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class="">13 June 2022, 11:52 pm</td>
-                                        <!-- <td class="text-end">3000000</td> -->
+                                        <td class="">{{$smartfinance->amount}}</td>
                                         <td class="">
-                                            <a href="" class="text-dark text-hover-primary">3000000</a>
+                                            {{$smartfinance->investment_date}}
                                         </td>
-                                        <td class="">3%</td>
+                                        @if($smartfinance->accepted_date != NULL)
+                                            <td>{{$smartfinance->accepted_date}}</td>
+                                        @else
+                                            <td>-</td>
+                                        @endif
+                                        @if($smartfinance->percentage != NULL)
+                                            <td>{{$smartfinance->percentage}}</td>
+                                        @else
+                                            <td>-</td>
+                                        @endif
+                                        
                                         <td class="">
-                                            <span class="text-dark fw-bolder">Rs. 60000</span>
+                                           -
                                         </td>
-                                        <td class="">
-                                            <span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span>
-                                        </td>
+                                        @if($smartfinance->is_status == 2)
+                                            <td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>
+                                        @elseif($smartfinance->is_status == 1)
+                                            <td><span class="badge py-3 px-4 fs-7 badge-light-success">Approved</span></td>
+                                        @elseif($smartfinance->is_status == 0)
+                                            <td><span class="badge py-3 px-4 fs-7 badge-light-danger">Rejected</span></td>
+                                        @endif      
                                         <td class="">
                                             <a href="#" class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary">
                                                 <!--begin::Svg Icon | path: icons/duotune/arrows/arr064.svg-->
@@ -473,6 +487,7 @@
                                             </a>
                                         </td>
                                     </tr>
+                                    @endforeach
                                 </tbody>
                             <!--end::Table body-->
                         </table>

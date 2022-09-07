@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Models\UserDetail;
 use App\Models\BankDetail;
 use App\Models\NomineeDetail;
+use App\Models\Smartfinance;
 use Image;
 use DB;
 
@@ -19,17 +20,18 @@ class UserController extends Controller
 {
     public function dashboard(){
 
-        $role_id = Auth::user()->role_id;
-        if($role_id == '3'){
+        $user = Auth::user();
+        if($user->role_id == '3'){
 
-            return view('user_dashboard');
+            $smartfinances = Smartfinance::where('user_id',$user->id)->get();
+
+            return view('user_dashboard')->with('smartfinances',$smartfinances);
 
         }else{
             $users = User::where('is_delete',0)->orderBy('id','Desc')->simplePaginate(10);
             $user_count = User::where('is_active',0)->orWhere('is_profile_verified',0)->count();
-            $search_txt = ' ';
-            $status = ' ';
-            return view('dashboard')->with('users',$users)->with('user_count',$user_count)->with('search_txt', $search_txt)->with('status', $status);
+            $smartfinances = Smartfinance::all();
+            return view('dashboard')->with('users',$users)->with('user_count',$user_count)->with('smartfinances',$smartfinances);
         }
         
     }
