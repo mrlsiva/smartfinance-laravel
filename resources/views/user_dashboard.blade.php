@@ -1051,6 +1051,13 @@
                             @enderror
                         </div>
                         <!--end::Input group-->
+
+                        <div class="fv-row mb-8 example">
+
+                        </div>
+
+
+
                         
                         
                         <div class="d-flex justify-content-center">
@@ -1498,4 +1505,51 @@
        });
     });
 </script>
+
+<!-- example month table -->
+<script type="text/javascript">
+    jQuery(document).ready(function ()
+    {
+        jQuery('select[name="plan"]').on('change',function(){
+            var plan = jQuery(this).val();
+            if(plan == 'month'){
+                $( ".example" ).html('');
+                var html ='<div class="d-flex justify-content-center">Monthly Plan</div><table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4"><thead><tr class="fw-bolder text-muted"><th class="">Amount</th><th class="">Percentage</th><th class="">Profit</th></tr></thead><tbody></tbody></table>';
+                $('.example').html(html);
+
+            }
+            else{
+                $( ".example" ).html('');
+                var html ='';
+                $('.example').html(html);
+
+            }
+        });
+    });
+</script>
+<!-- end example month table -->
+
+<!-- example year table -->
+<script type="text/javascript">
+    jQuery(document).ready(function ()
+    {
+        jQuery('select[name="plan_id"]').on('change',function(){
+            var plan_id = jQuery(this).val();
+            if(plan_id == '2'){
+                $( ".example" ).html('');
+                var html ='<div class="d-flex justify-content-center">Yearly Plan A</div><table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4"><thead><tr class="fw-bolder text-muted"><th class="">Amount</th><th class="">Percentage</th><th class="">Profit</th></tr></thead><tbody></tbody></table>';
+                $('.example').html(html);
+
+            }
+            else{
+                $( ".example" ).html('');
+                var html ='<div class="d-flex justify-content-center">Yearly Plan B</div><table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4"><thead><tr class="fw-bolder text-muted"><th class="">Amount</th><th class="">Percentage</th><th class="">Profit</th></tr></thead><tbody></tbody></table>';
+                $('.example').html(html);
+
+            }
+        });
+    });
+</script>
+<!-- end example month table -->
 @endsection
+

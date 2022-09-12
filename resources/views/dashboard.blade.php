@@ -441,11 +441,14 @@
                                         <td>
                                             <div class="d-flex align-items-center">
                                                 <div class="symbol symbol-45px me-5">
-                                                    <img src="{{ $user_detail->avatar}}" alt="" />
+                                                    @php
+                                                        $avatar = App\Models\UserDetail::where('user_id',$smartfinance->user->id)->first();
+                                                    @endphp
+                                                    <img src="{{ $avatar->avatar}}" alt="" />
                                                 </div>
                                                 <div class="d-flex justify-content-start flex-column">
-                                                    <a href="#" class="text-dark fw-bolder text-hover-primary fs-6">{{$user->first_name}} {{$user->last_name}}</a>
-                                                    <span class="text-muted fw-bold text-muted d-block fs-7">#{{$user->id}}</span>
+                                                    <a href="#" class="text-dark fw-bolder text-hover-primary fs-6">{{$smartfinance->user->first_name}} {{$smartfinance->user->last_name}}</a>
+                                                    <span class="text-muted fw-bold text-muted d-block fs-7">#{{$smartfinance->user->id}}</span>
                                                 </div>
                                             </div>
                                         </td>
@@ -475,7 +478,8 @@
                                             <td><span class="badge py-3 px-4 fs-7 badge-light-danger">Rejected</span></td>
                                         @endif      
                                         <td class="">
-                                            <a href="#" class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary">
+                                            
+                                            <button class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary" name="approve" data-system_id="{{$smartfinance->user->id}}">
                                                 <!--begin::Svg Icon | path: icons/duotune/arrows/arr064.svg-->
                                                 <span class="svg-icon svg-icon-2">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -484,7 +488,7 @@
                                                     </svg>
                                                 </span>
                                                 <!--end::Svg Icon-->
-                                            </a>
+                                            </button>
                                         </td>
                                     </tr>
                                     @endforeach
@@ -1255,6 +1259,92 @@
     <!--end::Modal dialog-->
 </div>
 <!-- end::Modal -->
+
+<!-- begin::Modal -approve-investment- -->
+<div class="modal fade" id="modal_approve_smart_finance" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog mw-650px">
+        <!--begin::Modal content-->
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header pb-0 border-0 justify-content-end">
+                <!--begin::Close-->
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
+                            <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="black" />
+                        </svg>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--begin::Modal header-->
+            <!--begin::Modal body-->
+            <div class="modal-body scroll-y mx-5 mx-xl-18 pt-0 pb-15">
+                <!--begin::Heading-->
+
+                <!--end::Google Contacts Invite-->
+                <!--begin::Separator-->
+                <!--end::Separator-->
+                <!--begin::Textarea-->
+                <!--end::Textarea-->
+                <!--begin::Users-->
+                <div class="mb-10">
+                    <!--begin::Heading-->
+                    <div class="fs-4 fw-bolder mb-2">Approval of user investment</div>
+                    <!--end::Heading-->
+                    <form class="form w-100" novalidate="novalidate" id="kt_sign_in_form" method="post" action="{{route('approve_smart_finance')}}" enctype="multipart/form-data">
+                        @csrf
+                        <input type="hidden" name="user_id" id="finance_user_id">
+                        <!--begin::Input group-->
+                        <div class="fv-row mb-8">
+                            <!--begin::Label-->
+                            <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                <span>Bill</span>
+                            </label>
+                            <!--end::Label-->
+                            <img src="" alt="image" id="bill" />
+                        </div>
+                        <!--end::Input group-->
+
+                        <!--begin::Input group-->
+                        <div class="fv-row mb-8">
+                            <!--begin::Label-->
+                            <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                <span class="required">Rate of intrest</span>
+                                <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Rate of intrest"></i>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="number" class="form-control form-control-solid @error('intrest') is-invalid @enderror" placeholder="Intrest" value="" name="intrest" id="intrest" />
+                            <!--end::Input-->
+                            <div class="" id="intrest_error"></div>
+                            @error('intrest')intrest_error
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <!--end::Input group-->
+                        
+                        <div class="d-flex justify-content-center">
+                            <button type="button"  class="btn  btn-danger mt-5 mb-3" onclick="reject()">Reject</button> &nbsp;&nbsp;&nbsp;
+                            <button type="button"  class="btn  btn-success mt-5 mb-3" onclick="accept()">Approve</button>
+                        </div>
+                    </form>
+                </div>
+                <!--end::Users-->
+                <!--begin::Notice-->
+                <!--end::Notice-->
+            </div>
+            <!--end::Modal body-->
+        </div>
+            <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+</div>
+<!-- end::Modal -approve-investment- -->
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
@@ -2301,6 +2391,84 @@
         });
     });
 </script> -->
+
+<!-- finance -->
+<script type="text/javascript">
+    $(document).on('click', 'button[name^="approve"]', function(e) {
+        var system_id = $(this).data("system_id");
+        console.log(system_id);
+
+        if(system_id)
+        {
+            jQuery.ajax({
+                url : 'get_smart_finance',
+                type: 'GET',
+                dataType: 'json',
+                data: { id: system_id },
+                success:function(data)
+                { 
+                    jQuery('#modal_approve_smart_finance').modal('show');
+                    document.getElementById("finance_user_id").value = system_id;
+                    $("#bill").attr("src", data.bill);
+
+                }
+            });
+}
+
+});
+</script>
+<!-- end-finance -->
+
+<!-- approve-finance -->
+<script type="text/javascript">
+    function accept(){
+        var intrest = jQuery("#intrest").val();
+        var user_id = jQuery("#finance_user_id").val();
+        if(intrest){
+            jQuery.ajax({
+                url : 'approve_smart_finance',
+                type: 'GET',
+                dataType: 'json',
+                data: { "user_id": user_id,"intrest" : intrest},
+                success:function(data)
+                {
+                    console.log(data);
+                    window.location.reload();
+
+                }
+            });
+        }
+        else{
+
+            $( "#intrest_error" ).html('');
+            var html ='<div class="alert alert-danger" role="alert">Intrest is required</div>';
+             $('#intrest_error').html(html);
+        }
+    }
+    
+</script>
+<!-- end-approve-finance -->
+
+<!-- reject-finance -->
+<script type="text/javascript">
+    function reject(){
+        var user_id = jQuery("#finance_user_id").val();
+        jQuery.ajax({
+            url : 'reject_smart_finance',
+            type: 'GET',
+            dataType: 'json',
+            data: { "user_id": user_id},
+            success:function(data)
+            {
+                console.log(data);
+                window.location.reload();
+
+            }
+        });
+    }
+    
+</script>
+<!-- end-reject-finance -->
 
 
 @endsection

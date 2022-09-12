@@ -22,4 +22,9 @@ class Smartfinance extends Model
     {
         return $this->belongsTo('App\Models\Plan');
     }
+
+    public function getBillAttribute($value)
+    {
+        return $value ? url('storage/app/public/'.config('path.bill').$value ): null;
+    }
 }

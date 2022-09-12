@@ -10,6 +10,7 @@ Use \Carbon\Carbon;
 use App\Models\Plan;
 use App\Models\Smartfinance;
 use Image;
+use DB;
 
 class smartfinanceController extends Controller
 {
@@ -53,6 +54,37 @@ class smartfinanceController extends Controller
 
         return redirect('dashboard');
 
+    }
+
+
+    public function get_smart_finance(Request $request) 
+    { 
+        $id=$request->id;  
+        $finance = Smartfinance::where('user_id',$id)->first();
+        return $finance;     
+    }
+
+    public function approve_smart_finance(Request $request) {
+        $user_id = $request->user_id;
+        $intrest = $request->intrest;
+        $auth = Auth::user();
+        $date = Carbon::now();
+        $accepted_date = $date->toDateString();
+        $next_payment_date = Carbon::now()->addMonths(1);
+
+        $smartfinances = DB::table('smartfinances')->where('user_id',$user_id)->update(['accepted_by' => $auth->id,'accepted_date' => $accepted_date,'percentage' => $intrest,'next_payment_date' => $next_payment_date,'is_status' => 1]);
+        return $smartfinances;
+
+    }
+
+    public function reject_smart_finance(Request $request) {
+
+        $user_id = $request->user_id;
+        $auth = Auth::user();
+
+        $smartfinances = DB::table('smartfinances')->where('user_id',$user_id)->update(['rejected_by' => $auth->id,'is_status' => 0]);
+        return $smartfinances;
+        
     }
 
 }
