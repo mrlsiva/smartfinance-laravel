@@ -79,7 +79,7 @@
                                             </span>            
                                         </div>
                                         <span class="symbol symbol-50px">
-                                            <span class="px-3 py-1 fs-5 fw-bolder bg-warning text-dark">0</span>
+                                            <span class="px-3 py-1 fs-5 fw-bolder bg-warning text-dark">{{$smartfinance_count}}</span>
                                         </span>
                                     </div>
                                     <a href="#" onclick="finance()" class="text-dark fw-bold fs-6">Smart Finance</a>
@@ -191,6 +191,7 @@
                                         <option value=" " selected="selected">Show All</option>
                                         <option value="1">Verified</option>
                                         <option value="0">Pending</option>
+                                        <option value="2">In Complete</option>
                                     </select>
                                     <!--end::Select-->
                                 </div>
@@ -305,7 +306,9 @@
                                                 @endif
                                             </td>
                                             <td class="">
-                                                @if($user->is_profile_verified == 0 || $user->is_profile_updated == 1)
+                                                @if($user->is_profile_verified == 2)
+                                                    <span class="badge py-3 px-4 fs-7 badge-light-danger">Incomplete</span>
+                                                @elseif($user->is_profile_verified == 0 || $user->is_profile_updated == 1)
                                                     <span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span>
                                                 @else
                                                     <span class="badge py-3 px-4 fs-7 badge-light-success">Verified</span>
@@ -423,11 +426,11 @@
                                 <!--begin::Table row-->
                                 <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                     <th class="">CUSTOMER</th>
+                                    <th class="">PLAN</th>
                                     <th class="">TOTAL AMOUNT INVESTED</th>
                                     <th class="">INVESTMENT DATE</th>
                                     <th class="">APPROVED DATE</th>
                                     <th class="">RATE OF INTEREST</th>
-                                    <th class="">PROFIT</th>
                                     <th class="">STATUS</th>
                                     <th class=""></th>               
                                 </tr>
@@ -454,7 +457,17 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class="">{{$smartfinance->amount}}</td>
+                                        @php
+                                            $plan = App\Models\Plan::where('id',$smartfinance->plan_id)->first();
+                                        @endphp
+                                        @if($plan != Null)
+                                            @if($plan->type == 'month')
+                                                <td class="">Month</td>
+                                            @else
+                                                <td class="">Year</td>
+                                            @endif
+                                        @endif
+                                        <td class="">Rs {{$smartfinance->amount}}</td>
                                         <td class="">
                                             {{$smartfinance->investment_date}}
                                         </td>
@@ -468,10 +481,6 @@
                                         @else
                                             <td>-</td>
                                         @endif
-                                        
-                                        <td class="">
-                                           -
-                                        </td>
                                         @if($smartfinance->is_status == 2)
                                             <td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>
                                         @elseif($smartfinance->is_status == 1)
@@ -1762,7 +1771,11 @@
                             else{
                                 output += '<td>Yes</td>';
                             }
-                            if(data[count].is_profile_verified == 0 || data[count].is_profile_updated == 1){
+                            if(data[count].is_profile_verified == 2){
+                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-danger">Incomplete</span></td>';
+
+                            }
+                            else if(data[count].is_profile_verified == 0 || data[count].is_profile_updated == 1){
 
                                 output += '<td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>';
                             }

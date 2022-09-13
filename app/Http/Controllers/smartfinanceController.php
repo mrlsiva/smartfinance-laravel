@@ -73,16 +73,38 @@ class smartfinanceController extends Controller
         $accepted_date = $date->toDateString();
 
         $smart_finance = Smartfinance::where('user_id',$user_id)->select('plan_id')->first();
-        $type = Plan::where('id',$smart_finance->plan_id)->first();
-        if($smart_finance->type == 'month'){
-           $next_payment_date = Carbon::now()->addMonths(1); 
+        $plan = Plan::where('id',$smart_finance->plan_id)->first();
+        if($plan->type == 'month'){
+            $payment_date = Carbon::now()->addMonths(2); 
+            $payment_date = Carbon::parse($payment_date)->setDay(6)->format('Y-m-d');
+
+            $timestamp = strtotime($payment_date);
+            $day = date('l', $timestamp);
+            if($day == 'Tuesday' || 'Sunday' || 'Friday'){
+                $payment_date = Carbon::parse($payment_date)->setDay(7)->format('Y-m-d');
+            }
+            else{
+                $payment_date = Carbon::parse($payment_date)->setDay(6)->format('Y-m-d');
+            }
+           //return $payment_date;
         }
         else{
-            $next_payment_date = Carbon::now()->addYears(1); 
+            $payment_date = Carbon::now()->addYears(2); 
+            $payment_date = $payment_date->addMonths(2);
+            $payment_date = Carbon::parse($payment_date)->setDay(6)->format('Y-m-d');
+
+            $timestamp = strtotime($payment_date);
+            $day = date('l', $timestamp);
+            if($day == 'Tuesday' || 'Sunday' || 'Friday'){
+                $payment_date = Carbon::parse($payment_date)->setDay(7)->format('Y-m-d');
+            }
+            else{
+                $payment_date = Carbon::parse($payment_date)->setDay(6)->format('Y-m-d');
+            }
         }
         
 
-        $smartfinances = DB::table('smartfinances')->where('user_id',$user_id)->update(['accepted_by' => $auth->id,'accepted_date' => $accepted_date,'percentage' => $intrest,'next_payment_date' => $next_payment_date,'is_status' => 1]);
+        $smartfinances = DB::table('smartfinances')->where('user_id',$user_id)->update(['accepted_by' => $auth->id,'accepted_date' => $accepted_date,'percentage' => $intrest,'next_payment_date' => $payment_date,'is_status' => 1]);
         return $smartfinances;
 
     }

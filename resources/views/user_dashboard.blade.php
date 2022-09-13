@@ -135,20 +135,17 @@
                                 <h3 class="card-title align-items-start flex-column">
                                     <span class="card-label fw-bolder text-dark">Investment History</span>
                                 </h3>
-                                <div class="card-toolbar" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover" title="Search">
-                                    <!--begin::Search-->
-                                    <div class="position-relative my-1">
-                                        
-                                        <span class="svg-icon svg-icon-2 position-absolute top-50 translate-middle-y ms-4">
+                                <div class="card-toolbar" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover" title="Next Investment">
+                                    <a class="btn btn-sm btn-light btn-active-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_start_investment" >
+                                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
+                                        <span class="svg-icon svg-icon-3">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                                <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="black" />
-                                                <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="black" />
+                                                <rect opacity="0.5" x="11.364" y="20.364" width="16" height="2" rx="1" transform="rotate(-90 11.364 20.364)" fill="black" />
+                                                <rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="black" />
                                             </svg>
                                         </span>
-                                        
-                                        <input type="text" data-kt-table-widget-4="search" class="form-control w-150px fs-7 ps-12" placeholder="Search" />
-                                    </div>
-                                    <!--end::Search-->
+                                        <!--end::Svg Icon-->Next Investment 
+                                    </a>
                                 </div>
                             </div>
                             <!--end::Header-->
@@ -161,6 +158,7 @@
                                         <!--begin::Table head-->
                                         <thead>
                                             <tr class="fw-bolder text-muted">
+                                                <th class="">PLAN</th>
                                                 <th class="">INVESTMENT AMOUNT</th>
                                                 <th class="">INVESTED DATE</th>
                                                 <th class="">APPROVED DATE</th>
@@ -175,6 +173,16 @@
                                         <tbody>
                                         	@foreach($smartfinances as $smartfinance)
                                                 <tr>
+                                                    @php
+                                                        $plan = App\Models\Plan::where('id',$smartfinance->plan_id)->first();
+                                                    @endphp
+                                                    @if($plan != Null)
+                                                        @if($plan->type == 'month')
+                                                            <td class="">Month</td>
+                                                        @else
+                                                            <td class="">Year</td>
+                                                        @endif
+                                                    @endif
                                                     <td>Rs {{$smartfinance->amount}}</td>
                                                     <td>{{$smartfinance->investment_date}}</td>
                                                     @if($smartfinance->accepted_date != NULL)
@@ -938,7 +946,7 @@
 <!-- begin::Modal -investment- -->
 <div class="modal fade" id="kt_modal_start_investment" tabindex="-1" aria-hidden="true">
     <!--begin::Modal dialog-->
-    <div class="modal-dialog modal-dialog-scrollable mw-650px">
+    <div class="modal-dialog modal-dialog-scrollable mw-800px">
         <!--begin::Modal content-->
         <div class="modal-content">
             <!--begin::Modal header-->
@@ -1514,7 +1522,7 @@
             var plan = jQuery(this).val();
             if(plan == 'month'){
                 $( ".example" ).html('');
-                var html ='<div class="d-flex justify-content-center">Monthly Plan</div><table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4"><thead><tr class="fw-bolder text-muted"><th class="">Amount</th><th class="">Percentage</th><th class="">Profit</th></tr></thead><tbody></tbody></table>';
+                var html ='<div class="d-flex justify-content-center">Monthly Return Plan(If you start investment in 25-9-2022)</div><table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4"><thead><tr class="fw-bolder text-muted"><th class="">Month</th><th class="">Investment Amount</th><th class="">Percentage(Sample)</th><th class="">Monthly return</th><th class="">Payment date</th></tr></thead><tbody><tr><td>1</td><td>100000</td><td>3%</td><td>3000</td><td>6-11-2022</td></tr><tr><td>2</td><td>100000</td><td>3%</td><td>3000</td><td>6-12-2022</td></tr><tr><td>3</td><td>100000</td><td>3%</td><td>3000</td><td>6-1-2023</td></tr></tbody></table>';
                 $('.example').html(html);
 
             }
@@ -1537,19 +1545,19 @@
             var plan_id = jQuery(this).val();
             if(plan_id == '2'){
                 $( ".example" ).html('');
-                var html ='<div class="d-flex justify-content-center">Yearly Plan A</div><table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4"><thead><tr class="fw-bolder text-muted"><th class="">Amount</th><th class="">Percentage</th><th class="">Profit</th></tr></thead><tbody></tbody></table>';
+                var html ='<div class="d-flex justify-content-center">One time Invertment(If you start investment in 25-9-2022)</div><table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4"><thead><tr class="fw-bolder text-muted"><th class="">Year</th><th class="">Investment Amount</th><th class="">Percentage(Sample)</th><th class="">Yearly Return</th><th class="">Payment date</th></tr></thead><tbody><tr><td>2</td><td>100000</td><td>3%</td><td>203279</td><td>6-11-2024</td></tr><tr><td>3</td><td>100000</td><td>3%</td><td>289828</td><td>6-11-2025</td></tr><tr><td>4</td><td>100000</td><td>3%</td><td>413225</td><td>6-11-2026</td></tr></tbody></table>';
                 $('.example').html(html);
 
             }
             else{
                 $( ".example" ).html('');
-                var html ='<div class="d-flex justify-content-center">Yearly Plan B</div><table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4"><thead><tr class="fw-bolder text-muted"><th class="">Amount</th><th class="">Percentage</th><th class="">Profit</th></tr></thead><tbody></tbody></table>';
+                var html ='<div class="d-flex justify-content-center">Monthly Invertment(If you start investment in 25-9-2022)</div><table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4"><thead><tr class="fw-bolder text-muted"><th class="">Year</th><th class="">Monthly Investment (1,00,000)</th><th class="">Percentage(Sample)</th><th class="">Yearly Return</th><th class="">Payment date</th></tr></thead><tbody><tr><td>2</td><td>24,00,000</td><td>3%</td><td>34,00,000</td><td>6-11-2024</td></tr><tr><td>3</td><td>36,00,000</td><td>3%</td><td>62,00,000</td><td>6-11-2025</td></tr><tr><td>4</td><td>48,00,000</td><td>3%</td><td>1,00,00,000</td><td>6-11-2026</td></tr></tbody></table>';
                 $('.example').html(html);
 
             }
         });
     });
 </script>
-<!-- end example month table -->
+<!-- end example year table -->
 @endsection
 

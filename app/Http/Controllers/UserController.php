@@ -30,8 +30,9 @@ class UserController extends Controller
         }else{
             $users = User::where('is_delete',0)->orderBy('id','Desc')->simplePaginate(10);
             $user_count = User::where('is_active',0)->orWhere('is_profile_verified',0)->count();
+            $smartfinance_count = Smartfinance::where('is_status',2)->count();
             $smartfinances = Smartfinance::all();
-            return view('dashboard')->with('users',$users)->with('user_count',$user_count)->with('smartfinances',$smartfinances);
+            return view('dashboard')->with('users',$users)->with('user_count',$user_count)->with('smartfinances',$smartfinances)->with('smartfinance_count',$smartfinance_count);
         }
         
     }
@@ -402,6 +403,9 @@ class UserController extends Controller
         if($profile != NULL){
             if($search != NULL) {
 
+                if($profile == 2){
+                    $users = User::join('roles','users.role_id','=','roles.id')->where('users.is_profile_verified',$profile)->where('users.first_name', 'like', '%'.$search.'%')->orWhere('users.last_name', 'like', '%'.$search.'%')->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
+                }
                 if($profile == 1){
                     $users = User::join('roles','users.role_id','=','roles.id')->where('users.is_profile_verified',$profile)->where('users.is_profile_updated','!=',$profile)->where('users.first_name', 'like', '%'.$search.'%')->orWhere('users.last_name', 'like', '%'.$search.'%')->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
                 }
@@ -410,7 +414,10 @@ class UserController extends Controller
                 }
             }
             else{
-                if($profile == 1){
+                if($profile == 2){
+                    $users = User::join('roles','users.role_id','=','roles.id')->where('users.is_profile_verified',$profile)->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
+                }
+                elseif($profile == 1){
                     $users = User::join('roles','users.role_id','=','roles.id')->where('users.is_profile_verified',$profile)->where('users.is_profile_updated','!=',$profile)->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
                 }
                 else{
