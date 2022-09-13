@@ -411,7 +411,7 @@
 <!--begin::Modal - Create Profile-->
 <div class="modal fade" id="kt_modal_create_project" tabindex="-1" aria-hidden="true">
     <!--begin::Modal dialog-->
-    <div class="modal-dialog modal-dialog-scrollable p-9">
+    <div class="modal-dialog modal-fullscreen p-9">
         <!--begin::Modal content-->
         <div class="modal-content modal-rounded">
             <!--begin::Modal header-->
@@ -938,7 +938,7 @@
 <!-- begin::Modal -investment- -->
 <div class="modal fade" id="kt_modal_start_investment" tabindex="-1" aria-hidden="true">
     <!--begin::Modal dialog-->
-    <div class="modal-dialog mw-650px">
+    <div class="modal-dialog modal-dialog-scrollable mw-650px">
         <!--begin::Modal content-->
         <div class="modal-content">
             <!--begin::Modal header-->
