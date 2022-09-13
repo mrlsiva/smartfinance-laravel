@@ -345,7 +345,7 @@
                     </div>
                 </div>
             @endif
-        @elseif($detail != NULL || $user->is_profile_verified == 0 )
+        @elseif($detail != NULL && $user->is_profile_verified == 0 )
             <div class="row">
                 <div class="card">
                     <!--begin::Card body-->
@@ -411,7 +411,7 @@
 <!--begin::Modal - Create Profile-->
 <div class="modal fade" id="kt_modal_create_project" tabindex="-1" aria-hidden="true">
     <!--begin::Modal dialog-->
-    <div class="modal-dialog modal-fullscreen p-9">
+    <div class="modal-dialog modal-dialog-scrollable p-9">
         <!--begin::Modal content-->
         <div class="modal-content modal-rounded">
             <!--begin::Modal header-->

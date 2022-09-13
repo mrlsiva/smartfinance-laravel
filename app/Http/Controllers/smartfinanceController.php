@@ -41,6 +41,7 @@ class smartfinanceController extends Controller
             'plan_id' => $request->plan_id,
             'amount' => $request->amount,
             'investment_date' => $investment_date,
+            'is_status' => 2,
         ]);
 
         //Bill
@@ -70,7 +71,16 @@ class smartfinanceController extends Controller
         $auth = Auth::user();
         $date = Carbon::now();
         $accepted_date = $date->toDateString();
-        $next_payment_date = Carbon::now()->addMonths(1);
+
+        $smart_finance = Smartfinance::where('user_id',$user_id)->select('plan_id')->first();
+        $type = Plan::where('id',$smart_finance->plan_id)->first();
+        if($smart_finance->type == 'month'){
+           $next_payment_date = Carbon::now()->addMonths(1); 
+        }
+        else{
+            $next_payment_date = Carbon::now()->addYears(1); 
+        }
+        
 
         $smartfinances = DB::table('smartfinances')->where('user_id',$user_id)->update(['accepted_by' => $auth->id,'accepted_date' => $accepted_date,'percentage' => $intrest,'next_payment_date' => $next_payment_date,'is_status' => 1]);
         return $smartfinances;
