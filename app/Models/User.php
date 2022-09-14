@@ -44,4 +44,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo('App\Models\Role');
     }
+    
+    public function getAvatarAttribute($value)
+    {
+        return $value ? url('storage/app/public/'.config('path.avatar').$value ): null;
+    }
 }

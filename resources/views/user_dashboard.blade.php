@@ -159,11 +159,11 @@
                                         <thead>
                                             <tr class="fw-bolder text-muted">
                                                 <th class="">PLAN</th>
+                                                <th class="">INVESTMENT YEAR</th>
                                                 <th class="">INVESTMENT AMOUNT</th>
                                                 <th class="">INVESTED DATE</th>
                                                 <th class="">APPROVED DATE</th>
                                                 <th class="">RATE OF INTEREST</th>
-                                                <th class="">NEXT PAYMENT DATE</th>
                                                 <th class="">STATUS</th>
                                                 <th class="">ACTION</th>
                                             </tr>
@@ -183,6 +183,13 @@
                                                             <td class="">Year</td>
                                                         @endif
                                                     @endif
+                                                    <td>
+                                                        @if($smartfinance->no_of_year != Null)
+                                                            {{$smartfinance->no_of_year}}
+                                                        @else
+                                                            -
+                                                        @endif
+                                                    </td>
                                                     <td>Rs {{$smartfinance->amount}}</td>
                                                     <td>{{$smartfinance->investment_date}}</td>
                                                     @if($smartfinance->accepted_date != NULL)
@@ -195,11 +202,6 @@
                                                     @else
                                                         <td>-</td>
                                                     @endif
-                                                    @if($smartfinance->next_payment_date != NULL)
-                                                        <td>{{$smartfinance->next_payment_date}}</td>
-                                                    @else
-                                                        <td>-</td>
-                                                    @endif
                                                     @if($smartfinance->is_status == 2)
                                                         <td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>
                                                     @elseif($smartfinance->is_status == 1)
@@ -209,7 +211,16 @@
                                                     @endif
                                                     <td>
                                                         <div class=" flex-shrink-0">
-                                                            <button type="button"  class="btn  btn-light mb-5" ><i class="fas fa-pencil-alt" id="fa"></i></button>
+                                                            <a class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary" href="{{route('view_finance', ['id' => $smartfinance->id])}}">
+                                                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr064.svg-->
+                                                                <span class="svg-icon svg-icon-2">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                                        <rect opacity="0.5" x="18" y="13" width="13" height="2" rx="1" transform="rotate(-180 18 13)" fill="black"></rect>
+                                                                        <path d="M15.4343 12.5657L11.25 16.75C10.8358 17.1642 10.8358 17.8358 11.25 18.25C11.6642 18.6642 12.3358 18.6642 12.75 18.25L18.2929 12.7071C18.6834 12.3166 18.6834 11.6834 18.2929 11.2929L12.75 5.75C12.3358 5.33579 11.6642 5.33579 11.25 5.75C10.8358 6.16421 10.8358 6.83579 11.25 7.25L15.4343 11.4343C15.7467 11.7467 15.7467 12.2533 15.4343 12.5657Z" fill="black"></path>
+                                                                    </svg>
+                                                                </span>
+                                                                <!--end::Svg Icon-->
+                                                            </a>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -230,101 +241,7 @@
                     <!--end::Col-->
                 </div>
                 <!--end::Row-->
-                <!--begin::Row-->
-                <div class="row gy-5 g-xl-8">
-                    <div class="col-xl-12 mb-5 mb-xl-10">
-                        <!--begin::Table Widget 4-->
-                        <div class="card card-flush h-xl-100">
-                            <!--begin::Card header-->
-                            <div class="card-header pt-7">
-                                <!--begin::Title-->
-                                <h3 class="card-title align-items-start flex-column">
-                                    <span class="card-label fw-bolder text-dark">Monthly Returns Table</span>
-                                </h3>
-                                <!--end::Title-->
-                                <!--begin::Actions-->
-                                <div class="card-toolbar">
-                                    <!--begin::Filters-->
-                                    <div class="d-flex flex-stack flex-wrap gap-4">
-                                        <!--begin::Destination-->
-                                        <!--end::Destination-->
-                                        <!--begin::Status-->
-                                        <!-- <div class="d-flex align-items-center fw-bolder">
-                                            <div class="text-muted fs-7 me-2">Status</div>
-                                            <select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Select an option" data-kt-table-widget-4="filter_status">
-                                                <option></option>
-                                                <option value="Show All" selected="selected">Show All</option>
-                                                <option value="Shipped">Approved</option>
-                                                <option value="Confirmed">Confirmed</option>
-                                                <option value="Rejected">Rejected</option>
-                                                <option value="Pending">Pending</option>
-                                            </select>
-                                        </div> -->
-                                        <!--end::Status-->
-                                        <div class="card-toolbar" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover" title="Search">
-                                            <!--begin::Search-->
-                                            <div class="position-relative my-1">
-                                                <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
-                                                <span class="svg-icon svg-icon-2 position-absolute top-50 translate-middle-y ms-4">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                                        <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="black" />
-                                                        <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="black" />
-                                                    </svg>
-                                                </span>
-                                                <!--end::Svg Icon-->
-                                                <input type="text" data-kt-table-widget-4="search" class="form-control w-150px fs-7 ps-12" placeholder="Search" />
-                                            </div>
-                                            <!--end::Search-->
-                                        </div>
-                                    </div>
-                                    <!--begin::Filters-->
-                                </div>
-                                <!--end::Actions-->
-                            </div>
-                            <!--end::Card header-->
-                            <!--begin::Card body-->
-                            <div class="card-body">
-                                <!--begin::Table-->
-                                <table class="table align-middle table-row-dashed fs-6 gy-3" >
-                                    <!--begin::Table head-->
-                                    <thead>
-                                        <!--begin::Table row-->
-                                        <tr class="fw-bolder text-muted">
-                                            <th class="">INVESTMENT AMOUNT</th>
-                                            <th class="">RATE OF INTEREST</th>
-                                            <th class="">INTEREST</th>
-                                            <th class="">ORIGINAL PAYMENT DATE</th>
-                                            <th class="">NEW PAYMENT DATE</th>
-                                            <th class="">ACTION</th>               
-                                        </tr>
-                                        <!--end::Table row-->
-                                    </thead>
-                                    <!--end::Table head-->
-                                    <!--begin::Table body-->
-                                        <tbody class="">
-                                            <tr>
-                                                <td class="">RS.500000</td>
-                                                <td class="">4.00%</td>
-                                                <td class="">RS.200000.00</td>
-                                                <td class="">2022-10-26</td>
-                                                <td class="">2022-11-26</td>
-                                                <td class="">
-                                                   <div class=" flex-shrink-0">
-                                                        <button type="button"  class="btn  btn-light mb-5" ><i class="fas fa-pencil-alt" id="fa"></i></button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    <!--end::Table body-->
-                                </table>
-                                <!--end::Table-->
-                            </div>
-                            <!--end::Card body-->
-                        </div>
-                        <!--end::Table Widget 4-->
-                    </div>
-                </div>
-                <!--end::Row-->
+                
             @else
                 <div class="row">
                     <div class="card">
@@ -1021,6 +938,28 @@
                         <!--end::Input group-->
 
                         <!--begin::Input group-->
+                        <div class="fv-row mb-8" id="year" style="display:none;">
+                            <!--begin::Label-->
+                            <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                <span class="required">Investment Years</span>
+                                <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Year"></i>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <select class="form-select form-select-solid form-select-sm " data-control="select2" data-hide-search="true" name="year" id="year">
+                                <option value="">Select</option>
+                               @for ($i = 2; $i <= 10; $i++)
+                                    <option value="{{$i}}">{{$i}}</option>
+                                @endfor
+                            </select>
+                            
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+
+
+
+                        <!--begin::Input group-->
                         <div class="fv-row mb-8">
                             <!--begin::Label-->
                             <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
@@ -1109,6 +1048,7 @@
                             console.log(value)
                             $('select[name="plan_id"]').append('<option value="'+ value.id +'">'+ value.name +'</option>');
                         });
+                        $('#year').show();
                     }
                     else{
                         console.log(data);

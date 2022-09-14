@@ -432,7 +432,7 @@
                                     <th class="">APPROVED DATE</th>
                                     <th class="">RATE OF INTEREST</th>
                                     <th class="">STATUS</th>
-                                    <th class=""></th>               
+                                    <th class="">ACTION</th>               
                                 </tr>
                                 <!--end::Table row-->
                             </thead>
@@ -489,8 +489,10 @@
                                             <td><span class="badge py-3 px-4 fs-7 badge-light-danger">Rejected</span></td>
                                         @endif      
                                         <td class="">
+
+                                            <button class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary"name="approve" data-system_id="{{$smartfinance->id}}" title="Edit"><i class="fas fa-pencil-alt" id="fa"></i></button>
                                             
-                                            <button class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary" name="approve" data-system_id="{{$smartfinance->user->id}}">
+                                            <a class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary" href="{{route('view_finance', ['id' => $smartfinance->id])}}">
                                                 <!--begin::Svg Icon | path: icons/duotune/arrows/arr064.svg-->
                                                 <span class="svg-icon svg-icon-2">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -499,7 +501,7 @@
                                                     </svg>
                                                 </span>
                                                 <!--end::Svg Icon-->
-                                            </button>
+                                            </a>
                                         </td>
                                     </tr>
                                     @endforeach
@@ -1309,12 +1311,12 @@
                     <!--end::Heading-->
                     <form class="form w-100" novalidate="novalidate" id="kt_sign_in_form" method="post" action="{{route('approve_smart_finance')}}" enctype="multipart/form-data">
                         @csrf
-                        <input type="hidden" name="user_id" id="finance_user_id">
+                        <input type="hidden" name="finance_id" id="finance_id">
                         <!--begin::Input group-->
                         <div class="fv-row mb-8">
                             <!--begin::Label-->
                             <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
-                                <span>Bill</span>
+                                <a href="" download class="col-lg-4 fw-bold fs-6 text-start text-muted text-hover-primary" id="receipt"><span class="fs-6 fw-bold form-label mb-2" >Receipt</span>&nbsp;&nbsp;&nbsp;<i class="fa fa-download"></i></a>
                             </label>
                             <!--end::Label-->
                             <img src="" alt="image" id="bill" />
@@ -2407,7 +2409,7 @@
     });
 </script> -->
 
-<!-- finance -->
+<!-- smartfinance -->
 <script type="text/javascript">
     $(document).on('click', 'button[name^="approve"]', function(e) {
         var system_id = $(this).data("system_id");
@@ -2423,8 +2425,10 @@
                 success:function(data)
                 { 
                     jQuery('#modal_approve_smart_finance').modal('show');
-                    document.getElementById("finance_user_id").value = system_id;
+                    document.getElementById("finance_id").value = system_id;
                     $("#bill").attr("src", data.bill);
+                    $("#receipt").prop("href", data.bill);
+
 
                 }
             });
@@ -2438,13 +2442,13 @@
 <script type="text/javascript">
     function accept(){
         var intrest = jQuery("#intrest").val();
-        var user_id = jQuery("#finance_user_id").val();
+        var finance_id = jQuery("#finance_id").val();
         if(intrest){
             jQuery.ajax({
                 url : 'approve_smart_finance',
                 type: 'GET',
                 dataType: 'json',
-                data: { "user_id": user_id,"intrest" : intrest},
+                data: { "finance_id": finance_id,"intrest" : intrest},
                 success:function(data)
                 {
                     console.log(data);

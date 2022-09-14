@@ -10,7 +10,7 @@ class Smartfinance extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id','plan_id','amount','investment_date','is_status'
+        'user_id','plan_id','amount','investment_date','is_status','no_of_year'
     ];
 
     public function user()
