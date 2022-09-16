@@ -857,7 +857,7 @@
 									@endif      
 									<td class="">
 
-										<button class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary"name="approve" data-system_id="{{$smartfinance->id}}" title="Edit"><i class="fas fa-pencil-alt" id="fa"></i></button>
+										<button class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary"name="approve_finance" data-system_id="{{$smartfinance->id}}" title="Edit"><i class="fas fa-pencil-alt" id="fa"></i></button>
 
 										<a class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary" href="{{route('view_finance', ['id' => $smartfinance->id])}}">
 											<!--begin::Svg Icon | path: icons/duotune/arrows/arr064.svg-->
@@ -1456,7 +1456,184 @@
 <!-- End Nominee Modal -->
 
 
+<!-- begin::Modal -approve-investment- -->
+<div class="modal fade" id="modal_approve_smart_finance" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog mw-650px">
+        <!--begin::Modal content-->
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header pb-0 border-0 justify-content-end">
+                <!--begin::Close-->
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
+                            <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="black" />
+                        </svg>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--begin::Modal header-->
+            <!--begin::Modal body-->
+            <div class="modal-body scroll-y mx-5 mx-xl-18 pt-0 pb-15">
+                <!--begin::Heading-->
+
+                <!--end::Google Contacts Invite-->
+                <!--begin::Separator-->
+                <!--end::Separator-->
+                <!--begin::Textarea-->
+                <!--end::Textarea-->
+                <!--begin::Users-->
+                <div class="mb-10">
+                    <!--begin::Heading-->
+                    <div class="fs-4 fw-bolder mb-2">Approval of user investment</div>
+                    <!--end::Heading-->
+                    <form class="form w-100" novalidate="novalidate" id="kt_sign_in_form" method="post" action="{{route('approve_smart_finance')}}" enctype="multipart/form-data">
+                        @csrf
+                        <input type="hidden" name="finance_id" id="finance_id">
+                        <!--begin::Input group-->
+                        <div class="fv-row mb-8">
+                            <!--begin::Label-->
+                            <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                <a href="" download class="col-lg-4 fw-bold fs-6 text-start text-muted text-hover-primary" id="receipt"><span class="fs-6 fw-bold form-label mb-2" >Receipt</span>&nbsp;&nbsp;&nbsp;<i class="fa fa-download"></i></a>
+                            </label>
+                            <!--end::Label-->
+                            <img src="" alt="image" id="bill" width="60%" height="40%" />
+                        </div>
+                        <!--end::Input group-->
+
+                        <!--begin::Input group-->
+                        <div class="fv-row mb-8">
+                            <!--begin::Label-->
+                            <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                <span class="required">Rate of intrest</span>
+                                <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Rate of intrest"></i>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="number" class="form-control form-control-solid @error('intrest') is-invalid @enderror" placeholder="Intrest" value="" name="intrest" id="intrest" />
+                            <!--end::Input-->
+                            <div class="" id="intrest_error"></div>
+                            @error('intrest')intrest_error
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <!--end::Input group-->
+
+                        <!--begin::Input group-->
+                        <div class="fv-row mb-8">
+                            <!--begin::Label-->
+                            <label class="required fs-6 fw-bold mb-2">Status</label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <select class="form-select form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="Select..." name="is_status" id="is_status">
+                                <option value="">Select</option>
+                                <option value="0">Reject</option>
+                                <option value="1">Approve</option>
+                            </select>
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+
+                        <!--begin::Input group-->
+                        <div class="fv-row mb-8">
+                            <!--begin::Label-->
+                            <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                <span class="">Investment Date</span>
+                                <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Investment Date"></i>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="date" class="form-control form-control-solid " placeholder="Investment Date" value="" name="investment_date" id="investment_date" />
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+
+                        <!--begin::Input group-->
+                        <div class="fv-row mb-8">
+                            <!--begin::Label-->
+                            <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                <span class="">Accepted Date</span>
+                                <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Accepted Date"></i>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="date" class="form-control form-control-solid " placeholder="Accepted Date" value="" name="accepted_date" id="accepted_date" />
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+                        
+                        <div class="d-flex justify-content-center">
+                            <button type="submit"  class="btn  btn-primary mt-5 mb-3">Submit</button>
+                            
+                        </div>
+                    </form>
+                </div>
+                <!--end::Users-->
+                <!--begin::Notice-->
+                <!--end::Notice-->
+            </div>
+            <!--end::Modal body-->
+        </div>
+            <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+</div>
+<!-- end::Modal -approve-investment- -->
+
+
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+<!-- smartfinance -->
+<script type="text/javascript">
+    $(document).on('click', 'button[name^="approve_finance"]', function(e) {
+        var system_id = $(this).data("system_id");
+        console.log(system_id);
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth()+1; //January is 0!
+        var yyyy = today.getFullYear();
+        if(dd<10) {
+          dd = '0'+dd
+        } 
+
+        if(mm<10) {
+          mm = '0'+mm
+        } 
+        today = yyyy + '-' + mm + '-' + dd;
+        console.log(today);
+        if(system_id !== null)
+        {
+          jQuery.ajax({
+            url : '../get_smart_finance',
+            type: 'GET',
+            dataType: 'json',
+            data: { id: system_id },
+            success:function(data)
+            { 
+                  jQuery('#modal_approve_smart_finance').modal('show');
+                  document.getElementById("finance_id").value = system_id;
+                  $("#bill").attr("src", data.bill);
+                  $("#receipt").prop("href", data.bill);
+                  document.getElementById("investment_date").value = data.investment_date;
+                  if(data.accepted_date !== null){
+                    document.getElementById("accepted_date").value = data.accepted_date;
+                  }
+                  else{
+                    document.getElementById("accepted_date").value = today;
+
+                  }
+            }
+          });
+        }
+      });
+</script>
+<!-- end-finance -->
+
 <script type="text/javascript">
 	function basic() {
 
