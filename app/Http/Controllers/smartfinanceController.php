@@ -70,87 +70,303 @@ class smartfinanceController extends Controller
     public function approve_smart_finance(Request $request) {
         $finance_id = $request->finance_id;
         $intrest = $request->intrest;
+        $is_status = $request->is_status;
         $auth = Auth::user();
-        $date = Carbon::now();
-        $accepted_date = $date->toDateString();
 
-        $smartfinance = DB::table('smartfinances')->where('id',$finance_id)->update(['accepted_by' => $auth->id,'accepted_date' => $accepted_date,'percentage' => $intrest,'is_status' => 1]);
+        if($is_status != Null){
+            if($is_status == 1){
 
-        // payment table
-        $finance = Smartfinance::where('id',$finance_id)->first();
-        if($finance->plan->type == 'month'){
-            $date = Carbon::now()->addMonths(1);
-            $new_date = Carbon::parse($date)->setDay(6)->format('Y-m-d');
-            if($date > $new_date){
-                $date = Carbon::now()->addMonths(2);
-                $payment_date = Carbon::parse($date)->setDay(6)->format('Y-m-d');
-                // check day
-                $timestamp = strtotime($payment_date);
-                $day = date('l', $timestamp);
-                if($day == 'Tuesday' ||$day == 'Sunday' ||$day == 'Friday'){
-                    $payment_date = Carbon::parse($payment_date)->setDay(7)->format('Y-m-d');
+                $accepted_date = $request->accepted_date;
+                $investment_date = $request->investment_date;
+
+                $smartfinances = DB::table('smartfinances')->where('id',$finance_id)->update(['accepted_by' => $auth->id,'accepted_date' => $accepted_date,'investment_date' => $investment_date,'percentage' => $intrest,'is_status' => 1]);
+
+
+                $smartfinance_payments = DB::table('smartfinance_payments')->where('smartfinance_id',$finance_id)->get();
+                if($smartfinance_payments != NULL){
+
+                    SmartfinancePayment::where('smartfinance_id',$finance_id)->delete();
+
                 }
-                else{
-                    $payment_date = Carbon::parse($payment_date)->setDay(6)->format('Y-m-d');
+
+
+                // payment table
+                $finance = Smartfinance::where('id',$finance_id)->first();
+                if($finance->plan->type == 'month'){
+                    $date = Carbon::now()->addMonths(1);
+                    $new_date = Carbon::parse($date)->setDay(6)->format('Y-m-d');
+                    if($date > $new_date){
+                        $date = Carbon::now()->addMonths(2);
+                        $payment_date = Carbon::parse($date)->setDay(6)->format('Y-m-d');
+                        // check day
+                        $timestamp = strtotime($payment_date);
+                        $day = date('l', $timestamp);
+                        if($day == 'Tuesday' ||$day == 'Sunday' ||$day == 'Friday'){
+                            $payment_date = Carbon::parse($payment_date)->setDay(7)->format('Y-m-d');
+                        }
+                        else{
+                            $payment_date = Carbon::parse($payment_date)->setDay(6)->format('Y-m-d');
+                        }
+                    }
+                    else{
+                        $date = Carbon::now()->addMonths(1);
+                        $payment_date = Carbon::parse($date)->setDay(6)->format('Y-m-d');
+                        // check day
+                        $timestamp = strtotime($payment_date);
+                        $day = date('l', $timestamp);
+                        if($day == 'Tuesday' ||$day == 'Sunday' ||$day == 'Friday'){
+                            $payment_date = Carbon::parse($payment_date)->setDay(7)->format('Y-m-d');
+                        }
+                        else{
+                            $payment_date = Carbon::parse($payment_date)->setDay(6)->format('Y-m-d');
+                        }
+                    }
+                    for ($i = 1; $i <= 12; $i++){
+
+                        $smartfinance = SmartfinancePayment::create([
+                            'smartfinance_id' => $finance_id,
+                            'month' => $i,
+                            'amount' => $finance->percentage/100 * $finance->amount ,
+                            'payment_date' => $payment_date,
+                            'is_status' => 0,
+                        ]);
+
+                        //next-payment
+                        $date = Carbon::parse($payment_date)->addMonths(1);
+                        $payment_date = Carbon::parse($date)->setDay(6)->format('Y-m-d');
+                        $timestamp = strtotime($payment_date);
+                        $day = date('l', $timestamp);
+                        if($day == 'Tuesday' ||$day == 'Sunday' ||$day == 'Friday'){
+                            $payment_date = Carbon::parse($payment_date)->setDay(7)->format('Y-m-d');
+                        }
+                        else{
+                            $payment_date = Carbon::parse($payment_date)->setDay(6)->format('Y-m-d');
+                        }
+                        //end-next-payment
+                    }
                 }
+
+                else if($finance->plan->type == 'year' && $finance->plan->name == 'One time Invertment'){
+                    $year = $finance->no_of_year;
+
+                    $date = Carbon::now()->addYears(2);
+                    $date = Carbon::parse($date)->addMonths(1);
+                    $new_date = Carbon::parse($date)->setDay(6)->format('Y-m-d');
+                    if($date > $new_date){
+                        $date = Carbon::now()->addYears(2);
+                        $date = Carbon::parse($date)->addMonths(2);
+                        $payment_date = Carbon::parse($date)->setDay(6)->format('Y-m-d');
+                        // check day
+                        $timestamp = strtotime($payment_date);
+                        $day = date('l', $timestamp);
+                        if($day == 'Tuesday' ||$day == 'Sunday' ||$day == 'Friday'){
+                            $payment_date = Carbon::parse($payment_date)->setDay(7)->format('Y-m-d');
+                        }
+                        else{
+                            $payment_date = Carbon::parse($payment_date)->setDay(6)->format('Y-m-d');
+                        }
+                    }
+                    else{
+
+                        $date = Carbon::now()->addYears(2);
+                        $date = Carbon::parse($date)->addMonths(1);
+                        $payment_date = Carbon::parse($date)->setDay(6)->format('Y-m-d');
+                        // check day
+                        $timestamp = strtotime($payment_date);
+                        $day = date('l', $timestamp);
+                        if($day == 'Tuesday' ||$day == 'Sunday' ||$day == 'Friday'){
+                            $payment_date = Carbon::parse($payment_date)->setDay(7)->format('Y-m-d');
+                        }
+                        else{
+                            $payment_date = Carbon::parse($payment_date)->setDay(6)->format('Y-m-d');
+                        }
+
+                    }
+
+                    $amnt = $finance->amount; 
+
+                    for ($i = 2; $i <= $year; $i++){
+
+                        //amount
+                        $profit = $finance->percentage/100 * $amnt;
+                        $amnt = $profit+$amnt;
+
+                        $smartfinance = SmartfinancePayment::create([
+                            'smartfinance_id' => $finance_id,
+                            'year' => $i,
+                            'amount' => round($profit),
+                            'payment_date' => $payment_date,
+                            'is_status' => 0,
+                        ]);
+
+                        
+
+
+                        //next-payment
+                        $date = Carbon::parse($payment_date)->addYears(1);
+                        $payment_date = Carbon::parse($date)->setDay(6)->format('Y-m-d');
+                        // check day
+                        $timestamp = strtotime($payment_date);
+                        $day = date('l', $timestamp);
+                        if($day == 'Tuesday' ||$day == 'Sunday' ||$day == 'Friday'){
+                            $payment_date = Carbon::parse($payment_date)->setDay(7)->format('Y-m-d');
+                        }
+                        else{
+                            $payment_date = Carbon::parse($payment_date)->setDay(6)->format('Y-m-d');
+                        }
+                        //end-next-payment
+                    }
+                }
+                // End Payment table
             }
             else{
-                $date = Carbon::now()->addMonths(1);
-                $payment_date = Carbon::parse($date)->setDay(6)->format('Y-m-d');
-                // check day
-                $timestamp = strtotime($payment_date);
-                $day = date('l', $timestamp);
-                if($day == 'Tuesday' ||$day == 'Sunday' ||$day == 'Friday'){
-                    $payment_date = Carbon::parse($payment_date)->setDay(7)->format('Y-m-d');
-                }
-                else{
-                    $payment_date = Carbon::parse($payment_date)->setDay(6)->format('Y-m-d');
-                }
-            }
-            for ($i = 1; $i <= 12; $i++){
+                $investment_date = $request->investment_date;
 
-                $smartfinance = SmartfinancePayment::create([
-                    'smartfinance_id' => $finance_id,
-                    'month' => $i,
-                    'amount' => $finance->percentage/100 * $finance->amount ,
-                    'payment_date' => $payment_date,
-                    'is_status' => 0,
-                ]);
-
-                //next-payment
-                $date = Carbon::parse($payment_date)->addMonths(1);
-                $new_date = Carbon::parse($date)->setDay(6)->format('Y-m-d');
-                if($date > $new_date){
-                    $date = Carbon::parse($payment_date)->addMonths(2);
-                    $payment_date = Carbon::parse($date)->setDay(6)->format('Y-m-d');
-                    // check day
-                    $timestamp = strtotime($payment_date);
-                    $day = date('l', $timestamp);
-                    if($day == 'Tuesday' ||$day == 'Sunday' ||$day == 'Friday'){
-                        $payment_date = Carbon::parse($payment_date)->setDay(7)->format('Y-m-d');
-                    }
-                    else{
-                        $payment_date = Carbon::parse($payment_date)->setDay(6)->format('Y-m-d');
-                    }
-                }
-                else{
-                    $date = Carbon::parse($payment_date)->addMonths(1);
-                    $payment_date = Carbon::parse($date)->setDay(6)->format('Y-m-d');
-                    // check day
-                    $timestamp = strtotime($payment_date);
-                    $day = date('l', $timestamp);
-                    if($day == 'Tuesday' ||$day == 'Sunday' ||$day == 'Friday'){
-                        $payment_date = Carbon::parse($payment_date)->setDay(7)->format('Y-m-d');
-                    }
-                    else{
-                        $payment_date = Carbon::parse($payment_date)->setDay(6)->format('Y-m-d');
-                    }
-                }
-                //end-next-payment
+                $smartfinances = DB::table('smartfinances')->where('id',$finance_id)->update(['rejected_by' => $auth->id,'is_status' => 0,'investment_date' => $investment_date]); 
             }
         }
-        // End Payment table
-        return $smartfinance;
+        else{
+            $investment_date = $request->investment_date;
+            $accepted_date = $request->accepted_date;
+            $smartfinances = DB::table('smartfinances')->where('id',$finance_id)->update(['investment_date' => $investment_date,'accepted_date' => $accepted_date]); 
+
+            $smartfinance_payments = DB::table('smartfinance_payments')->where('smartfinance_id',$finance_id)->get();
+            if($smartfinance_payments != NULL){
+
+                SmartfinancePayment::where('smartfinance_id',$finance_id)->delete();
+
+            }
+                
+            // payment table
+            $finance = Smartfinance::where('id',$finance_id)->first();
+            if($finance->plan->type == 'month'){
+                $date = Carbon::now()->addMonths(1);
+                $new_date = Carbon::parse($date)->setDay(6)->format('Y-m-d');
+                if($date > $new_date){
+                    $date = Carbon::now()->addMonths(2);
+                    $payment_date = Carbon::parse($date)->setDay(6)->format('Y-m-d');
+                        // check day
+                    $timestamp = strtotime($payment_date);
+                    $day = date('l', $timestamp);
+                    if($day == 'Tuesday' ||$day == 'Sunday' ||$day == 'Friday'){
+                        $payment_date = Carbon::parse($payment_date)->setDay(7)->format('Y-m-d');
+                    }
+                    else{
+                        $payment_date = Carbon::parse($payment_date)->setDay(6)->format('Y-m-d');
+                    }
+                }
+                else{
+                    $date = Carbon::now()->addMonths(1);
+                    $payment_date = Carbon::parse($date)->setDay(6)->format('Y-m-d');
+                        // check day
+                    $timestamp = strtotime($payment_date);
+                    $day = date('l', $timestamp);
+                    if($day == 'Tuesday' ||$day == 'Sunday' ||$day == 'Friday'){
+                        $payment_date = Carbon::parse($payment_date)->setDay(7)->format('Y-m-d');
+                    }
+                    else{
+                        $payment_date = Carbon::parse($payment_date)->setDay(6)->format('Y-m-d');
+                    }
+                }
+                for ($i = 1; $i <= 12; $i++){
+
+                    $smartfinance = SmartfinancePayment::create([
+                        'smartfinance_id' => $finance_id,
+                        'month' => $i,
+                        'amount' => $finance->percentage/100 * $finance->amount ,
+                        'payment_date' => $payment_date,
+                        'is_status' => 0,
+                    ]);
+
+                        //next-payment
+                    $date = Carbon::parse($payment_date)->addMonths(1);
+                    $payment_date = Carbon::parse($date)->setDay(6)->format('Y-m-d');
+                    $timestamp = strtotime($payment_date);
+                    $day = date('l', $timestamp);
+                    if($day == 'Tuesday' ||$day == 'Sunday' ||$day == 'Friday'){
+                        $payment_date = Carbon::parse($payment_date)->setDay(7)->format('Y-m-d');
+                    }
+                    else{
+                        $payment_date = Carbon::parse($payment_date)->setDay(6)->format('Y-m-d');
+                    }
+                        //end-next-payment
+                }
+            }
+
+            else if($finance->plan->type == 'year' && $finance->plan->name == 'One time Invertment'){
+                $year = $finance->no_of_year;
+
+                $date = Carbon::now()->addYears(2);
+                $date = Carbon::parse($date)->addMonths(1);
+                $new_date = Carbon::parse($date)->setDay(6)->format('Y-m-d');
+                if($date > $new_date){
+                    $date = Carbon::now()->addYears(2);
+                    $date = Carbon::parse($date)->addMonths(2);
+                    $payment_date = Carbon::parse($date)->setDay(6)->format('Y-m-d');
+                        // check day
+                    $timestamp = strtotime($payment_date);
+                    $day = date('l', $timestamp);
+                    if($day == 'Tuesday' ||$day == 'Sunday' ||$day == 'Friday'){
+                        $payment_date = Carbon::parse($payment_date)->setDay(7)->format('Y-m-d');
+                    }
+                    else{
+                        $payment_date = Carbon::parse($payment_date)->setDay(6)->format('Y-m-d');
+                    }
+                }
+                else{
+
+                    $date = Carbon::now()->addYears(2);
+                    $date = Carbon::parse($date)->addMonths(1);
+                    $payment_date = Carbon::parse($date)->setDay(6)->format('Y-m-d');
+                        // check day
+                    $timestamp = strtotime($payment_date);
+                    $day = date('l', $timestamp);
+                    if($day == 'Tuesday' ||$day == 'Sunday' ||$day == 'Friday'){
+                        $payment_date = Carbon::parse($payment_date)->setDay(7)->format('Y-m-d');
+                    }
+                    else{
+                        $payment_date = Carbon::parse($payment_date)->setDay(6)->format('Y-m-d');
+                    }
+
+                }
+
+                $amnt = $finance->amount; 
+
+                for ($i = 2; $i <= $year; $i++){
+
+                        //amount
+                    $profit = $finance->percentage/100 * $amnt;
+                    $amnt = $profit+$amnt;
+
+                    $smartfinance = SmartfinancePayment::create([
+                        'smartfinance_id' => $finance_id,
+                        'year' => $i,
+                        'amount' => round($profit),
+                        'payment_date' => $payment_date,
+                        'is_status' => 0,
+                    ]);
+
+
+
+
+                        //next-payment
+                    $date = Carbon::parse($payment_date)->addYears(1);
+                    $payment_date = Carbon::parse($date)->setDay(6)->format('Y-m-d');
+                        // check day
+                    $timestamp = strtotime($payment_date);
+                    $day = date('l', $timestamp);
+                    if($day == 'Tuesday' ||$day == 'Sunday' ||$day == 'Friday'){
+                        $payment_date = Carbon::parse($payment_date)->setDay(7)->format('Y-m-d');
+                    }
+                    else{
+                        $payment_date = Carbon::parse($payment_date)->setDay(6)->format('Y-m-d');
+                    }
+                        //end-next-payment
+                }
+            }
+            // End Payment table
+        }
+        return redirect('dashboard');
 
     }
 
@@ -168,8 +384,13 @@ class smartfinanceController extends Controller
 
         $smartfinance = Smartfinance::where('id',$id)->first();
         $smartfinance_payments = SmartfinancePayment::where('smartfinance_id',$id)->get();
+        $payment = SmartfinancePayment::where('smartfinance_id',$id)->first();
+        
 
-        return view('smartfinance')->with('smartfinance',$smartfinance)->with('smartfinance_payments',$smartfinance_payments);
+        $finances = Smartfinance::where([['user_id',$smartfinance->user_id],['id','!=',$id]])->simplePaginate(10);
+        $finances_count = Smartfinance::where([['user_id',$smartfinance->user_id],['id','!=',$id]])->count();
+
+        return view('smartfinance')->with('smartfinance',$smartfinance)->with('smartfinance_payments',$smartfinance_payments)->with('payment',$payment)->with('finances',$finances)->with('finances_count',$finances_count);
         
     }
 

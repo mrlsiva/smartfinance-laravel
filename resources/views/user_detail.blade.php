@@ -149,7 +149,7 @@
 										<!--begin::Number-->
 										<div class="d-flex align-items-center">
 
-											<div class="fs-2 fw-bolder" data-kt-countup="true" data-kt-countup-value="500000" data-kt-countup-prefix="Rs.">0</div>
+											<div class="fs-2 fw-bolder" data-kt-countup="true" data-kt-countup-value="{{$amount}}" data-kt-countup-prefix="Rs.">{{$amount}}</div>
 										</div>
 										<!--end::Number-->
 										<!--begin::Label-->
@@ -180,17 +180,17 @@
 										<div class="fw-bold fs-6 text-gray-400">Earnings percentage</div>
 										<!--end::Label-->
 									</div>
-									<div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
+									<!-- <div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3"> -->
 										<!--begin::Number-->
-										<div class="d-flex align-items-center">
+										<!-- <div class="d-flex align-items-center">
 
 											<div class="fs-2 fw-bolder" data-kt-countup="true" data-kt-countup-value="7" data-kt-countup-prefix="June">0</div>
-										</div>
+										</div> -->
 										<!--end::Number-->
 										<!--begin::Label-->
-										<div class="fw-bold fs-6 text-gray-400">Next payemnt</div>
+										<!-- <div class="fw-bold fs-6 text-gray-400">Next payemnt</div> -->
 										<!--end::Label-->
-									</div>
+									<!-- </div> -->
 									<!--end::Stat-->
 								</div>
 								<!--end::Stats-->
@@ -732,7 +732,6 @@
 						<!--begin::Title-->
 						<h3 class="card-title align-items-start flex-column">
 							<span class="card-label fw-bolder text-dark">Smart Inverstment</span>
-							<span class="text-gray-400 mt-1 fw-bold fs-6">10000 yearly scheme</span>
 						</h3>
 						<!--end::Title-->
 						<!--begin::Actions-->
@@ -780,50 +779,87 @@
 					<!--begin::Card body-->
 					<div class="card-body">
 						<!--begin::Table-->
-						<table class="table align-middle table-row-dashed fs-6 gy-3" id="kt_table_widget_4_table">
+						<table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
 							<!--begin::Table head-->
 							<thead>
 								<!--begin::Table row-->
 								<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-									<th class="min-w-100px">Customer</th>
-									<th class="text-end min-w-125px">INVESTMENT DATE</th>
-									<th class="text-end min-w-100px">TOTAL AMOUNT INVESTED</th>
-									<th class="text-end min-w-100px">RATE OF INTEREST</th>
-									<th class="text-end min-w-100px">Profit</th>
-									<th class="text-end min-w-50px">Status</th>
-									<th class="text-end"></th>          
+									<th class="">CUSTOMER</th>
+									<th class="">PLAN</th>
+									<th class="">INVESTMENT YEAR</th>
+									<th class="">TOTAL AMOUNT INVESTED</th>
+									<th class="">INVESTMENT DATE</th>
+									<th class="">APPROVED DATE</th>
+									<th class="">RATE OF INTEREST</th>
+									<th class="">STATUS</th>
+									<th class="">ACTION</th>               
 								</tr>
 								<!--end::Table row-->
 							</thead>
 							<!--end::Table head-->
 							<!--begin::Table body-->
 							<tbody class="fw-bolder text-gray-600">
+								@foreach($smartfinances as $smartfinance)
 								<tr>
 									<td>
 										<div class="d-flex align-items-center">
 											<div class="symbol symbol-45px me-5">
-												<img src="{{ asset('public/assets/media/avatars/blank.png') }}" alt="" />
+												@php
+												$avatar = App\Models\UserDetail::where('user_id',$smartfinance->user->id)->first();
+												@endphp
+												@if($avatar != NULL)
+												<img src="{{ $avatar->avatar}}" alt="" />
+												@endif
 											</div>
 											<div class="d-flex justify-content-start flex-column">
-												<a href="#" class="text-dark fw-bolder text-hover-primary fs-6">Siva</a>
-												<span class="text-muted fw-bold text-muted d-block fs-7">+91 9994090424</span>
+												<a href="{{route('user', ['id' => $user->id])}}" class="text-dark fw-bolder text-hover-primary fs-6">{{$smartfinance->user->first_name}} {{$smartfinance->user->last_name}}</a>
+												<span class="text-muted fw-bold text-muted d-block fs-7">#{{$smartfinance->user->id}}</span>
 											</div>
 										</div>
 									</td>
-									<td class="text-end">13 June 2022, 11:52 pm</td>
-									<!-- <td class="text-end">3000000</td> -->
-									<td class="text-end">
-										<a href="" class="text-dark text-hover-primary">3000000</a>
+									@php
+									$plan = App\Models\Plan::where('id',$smartfinance->plan_id)->first();
+									@endphp
+									@if($plan != Null)
+									@if($plan->type == 'month')
+									<td class="">Month</td>
+									@else
+									<td class="">Year</td>
+									@endif
+									@endif
+									<td>
+										@if($smartfinance->no_of_year != Null)
+										{{$smartfinance->no_of_year}}
+										@else
+										-
+										@endif
 									</td>
-									<td class="text-end">3%</td>
-									<td class="text-end">
-										<span class="text-dark fw-bolder">Rs. 60000</span>
+									<td class="">Rs {{$smartfinance->amount}}</td>
+									<td class="">
+										{{$smartfinance->investment_date}}
 									</td>
-									<td class="text-end">
-										<span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span>
-									</td>
-									<td class="text-end">
-										<a href="#" class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary">
+									@if($smartfinance->accepted_date != NULL)
+									<td>{{$smartfinance->accepted_date}}</td>
+									@else
+									<td>-</td>
+									@endif
+									@if($smartfinance->percentage != NULL)
+									<td>{{$smartfinance->percentage}}</td>
+									@else
+									<td>-</td>
+									@endif
+									@if($smartfinance->is_status == 2)
+									<td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>
+									@elseif($smartfinance->is_status == 1)
+									<td><span class="badge py-3 px-4 fs-7 badge-light-success">Approved</span></td>
+									@elseif($smartfinance->is_status == 0)
+									<td><span class="badge py-3 px-4 fs-7 badge-light-danger">Rejected</span></td>
+									@endif      
+									<td class="">
+
+										<button class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary"name="approve" data-system_id="{{$smartfinance->id}}" title="Edit"><i class="fas fa-pencil-alt" id="fa"></i></button>
+
+										<a class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary" href="{{route('view_finance', ['id' => $smartfinance->id])}}">
 											<!--begin::Svg Icon | path: icons/duotune/arrows/arr064.svg-->
 											<span class="svg-icon svg-icon-2">
 												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -835,10 +871,14 @@
 										</a>
 									</td>
 								</tr>
+								@endforeach
 							</tbody>
 							<!--end::Table body-->
 						</table>
 						<!--end::Table-->
+						<div class="d-flex justify-content-end mb-3">
+							{{ $smartfinances->links() }}
+						</div>
 					</div>
 					<!--end::Card body-->
 				</div>

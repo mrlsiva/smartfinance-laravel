@@ -60,7 +60,7 @@ Route::post('/edit_profile',[UserController::class, 'edit_profile'])->name('edit
 Route::post('/store_smart_finance',[SmartFinanceController::class, 'store_smart_finance'])->name('store_smart_finance');
 Route::get('plan_type',[SmartFinanceController::class, 'plan_type'])->name('plan_type');
 Route::get('/get_smart_finance',[SmartFinanceController::class, 'get_smart_finance'])->name('get_smart_finance');
-Route::get('/approve_smart_finance',[SmartFinanceController::class, 'approve_smart_finance'])->name('approve_smart_finance');
+Route::post('/approve_smart_finance',[SmartFinanceController::class, 'approve_smart_finance'])->name('approve_smart_finance');
 Route::get('/reject_smart_finance',[SmartFinanceController::class, 'reject_smart_finance'])->name('reject_smart_finance');
 Route::get('/view_finance/{id}/',[SmartFinanceController::class, 'view_finance'])->name('view_finance');
 Route::get('/payment',[SmartFinanceController::class, 'payment'])->name('payment');

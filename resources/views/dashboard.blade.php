@@ -427,6 +427,7 @@
                                 <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                     <th class="">CUSTOMER</th>
                                     <th class="">PLAN</th>
+                                    <th class="">INVESTMENT YEAR</th>
                                     <th class="">TOTAL AMOUNT INVESTED</th>
                                     <th class="">INVESTMENT DATE</th>
                                     <th class="">APPROVED DATE</th>
@@ -452,7 +453,7 @@
                                                     @endif
                                                 </div>
                                                 <div class="d-flex justify-content-start flex-column">
-                                                    <a href="#" class="text-dark fw-bolder text-hover-primary fs-6">{{$smartfinance->user->first_name}} {{$smartfinance->user->last_name}}</a>
+                                                    <a href="{{route('user', ['id' => $user->id])}}" class="text-dark fw-bolder text-hover-primary fs-6">{{$smartfinance->user->first_name}} {{$smartfinance->user->last_name}}</a>
                                                     <span class="text-muted fw-bold text-muted d-block fs-7">#{{$smartfinance->user->id}}</span>
                                                 </div>
                                             </div>
@@ -467,6 +468,13 @@
                                                 <td class="">Year</td>
                                             @endif
                                         @endif
+                                        <td>
+                                            @if($smartfinance->no_of_year != Null)
+                                                {{$smartfinance->no_of_year}}
+                                            @else
+                                                -
+                                            @endif
+                                        </td>
                                         <td class="">Rs {{$smartfinance->amount}}</td>
                                         <td class="">
                                             {{$smartfinance->investment_date}}
@@ -509,6 +517,9 @@
                             <!--end::Table body-->
                         </table>
                         <!--end::Table-->
+                        <div class="d-flex justify-content-end mb-3">
+                            {{ $smartfinances->links() }}
+                        </div>
                     </div>
                     <!--end::Card body-->
                 </div>
@@ -1319,7 +1330,7 @@
                                 <a href="" download class="col-lg-4 fw-bold fs-6 text-start text-muted text-hover-primary" id="receipt"><span class="fs-6 fw-bold form-label mb-2" >Receipt</span>&nbsp;&nbsp;&nbsp;<i class="fa fa-download"></i></a>
                             </label>
                             <!--end::Label-->
-                            <img src="" alt="image" id="bill" />
+                            <img src="" alt="image" id="bill" width="60%" height="40%" />
                         </div>
                         <!--end::Input group-->
 
@@ -1340,10 +1351,53 @@
                             @enderror
                         </div>
                         <!--end::Input group-->
+
+                        <!--begin::Input group-->
+                        <div class="fv-row mb-8">
+                            <!--begin::Label-->
+                            <label class="required fs-6 fw-bold mb-2">Status</label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <select class="form-select form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="Select..." name="is_status" id="is_status">
+                                <option value="">Select</option>
+                                <option value="0">Reject</option>
+                                <option value="1">Approve</option>
+                            </select>
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+
+                        <!--begin::Input group-->
+                        <div class="fv-row mb-8">
+                            <!--begin::Label-->
+                            <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                <span class="">Investment Date</span>
+                                <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Investment Date"></i>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="date" class="form-control form-control-solid " placeholder="Investment Date" value="" name="investment_date" id="investment_date" />
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+
+                        <!--begin::Input group-->
+                        <div class="fv-row mb-8">
+                            <!--begin::Label-->
+                            <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                <span class="">Accepted Date</span>
+                                <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Accepted Date"></i>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="date" class="form-control form-control-solid " placeholder="Accepted Date" value="" name="accepted_date" id="accepted_date" />
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
                         
                         <div class="d-flex justify-content-center">
-                            <button type="button"  class="btn  btn-danger mt-5 mb-3" onclick="reject()">Reject</button> &nbsp;&nbsp;&nbsp;
-                            <button type="button"  class="btn  btn-success mt-5 mb-3" onclick="accept()">Approve</button>
+                            <button type="submit"  class="btn  btn-primary mt-5 mb-3">Submit</button>
+                            
                         </div>
                     </form>
                 </div>
@@ -2414,7 +2468,19 @@
     $(document).on('click', 'button[name^="approve"]', function(e) {
         var system_id = $(this).data("system_id");
         console.log(system_id);
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth()+1; //January is 0!
+        var yyyy = today.getFullYear();
+        if(dd<10) {
+          dd = '0'+dd
+        } 
 
+        if(mm<10) {
+          mm = '0'+mm
+        } 
+        today = yyyy + '-' + mm + '-' + dd;
+        console.log(today);
         if(system_id)
         {
             jQuery.ajax({
@@ -2428,8 +2494,14 @@
                     document.getElementById("finance_id").value = system_id;
                     $("#bill").attr("src", data.bill);
                     $("#receipt").prop("href", data.bill);
+                    document.getElementById("investment_date").value = data.investment_date;
+                    if(data.accepted_date !== null){
+                        document.getElementById("accepted_date").value = data.accepted_date;
+                    }
+                    else{
+                        document.getElementById("accepted_date").value = today;
 
-
+                    }
                 }
             });
 }

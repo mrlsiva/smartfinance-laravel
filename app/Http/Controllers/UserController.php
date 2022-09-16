@@ -23,15 +23,16 @@ class UserController extends Controller
         $user = Auth::user();
         if($user->role_id == '3'){
 
-            $smartfinances = Smartfinance::where('user_id',$user->id)->get();
+            $smartfinances = Smartfinance::where('user_id',$user->id)->orderBy('id','Desc')->simplePaginate(10);
+            $smartfinance_count = Smartfinance::where('is_status',2)->count();
 
-            return view('user_dashboard')->with('smartfinances',$smartfinances);
+            return view('user_dashboard')->with('smartfinances',$smartfinances)->with('smartfinance_count',$smartfinance_count);
 
         }else{
             $users = User::where('is_delete',0)->orderBy('id','Desc')->simplePaginate(10);
             $user_count = User::where('is_active',0)->orWhere('is_profile_verified',0)->count();
             $smartfinance_count = Smartfinance::where('is_status',2)->count();
-            $smartfinances = Smartfinance::all();
+            $smartfinances = Smartfinance::orderBy('id','Desc')->simplePaginate(10);
             return view('dashboard')->with('users',$users)->with('user_count',$user_count)->with('smartfinances',$smartfinances)->with('smartfinance_count',$smartfinance_count);
         }
         
@@ -86,7 +87,12 @@ class UserController extends Controller
         $user_detail = UserDetail::where('user_id',$user->id)->first();
         $bank_detail = BankDetail::where('user_id',$user->id)->first();
         $nominee_detail = NomineeDetail::where('user_id',$user->id)->first();
-        return view('user_profile')->with('user',$user)->with('user_detail',$user_detail)->with('bank_detail',$bank_detail)->with('nominee_detail',$nominee_detail);
+         $finances = Smartfinance::where('user_id',$user->id)->orderBy('id','Desc')->get();
+        $amount= 0;
+        foreach ($finances as $finance) {
+            $amount += $finance->amount;
+        }
+        return view('user_profile')->with('user',$user)->with('user_detail',$user_detail)->with('bank_detail',$bank_detail)->with('nominee_detail',$nominee_detail)->with('amount',$amount);
     }
 
     public function user($id){
@@ -95,8 +101,14 @@ class UserController extends Controller
         $user_detail = UserDetail::where('user_id',$user->id)->first();
         $bank_detail = BankDetail::where('user_id',$user->id)->first();
         $nominee_detail = NomineeDetail::where('user_id',$user->id)->first();
+        $smartfinances = Smartfinance::where('user_id',$user->id)->orderBy('id','Desc')->simplePaginate(10);
+         $finances = Smartfinance::where('user_id',$user->id)->orderBy('id','Desc')->get();
+        $amount= 0;
+        foreach ($finances as $finance) {
+            $amount += $finance->amount;
+        }
 
-        return view('user_detail')->with('user',$user)->with('user_detail',$user_detail)->with('bank_detail',$bank_detail)->with('nominee_detail',$nominee_detail);
+        return view('user_detail')->with('user',$user)->with('user_detail',$user_detail)->with('bank_detail',$bank_detail)->with('nominee_detail',$nominee_detail)->with('smartfinances',$smartfinances)->with('amount',$amount);
         
     }
 
@@ -186,6 +198,8 @@ class UserController extends Controller
         Storage::disk('public')->put(config('path.aadhaar_card').$filename, $photo);
         $nominee_detail->aadhaar = $filename;
         $nominee_detail->save();
+
+        DB::table('users')->where('id',$id)->update(['is_profile_verified' => 0]);
 
         return redirect('dashboard');
     }

@@ -52,7 +52,7 @@
                                             </span>            
                                         </div>
                                         <span class="symbol symbol-50px">
-                                            <span class="px-3 py-1 fs-5 fw-bolder bg-warning text-dark">0</span>
+                                            <span class="px-3 py-1 fs-5 fw-bolder bg-warning text-dark">{{$smartfinance_count}}</span>
                                         </span>
                                     </div>
                                     <a href="#" class="text-dark fw-bold fs-6">Smart Finance</a>
@@ -230,6 +230,10 @@
                                         <!--end::Table body-->
                                     </table>
                                     <!--end::Table-->
+
+                                    <div class="d-flex justify-content-end mb-3">
+                                        {{ $smartfinances->links() }}
+                                    </div>
                                     
                                 </div>
                                 <!--end::Table container-->
@@ -903,6 +907,24 @@
                         <div class="fv-row mb-8">
                             <!--begin::Label-->
                             <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                <span class="required">Investment Amount</span>
+                                <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Investment Amount"></i>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="number" class="form-control form-control-solid @error('amount') is-invalid @enderror" placeholder="Investment Amount" value="" name="amount" id="amount" />
+                            <!--end::Input-->
+                            <div class=" amount_error" id="amount_error"></div>
+                            @error('amount')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <!--end::Input group-->
+
+                        <!--begin::Input group-->
+                        <div class="fv-row mb-8">
+                            <!--begin::Label-->
+                            <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
                                 <span class="required">Select Your Plan</span>
                                 <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Plan"></i>
                             </label>
@@ -956,27 +978,6 @@
                             <!--end::Input-->
                         </div>
                         <!--end::Input group-->
-
-
-
-                        <!--begin::Input group-->
-                        <div class="fv-row mb-8">
-                            <!--begin::Label-->
-                            <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
-                                <span class="required">Investment Amount</span>
-                                <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Investment Amount"></i>
-                            </label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <input type="number" class="form-control form-control-solid @error('amount') is-invalid @enderror" placeholder="Investment Amount" value="" name="amount" id="amount" />
-                            <!--end::Input-->
-                            <div class=" amount_error" id="amount_error"></div>
-                            @error('amount')
-                                <div class="text-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <!--end::Input group-->
-
 
                         <!--begin::Input group-->
                         <div class="fv-row mb-8">
@@ -1459,11 +1460,185 @@
     jQuery(document).ready(function ()
     {
         jQuery('select[name="plan"]').on('change',function(){
+            
             var plan = jQuery(this).val();
+            var amount = jQuery("#amount").val();
+            //to display today date in heading
+            var today = new Date();
+            var dd = today.getDate();
+            var mm = today.getMonth()+1; //January is 0!
+            var yyyy = today.getFullYear();
+            if(dd<10) {
+                dd = '0'+dd
+            } 
+
+            if(mm<10) {
+                mm = '0'+mm
+            } 
+            today = yyyy + '-' + mm + '-' + dd;
+            //to display today date in heading end
+
+            //next 30 days
+            var date = new Date();
+            date.setDate(date.getDate() + 30);
+            //console.log(date);
+            //next 30 days end
+            
+            //convert next 30 days with date 6
+            var new_date = new Date();
+            new_date.setDate(new_date.getDate() + 30);
+            new_date.setDate(6);
+            //console.log(new_date);
+            //convert next 30 days with date 6 end
+
+            if(date > new_date){
+                //console.log('yes');
+
+                var date = new Date();
+                date.setDate(date.getDate() + 60);
+                date.setDate(6);
+                //console.log(date);
+
+                //check day
+                var day = date.getDay();
+                console.log(day);
+                if(day == 2 || day ==  0 || day == 5){
+                    var date = new Date();
+                    date.setDate(date.getDate() + 60);
+                    date.setDate(7);
+                    //console.log(last);
+
+                    var dd = date.getDate();
+                    var mm = date.getMonth()+1; //January is 0!
+                    var yyyy = date.getFullYear();
+                    if(dd<10) {
+                        dd = '0'+dd
+                    } 
+                    if(mm<10) {
+                        mm = '0'+mm
+                    } 
+                    final = yyyy + '-' + mm + '-' + dd;
+
+                }
+                else{
+                    var date = new Date();
+                    date.setDate(date.getDate() + 60);
+                    date.setDate(6);
+
+                    var dd = date.getDate();
+                    var mm = date.getMonth()+1; //January is 0!
+                    var yyyy = date.getFullYear();
+                    if(dd<10) {
+                        dd = '0'+dd
+                    } 
+                    if(mm<10) {
+                        mm = '0'+mm
+                    } 
+                    final = yyyy + '-' + mm + '-' + dd;
+
+                }
+                //check day end
+            }
+            else{
+
+                //console.log('no');
+                var date = new Date();
+                date.setDate(date.getDate() + 30);
+                date.setDate(6);
+                //console.log(dateee);
+
+                var day = date.getDay();
+                console.log(day);
+                if(day == 2 || day ==  0 || day == 5){
+                    var date = new Date();
+                    date.setDate(date.getDate() + 30);
+                    date.setDate(7);
+                    //console.log(date);
+                    var dd = date.getDate();
+                    var mm = date.getMonth()+1; //January is 0!
+                    var yyyy = date.getFullYear();
+                    if(dd<10) {
+                        dd = '0'+dd
+                    } 
+                    if(mm<10) {
+                        mm = '0'+mm
+                    } 
+                    final = yyyy + '-' + mm + '-' + dd;
+                }
+                else{
+                    var date = new Date();
+                    date.setDate(date.getDate() + 30);
+                    date.setDate(6);
+                    var dd = date.getDate();
+                    var mm = date.getMonth()+1; //January is 0!
+                    var yyyy = date.getFullYear();
+                    if(dd<10) {
+                        dd = '0'+dd
+                    } 
+                    if(mm<10) {
+                        mm = '0'+mm
+                    } 
+                    final = yyyy + '-' + mm + '-' + dd;
+
+                }
+            }
+
             if(plan == 'month'){
                 $( ".example" ).html('');
-                var html ='<div class="d-flex justify-content-center">Monthly Return Plan(If you start investment in 25-9-2022)</div><table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4"><thead><tr class="fw-bolder text-muted"><th class="">Month</th><th class="">Investment Amount</th><th class="">Percentage(Sample)</th><th class="">Monthly return</th><th class="">Payment date</th></tr></thead><tbody><tr><td>1</td><td>100000</td><td>3%</td><td>3000</td><td>6-11-2022</td></tr><tr><td>2</td><td>100000</td><td>3%</td><td>3000</td><td>6-12-2022</td></tr><tr><td>3</td><td>100000</td><td>3%</td><td>3000</td><td>6-1-2023</td></tr></tbody></table>';
+                var html ='<div class="d-flex justify-content-center">Monthly Return Plan(If you start investment in '+today+')</div><table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4"><thead><tr class="fw-bolder text-muted"><th class="">Month</th><th class="">Investment Amount</th><th class="">Percentage(Sample)</th><th class="">Monthly return</th><th class="">Payment date</th></tr></thead><tbody class = "sample"></tbody></table>';
                 $('.example').html(html);
+                var output = '';
+                for(var count = 1; count <= 3; count++)
+                {
+                    
+                    output += '<tr>';
+                    output += '<td>'+count+'</td>';
+                    output += '<td>'+amount+'</td>';
+                    output += '<td>3%</td>';
+                    output += '<td>'+3/100*amount+'</td>';
+                    output += '<td>'+final+'</td>';
+                    output += '</tr>';
+
+
+                    
+                    date.setDate(date.getDate() + 30);
+                    date.setDate(6);
+                    //console.log(dateee);
+
+                    var day = date.getDay();
+                    //console.log(day);
+                    if(day == 2 || day ==  0 || day == 5){
+
+                        date.setDate(7);
+                        //console.log(date);
+                        var dd = date.getDate();
+                        var mm = date.getMonth()+1; //January is 0!
+                        var yyyy = date.getFullYear();
+                        if(dd<10) {
+                            dd = '0'+dd
+                        } 
+                        if(mm<10) {
+                            mm = '0'+mm
+                        } 
+                        final = yyyy + '-' + mm + '-' + dd;
+                    }
+                    else{
+                        date.setDate(6);
+                        var dd = date.getDate();
+                        var mm = date.getMonth()+1; //January is 0!
+                        var yyyy = date.getFullYear();
+                        if(dd<10) {
+                            dd = '0'+dd
+                        } 
+                        if(mm<10) {
+                            mm = '0'+mm
+                        } 
+                        final = yyyy + '-' + mm + '-' + dd;
+
+                    }
+                    
+                }
+                $('.sample').html(output);
 
             }
             else{

@@ -132,7 +132,7 @@
 										<!--begin::Number-->
 										<div class="d-flex align-items-center">
 
-											<div class="fs-2 fw-bolder" data-kt-countup="true" data-kt-countup-value="500000" data-kt-countup-prefix="Rs.">0</div>
+											<div class="fs-2 fw-bolder" data-kt-countup="true" data-kt-countup-value="{{$amount}}" data-kt-countup-prefix="Rs.">{{$amount}}</div>
 										</div>
 										<!--end::Number-->
 										<!--begin::Label-->
@@ -163,17 +163,17 @@
 										<div class="fw-bold fs-6 text-gray-400">Earnings percentage</div>
 										<!--end::Label-->
 									</div>
-									<div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
+									<!-- <div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3"> -->
 										<!--begin::Number-->
-										<div class="d-flex align-items-center">
+										<!-- <div class="d-flex align-items-center">
 
 											<div class="fs-2 fw-bolder" data-kt-countup="true" data-kt-countup-value="7" data-kt-countup-prefix="June">0</div>
-										</div>
+										</div> -->
 										<!--end::Number-->
 										<!--begin::Label-->
-										<div class="fw-bold fs-6 text-gray-400">Next payemnt</div>
+										<!-- <div class="fw-bold fs-6 text-gray-400">Next payemnt</div> -->
 										<!--end::Label-->
-									</div>
+									<!-- </div> -->
 									<!--end::Stat-->
 								</div>
 								<!--end::Stats-->
@@ -340,7 +340,7 @@
 							<!--end::Wrapper-->
 						</div>
 						<!--end::Notice-->
-						@if($user_detail != NULL && $user->is_profile_updated == 1)
+						@elseif($user_detail != NULL && $user->is_profile_updated == 1)
 						<!--begin::Notice-->
 						<div class="notice d-flex bg-light-warning rounded border-warning border border-dashed p-6">
 							<!--begin::Icon-->
@@ -366,6 +366,7 @@
 							<!--end::Wrapper-->
 						</div>
 						<!--end::Notice-->
+						
 					@endif
 				</div>
 				<!--end::Card body-->
@@ -658,130 +659,6 @@
 		</div>
 		<!--end::nominee View-->
 
-		<!--begin::Row-->
-		<div class="row gy-5 g-xl-8">
-			<div class="col-xl-12 mb-5 mb-xl-10">
-				<!--begin::Table Widget 4-->
-				<div class="card card-flush h-xl-100">
-					<!--begin::Card header-->
-					<div class="card-header pt-7">
-						<!--begin::Title-->
-						<h3 class="card-title align-items-start flex-column">
-							<span class="card-label fw-bolder text-dark">Smart Inverstment</span>
-							<span class="text-gray-400 mt-1 fw-bold fs-6">10000 yearly scheme</span>
-						</h3>
-						<!--end::Title-->
-						<!--begin::Actions-->
-						<div class="card-toolbar">
-							<!--begin::Filters-->
-							<div class="d-flex flex-stack flex-wrap gap-4">
-								<!--begin::Destination-->
-								<!--end::Destination-->
-								<!--begin::Status-->
-								<div class="d-flex align-items-center fw-bolder">
-									<!--begin::Label-->
-									<div class="text-muted fs-7 me-2">Status</div>
-									<!--end::Label-->
-									<!--begin::Select-->
-									<select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Select an option" data-kt-table-widget-4="filter_status">
-										<option></option>
-										<option value="Show All" selected="selected">Show All</option>
-										<option value="Shipped">Approved</option>
-										<option value="Confirmed">Confirmed</option>
-										<option value="Rejected">Rejected</option>
-										<option value="Pending">Pending</option>
-									</select>
-									<!--end::Select-->
-								</div>
-								<!--end::Status-->
-								<!--begin::Search-->
-								<div class="position-relative my-1">
-									<!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
-									<span class="svg-icon svg-icon-2 position-absolute top-50 translate-middle-y ms-4">
-										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-											<rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="black" />
-											<path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="black" />
-										</svg>
-									</span>
-									<!--end::Svg Icon-->
-									<input type="text" data-kt-table-widget-4="search" class="form-control w-150px fs-7 ps-12" placeholder="Search" />
-								</div>
-								<!--end::Search-->
-							</div>
-							<!--begin::Filters-->
-						</div>
-						<!--end::Actions-->
-					</div>
-					<!--end::Card header-->
-					<!--begin::Card body-->
-					<div class="card-body">
-						<!--begin::Table-->
-						<table class="table align-middle table-row-dashed fs-6 gy-3" id="kt_table_widget_4_table">
-							<!--begin::Table head-->
-							<thead>
-								<!--begin::Table row-->
-								<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-									<th class="min-w-100px">Customer</th>
-									<th class="text-end min-w-125px">INVESTMENT DATE</th>
-									<th class="text-end min-w-100px">TOTAL AMOUNT INVESTED</th>
-									<th class="text-end min-w-100px">RATE OF INTEREST</th>
-									<th class="text-end min-w-100px">Profit</th>
-									<th class="text-end min-w-50px">Status</th>
-									<th class="text-end"></th>          
-								</tr>
-								<!--end::Table row-->
-							</thead>
-							<!--end::Table head-->
-							<!--begin::Table body-->
-							<tbody class="fw-bolder text-gray-600">
-								<tr>
-									<td>
-										<div class="d-flex align-items-center">
-											<div class="symbol symbol-45px me-5">
-												<img src="{{ asset('public/assets/media/avatars/blank.png') }}" alt="" />
-											</div>
-											<div class="d-flex justify-content-start flex-column">
-												<a href="#" class="text-dark fw-bolder text-hover-primary fs-6">Siva</a>
-												<span class="text-muted fw-bold text-muted d-block fs-7">+91 9994090424</span>
-											</div>
-										</div>
-									</td>
-									<td class="text-end">13 June 2022, 11:52 pm</td>
-									<!-- <td class="text-end">3000000</td> -->
-									<td class="text-end">
-										<a href="" class="text-dark text-hover-primary">3000000</a>
-									</td>
-									<td class="text-end">3%</td>
-									<td class="text-end">
-										<span class="text-dark fw-bolder">Rs. 60000</span>
-									</td>
-									<td class="text-end">
-										<span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span>
-									</td>
-									<td class="text-end">
-										<a href="#" class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary">
-											<!--begin::Svg Icon | path: icons/duotune/arrows/arr064.svg-->
-											<span class="svg-icon svg-icon-2">
-												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-													<rect opacity="0.5" x="18" y="13" width="13" height="2" rx="1" transform="rotate(-180 18 13)" fill="black"></rect>
-													<path d="M15.4343 12.5657L11.25 16.75C10.8358 17.1642 10.8358 17.8358 11.25 18.25C11.6642 18.6642 12.3358 18.6642 12.75 18.25L18.2929 12.7071C18.6834 12.3166 18.6834 11.6834 18.2929 11.2929L12.75 5.75C12.3358 5.33579 11.6642 5.33579 11.25 5.75C10.8358 6.16421 10.8358 6.83579 11.25 7.25L15.4343 11.4343C15.7467 11.7467 15.7467 12.2533 15.4343 12.5657Z" fill="black"></path>
-												</svg>
-											</span>
-											<!--end::Svg Icon-->
-										</a>
-									</td>
-								</tr>
-							</tbody>
-							<!--end::Table body-->
-						</table>
-						<!--end::Table-->
-					</div>
-					<!--end::Card body-->
-				</div>
-				<!--end::Table Widget 4-->
-			</div>
-		</div>
-		<!--end::Row-->
     </div>
     <!--end::Post-->
 </div>
