@@ -1784,7 +1784,7 @@
                     }
                 }
 
-                var amnt = 100000; 
+                var amnt = amount; 
                 //amount-loop
                 for (var i = 1; i <= 4; i++){
 
