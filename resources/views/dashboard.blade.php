@@ -2373,6 +2373,11 @@
                         $('select[name="profile"]').append('<option value="'+ '1' +'" selected>'+ 'Approved' +'</option>');
                         $('select[name="profile"]').append('<option value="'+ '0' +'">'+ 'Pending' +'</option>');
                     }
+                    else if(data.is_profile_verified == 2){
+                        jQuery('select[name="profile"]').empty();
+                        $('select[name="profile"]').append('<option value="'+ '2' +'" selected>'+ 'Incomplete' +'</option>');
+
+                    }
                     else{
                         jQuery('select[name="profile"]').empty();
                         $('select[name="profile"]').append('<option value="'+ '0' +'" selected>'+ 'Pending' +'</option>');
