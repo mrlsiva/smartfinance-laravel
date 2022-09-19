@@ -1080,8 +1080,8 @@
 									<input type="text" class="form-control form-control-solid @error('aadhaar_no') is-invalid @enderror" placeholder="Aadhaar Number" value="" name="aadhaar_no" id="aadhaar_no" />
 									<!--end::Input-->
 									@error('aadhaar_no')
-                                    	<div class="text-danger">{{ $message }}</div>
-                                	@enderror
+                    <div class="text-danger">{{ $message }}</div>
+                 	@enderror
 								@endif
 							</div>
 						</div>
@@ -1515,7 +1515,7 @@
                             </label>
                             <!--end::Label-->
                             <!--begin::Input-->
-                            <input type="number" class="form-control form-control-solid @error('intrest') is-invalid @enderror" placeholder="Intrest" value="" name="intrest" id="intrest" />
+                            <input type="text" class="form-control form-control-solid @error('intrest') is-invalid @enderror" placeholder="Intrest" value="" name="intrest" id="intrest" />
                             <!--end::Input-->
                             <div class="" id="intrest_error"></div>
                             @error('intrest')intrest_error

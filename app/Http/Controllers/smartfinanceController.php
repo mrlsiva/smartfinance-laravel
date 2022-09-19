@@ -88,8 +88,6 @@ class smartfinanceController extends Controller
                     SmartfinancePayment::where('smartfinance_id',$finance_id)->delete();
 
                 }
-
-
                 // payment table
                 $finance = Smartfinance::where('id',$finance_id)->first();
                 if($finance->plan->type == 'month'){
@@ -149,12 +147,11 @@ class smartfinanceController extends Controller
                 else if($finance->plan->type == 'year' && $finance->plan->name == 'One time Invertment'){
                     $year = $finance->no_of_year;
 
-                    $date = Carbon::now()->addYears(2);
-                    $date = Carbon::parse($date)->addMonths(1);
+                    $date = Carbon::now()->addYears(1);
                     $new_date = Carbon::parse($date)->setDay(6)->format('Y-m-d');
                     if($date > $new_date){
-                        $date = Carbon::now()->addYears(2);
-                        $date = Carbon::parse($date)->addMonths(2);
+                        $date = Carbon::now()->addYears(1);
+                        $date = Carbon::parse($date)->addMonths(1);
                         $payment_date = Carbon::parse($date)->setDay(6)->format('Y-m-d');
                         // check day
                         $timestamp = strtotime($payment_date);
@@ -168,8 +165,7 @@ class smartfinanceController extends Controller
                     }
                     else{
 
-                        $date = Carbon::now()->addYears(2);
-                        $date = Carbon::parse($date)->addMonths(1);
+                        $date = Carbon::now()->addYears(1);
                         $payment_date = Carbon::parse($date)->setDay(6)->format('Y-m-d');
                         // check day
                         $timestamp = strtotime($payment_date);
@@ -180,27 +176,23 @@ class smartfinanceController extends Controller
                         else{
                             $payment_date = Carbon::parse($payment_date)->setDay(6)->format('Y-m-d');
                         }
-
                     }
 
                     $amnt = $finance->amount; 
 
-                    for ($i = 2; $i <= $year; $i++){
+                    //amount-loop
+                    for ($i = 1; $i <= $year; $i++){
 
-                        //amount
-                        $profit = $finance->percentage/100 * $amnt;
-                        $amnt = $profit+$amnt;
+                        for ($j = 1; $j <= 12; $j++){
+                            //amount
+                            $profit = $finance->percentage/100 * $amnt;
+                            $amnt = $profit+$amnt;
+                        }
+                    }
+                    //amount-loop-end
 
-                        $smartfinance = SmartfinancePayment::create([
-                            'smartfinance_id' => $finance_id,
-                            'year' => $i,
-                            'amount' => round($profit),
-                            'payment_date' => $payment_date,
-                            'is_status' => 0,
-                        ]);
-
-                        
-
+                    //payment-loop
+                    for ($k = 2; $k <= $year; $k++){
 
                         //next-payment
                         $date = Carbon::parse($payment_date)->addYears(1);
@@ -215,7 +207,34 @@ class smartfinanceController extends Controller
                             $payment_date = Carbon::parse($payment_date)->setDay(6)->format('Y-m-d');
                         }
                         //end-next-payment
+                        
                     }
+                    //payment-loop-end
+
+                    $payment_date = Carbon::parse($payment_date)->addMonths(1);
+                    // check day
+                    $timestamp = strtotime($payment_date);
+                    $day = date('l', $timestamp);
+                    if($day == 'Tuesday' ||$day == 'Sunday' ||$day == 'Friday'){
+                        $payment_date = Carbon::parse($payment_date)->setDay(7)->format('Y-m-d');
+                    }
+                    else{
+                        $payment_date = Carbon::parse($payment_date)->setDay(6)->format('Y-m-d');
+                    }
+
+
+                    //return $payment_date;
+                    //return round($amnt);
+                    
+
+                    $smartfinance = SmartfinancePayment::create([
+                        'smartfinance_id' => $finance_id,
+                        'year' => $year,
+                        'amount' => round($amnt),
+                        'payment_date' => $payment_date,
+                        'is_status' => 0,
+                    ]);
+
                 }
                 // End Payment table
             }
@@ -294,14 +313,14 @@ class smartfinanceController extends Controller
             }
 
             else if($finance->plan->type == 'year' && $finance->plan->name == 'One time Invertment'){
+
                 $year = $finance->no_of_year;
 
-                $date = Carbon::now()->addYears(2);
-                $date = Carbon::parse($date)->addMonths(1);
+                $date = Carbon::now()->addYears(1);
                 $new_date = Carbon::parse($date)->setDay(6)->format('Y-m-d');
                 if($date > $new_date){
-                    $date = Carbon::now()->addYears(2);
-                    $date = Carbon::parse($date)->addMonths(2);
+                    $date = Carbon::now()->addYears(1);
+                    $date = Carbon::parse($date)->addMonths(1);
                     $payment_date = Carbon::parse($date)->setDay(6)->format('Y-m-d');
                         // check day
                     $timestamp = strtotime($payment_date);
@@ -315,8 +334,7 @@ class smartfinanceController extends Controller
                 }
                 else{
 
-                    $date = Carbon::now()->addYears(2);
-                    $date = Carbon::parse($date)->addMonths(1);
+                    $date = Carbon::now()->addYears(1);
                     $payment_date = Carbon::parse($date)->setDay(6)->format('Y-m-d');
                         // check day
                     $timestamp = strtotime($payment_date);
@@ -327,32 +345,28 @@ class smartfinanceController extends Controller
                     else{
                         $payment_date = Carbon::parse($payment_date)->setDay(6)->format('Y-m-d');
                     }
-
                 }
 
                 $amnt = $finance->amount; 
 
-                for ($i = 2; $i <= $year; $i++){
+                //amount-loop
+                for ($i = 1; $i <= $year; $i++){
 
-                        //amount
-                    $profit = $finance->percentage/100 * $amnt;
-                    $amnt = $profit+$amnt;
+                    for ($j = 1; $j <= 12; $j++){
+                            //amount
+                        $profit = $finance->percentage/100 * $amnt;
+                        $amnt = $profit+$amnt;
+                    }
+                }
+                //amount-loop-end
 
-                    $smartfinance = SmartfinancePayment::create([
-                        'smartfinance_id' => $finance_id,
-                        'year' => $i,
-                        'amount' => round($profit),
-                        'payment_date' => $payment_date,
-                        'is_status' => 0,
-                    ]);
+                //payment-loop
+                for ($k = 2; $k <= $year; $k++){
 
-
-
-
-                        //next-payment
+                    //next-payment
                     $date = Carbon::parse($payment_date)->addYears(1);
                     $payment_date = Carbon::parse($date)->setDay(6)->format('Y-m-d');
-                        // check day
+                    // check day
                     $timestamp = strtotime($payment_date);
                     $day = date('l', $timestamp);
                     if($day == 'Tuesday' ||$day == 'Sunday' ||$day == 'Friday'){
@@ -361,12 +375,37 @@ class smartfinanceController extends Controller
                     else{
                         $payment_date = Carbon::parse($payment_date)->setDay(6)->format('Y-m-d');
                     }
-                        //end-next-payment
+                    //end-next-payment
+
                 }
-            }
-            // End Payment table
+                //payment-loop-end
+
+                $payment_date = Carbon::parse($payment_date)->addMonths(1);
+                    // check day
+                $timestamp = strtotime($payment_date);
+                $day = date('l', $timestamp);
+                if($day == 'Tuesday' ||$day == 'Sunday' ||$day == 'Friday'){
+                    $payment_date = Carbon::parse($payment_date)->setDay(7)->format('Y-m-d');
+                }
+                else{
+                    $payment_date = Carbon::parse($payment_date)->setDay(6)->format('Y-m-d');
+                }
+
+
+                //return $payment_date;
+                //return round($amnt);
+
+
+                $smartfinance = SmartfinancePayment::create([
+                    'smartfinance_id' => $finance_id,
+                    'year' => $year,
+                    'amount' => round($amnt),
+                    'payment_date' => $payment_date,
+                    'is_status' => 0,
+                ]);
+            }      
         }
-        return redirect('dashboard');
+        return redirect()->back();
 
     }
 

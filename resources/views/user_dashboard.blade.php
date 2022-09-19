@@ -1659,9 +1659,224 @@
         jQuery('select[name="plan_id"]').on('change',function(){
             var plan_id = jQuery(this).val();
             if(plan_id == '2'){
+                var amount = jQuery("#amount").val();
+                //to display today date in heading
+                var today = new Date();
+                var dd = today.getDate();
+                var mm = today.getMonth()+1; //January is 0!
+                var yyyy = today.getFullYear();
+                if(dd<10) {
+                    dd = '0'+dd
+                } 
+
+                if(mm<10) {
+                    mm = '0'+mm
+                } 
+                today = yyyy + '-' + mm + '-' + dd;
+                //to display today date in heading end
+
+                //next 30 days
+                var date = new Date();
+                date.setFullYear(date.getFullYear() + 1);
+                //date.setDate(date.getDate() + 360);
+                //console.log(date);
+                //next 30 days end
+                
+                //convert next 30 days with date 6
+                var new_date = new Date();
+
+                new_date.setFullYear(new_date.getFullYear() + 1);
+                //new_date.setDate(new_date.getDate() + 360);
+                new_date.setDate(6);
+                //console.log(new_date);
+                //convert next 30 days with date 6 end
+
+                if(date > new_date){
+
+                    var date = new Date();
+                    date.setFullYear(date.getFullYear() + 1);
+                    date.setMonth(date.getMonth() + 1);
+                    //date.setDate(date.getDate() + 390);
+                    date.setDate(6);
+                    //console.log(date);
+                    //check day
+                    var day = date.getDay();
+                    //console.log(day);
+                    if(day == 2 || day ==  0 || day == 5){
+                        var date = new Date();
+                        date.setFullYear(date.getFullYear() + 1);
+                        date.setMonth(date.getMonth() + 1);
+                        //date.setDate(date.getDate() + 390);
+                        date.setDate(7);
+                        //console.log(last);
+
+                        var dd = date.getDate();
+                        var mm = date.getMonth()+1; //January is 0!
+                        var yyyy = date.getFullYear();
+                        if(dd<10) {
+                            dd = '0'+dd
+                        } 
+                        if(mm<10) {
+                            mm = '0'+mm
+                        } 
+                        final = yyyy + '-' + mm + '-' + dd;
+                    }
+                    else{
+                        var date = new Date();
+                        date.setFullYear(date.getFullYear() + 1);
+                        date.setMonth(date.getMonth() + 1);
+                        //date.setDate(date.getDate() + 390);
+                        date.setDate(6);
+
+                        var dd = date.getDate();
+                        var mm = date.getMonth()+1; //January is 0!
+                        var yyyy = date.getFullYear();
+                        if(dd<10) {
+                            dd = '0'+dd
+                        } 
+                        if(mm<10) {
+                            mm = '0'+mm
+                        } 
+                        final = yyyy + '-' + mm + '-' + dd;
+
+                    }
+                }
+                else{
+                    //console.log('no');
+                    var date = new Date();
+                    date.setFullYear(date.getFullYear() + 1);
+                    //date.setDate(date.getDate() + 360);
+                    date.setDate(6);
+                    var day = date.getDay();
+                    console.log(day);
+                    if(day == 2 || day ==  0 || day == 5){
+                        var date = new Date();
+                        date.setFullYear(date.getFullYear() + 1);
+                        //date.setDate(date.getDate() + 360);
+                        date.setDate(7);
+                        //console.log(date);
+                        var dd = date.getDate();
+                        var mm = date.getMonth()+1; //January is 0!
+                        var yyyy = date.getFullYear();
+                        if(dd<10) {
+                            dd = '0'+dd
+                        } 
+                        if(mm<10) {
+                            mm = '0'+mm
+                        } 
+                        final = yyyy + '-' + mm + '-' + dd;
+                    }
+                    else{
+                        var date = new Date();
+                        date.setFullYear(date.getFullYear() + 1);
+                        //date.setDate(date.getDate() + 360);
+                        date.setDate(6);
+                        var dd = date.getDate();
+                        var mm = date.getMonth()+1; //January is 0!
+                        var yyyy = date.getFullYear();
+                        if(dd<10) {
+                            dd = '0'+dd
+                        } 
+                        if(mm<10) {
+                            mm = '0'+mm
+                        } 
+                        final = yyyy + '-' + mm + '-' + dd;
+                    }
+                }
+
+                var amnt = 100000; 
+                //amount-loop
+                for (var i = 1; i <= 4; i++){
+
+                    for (var j = 1; j <= 12; j++){
+                        //amount
+                        var profit = 3/100 * amnt;
+                        amnt = profit+amnt;
+                    }
+                }
+                //amount-loop-end
+
+                //payment-loop
+                for (var k = 2; k <= 4; k++){
+                    date.setFullYear(date.getFullYear() + 1);
+                    //date.setDate(date.getDate() + 360);
+                    date.setDate(6);
+                    //console.log(dateee);
+                    var day = date.getDay();
+                    //console.log(day);
+                    if(day == 2 || day ==  0 || day == 5){
+
+                        date.setDate(7);
+                        //console.log(date);
+                        var dd = date.getDate();
+                        var mm = date.getMonth()+1; //January is 0!
+                        var yyyy = date.getFullYear();
+                        if(dd<10) {
+                            dd = '0'+dd
+                        } 
+                        if(mm<10) {
+                            mm = '0'+mm
+                        } 
+                        final = yyyy + '-' + mm + '-' + dd;
+                    }
+                    else{
+                        date.setDate(6);
+                        var dd = date.getDate();
+                        var mm = date.getMonth()+1; //January is 0!
+                        var yyyy = date.getFullYear();
+                        if(dd<10) {
+                            dd = '0'+dd
+                        } 
+                        if(mm<10) {
+                            mm = '0'+mm
+                        } 
+                        final = yyyy + '-' + mm + '-' + dd;
+                    }
+                }
+                date.setMonth(date.getMonth() + 1);
+                //date.setDate(date.getDate() + 300);
+                date.setDate(6);
+                //console.log(dateee);
+                var day = date.getDay();
+                //console.log(day);
+                if(day == 2 || day ==  0 || day == 5){
+
+                    date.setDate(7);
+                    //console.log(date);
+                    var dd = date.getDate();
+                    var mm = date.getMonth()+1; //January is 0!
+                    var yyyy = date.getFullYear();
+                    if(dd<10) {
+                        dd = '0'+dd
+                    } 
+                    if(mm<10) {
+                        mm = '0'+mm
+                    } 
+                    final = yyyy + '-' + mm + '-' + dd;
+                }
+                else{
+                    date.setDate(6);
+                    var dd = date.getDate();
+                    var mm = date.getMonth()+1; //January is 0!
+                    var yyyy = date.getFullYear();
+                    if(dd<10) {
+                        dd = '0'+dd
+                    } 
+                    if(mm<10) {
+                        mm = '0'+mm
+                    } 
+                    final = yyyy + '-' + mm + '-' + dd;
+                }
+
+
+
+
                 $( ".example" ).html('');
-                var html ='<div class="d-flex justify-content-center">One time Invertment(If you start investment in 25-9-2022)</div><table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4"><thead><tr class="fw-bolder text-muted"><th class="">Year</th><th class="">Investment Amount</th><th class="">Percentage(Sample)</th><th class="">Yearly Return</th><th class="">Payment date</th></tr></thead><tbody><tr><td>2</td><td>100000</td><td>3%</td><td>203279</td><td>6-11-2024</td></tr><tr><td>3</td><td>100000</td><td>3%</td><td>289828</td><td>6-11-2025</td></tr><tr><td>4</td><td>100000</td><td>3%</td><td>413225</td><td>6-11-2026</td></tr></tbody></table>';
+                var html ='<div class="d-flex justify-content-center">Yearly- One time investment(If you start investment in '+today+')</div><table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4"><thead><tr class="fw-bolder text-muted"><th class="">Year</th><th class="">Investment Amount</th><th class="">Percentage(Sample)</th><th class="">Yearly Return</th><th class="">Payment date</th></tr></thead><tbody><tr><td>4</td><td>100000</td><td>3%</td><td>'+Math.round(amnt)+'</td><td>'+final+'</td></tr></tbody></table>';
                 $('.example').html(html);
+
+
+                
 
             }
             else{

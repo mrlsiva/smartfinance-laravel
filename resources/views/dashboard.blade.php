@@ -1343,7 +1343,7 @@
                             </label>
                             <!--end::Label-->
                             <!--begin::Input-->
-                            <input type="number" class="form-control form-control-solid @error('intrest') is-invalid @enderror" placeholder="Intrest" value="" name="intrest" id="intrest" />
+                            <input type="text" class="form-control form-control-solid @error('intrest') is-invalid @enderror" placeholder="Intrest" value="" name="intrest" id="intrest" />
                             <!--end::Input-->
                             <div class="" id="intrest_error"></div>
                             @error('intrest')intrest_error
