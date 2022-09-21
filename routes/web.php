@@ -65,6 +65,8 @@ Route::get('/reject_smart_finance',[SmartFinanceController::class, 'reject_smart
 Route::get('/view_finance/{id}/',[SmartFinanceController::class, 'view_finance'])->name('view_finance');
 Route::get('/payment',[SmartFinanceController::class, 'payment'])->name('payment');
 Route::get('investment_search',[SmartFinanceController::class, 'investment_search'])->name('investment_search');
+Route::get('investment_status',[SmartFinanceController::class, 'investment_status'])->name('investment_status');
+Route::get('investment_plan',[SmartFinanceController::class, 'investment_plan'])->name('investment_plan');
 //Smart Finance end
 
 

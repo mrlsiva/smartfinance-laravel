@@ -380,6 +380,16 @@ class smartfinanceController extends Controller
 
     public function view_finance($id,Request $request) {
 
+        $today = Carbon::now()->format('Y-m-d');
+        $smartfinance_payments = SmartfinancePayment::where([['smartfinance_id',$id],['payment_date','<',$today],['is_status',0]])->get();
+
+        foreach($smartfinance_payments as $smartfinance_payment){
+            $smartfinance_payment_status = DB::table('smartfinance_payments')->where('id',$smartfinance_payment->id)->update(['is_status' => 1]);
+        }
+
+        
+
+
         $smartfinance = Smartfinance::where('id',$id)->first();
         $smartfinance_payments = SmartfinancePayment::where('smartfinance_id',$id)->get();
         $payment = SmartfinancePayment::where('smartfinance_id',$id)->first();
@@ -409,17 +419,53 @@ class smartfinanceController extends Controller
         if($search != NULL){
 
             $data = Smartfinance::join('users','smartfinances.user_id','=','users.id')->join('plans','smartfinances.plan_id','=','plans.id')->where('users.first_name', 'like', '%'.$search.'%')->orWhere('users.last_name', 'like', '%'.$search.'%')->select('smartfinances.*','users.first_name as user_firstname','users.last_name as user_lastname','users.avatar as user_avatar','users.id as user_id','plans.type as plan_type')->orderBy('id','Desc')->simplePaginate(10);
-
-            // $data = Smartfinance::whereHas('user', function($query) use($search) {
-            //     $query->where('first_name', 'like', '%'.$search.'%')->orWhere('last_name', 'like', '%'.$search.'%');
-            // })->get();
             
         }
         else{
-            $data = Smartfinance::orderBy('id','Desc')->simplePaginate(10);
+
+            $data = Smartfinance::join('users','smartfinances.user_id','=','users.id')->join('plans','smartfinances.plan_id','=','plans.id')->select('smartfinances.*','users.first_name as user_firstname','users.last_name as user_lastname','users.avatar as user_avatar','users.id as user_id','plans.type as plan_type')->orderBy('id','Desc')->simplePaginate(10);
            
         }
         return $data;
     }
+
+    public function investment_status(Request $request)
+    {
+        $status = $request->status;
+
+        if($status != NULL){
+
+            $data = Smartfinance::join('users','smartfinances.user_id','=','users.id')->join('plans','smartfinances.plan_id','=','plans.id')->where('smartfinances.is_status', 'like', '%'.$status.'%')->select('smartfinances.*','users.first_name as user_firstname','users.last_name as user_lastname','users.avatar as user_avatar','users.id as user_id','plans.type as plan_type')->orderBy('id','Desc')->simplePaginate(10);
+            
+        }
+        else{
+
+            $data = Smartfinance::join('users','smartfinances.user_id','=','users.id')->join('plans','smartfinances.plan_id','=','plans.id')->select('smartfinances.*','users.first_name as user_firstname','users.last_name as user_lastname','users.avatar as user_avatar','users.id as user_id','plans.type as plan_type')->orderBy('id','Desc')->simplePaginate(10);
+           
+        }
+        return $data;
+    }
+
+    public function investment_plan(Request $request)
+    {
+        $plan = $request->plan;
+
+        if($plan != NULL){
+
+            
+            $data = Smartfinance::join('users','smartfinances.user_id','=','users.id')->join('plans','smartfinances.plan_id','=','plans.id')->where('plans.type', 'like', '%'.$plan.'%')->select('smartfinances.*','users.first_name as user_firstname','users.last_name as user_lastname','users.avatar as user_avatar','users.id as user_id','plans.type as plan_type')->orderBy('id','Desc')->simplePaginate(10);
+            
+        }
+        else{
+
+            $data = Smartfinance::join('users','smartfinances.user_id','=','users.id')->join('plans','smartfinances.plan_id','=','plans.id')->select('smartfinances.*','users.first_name as user_firstname','users.last_name as user_lastname','users.avatar as user_avatar','users.id as user_id','plans.type as plan_type')->orderBy('id','Desc')->simplePaginate(10);
+           
+        }
+        return $data;
+    }
+
+
+
+    
 
 }

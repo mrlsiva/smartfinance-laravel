@@ -383,21 +383,36 @@
                                 <!--end::Destination-->
                                 <!--begin::Status-->
                                 <div class="d-flex align-items-center fw-bolder">
+
+                                    <!--begin::Label-->
+                                    <div class="text-muted fs-7 me-2">Plan</div>
+                                    <!--end::Label-->
+                                    <!--begin::Select-->
+                                    <select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Show All" data-kt-table-widget-4="filter_status" name="investment_plan" id="investment_plan" >
+                                        <option></option>
+                                        <option value=" " selected="selected">Show All</option>
+                                        <option value="year">Year</option>
+                                        <option value="month">Month</option>
+                                        
+                                    </select>
+                                    <!--end::Select-->
+
                                     <!--begin::Label-->
                                     <div class="text-muted fs-7 me-2">Status</div>
                                     <!--end::Label-->
                                     <!--begin::Select-->
-                                    <select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Select an option" data-kt-table-widget-4="filter_status" >
+                                    <select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Show All" data-kt-table-widget-4="filter_status" name="investment_status" id="investment_status" >
                                         <option></option>
-                                        <option value="Show All" selected="selected">Show All</option>
-                                        <option value="Shipped">Approved</option>
-                                        <option value="Confirmed">Confirmed</option>
-                                        <option value="Rejected">Rejected</option>
-                                        <option value="Pending">Pending</option>
+                                        <option value=" " selected="selected">Show All</option>
+                                        <option value="2">Pending</option>
+                                        <option value="1">Approved</option>
+                                        <option value="0">Rejected</option>
                                     </select>
                                     <!--end::Select-->
                                 </div>
                                 <!--end::Status-->
+
+
                                 <!--begin::Search-->
                                 <div class="position-relative my-1">
                                     <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
@@ -1996,7 +2011,13 @@
 
                                 output += '<td><div class="d-flex align-items-center"><div class="symbol symbol-45px me-5"><img src="{{ asset('public/assets/media/avatars/blank.png') }}" alt="" /></div><div class="d-flex justify-content-start flex-column"><a href="" class="text-dark fw-bolder text-hover-primary fs-6">'+data.data[count].user_firstname+' '+data.data[count].user_lastname+'</a><span class="text-muted fw-bold text-muted d-block fs-7">'+data.data[count].user_id+'</span></td>';
                             }
-                            output += '<td>'+data.data[count].plan_type+'</td>';
+                            if(data.data[count].plan_type == 'month'){
+                                output += '<td>Month</td>';
+                            }
+                            else{
+                                output += '<td>Year</td>';
+                            }
+
                             if(data.data[count].no_of_year !== null){
                                 output += '<td>'+data.data[count].no_of_year+'</td>';
                             }
@@ -2035,6 +2056,172 @@
                         output += '</tr>';
                     }
                     $('.investment_body').html(output);
+                }
+            });  
+        });
+    });
+</script>
+
+<!-- investment_status -->
+<script type="application/javascript">
+    jQuery(document).ready(function ()
+    {
+        jQuery('select[name="investment_status"]').on('change',function(){
+            var status = jQuery(this).val();
+            jQuery.ajax({
+                url : 'investment_status',
+                type: 'GET',
+                dataType: 'json',
+                data: { "status": status},
+                success:function(data)
+                {
+
+                    console.log(data.data);
+                    var output = '';
+                    if(data.data.length > 0){
+                        for(var count = 0; count < data.data.length; count++)
+                        {
+                            var directory = 'user/'+data.data[count].user_id+'/';
+                            var directory1 = 'view_finance/'+data.data[count].id+'/';
+                            var image_url = 'storage/app/public/avatar/'+data.data[count].user_avatar+'/';
+                            output += '<tr>';
+                            if(data.data[count].user_avatar){
+                                output += '<td><div class="d-flex align-items-center"><div class="symbol symbol-45px me-5"><img src="'+image_url+'" alt="" /></div><div class="d-flex justify-content-start flex-column"><a href="'+directory+'" class="text-dark fw-bolder text-hover-primary fs-6">'+data.data[count].user_firstname+' '+data.data[count].user_lastname+'</a><span class="text-muted fw-bold text-muted d-block fs-7">'+data.data[count].user_id+'</span></td>';
+
+                            }
+                            else{
+
+                                output += '<td><div class="d-flex align-items-center"><div class="symbol symbol-45px me-5"><img src="{{ asset('public/assets/media/avatars/blank.png') }}" alt="" /></div><div class="d-flex justify-content-start flex-column"><a href="" class="text-dark fw-bolder text-hover-primary fs-6">'+data.data[count].user_firstname+' '+data.data[count].user_lastname+'</a><span class="text-muted fw-bold text-muted d-block fs-7">'+data.data[count].user_id+'</span></td>';
+                            }
+                            if(data.data[count].plan_type == 'month'){
+                                output += '<td>Month</td>';
+                            }
+                            else{
+                                output += '<td>Year</td>';
+                            }
+
+                            if(data.data[count].no_of_year !== null){
+                                output += '<td>'+data.data[count].no_of_year+'</td>';
+                            }
+                            else{
+                                output += '<td>-</td>';
+                            }
+                            output += '<td>'+data.data[count].amount+'</td>';
+                            output += '<td>'+data.data[count].investment_date+'</td>';
+                            if(data.data[count].accepted_date !== null){
+                                output += '<td>'+data.data[count].accepted_date+'</td>';
+                            }
+                            else{
+                                output += '<td>-</td>';
+                            }
+                            
+                            output += '<td>'+data.data[count].percentage+'</td>';
+                            if(data.data[count].is_status == 2){
+
+                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>';
+                            }
+                            else if(data.data[count].is_status == 1){
+                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-success">Approved</span></td>';
+                            }
+                            else{
+                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-danger">Rejected</span></td>';
+                            }
+
+                            output += '<td><button class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary"name="approve"  data-system_id="'+data.data[count].id+'" title="Edit"><i class="fas fa-pencil-alt" id="fa"></i></button> <a class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary" href="'+directory1+'"><span class="svg-icon svg-icon-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><rect opacity="0.5" x="18" y="13" width="13" height="2" rx="1" transform="rotate(-180 18 13)" fill="black"></rect><path d="M15.4343 12.5657L11.25 16.75C10.8358 17.1642 10.8358 17.8358 11.25 18.25C11.6642 18.6642 12.3358 18.6642 12.75 18.25L18.2929 12.7071C18.6834 12.3166 18.6834 11.6834 18.2929 11.2929L12.75 5.75C12.3358 5.33579 11.6642 5.33579 11.25 5.75C10.8358 6.16421 10.8358 6.83579 11.25 7.25L15.4343 11.4343C15.7467 11.7467 15.7467 12.2533 15.4343 12.5657Z" fill="black"></path></svg></span></a> </td>';
+                            output += '</tr>';
+                        }
+                    }
+                    else
+                    {
+                        output += '<tr>';
+                        output += '<td colspan="6">No Data Found</td>';
+                        output += '</tr>';
+                    }
+                    $('.investment_body').html(output); 
+                    
+                }
+            });  
+        });
+    });
+</script>
+
+<!-- investment_plan -->
+<script type="application/javascript">
+    jQuery(document).ready(function ()
+    {
+        jQuery('select[name="investment_plan"]').on('change',function(){
+            var plan = jQuery(this).val();
+            jQuery.ajax({
+                url : 'investment_plan',
+                type: 'GET',
+                dataType: 'json',
+                data: { "plan": plan},
+                success:function(data)
+                {
+
+                    console.log(data.data);
+                    var output = '';
+                    if(data.data.length > 0){
+                        for(var count = 0; count < data.data.length; count++)
+                        {
+                            var directory = 'user/'+data.data[count].user_id+'/';
+                            var directory1 = 'view_finance/'+data.data[count].id+'/';
+                            var image_url = 'storage/app/public/avatar/'+data.data[count].user_avatar+'/';
+                            output += '<tr>';
+                            if(data.data[count].user_avatar){
+                                output += '<td><div class="d-flex align-items-center"><div class="symbol symbol-45px me-5"><img src="'+image_url+'" alt="" /></div><div class="d-flex justify-content-start flex-column"><a href="'+directory+'" class="text-dark fw-bolder text-hover-primary fs-6">'+data.data[count].user_firstname+' '+data.data[count].user_lastname+'</a><span class="text-muted fw-bold text-muted d-block fs-7">'+data.data[count].user_id+'</span></td>';
+
+                            }
+                            else{
+
+                                output += '<td><div class="d-flex align-items-center"><div class="symbol symbol-45px me-5"><img src="{{ asset('public/assets/media/avatars/blank.png') }}" alt="" /></div><div class="d-flex justify-content-start flex-column"><a href="" class="text-dark fw-bolder text-hover-primary fs-6">'+data.data[count].user_firstname+' '+data.data[count].user_lastname+'</a><span class="text-muted fw-bold text-muted d-block fs-7">'+data.data[count].user_id+'</span></td>';
+                            }
+                            if(data.data[count].plan_type == 'month'){
+                                output += '<td>Month</td>';
+                            }
+                            else{
+                                output += '<td>Year</td>';
+                            }
+
+                            if(data.data[count].no_of_year !== null){
+                                output += '<td>'+data.data[count].no_of_year+'</td>';
+                            }
+                            else{
+                                output += '<td>-</td>';
+                            }
+                            output += '<td>'+data.data[count].amount+'</td>';
+                            output += '<td>'+data.data[count].investment_date+'</td>';
+                            if(data.data[count].accepted_date !== null){
+                                output += '<td>'+data.data[count].accepted_date+'</td>';
+                            }
+                            else{
+                                output += '<td>-</td>';
+                            }
+                            
+                            output += '<td>'+data.data[count].percentage+'</td>';
+                            if(data.data[count].is_status == 2){
+
+                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>';
+                            }
+                            else if(data.data[count].is_status == 1){
+                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-success">Approved</span></td>';
+                            }
+                            else{
+                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-danger">Rejected</span></td>';
+                            }
+
+                            output += '<td><button class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary"name="approve"  data-system_id="'+data.data[count].id+'" title="Edit"><i class="fas fa-pencil-alt" id="fa"></i></button> <a class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary" href="'+directory1+'"><span class="svg-icon svg-icon-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><rect opacity="0.5" x="18" y="13" width="13" height="2" rx="1" transform="rotate(-180 18 13)" fill="black"></rect><path d="M15.4343 12.5657L11.25 16.75C10.8358 17.1642 10.8358 17.8358 11.25 18.25C11.6642 18.6642 12.3358 18.6642 12.75 18.25L18.2929 12.7071C18.6834 12.3166 18.6834 11.6834 18.2929 11.2929L12.75 5.75C12.3358 5.33579 11.6642 5.33579 11.25 5.75C10.8358 6.16421 10.8358 6.83579 11.25 7.25L15.4343 11.4343C15.7467 11.7467 15.7467 12.2533 15.4343 12.5657Z" fill="black"></path></svg></span></a> </td>';
+                            output += '</tr>';
+                        }
+                    }
+                    else
+                    {
+                        output += '<tr>';
+                        output += '<td colspan="6">No Data Found</td>';
+                        output += '</tr>';
+                    }
+                    $('.investment_body').html(output); 
+                    
                 }
             });  
         });
