@@ -13,6 +13,7 @@ use App\Models\UserDetail;
 use App\Models\BankDetail;
 use App\Models\NomineeDetail;
 use App\Models\Smartfinance;
+use App\Models\SmartfinancePayment;
 use Image;
 use DB;
 
@@ -23,17 +24,54 @@ class UserController extends Controller
         $user = Auth::user();
         if($user->role_id == '3'){
 
+            $smartfinances = Smartfinance::where([['user_id',$user->id],['is_close',0],['is_status',1]])->get();
+            if($smartfinances != NULL){
+                foreach($smartfinances as $smartfinance){
+
+                    $count = SmartfinancePayment::where('smartfinance_id',$smartfinance->id)->count();
+                    $count1 = SmartfinancePayment::where([['smartfinance_id',$smartfinance->id],['is_status',1]])->count();
+                    $smartfinance_payment = SmartfinancePayment::where([['smartfinance_id',$smartfinance->id],['is_status',1]])->first();
+
+                    if($count == $count1){
+
+                        DB::table('smartfinances')->where('id',$smartfinance_payment->smartfinance_id)->update(['is_close' => 1]);
+                    }
+                }
+            }
+
             $smartfinances = Smartfinance::where('user_id',$user->id)->orderBy('id','Desc')->simplePaginate(10);
             $smartfinance_count = Smartfinance::where('is_status',2)->count();
 
             return view('user_dashboard')->with('smartfinances',$smartfinances)->with('smartfinance_count',$smartfinance_count);
 
         }else{
+
+
+
+            $smartfinances = Smartfinance::where([['is_close',0],['is_status',1]])->get();
+            if($smartfinances != NULL){
+                foreach($smartfinances as $smartfinance){
+
+                    $count = SmartfinancePayment::where('smartfinance_id',$smartfinance->id)->count();
+                    $count1 = SmartfinancePayment::where([['smartfinance_id',$smartfinance->id],['is_status',1]])->count();
+                    $smartfinance_payment = SmartfinancePayment::where([['smartfinance_id',$smartfinance->id],['is_status',1]])->first();
+
+                    if($count == $count1){
+
+                        DB::table('smartfinances')->where('id',$smartfinance_payment->smartfinance_id)->update(['is_close' => 1]);
+                    }
+                }
+            }
+            
+
+
             $users = User::where('is_delete',0)->orderBy('id','Desc')->simplePaginate(10);
             $user_count = User::where('is_active',0)->orWhere('is_profile_verified',0)->count();
             $smartfinance_count = Smartfinance::where('is_status',2)->count();
             $smartfinances = Smartfinance::orderBy('id','Desc')->simplePaginate(10);
-            return view('dashboard')->with('users',$users)->with('user_count',$user_count)->with('smartfinances',$smartfinances)->with('smartfinance_count',$smartfinance_count);
+            $admin_finances = Smartfinance::where('user_id',$user->id)->orderBy('id','Desc')->simplePaginate(10);
+            $admin_finance_count = Smartfinance::where('user_id',$user->id)->count();
+            return view('dashboard')->with('users',$users)->with('user_count',$user_count)->with('smartfinances',$smartfinances)->with('smartfinance_count',$smartfinance_count)->with('admin_finances',$admin_finances)->with('admin_finance_count',$admin_finance_count);
         }
         
     }
@@ -79,8 +117,6 @@ class UserController extends Controller
         }
         
     }
-
-
     public function profile(){
 
         $user = Auth::user();
@@ -107,8 +143,36 @@ class UserController extends Controller
         foreach ($finances as $finance) {
             $amount += $finance->amount;
         }
+        $percentage = 0;
+        foreach ($finances as $finance) {
+            $percentage += $finance->percentage;
+        }
 
-        return view('user_detail')->with('user',$user)->with('user_detail',$user_detail)->with('bank_detail',$bank_detail)->with('nominee_detail',$nominee_detail)->with('smartfinances',$smartfinances)->with('amount',$amount);
+        $month_finances = Smartfinance::where([['user_id',$user->id],['plan_id',1]])->get();
+        foreach($month_finances as $month_finance){
+            $month_amounts = SmartfinancePayment::where('smartfinance_id',$month_finance->id)->get();
+            $m_amount=0;
+            foreach($month_amounts as $month_amount){
+                $m_amount += $month_amount->amount;
+
+            }
+        }
+
+        $year_finances = Smartfinance::where([['user_id',$user->id],['plan_id',2]])->get();
+        foreach($year_finances as $year_finance){
+            $year_amount = SmartfinancePayment::where('smartfinance_id',$year_finance->id)->first();
+            $year_amount = $year_amount->amount - $year_finance->amount;
+            $y_amount=0;
+            $y_amount += $year_amount;
+        }
+
+        $earning_amount = $m_amount + $y_amount; 
+
+        $investment_count = Smartfinance::where('user_id',$user->id)->count();
+        $earning_percentage = $percentage/$investment_count;
+
+
+        return view('user_detail')->with('user',$user)->with('user_detail',$user_detail)->with('bank_detail',$bank_detail)->with('nominee_detail',$nominee_detail)->with('smartfinances',$smartfinances)->with('amount',$amount)->with('investment_count',$investment_count)->with('earning_percentage',$earning_percentage)->with('earning_amount',$earning_amount);
         
     }
 

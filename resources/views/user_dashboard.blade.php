@@ -1,5 +1,16 @@
 @extends('layouts.master')
 @section('body')
+
+<style> 
+.parent-active .col {
+    filter: grayscale(100%);
+}
+
+ .col.active {
+    filter: grayscale(0%);
+} 
+</style>
+
 <!--begin::Toolbar-->
     <div class="toolbar py-5 py-lg-15" id="kt_toolbar">
         <!--begin::Container-->
@@ -43,8 +54,8 @@
                         <!--begin::Stats-->
                         <div class="card-p mt-n20 position-relative">
                             <!--begin::Row-->
-                            <div class="row g-0">
-                               <div class="col bg-light-warning p-6 rounded-2 me-7 mb-7">                                    
+                            <div class="row g-0 parent-active">
+                                <a href="#" onclick="finance()" class="active text-dark fw-bold fs-6 col bg-light-warning p-6 rounded-2 me-7 mb-7" id="smart_finance">                                   
                                     <div class="d-flex flex-stack flex-grow-1">
                                         <div class="d-flex flex-column me-2">       
                                             <span class="svg-icon svg-icon-3x svg-icon-warning d-block my-2">
@@ -55,10 +66,10 @@
                                             <span class="px-3 py-1 fs-5 fw-bolder bg-warning text-dark">{{$smartfinance_count}}</span>
                                         </span>
                                     </div>
-                                    <a href="#" class="text-dark fw-bold fs-6">Smart Finance</a>
-                                </div>
-
-                                <div class="col bg-light-primary p-6 rounded-2 me-7 mb-7">                                    
+                                    Smart Finance
+                                </a>
+                                <a href="#" class="text-dark fw-bold fs-6 col bg-light-primary p-6 rounded-2 me-7 mb-7">
+                                                                  
                                     <div class="d-flex flex-stack flex-grow-1">
                                         <div class="d-flex flex-column me-2">
                                             <span class="svg-icon svg-icon-3x svg-icon-primary d-block my-2">
@@ -69,9 +80,9 @@
                                             <span class="px-3 py-1 fs-5 fw-bolder bg-primary text-white">0</span>
                                         </span>
                                     </div>
-                                    <a href="#" class="text-dark fw-bold fs-6">Loan</a>
-                                </div>
-                                <div class="col bg-light-danger p-6 rounded-2 me-7 mb-7">                                    
+                                    Loan
+                                </a>
+                                <a href="#" class="text-dark fw-bold fs-6 col bg-light-danger p-6 rounded-2 me-7 mb-7">                                    
                                     <div class="d-flex flex-stack flex-grow-1">
                                         <div class="d-flex flex-column me-2">
                                             <span class="svg-icon svg-icon-3x svg-icon-danger d-block my-2">
@@ -82,9 +93,9 @@
                                             <span class="px-3 py-1 fs-5 fw-bolder bg-danger text-white">0</span>
                                         </span>
                                     </div>
-                                    <a href="#" class="text-dark fw-bold fs-6">Mutual Fund</a>
-                                </div>
-                                <div class="col bg-light-success p-6 rounded-2 me-7 mb-7">                                    
+                                    Mutual Fund
+                                </a>
+                                <a href="#" class="text-dark fw-bold fs-6 col bg-light-success p-6 rounded-2 me-7 mb-7">                                   
                                     <div class="d-flex flex-stack flex-grow-1">
                                         <div class="d-flex flex-column me-2">       
                                             <span class="svg-icon svg-icon-3x svg-icon-success d-block my-2">
@@ -95,8 +106,8 @@
                                             <span class="px-3 py-1 fs-5 fw-bolder bg-success text-white">0</span>
                                         </span>
                                     </div>
-                                    <a href="#" class="text-dark fw-bold fs-6">Insurance</a>
-                                </div>
+                                    Insurance
+                                </a>
                             </div>
                             <!--end::Row-->
                             <!--begin::Row-->
@@ -123,7 +134,7 @@
         @if($user->is_profile_verified == 1)
             @if($finance != NULL)
                 <!--begin::Row-->
-                <div class="row gy-5 g-xl-8 mt-xl-5">
+                <div class="row gy-5 g-xl-8 mt-xl-5" id="finance" >
                     <!--begin::Col-->
                     <!--end::Col-->
                     <!--begin::Col-->
@@ -577,6 +588,8 @@
                                         <input type="file" class="form-control form-control-solid custom-file-input" id="avatar" placeholder="Avatar" value="" name="avatar" accept="image/*" />
                                         <div class="d-flex justify-content-center mt-3">
                                             <img id="preview-image-avatar" style="max-height: 200px;">
+                                            <a href="#" class="text-hover-primary" onclick="delete_avatar()"  style="display:none;" id="avatar_image">X</a>
+
                                         </div>
                                     
                                         <!--end::Input-->
@@ -594,6 +607,7 @@
                                         <input type="file" class="form-control form-control-solid custom-file-input" id="aadhaar_card" placeholder="Aadhaar Card" value="" name="aadhaar_card" accept="image/*" />
                                         <div class="d-flex justify-content-center mt-3">
                                             <img id="preview-image-aadhaar_card" style="max-height: 200px;">
+                                            <a href="#" class="text-hover-primary" onclick="delete_aadhaar()"  style="display:none;" id="aadhaar_image">X</a>
                                         </div>
                                     
                                         <!--end::Input-->
@@ -611,6 +625,7 @@
                                         <input type="file" class="form-control form-control-solid custom-file-input" id="pan_card" placeholder="Pan Card" value="" name="pan_card" accept="image/*" />
                                         <div class="d-flex justify-content-center mt-3">
                                             <img id="preview-image-pan_card" style="max-height: 200px;">
+                                            <a href="#" class="text-hover-primary" onclick="delete_pan()"  style="display:none;" id="pan_image">X</a>
                                         </div>
                                     
                                         <!--end::Input-->
@@ -820,6 +835,7 @@
                                         <input type="file" class="form-control form-control-solid custom-file-input" id="nominee_aadhar" placeholder="Nominee Aadhar Card" value="" name="nominee_aadhar" accept="image/*" />
                                         <div class="d-flex justify-content-center mt-3">
                                             <img id="preview-image-nominee_aadhar" style="max-height: 200px;">
+                                            <a href="#" class="text-hover-primary" onclick="delete_nominee_aadhar()"  style="display:none;" id="nominee_aadhar_image">X</a>
                                         </div>
                                     
                                         <!--end::Input-->
@@ -989,8 +1005,9 @@
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="file" class="form-control form-control-solid custom-file-input @error('amount') is-invalid @enderror" id="bill" placeholder="Payment Receipt" value="" name="bill" accept="image/*" />
-                            <div class="d-flex justify-content-center mt-3">
+                            <div class="d-flex justify-content-center mt-3" >
                                 <img id="preview-image-bill" style="max-height: 200px;">
+                                <a href="#" class="text-hover-primary" onclick="delete_bill()"  style="display:none;" id="bill_image">X</a>
                             </div>
 
                             <!--end::Input-->
@@ -1024,6 +1041,50 @@
 <!-- end::Modal -investment- -->
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<!-- active -->
+<script type="text/javascript">
+    function finance() {
+        document.getElementById("smart_finance").classList.add("active");
+        $('#finance').show();
+    }
+</script>
+<!-- active end -->
+
+<!-- image delete -->
+<script type="text/javascript">
+    function delete_bill() {
+        document.getElementById('bill').value = null;
+        $("#preview-image-bill").attr("src", '');
+        $('#bill_image').hide();
+    }
+
+    function delete_avatar() {
+        document.getElementById('avatar').value = null;
+        $("#preview-image-avatar").attr("src", '');
+        $('#avatar_image').hide();
+    }
+
+    function delete_aadhaar() {
+        document.getElementById('aadhaar_card').value = null;
+        $("#preview-image-aadhaar_card").attr("src", '');
+        $('#aadhaar_image').hide();
+    }
+
+    function delete_pan() {
+        document.getElementById('pan_card').value = null;
+        $("#preview-image-pan_card").attr("src", '');
+        $('#pan_image').hide();
+    }
+
+    function delete_nominee_aadhar() {
+        document.getElementById('nominee_aadhar').value = null;
+        $("#preview-image-nominee_aadhar").attr("src", '');
+        $('#nominee_aadhar_image').hide();
+    }
+</script>
+<!-- image delete end -->
+
+
 
 <!-- Reset button -->
 <script type="text/javascript">
@@ -1404,7 +1465,8 @@
 <!-- avatar -->
 <script type="text/javascript">    
     $(document).ready(function (e) { 
-       $('#avatar').change(function(){   
+       $('#avatar').change(function(){ 
+            $('#avatar_image').show();   
             let reader = new FileReader();
             reader.onload = (e) => { 
                 $('#preview-image-avatar').attr('src', e.target.result); 
@@ -1419,7 +1481,8 @@
 <script type="text/javascript">    
     $(document).ready(function (e) {
        
-       $('#aadhaar_card').change(function(){   
+       $('#aadhaar_card').change(function(){
+            $('#aadhaar_image').show();   
             let reader = new FileReader();
             reader.onload = (e) => { 
                 $('#preview-image-aadhaar_card').attr('src', e.target.result); 
@@ -1433,7 +1496,8 @@
 <!-- pan card -->
 <script type="text/javascript">    
     $(document).ready(function (e) {
-       $('#pan_card').change(function(){   
+       $('#pan_card').change(function(){
+            $('#pan_image').show();    
             let reader = new FileReader();
             reader.onload = (e) => { 
                 $('#preview-image-pan_card').attr('src', e.target.result); 
@@ -1459,6 +1523,7 @@
 <script type="text/javascript">    
     $(document).ready(function (e) {
        $('#nominee_aadhar').change(function(){   
+            $('#nominee_aadhar_image').show();
             let reader = new FileReader();
             reader.onload = (e) => { 
                 $('#preview-image-nominee_aadhar').attr('src', e.target.result); 
@@ -1471,7 +1536,8 @@
 <!-- bill image -->
 <script type="text/javascript">    
     $(document).ready(function (e) {
-       $('#bill').change(function(){   
+       $('#bill').change(function(){ 
+            $('#bill_image').show();  
             let reader = new FileReader();
             reader.onload = (e) => { 
                 $('#preview-image-bill').attr('src', e.target.result); 
@@ -2038,5 +2104,7 @@
     });
 </script>
 <!-- end example year table -->
+
+
 @endsection
 

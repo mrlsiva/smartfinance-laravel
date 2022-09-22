@@ -9,9 +9,11 @@
  .col.active {
     filter: grayscale(0%);
 } 
-</style>parent-active
+</style>
 
-
+@php
+    $auth = Auth::guard('web')->user();
+@endphp
 <!--begin::Toolbar-->
     <div class="toolbar py-5 py-lg-15" id="kt_toolbar">
         <!--begin::Container-->
@@ -19,13 +21,13 @@
             <!--begin::Page title-->
             <div class="page-title d-flex flex-column me-3">
                 <!--begin::Title-->
-                <h1 class="d-flex text-white fw-bolder my-1 fs-3">Dashboard</h1>
+                <h1 class="d-flex text-white fw-bolder my-1 fs-3">Welcome - {{$auth->first_name}} {{$auth->last_name}}</h1>
                 <!--end::Title-->
                 <!--begin::Breadcrumb-->
                 <ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
                     
                     <!--begin::Item-->
-                    <li class="breadcrumb-item text-white opacity-75"><a class="text-hover-primary text-white opacity-75" href="{{route('dashboard')}}">Dashboard</a></li>
+                    <li class="breadcrumb-item text-white opacity-75"><a class="text-hover-primary text-white opacity-75" href="{{route('dashboard')}}"><i class="fa fa-envelope"></i> {{$auth->email}} <i class="fa fa-phone-square"></i> {{$auth->phone}}</a></li>
                     <!--end::Item-->        
                 </ul>
                 <!--end::Breadcrumb-->
@@ -57,7 +59,8 @@
                             <!--begin::Row-->
                             
                             <div class="row g-0 parent-active">
-                                <div class="col active border-bottom border-info bg-light-info p-6 rounded-2 me-7 mb-7" id="user_management">                                    
+                                <a href="#" onclick="user()" class="text-dark fw-bold fs-6 col active border-bottom border-info bg-light-info p-6 rounded-2 me-7 mb-7" id="user_management">    
+
                                     <div class="d-flex flex-stack flex-grow-1">
                                         <div class="d-flex flex-column me-2">
                                             <span class="svg-icon svg-icon-3x svg-icon-info d-block my-2">
@@ -69,9 +72,9 @@
                                             <span class="px-3 py-1 fs-5 fw-bolder bg-info text-white">{{$user_count}}</span>
                                         </span>
                                     </div>
-                                    <a href="#" onclick="user()" class="text-dark fw-bold fs-6">User Management</a>
-                                </div>
-                                <div class="col border-bottom border-warning bg-light-warning p-6 rounded-2 me-7 mb-7" id="smart_finance">                                    
+                                    User Management
+                                </a>
+                                <a href="#" onclick="finance()" class="text-dark fw-bold fs-6 col border-bottom border-warning bg-light-warning p-6 rounded-2 me-7 mb-7" id="smart_finance">                                   
                                     <div class="d-flex flex-stack flex-grow-1">
                                         <div class="d-flex flex-column me-2">       
                                             <span class="svg-icon svg-icon-3x svg-icon-warning d-block my-2">
@@ -82,9 +85,10 @@
                                             <span class="px-3 py-1 fs-5 fw-bolder bg-warning text-dark">{{$smartfinance_count}}</span>
                                         </span>
                                     </div>
-                                    <a href="#" onclick="finance()" class="text-dark fw-bold fs-6">Smart Finance</a>
-                                </div>
-                                <div class="col border-bottom border-primary bg-light-primary p-6 rounded-2 me-7 mb-7">                                    
+                                    Smart Finance
+                                </a>
+                                <a href="#" class="text-dark fw-bold fs-6 col border-bottom border-primary bg-light-primary p-6 rounded-2 me-7 mb-7">
+                                                                    
                                     <div class="d-flex flex-stack flex-grow-1">
                                         <div class="d-flex flex-column me-2">
                                             <span class="svg-icon svg-icon-3x svg-icon-primary d-block my-2">
@@ -95,9 +99,10 @@
                                             <span class="px-3 py-1 fs-5 fw-bolder bg-primary text-white">0</span>
                                         </span>
                                     </div>
-                                    <a href="#" class="text-dark fw-bold fs-6">Loan</a>
-                                </div>
-                                <div class="col border-bottom border-danger bg-light-danger p-6 rounded-2 me-7 mb-7">                                    
+                                    Loan
+                                </a>
+                                <a href="#" class="text-dark fw-bold fs-6 col border-bottom border-danger bg-light-danger p-6 rounded-2 me-7 mb-7">
+                                                                   
                                     <div class="d-flex flex-stack flex-grow-1">
                                         <div class="d-flex flex-column me-2">
                                             <span class="svg-icon svg-icon-3x svg-icon-danger d-block my-2">
@@ -108,9 +113,9 @@
                                             <span class="px-3 py-1 fs-5 fw-bolder bg-danger text-white">0</span>
                                         </span>
                                     </div>
-                                    <a href="#" class="text-dark fw-bold fs-6">Mutual Fund</a>
-                                </div>
-                                <div class="col border-bottom border-success bg-light-success p-6 rounded-2 me-7 mb-7">                                    
+                                    Mutual Fund
+                                </a>
+                                <a href="#" class="text-dark fw-bold fs-6 col border-bottom border-success bg-light-success p-6 rounded-2 me-7 mb-7">                            
                                     <div class="d-flex flex-stack flex-grow-1">
                                         <div class="d-flex flex-column me-2">       
                                             <span class="svg-icon svg-icon-3x svg-icon-success d-block my-2">
@@ -121,8 +126,8 @@
                                             <span class="px-3 py-1 fs-5 fw-bolder bg-success text-white">0</span>
                                         </span>
                                     </div>
-                                    <a href="#" class="text-dark fw-bold fs-6">Insurance</a>
-                                </div>
+                                    Insurance
+                                </a>
                             </div>
                             <!--end::Row-->
                             <!--begin::Row-->
@@ -144,456 +149,633 @@
             $detail = DB::table('user_details')->where('user_id',$user->id)->first();
         @endphp
         @if($user->is_profile_verified == 1)
-        <!--begin::Row-->
-        <div class="row gy-5 g-xl-8 mt-xl-5" id="user">
-            <!--begin::Col-->
-            <!--end::Col-->
-            <!--begin::Col-->
-            <div class="col-xl-12 ">
-                <!--begin::Tables Widget 9-->
-                <div class="card card-xl-stretch mb-5 mb-xl-8">
-                    <!--begin::Header-->
-                    <div class="card-header border-0 pt-5">
-                        <h3 class="card-title align-items-start flex-column">
-                            <span class="card-label fw-bolder text-dark">User Management</span>
-                            <span class="text-gray-400 mt-1 fw-bold fs-6">Avg. 10 customers added per day</span>
-                        </h3>
-                        <!--begin::Actions-->
-                        <div class="card-toolbar">
-                            <!--begin::Filters-->
-                            <div class="d-flex flex-stack flex-wrap gap-4">
-                                <!--begin::Destination-->
-                                <!--end::Destination-->
-                                <!--begin::Profile-->
-                                <div class="d-flex align-items-center fw-bolder">
-                                    <!--begin::Label-->
-                                    <div class="text-muted fs-7 me-2">Role</div>
-                                    <!--end::Label-->
-                                    <!--begin::Select-->
-                                    <select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Select an option" data-kt-table-widget-4="filter_status" name="role_search" id="role_search" >
-                                        <option></option>
-                                        <option value=" " selected="selected">Show All</option>
-                                        <option value="1">Super Admin</option>
-                                        <option value="2">Admin</option>
-                                        <option value="3">User</option>
-                                    </select>
-                                    <!--end::Select-->
+            <!--begin::Row-->
+            <div class="row gy-5 g-xl-8 mt-xl-5" id="user">
+                <!--begin::Col-->
+                <!--end::Col-->
+                <!--begin::Col-->
+                <div class="col-xl-12 ">
+                    <!--begin::Tables Widget 9-->
+                    <div class="card card-xl-stretch mb-5 mb-xl-8">
+                        <!--begin::Header-->
+                        <div class="card-header border-0 pt-5">
+                            <h3 class="card-title align-items-start flex-column">
+                                <span class="card-label fw-bolder text-dark">User Management</span>
+                                <span class="text-gray-400 mt-1 fw-bold fs-6">Avg. 10 customers added per day</span>
+                            </h3>
+                            <!--begin::Actions-->
+                            <div class="card-toolbar">
+                                <!--begin::Filters-->
+                                <div class="d-flex flex-stack flex-wrap gap-4">
+                                    <!--begin::Destination-->
+                                    <!--end::Destination-->
+                                    <!--begin::Profile-->
+                                    <div class="d-flex align-items-center fw-bolder">
+                                        <!--begin::Label-->
+                                        <div class="text-muted fs-7 me-2">Role</div>
+                                        <!--end::Label-->
+                                        <!--begin::Select-->
+                                        <select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Select an option" data-kt-table-widget-4="filter_status" name="role_search" id="role_search" >
+                                            <option></option>
+                                            <option value=" " selected="selected">Show All</option>
+                                            <option value="1">Super Admin</option>
+                                            <option value="2">Admin</option>
+                                            <option value="3">User</option>
+                                        </select>
+                                        <!--end::Select-->
+                                    </div>
+                                    <!--end::Profile-->
+                                    <!--begin::Profile-->
+                                    <div class="d-flex align-items-center fw-bolder">
+                                        <!--begin::Label-->
+                                        <div class="text-muted fs-7 me-2">Profile</div>
+                                        <!--end::Label-->
+                                        <!--begin::Select-->
+                                        <select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Select an option" data-kt-table-widget-4="filter_status" name="profile_search" id="profile_search" >
+                                            <option></option>
+                                            <option value=" " selected="selected">Show All</option>
+                                            <option value="1">Verified</option>
+                                            <option value="0">Pending</option>
+                                            <option value="2">In Complete</option>
+                                        </select>
+                                        <!--end::Select-->
+                                    </div>
+                                    <!--end::Profile-->
+                                    <!--begin::Progress-->
+                                    <div class="d-flex align-items-center fw-bolder">
+                                        <!--begin::Label-->
+                                        <div class="text-muted fs-7 me-2">Progress</div>
+                                        <!--end::Label-->
+                                        <!--begin::Select-->
+                                        <select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Select an option" data-kt-table-widget-4="filter_status" name="progress_search" id="progress_search" >
+                                            <option></option>
+                                            <option value=" " selected="selected">Show All</option>
+                                            <option value="1">Approved</option>
+                                            <option value="0">Pending</option>
+                                        </select>
+                                        <!--end::Select-->
+                                    </div>
+                                    <!--end::Progress-->
+                                    <!--begin::Status-->
+                                    <div class="d-flex align-items-center fw-bolder">
+                                        <!--begin::Label-->
+                                        <div class="text-muted fs-7 me-2">Status</div>
+                                        <!--end::Label-->
+                                        <!--begin::Select-->
+                                        <select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Select an option" data-kt-table-widget-4="filter_status" name="status_search" id="status_search" >
+                                            <option></option>
+                                            <option value=" " selected="selected">Show All</option>
+                                            <option value="0">Active</option>
+                                            <option value="1">Locked</option>
+                                        </select>
+                                        <!--end::Select-->
+                                    </div>
+                                    <!--end::Status-->
+                                    <!--begin::Search-->
+                                    <div class="position-relative my-1">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
+                                        <span class="svg-icon svg-icon-2 position-absolute top-50 translate-middle-y ms-4">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="black" />
+                                                <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="black" />
+                                            </svg>
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                        <input type="text"  class="form-control w-150px fs-7 ps-12" placeholder="Search" name="search" id="search" />
+                                    </div>
+                                    <!--end::Search-->
                                 </div>
-                                <!--end::Profile-->
-                                <!--begin::Profile-->
-                                <div class="d-flex align-items-center fw-bolder">
-                                    <!--begin::Label-->
-                                    <div class="text-muted fs-7 me-2">Profile</div>
-                                    <!--end::Label-->
-                                    <!--begin::Select-->
-                                    <select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Select an option" data-kt-table-widget-4="filter_status" name="profile_search" id="profile_search" >
-                                        <option></option>
-                                        <option value=" " selected="selected">Show All</option>
-                                        <option value="1">Verified</option>
-                                        <option value="0">Pending</option>
-                                        <option value="2">In Complete</option>
-                                    </select>
-                                    <!--end::Select-->
-                                </div>
-                                <!--end::Profile-->
-                                <!--begin::Progress-->
-                                <div class="d-flex align-items-center fw-bolder">
-                                    <!--begin::Label-->
-                                    <div class="text-muted fs-7 me-2">Progress</div>
-                                    <!--end::Label-->
-                                    <!--begin::Select-->
-                                    <select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Select an option" data-kt-table-widget-4="filter_status" name="progress_search" id="progress_search" >
-                                        <option></option>
-                                        <option value=" " selected="selected">Show All</option>
-                                        <option value="1">Approved</option>
-                                        <option value="0">Pending</option>
-                                    </select>
-                                    <!--end::Select-->
-                                </div>
-                                <!--end::Progress-->
-                                <!--begin::Status-->
-                                <div class="d-flex align-items-center fw-bolder">
-                                    <!--begin::Label-->
-                                    <div class="text-muted fs-7 me-2">Status</div>
-                                    <!--end::Label-->
-                                    <!--begin::Select-->
-                                    <select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Select an option" data-kt-table-widget-4="filter_status" name="status_search" id="status_search" >
-                                        <option></option>
-                                        <option value=" " selected="selected">Show All</option>
-                                        <option value="0">Active</option>
-                                        <option value="1">Locked</option>
-                                    </select>
-                                    <!--end::Select-->
-                                </div>
-                                <!--end::Status-->
-                                <!--begin::Search-->
-                                <div class="position-relative my-1">
-                                    <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
-                                    <span class="svg-icon svg-icon-2 position-absolute top-50 translate-middle-y ms-4">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                            <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="black" />
-                                            <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="black" />
-                                        </svg>
-                                    </span>
-                                    <!--end::Svg Icon-->
-                                    <input type="text"  class="form-control w-150px fs-7 ps-12" placeholder="Search" name="search" id="search" />
-                                </div>
-                                <!--end::Search-->
+                                <!--begin::Filters-->
                             </div>
-                            <!--begin::Filters-->
+                            <!--end::Actions-->
                         </div>
-                        <!--end::Actions-->
+                        <!--end::Header-->
+                        <!--begin::Body-->
+                        <div class="card-body py-3">
+                            <!--begin::Table container-->
+                            <div class="table-responsive">
+                                <!--begin::Table-->
+                                <table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
+                                    <!--begin::Table head-->
+                                    <thead>
+                                        <tr class="fw-bolder text-muted">
+                                            <th class="">User</th>
+                                            <th class="">Role</th>
+                                            <th class="">Smart Finanace</th>
+                                            <th class="">Taxation</th>
+                                            <th class="">Profile</th>
+                                            <th class="">Progress</th>
+                                            <th class="">Status</th>
+                                            <th class="">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <!--end::Table head-->
+                                    <!--begin::Table body-->
+                                    <tbody class="user_table">
+                                        @foreach($users as $user)
+                                        
+                                            <tr>                               
+                                                <td class="">
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="symbol symbol-45px me-5">
+                                                            @php
+                                                                $user_detail = App\Models\UserDetail::where('user_id',$user->id)->first();
+                                                            @endphp
+                                                            @if($user_detail != NULL)
+                                                                <img src="{{ $user_detail->avatar}}" alt="" />
+                                                            @else
+                                                            <img src="{{ asset('public/assets/media/avatars/blank.png') }}" alt="" />
+                                                            @endif
+                                                        </div>
+                                                        <div class="d-flex justify-content-start flex-column">
+                                                            <a href="{{route('user', ['id' => $user->id])}}" class="text-dark fw-bolder text-hover-primary fs-6">{{$user->first_name}} {{$user->last_name}}</a>
+                                                            <span class="text-muted fw-bold text-muted d-block fs-7">#{{$user->id}}</span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="">
+                                                    {{$user->role->name}}
+                                                </td>
+                                                <td class="">
+                                                    @php
+                                                        $is_finance = App\Models\Smartfinance::where([['user_id',$user->id],['is_close',0]])->first(); 
+                                                    @endphp
+
+                                                    @if($is_finance != NULL)
+                                                        <span>Yes</span>
+                                                    @else
+                                                        <span>No</span>
+                                                    @endif
+                                                </td>
+                                                <td class="">
+                                                    @if($user->is_tax == 0)
+                                                        <span>No</span>
+                                                    @else
+                                                        <span>Yes</span>
+                                                    @endif
+                                                </td>
+                                                <td class="">
+                                                    @if($user->is_profile_verified == 2)
+                                                        <span class="badge py-3 px-4 fs-7 badge-light-danger">Incomplete</span>
+                                                    @elseif($user->is_profile_verified == 0 || $user->is_profile_updated == 1)
+                                                        <span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span>
+                                                    @else
+                                                        <span class="badge py-3 px-4 fs-7 badge-light-success">Verified</span>
+                                                    @endif
+                                                </td>
+                                                <td class="">
+                                                    @if($user->is_active == 0)
+                                                        <span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span>
+                                                    @else
+                                                        <span class="badge py-3 px-4 fs-7 badge-light-success">Approved</span>
+                                                    @endif
+                                                </td>
+                                                <td class="">
+                                                    @if($user->is_lock == 0)
+                                                        <span class="badge py-3 px-4 fs-7 badge-light-success">Active</span>
+                                                    @else
+                                                        <span class="badge py-3 px-4 fs-7 badge-light-danger">Locked</span>
+                                                    @endif
+                                                </td>
+                                                @if($user->role_id == 1)
+                                                    <td class="">
+                                                        <div class=" flex-shrink-0">
+                                                            <button type="button"  class="btn  btn-light mb-5" onclick="super_admin()"><i class="fas fa-pencil-alt" id="fa"></i></button>
+                                                        </div>
+                                                    </td>
+                                                @else
+                                                    <td class="">
+                                                        <div class=" flex-shrink-0">
+                                                            <button type="button" id="kt_sign_in_submit" class="btn  btn-light mb-5" data-system_id="{{$user->id}}" name="edit"><i class="fas fa-pencil-alt" id="fa"></i></button> 
+                                                        </div>
+                                                    </td>
+                                                @endif
+                                            </tr>
+                                        
+                                        @endforeach
+                                    </tbody>
+                                    <!--end::Table body-->
+                                </table>
+                                <!--end::Table-->
+                                <div class="d-flex justify-content-end mb-3">
+                                    {{ $users->links() }}
+                                </div>
+                                
+                            </div>
+                            <!--end::Table container-->
+                        </div>
+                        <!--begin::Body-->
                     </div>
-                    <!--end::Header-->
-                    <!--begin::Body-->
-                    <div class="card-body py-3">
-                        <!--begin::Table container-->
-                        <div class="table-responsive">
+                    <!--end::Tables Widget 9-->
+                </div>
+                <!--end::Col-->
+            </div>
+            <!--end::Row-->
+            <!--begin::Row-->
+            <div class="row gy-5 g-xl-8 mt-xl-5" id="finance" style="display:none;">
+                <div class="col-xl-12 mb-5 mb-xl-10">
+                    <!--begin::Table Widget 4-->
+                    <div class="card card-flush h-xl-100">
+                        <!--begin::Card header-->
+                        <div class="card-header pt-7">
+                            <!--begin::Title-->
+                            <h3 class="card-title align-items-start flex-column">
+                                <span class="card-label fw-bolder text-dark">Recent Transactions</span>
+                                <span class="text-gray-400 mt-1 fw-bold fs-6">Avg 100 Transactions processed per day</span>
+                            </h3>
+                            <!--end::Title-->
+                            <!--begin::Actions-->
+                            <div class="card-toolbar">
+                                <!--begin::Filters-->
+                                <div class="d-flex flex-stack flex-wrap gap-4">
+                                    <!--begin::Destination-->
+                                    <!--end::Destination-->
+                                    <!--begin::Status-->
+                                    <div class="d-flex align-items-center fw-bolder">
+
+                                        <!--begin::Label-->
+                                        <div class="text-muted fs-7 me-2">Plan</div>
+                                        <!--end::Label-->
+                                        <!--begin::Select-->
+                                        <select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Show All" data-kt-table-widget-4="filter_status" name="investment_plan" id="investment_plan" >
+                                            <option></option>
+                                            <option value=" " selected="selected">Show All</option>
+                                            <option value="year">Year</option>
+                                            <option value="month">Month</option>
+                                            
+                                        </select>
+                                        <!--end::Select-->
+
+                                        <!--begin::Label-->
+                                        <div class="text-muted fs-7 me-2">Status</div>
+                                        <!--end::Label-->
+                                        <!--begin::Select-->
+                                        <select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Show All" data-kt-table-widget-4="filter_status" name="investment_status" id="investment_status" >
+                                            <option></option>
+                                            <option value=" " selected="selected">Show All</option>
+                                            <option value="2">Pending</option>
+                                            <option value="1">Approved</option>
+                                            <option value="0">Rejected</option>
+                                        </select>
+                                        <!--end::Select-->
+                                    </div>
+                                    <!--end::Status-->
+
+
+                                    <!--begin::Search-->
+                                    <div class="position-relative my-1">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
+                                        <span class="svg-icon svg-icon-2 position-absolute top-50 translate-middle-y ms-4">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="black" />
+                                                <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="black" />
+                                            </svg>
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                        <input type="text" data-kt-table-widget-4="search" class="form-control w-150px fs-7 ps-12" placeholder="Search" name="investment_search" />
+                                    </div>
+                                    <!--end::Search-->
+                                </div>
+                                <!--begin::Filters-->
+                            </div>
+                            <!--end::Actions-->
+                        </div>
+                        <!--end::Card header-->
+                        <!--begin::Card body-->
+                        <div class="card-body">
                             <!--begin::Table-->
                             <table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
                                 <!--begin::Table head-->
                                 <thead>
-                                    <tr class="fw-bolder text-muted">
-                                        <th class="">User</th>
-                                        <th class="">Role</th>
-                                        <th class="">Smart Finanace</th>
-                                        <th class="">Taxation</th>
-                                        <th class="">Profile</th>
-                                        <th class="">Progress</th>
-                                        <th class="">Status</th>
-                                        <th class="">Actions</th>
+                                    <!--begin::Table row-->
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="">CUSTOMER</th>
+                                        <th class="">PLAN</th>
+                                        <th class="">INVESTMENT YEAR</th>
+                                        <th class="">TOTAL AMOUNT INVESTED</th>
+                                        <th class="">INVESTMENT DATE</th>
+                                        <th class="">APPROVED DATE</th>
+                                        <th class="">RATE OF INTEREST</th>
+                                        <th class="">STATUS</th>
+                                        <th class="">ACTION</th>               
                                     </tr>
+                                    <!--end::Table row-->
                                 </thead>
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
-                                <tbody class="user_table">
-                                    @foreach($users as $user)
-                                    
-                                        <tr>                               
-                                            <td class="">
+                                    <tbody class="fw-bolder text-gray-600 investment_body">
+                                        @foreach($smartfinances as $smartfinance)
+                                        <tr>
+                                            <td>
                                                 <div class="d-flex align-items-center">
                                                     <div class="symbol symbol-45px me-5">
                                                         @php
-                                                            $user_detail = App\Models\UserDetail::where('user_id',$user->id)->first();
+                                                            $avatar = App\Models\UserDetail::where('user_id',$smartfinance->user->id)->first();
                                                         @endphp
-                                                        @if($user_detail != NULL)
-                                                            <img src="{{ $user_detail->avatar}}" alt="" />
-                                                        @else
-                                                        <img src="{{ asset('public/assets/media/avatars/blank.png') }}" alt="" />
+                                                        @if($avatar != NULL)
+                                                        <img src="{{ $avatar->avatar}}" alt="" />
                                                         @endif
                                                     </div>
                                                     <div class="d-flex justify-content-start flex-column">
-                                                        <a href="{{route('user', ['id' => $user->id])}}" class="text-dark fw-bolder text-hover-primary fs-6">{{$user->first_name}} {{$user->last_name}}</a>
-                                                        <span class="text-muted fw-bold text-muted d-block fs-7">#{{$user->id}}</span>
+                                                        <a href="{{route('user', ['id' => $smartfinance->user->id])}}" class="text-dark fw-bolder text-hover-primary fs-6">{{$smartfinance->user->first_name}} {{$smartfinance->user->last_name}}</a>
+                                                        <span class="text-muted fw-bold text-muted d-block fs-7">#{{$smartfinance->user->id}}</span>
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td class="">
-                                                {{$user->role->name}}
-                                            </td>
-                                            <td class="">
-                                                 @if($user->is_finanace == 0)
-                                                    <span>No</span>
+                                            @php
+                                                $plan = App\Models\Plan::where('id',$smartfinance->plan_id)->first();
+                                            @endphp
+                                            @if($plan != Null)
+                                                @if($plan->type == 'month')
+                                                    <td class="">Month</td>
                                                 @else
-                                                    <span>Yes</span>
+                                                    <td class="">Year</td>
                                                 @endif
-                                            </td>
-                                            <td class="">
-                                                @if($user->is_tax == 0)
-                                                    <span>No</span>
-                                                @else
-                                                    <span>Yes</span>
-                                                @endif
-                                            </td>
-                                            <td class="">
-                                                @if($user->is_profile_verified == 2)
-                                                    <span class="badge py-3 px-4 fs-7 badge-light-danger">Incomplete</span>
-                                                @elseif($user->is_profile_verified == 0 || $user->is_profile_updated == 1)
-                                                    <span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span>
-                                                @else
-                                                    <span class="badge py-3 px-4 fs-7 badge-light-success">Verified</span>
-                                                @endif
-                                            </td>
-                                            <td class="">
-                                                @if($user->is_active == 0)
-                                                    <span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span>
-                                                @else
-                                                    <span class="badge py-3 px-4 fs-7 badge-light-success">Approved</span>
-                                                @endif
-                                            </td>
-                                            <td class="">
-                                                @if($user->is_lock == 0)
-                                                    <span class="badge py-3 px-4 fs-7 badge-light-success">Active</span>
-                                                @else
-                                                    <span class="badge py-3 px-4 fs-7 badge-light-danger">Locked</span>
-                                                @endif
-                                            </td>
-                                            @if($user->role_id == 1)
-                                                <td class="">
-                                                    <div class=" flex-shrink-0">
-                                                        <button type="button"  class="btn  btn-light mb-5" onclick="super_admin()"><i class="fas fa-pencil-alt" id="fa"></i></button>
-                                                    </div>
-                                                </td>
-                                            @else
-                                                <td class="">
-                                                    <div class=" flex-shrink-0">
-                                                        <button type="button" id="kt_sign_in_submit" class="btn  btn-light mb-5" data-system_id="{{$user->id}}" name="edit"><i class="fas fa-pencil-alt" id="fa"></i></button> 
-                                                    </div>
-                                                </td>
                                             @endif
+                                            <td>
+                                                @if($smartfinance->no_of_year != Null)
+                                                    {{$smartfinance->no_of_year}}
+                                                @else
+                                                    -
+                                                @endif
+                                            </td>
+                                            <td class="">Rs {{$smartfinance->amount}}</td>
+                                            <td class="">
+                                                {{$smartfinance->investment_date}}
+                                            </td>
+                                            @if($smartfinance->accepted_date != NULL)
+                                                <td>{{$smartfinance->accepted_date}}</td>
+                                            @else
+                                                <td>-</td>
+                                            @endif
+                                            @if($smartfinance->percentage != NULL)
+                                                <td>{{$smartfinance->percentage}}</td>
+                                            @else
+                                                <td>-</td>
+                                            @endif
+                                            @if($smartfinance->is_status == 2)
+                                                <td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>
+                                            @elseif($smartfinance->is_status == 1)
+                                                <td><span class="badge py-3 px-4 fs-7 badge-light-success">Approved</span></td>
+                                            @elseif($smartfinance->is_status == 0)
+                                                <td><span class="badge py-3 px-4 fs-7 badge-light-danger">Rejected</span></td>
+                                            @endif      
+                                            <td class="">
+
+                                                <button class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary"name="approve" data-system_id="{{$smartfinance->id}}" title="Edit"><i class="fas fa-pencil-alt" id="fa"></i></button>
+                                                
+                                                <a class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary" href="{{route('view_finance', ['id' => $smartfinance->id])}}">
+                                                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr064.svg-->
+                                                    <span class="svg-icon svg-icon-2">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                            <rect opacity="0.5" x="18" y="13" width="13" height="2" rx="1" transform="rotate(-180 18 13)" fill="black"></rect>
+                                                            <path d="M15.4343 12.5657L11.25 16.75C10.8358 17.1642 10.8358 17.8358 11.25 18.25C11.6642 18.6642 12.3358 18.6642 12.75 18.25L18.2929 12.7071C18.6834 12.3166 18.6834 11.6834 18.2929 11.2929L12.75 5.75C12.3358 5.33579 11.6642 5.33579 11.25 5.75C10.8358 6.16421 10.8358 6.83579 11.25 7.25L15.4343 11.4343C15.7467 11.7467 15.7467 12.2533 15.4343 12.5657Z" fill="black"></path>
+                                                        </svg>
+                                                    </span>
+                                                    <!--end::Svg Icon-->
+                                                </a>
+                                            </td>
                                         </tr>
-                                    
-                                    @endforeach
-                                </tbody>
+                                        @endforeach
+                                    </tbody>
                                 <!--end::Table body-->
                             </table>
                             <!--end::Table-->
                             <div class="d-flex justify-content-end mb-3">
-                                {{ $users->links() }}
+                                {{ $smartfinances->links() }}
                             </div>
-                            
                         </div>
-                        <!--end::Table container-->
+                        <!--end::Card body-->
                     </div>
-                    <!--begin::Body-->
+                    <!--end::Table Widget 4-->
                 </div>
-                <!--end::Tables Widget 9-->
             </div>
-            <!--end::Col-->
-        </div>
-        <!--end::Row-->
-        <!--begin::Row-->
-        <div class="row gy-5 g-xl-8 mt-xl-5" id="finance" style="display:none;">
-            <div class="col-xl-12 mb-5 mb-xl-10">
-                <!--begin::Table Widget 4-->
-                <div class="card card-flush h-xl-100">
-                    <!--begin::Card header-->
-                    <div class="card-header pt-7">
-                        <!--begin::Title-->
-                        <h3 class="card-title align-items-start flex-column">
-                            <span class="card-label fw-bolder text-dark">Recent Transactions</span>
-                            <span class="text-gray-400 mt-1 fw-bold fs-6">Avg 100 Transactions processed per day</span>
-                        </h3>
-                        <!--end::Title-->
-                        <!--begin::Actions-->
-                        <div class="card-toolbar">
-                            <!--begin::Filters-->
-                            <div class="d-flex flex-stack flex-wrap gap-4">
-                                <!--begin::Destination-->
-                                <!--end::Destination-->
-                                <!--begin::Status-->
-                                <div class="d-flex align-items-center fw-bolder">
+            <!--end::Row-->
+            <div id="admin_finance" id="admin_finance" style="display:none;">
+                @if($admin_finance_count != 0)
+                    <div class="row gy-5 g-xl-8 mt-xl-5" >
+                        <div class="col-xl-12 mb-5 mb-xl-10">
+                            <!--begin::Table Widget 4-->
+                            <div class="card card-flush h-xl-100">
+                                <!--begin::Card header-->
+                                <div class="card-header pt-7">
+                                    <!--begin::Title-->
+                                    <h3 class="card-title align-items-start flex-column">
+                                        <span class="card-label fw-bolder text-dark">My  Transactions</span>
 
-                                    <!--begin::Label-->
-                                    <div class="text-muted fs-7 me-2">Plan</div>
-                                    <!--end::Label-->
-                                    <!--begin::Select-->
-                                    <select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Show All" data-kt-table-widget-4="filter_status" name="investment_plan" id="investment_plan" >
-                                        <option></option>
-                                        <option value=" " selected="selected">Show All</option>
-                                        <option value="year">Year</option>
-                                        <option value="month">Month</option>
-                                        
-                                    </select>
-                                    <!--end::Select-->
-
-                                    <!--begin::Label-->
-                                    <div class="text-muted fs-7 me-2">Status</div>
-                                    <!--end::Label-->
-                                    <!--begin::Select-->
-                                    <select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Show All" data-kt-table-widget-4="filter_status" name="investment_status" id="investment_status" >
-                                        <option></option>
-                                        <option value=" " selected="selected">Show All</option>
-                                        <option value="2">Pending</option>
-                                        <option value="1">Approved</option>
-                                        <option value="0">Rejected</option>
-                                    </select>
-                                    <!--end::Select-->
+                                    </h3>
+                                    <!--end::Title-->
+                                    <div class="card-toolbar" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover" title="Next Investment">
+                                        <a class="btn btn-sm btn-light btn-active-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_start_investment" >
+                                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
+                                            <span class="svg-icon svg-icon-3">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                    <rect opacity="0.5" x="11.364" y="20.364" width="16" height="2" rx="1" transform="rotate(-90 11.364 20.364)" fill="black" />
+                                                    <rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="black" />
+                                                </svg>
+                                            </span>
+                                            <!--end::Svg Icon-->Next Investment 
+                                        </a>
+                                    </div>
                                 </div>
-                                <!--end::Status-->
+                                <!--end::Card header-->
+                                <!--begin::Card body-->
+                                <div class="card-body">
+                                    <!--begin::Table-->
+                                    <table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
+                                        <!--begin::Table head-->
+                                        <thead>
+                                            <!--begin::Table row-->
+                                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                <th class="">CUSTOMER</th>
+                                                <th class="">PLAN</th>
+                                                <th class="">INVESTMENT YEAR</th>
+                                                <th class="">TOTAL AMOUNT INVESTED</th>
+                                                <th class="">INVESTMENT DATE</th>
+                                                <th class="">APPROVED DATE</th>
+                                                <th class="">RATE OF INTEREST</th>
+                                                <th class="">STATUS</th>
+                                                <th class="">ACTION</th>               
+                                            </tr>
+                                            <!--end::Table row-->
+                                        </thead>
+                                        <!--end::Table head-->
+                                        <!--begin::Table body-->
+                                        <tbody class="fw-bolder text-gray-600 investment_body">
+                                            @foreach($admin_finances as $admin_finance)
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="symbol symbol-45px me-5">
+                                                            @php
+                                                            $avatar = App\Models\UserDetail::where('user_id',$admin_finance->user->id)->first();
+                                                            @endphp
+                                                            @if($avatar != NULL)
+                                                            <img src="{{ $avatar->avatar}}" alt="" />
+                                                            @endif
+                                                        </div>
+                                                        <div class="d-flex justify-content-start flex-column">
+                                                            <a href="{{route('user', ['id' => $admin_finance->user->id])}}" class="text-dark fw-bolder text-hover-primary fs-6">{{$admin_finance->user->first_name}} {{$admin_finance->user->last_name}}</a>
+                                                            <span class="text-muted fw-bold text-muted d-block fs-7">#{{$admin_finance->user->id}}</span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                @php
+                                                $plan = App\Models\Plan::where('id',$admin_finance->plan_id)->first();
+                                                @endphp
+                                                @if($plan != Null)
+                                                @if($plan->type == 'month')
+                                                <td class="">Month</td>
+                                                @else
+                                                <td class="">Year</td>
+                                                @endif
+                                                @endif
+                                                <td>
+                                                    @if($admin_finance->no_of_year != Null)
+                                                    {{$admin_finance->no_of_year}}
+                                                    @else
+                                                    -
+                                                    @endif
+                                                </td>
+                                                <td class="">Rs {{$admin_finance->amount}}</td>
+                                                <td class="">
+                                                    {{$admin_finance->investment_date}}
+                                                </td>
+                                                @if($admin_finance->accepted_date != NULL)
+                                                <td>{{$admin_finance->accepted_date}}</td>
+                                                @else
+                                                <td>-</td>
+                                                @endif
+                                                @if($admin_finance->percentage != NULL)
+                                                <td>{{$admin_finance->percentage}}</td>
+                                                @else
+                                                <td>-</td>
+                                                @endif
+                                                @if($admin_finance->is_status == 2)
+                                                <td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>
+                                                @elseif($admin_finance->is_status == 1)
+                                                <td><span class="badge py-3 px-4 fs-7 badge-light-success">Approved</span></td>
+                                                @elseif($admin_finance->is_status == 0)
+                                                <td><span class="badge py-3 px-4 fs-7 badge-light-danger">Rejected</span></td>
+                                                @endif      
+                                                <td class="">
 
-
-                                <!--begin::Search-->
-                                <div class="position-relative my-1">
-                                    <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
-                                    <span class="svg-icon svg-icon-2 position-absolute top-50 translate-middle-y ms-4">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                            <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="black" />
-                                            <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="black" />
-                                        </svg>
-                                    </span>
-                                    <!--end::Svg Icon-->
-                                    <input type="text" data-kt-table-widget-4="search" class="form-control w-150px fs-7 ps-12" placeholder="Search" name="investment_search" />
+                                                    <button class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary"name="approve" data-system_id="{{$admin_finance->id}}" title="Edit"><i class="fas fa-pencil-alt" id="fa"></i></button>
+                                                    
+                                                    <a class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary" href="{{route('view_finance', ['id' => $admin_finance->id])}}">
+                                                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr064.svg-->
+                                                        <span class="svg-icon svg-icon-2">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                                <rect opacity="0.5" x="18" y="13" width="13" height="2" rx="1" transform="rotate(-180 18 13)" fill="black"></rect>
+                                                                <path d="M15.4343 12.5657L11.25 16.75C10.8358 17.1642 10.8358 17.8358 11.25 18.25C11.6642 18.6642 12.3358 18.6642 12.75 18.25L18.2929 12.7071C18.6834 12.3166 18.6834 11.6834 18.2929 11.2929L12.75 5.75C12.3358 5.33579 11.6642 5.33579 11.25 5.75C10.8358 6.16421 10.8358 6.83579 11.25 7.25L15.4343 11.4343C15.7467 11.7467 15.7467 12.2533 15.4343 12.5657Z" fill="black"></path>
+                                                            </svg>
+                                                        </span>
+                                                        <!--end::Svg Icon-->
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                        <!--end::Table body-->
+                                    </table>
+                                    <!--end::Table-->
+                                    <div class="d-flex justify-content-end mb-3">
+                                        {{ $admin_finances->links() }}
+                                    </div>
                                 </div>
-                                <!--end::Search-->
+                                <!--end::Card body-->
                             </div>
-                            <!--begin::Filters-->
+                            <!--end::Table Widget 4-->
+
                         </div>
-                        <!--end::Actions-->
                     </div>
-                    <!--end::Card header-->
+                @else
+                    <!--begin::Row-->
+                    <div class="row gy-5 g-xl-8 mt-xl-5" >
+                        <div class="col-xl-12 mb-5 mb-xl-10">
+                            <!--begin::Table Widget 4-->
+                            <div class="card card-flush h-xl-100">
+                                <!--begin::Card body-->
+                                <div class="card-body">
+                                    <!--begin::Heading-->
+                                    <div class="card-px text-center pt-15 pb-15">
+                                        <!--begin::Title-->
+                                        <h2 class="fs-2x fw-bolder mb-0">Start Your Investment </h2>
+                                        <!--end::Title-->
+                                        <!--begin::Description-->
+                                        <p class="text-gray-400 fs-4 fw-bold py-7">Click on the below button to start your investment </p>
+                                        <!--end::Description-->
+                                        <!--begin::Action-->
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_start_investment" style="color: white;">Start Investment</button>
+                                        <!--end::Action-->
+                                    </div>
+                                    <!--end::Heading-->
+                                    <!--begin::Illustration-->
+                                    <div class="text-center pb-15 px-5">
+                                        <img src="{{ asset('public/assets/media/illustrations/sigma-1/11.png') }}" alt="" class="mw-100 h-200px h-sm-325px" />
+                                    </div>
+                                    <!--end::Illustration-->
+                                </div>
+                                <!--end::Card body-->
+                            </div>
+                            <!--end::Table Widget 4-->
+                        </div>
+                    </div>
+                    <!--end::Row-->
+                @endif
+            </div>
+        @elseif($detail)
+            <div class="row">
+                <div class="card">
                     <!--begin::Card body-->
                     <div class="card-body">
-                        <!--begin::Table-->
-                        <table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
-                            <!--begin::Table head-->
-                            <thead>
-                                <!--begin::Table row-->
-                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="">CUSTOMER</th>
-                                    <th class="">PLAN</th>
-                                    <th class="">INVESTMENT YEAR</th>
-                                    <th class="">TOTAL AMOUNT INVESTED</th>
-                                    <th class="">INVESTMENT DATE</th>
-                                    <th class="">APPROVED DATE</th>
-                                    <th class="">RATE OF INTEREST</th>
-                                    <th class="">STATUS</th>
-                                    <th class="">ACTION</th>               
-                                </tr>
-                                <!--end::Table row-->
-                            </thead>
-                            <!--end::Table head-->
-                            <!--begin::Table body-->
-                                <tbody class="fw-bolder text-gray-600 investment_body">
-                                    @foreach($smartfinances as $smartfinance)
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="symbol symbol-45px me-5">
-                                                    @php
-                                                        $avatar = App\Models\UserDetail::where('user_id',$smartfinance->user->id)->first();
-                                                    @endphp
-                                                    @if($avatar != NULL)
-                                                    <img src="{{ $avatar->avatar}}" alt="" />
-                                                    @endif
-                                                </div>
-                                                <div class="d-flex justify-content-start flex-column">
-                                                    <a href="{{route('user', ['id' => $smartfinance->user->id])}}" class="text-dark fw-bolder text-hover-primary fs-6">{{$smartfinance->user->first_name}} {{$smartfinance->user->last_name}}</a>
-                                                    <span class="text-muted fw-bold text-muted d-block fs-7">#{{$smartfinance->user->id}}</span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        @php
-                                            $plan = App\Models\Plan::where('id',$smartfinance->plan_id)->first();
-                                        @endphp
-                                        @if($plan != Null)
-                                            @if($plan->type == 'month')
-                                                <td class="">Month</td>
-                                            @else
-                                                <td class="">Year</td>
-                                            @endif
-                                        @endif
-                                        <td>
-                                            @if($smartfinance->no_of_year != Null)
-                                                {{$smartfinance->no_of_year}}
-                                            @else
-                                                -
-                                            @endif
-                                        </td>
-                                        <td class="">Rs {{$smartfinance->amount}}</td>
-                                        <td class="">
-                                            {{$smartfinance->investment_date}}
-                                        </td>
-                                        @if($smartfinance->accepted_date != NULL)
-                                            <td>{{$smartfinance->accepted_date}}</td>
-                                        @else
-                                            <td>-</td>
-                                        @endif
-                                        @if($smartfinance->percentage != NULL)
-                                            <td>{{$smartfinance->percentage}}</td>
-                                        @else
-                                            <td>-</td>
-                                        @endif
-                                        @if($smartfinance->is_status == 2)
-                                            <td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>
-                                        @elseif($smartfinance->is_status == 1)
-                                            <td><span class="badge py-3 px-4 fs-7 badge-light-success">Approved</span></td>
-                                        @elseif($smartfinance->is_status == 0)
-                                            <td><span class="badge py-3 px-4 fs-7 badge-light-danger">Rejected</span></td>
-                                        @endif      
-                                        <td class="">
-
-                                            <button class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary"name="approve" data-system_id="{{$smartfinance->id}}" title="Edit"><i class="fas fa-pencil-alt" id="fa"></i></button>
-                                            
-                                            <a class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary" href="{{route('view_finance', ['id' => $smartfinance->id])}}">
-                                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr064.svg-->
-                                                <span class="svg-icon svg-icon-2">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                                        <rect opacity="0.5" x="18" y="13" width="13" height="2" rx="1" transform="rotate(-180 18 13)" fill="black"></rect>
-                                                        <path d="M15.4343 12.5657L11.25 16.75C10.8358 17.1642 10.8358 17.8358 11.25 18.25C11.6642 18.6642 12.3358 18.6642 12.75 18.25L18.2929 12.7071C18.6834 12.3166 18.6834 11.6834 18.2929 11.2929L12.75 5.75C12.3358 5.33579 11.6642 5.33579 11.25 5.75C10.8358 6.16421 10.8358 6.83579 11.25 7.25L15.4343 11.4343C15.7467 11.7467 15.7467 12.2533 15.4343 12.5657Z" fill="black"></path>
-                                                    </svg>
-                                                </span>
-                                                <!--end::Svg Icon-->
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            <!--end::Table body-->
-                        </table>
-                        <!--end::Table-->
-                        <div class="d-flex justify-content-end mb-3">
-                            {{ $smartfinances->links() }}
+                        <!--begin::Heading-->
+                        <div class="card-px text-center pt-15 pb-15">
+                            <!--begin::Title-->
+                            <h2 class="fs-2x fw-bolder mb-0">Profile Status</h2>
+                            <!--end::Title-->
+                            <!--begin::Description-->
+                            <p class="text-gray-400 fs-4 fw-bold py-7">Your profile is under verification</p>
+                            <!--end::Description-->
+                            
                         </div>
+                        <!--end::Heading-->
+                        <!--begin::Illustration-->
+                        <div class="text-center pb-15 px-5">
+                            <img src="{{ asset('public/assets/media/illustrations/sigma-1/17.png') }}" alt="" class="mw-100 h-200px h-sm-325px" />
+                        </div>
+                            <!--end::Illustration-->
                     </div>
-                    <!--end::Card body-->
+                        <!--end::Card body-->
                 </div>
-                <!--end::Table Widget 4-->
-            </div>
-        </div>
-        <!--end::Row-->
-        @elseif($detail)
-        <div class="row">
-            <div class="card">
-                <!--begin::Card body-->
-                <div class="card-body">
-                    <!--begin::Heading-->
-                    <div class="card-px text-center pt-15 pb-15">
-                        <!--begin::Title-->
-                        <h2 class="fs-2x fw-bolder mb-0">Profile Status</h2>
-                        <!--end::Title-->
-                        <!--begin::Description-->
-                        <p class="text-gray-400 fs-4 fw-bold py-7">Your profile is under verification</p>
-                        <!--end::Description-->
-                        
-                    </div>
-                    <!--end::Heading-->
-                    <!--begin::Illustration-->
-                    <div class="text-center pb-15 px-5">
-                        <img src="{{ asset('public/assets/media/illustrations/sigma-1/17.png') }}" alt="" class="mw-100 h-200px h-sm-325px" />
-                    </div>
-                        <!--end::Illustration-->
-                </div>
-                    <!--end::Card body-->
-            </div>
-        </div> 
+            </div> 
         @else
-        <div class="row">
-            <div class="card">
-                <!--begin::Card body-->
-                <div class="card-body">
-                    <!--begin::Heading-->
-                    <div class="card-px text-center pt-15 pb-15">
-                        <!--begin::Title-->
-                        <h2 class="fs-2x fw-bolder mb-0">Create a Profile</h2>
-                        <!--end::Title-->
-                        <!--begin::Description-->
-                        <p class="text-gray-400 fs-4 fw-bold py-7">Click on the below button to create your profile </p>
-                        <!--end::Description-->
-                        <!--begin::Action-->
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_create_project" style="color: white;">Create Profile</button>
-                            <!--end::Action-->
+            <div class="row">
+                <div class="card">
+                    <!--begin::Card body-->
+                    <div class="card-body">
+                        <!--begin::Heading-->
+                        <div class="card-px text-center pt-15 pb-15">
+                            <!--begin::Title-->
+                            <h2 class="fs-2x fw-bolder mb-0">Create a Profile</h2>
+                            <!--end::Title-->
+                            <!--begin::Description-->
+                            <p class="text-gray-400 fs-4 fw-bold py-7">Click on the below button to create your profile </p>
+                            <!--end::Description-->
+                            <!--begin::Action-->
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_create_project" style="color: white;">Create Profile</button>
+                                <!--end::Action-->
+                        </div>
+                        <!--end::Heading-->
+                        <!--begin::Illustration-->
+                        <div class="text-center pb-15 px-5">
+                            <img src="{{ asset('public/assets/media/illustrations/sigma-1/6.png') }}" alt="" class="mw-100 h-200px h-sm-325px" />
+                        </div>
+                            <!--end::Illustration-->
                     </div>
-                    <!--end::Heading-->
-                    <!--begin::Illustration-->
-                    <div class="text-center pb-15 px-5">
-                        <img src="{{ asset('public/assets/media/illustrations/sigma-1/6.png') }}" alt="" class="mw-100 h-200px h-sm-325px" />
-                    </div>
-                        <!--end::Illustration-->
+                        <!--end::Card body-->
                 </div>
-                    <!--end::Card body-->
             </div>
-        </div>
         @endif
     </div>
     <!--end::Post-->
@@ -603,6 +785,167 @@
 @php
     $user = Auth::guard('web')->user();
 @endphp
+
+<!-- begin::Modal -investment- -->
+<div class="modal fade" id="kt_modal_start_investment" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog modal-dialog-scrollable mw-800px">
+        <!--begin::Modal content-->
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header pb-0 border-0 justify-content-end">
+                <!--begin::Close-->
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
+                            <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="black" />
+                        </svg>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--begin::Modal header-->
+            <!--begin::Modal body-->
+            <div class="modal-body scroll-y mx-5 mx-xl-18 pt-0 pb-15">
+                <!--begin::Heading-->
+
+                <!--end::Google Contacts Invite-->
+                <!--begin::Separator-->
+                <!--end::Separator-->
+                <!--begin::Textarea-->
+                <!--end::Textarea-->
+                <!--begin::Users-->
+                <div class="mb-10">
+                    <!--begin::Heading-->
+                    <div class="fs-4 fw-bolder mb-2">Smart Finance</div>
+                    <!--end::Heading-->
+                    <form class="form w-100" novalidate="novalidate" id="selectform" method="post" action="{{route('store_smart_finance')}}" enctype="multipart/form-data">
+                        @csrf
+
+                        <!--begin::Input group-->
+                        <div class="fv-row mb-8">
+                            <!--begin::Label-->
+                            <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                <span class="required">Investment Amount</span>
+                                <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Investment Amount"></i>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="number" class="form-control form-control-solid @error('amount') is-invalid @enderror" placeholder="Investment Amount" value="" name="amount" id="amount" />
+                            <!--end::Input-->
+                            <div class=" amount_error" id="amount_error"></div>
+                            @error('amount')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <!--end::Input group-->
+
+                        <!--begin::Input group-->
+                        <div class="fv-row mb-8">
+                            <!--begin::Label-->
+                            <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                <span class="required">Select Your Plan</span>
+                                <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Plan"></i>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <select class="form-select form-select-solid form-select-sm" data-control="select2" data-hide-search="true" name="plan" id="plan">
+                                <option value="">Select</option>
+                                <option value="month">Month</option>
+                                <option value="year">Year</option>
+
+                            </select>
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+
+                        <!--begin::Input group-->
+                        <div class="fv-row mb-8" id="plan_type" style="display:none;">
+                            <!--begin::Label-->
+                            <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                <span class="required">Select Your Plan Type</span>
+                                <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Plan Type"></i>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <select class="form-select form-select-solid form-select-sm @error('plan_id') is-invalid @enderror" data-control="select2" data-hide-search="true" name="plan_id" id="plan_id">
+                                <option value="">Select</option>
+                            </select>
+                            @error('plan_id')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+
+                        <!--begin::Input group-->
+                        <div class="fv-row mb-8" id="year" style="display:none;">
+                            <!--begin::Label-->
+                            <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                <span class="required">Investment Years</span>
+                                <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Year"></i>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <select class="form-select form-select-solid form-select-sm " data-control="select2" data-hide-search="true" name="year" id="year">
+                                <option value="">Select</option>
+                               @for ($i = 2; $i <= 10; $i++)
+                                    <option value="{{$i}}">{{$i}}</option>
+                                @endfor
+                            </select>
+                            
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+
+                        <!--begin::Input group-->
+                        <div class="fv-row mb-8">
+                            <!--begin::Label-->
+                            <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                <span class="required">Payment Receipt</span>
+                                <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Payment Receipt"></i>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="file" class="form-control form-control-solid custom-file-input @error('amount') is-invalid @enderror" id="bill" placeholder="Payment Receipt" value="" name="bill" accept="image/*" />
+                            <div class="d-flex justify-content-center mt-3" >
+                                <img id="preview-image-bill" style="max-height: 200px;">
+                                <a href="#" class="text-hover-primary" onclick="delete_bill()"  style="display:none;" id="bill_image">X</a>
+                            </div>
+
+                            <!--end::Input-->
+                            @error('bill')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <!--end::Input group-->
+
+                        <div class="fv-row mb-8 example" id="example">
+
+                        </div>
+                        
+                        <div class="d-flex justify-content-center">
+                            <button type="submit"  class="btn  btn-primary mt-5 mb-3">Submit</button> &nbsp;&nbsp;&nbsp;
+                            <button type="button" name="reset"  class="btn  btn-warning mt-5 mb-3">Reset</button>
+                            
+                        </div>
+                    </form>
+                </div>
+                <!--end::Users-->
+                <!--begin::Notice-->
+                <!--end::Notice-->
+            </div>
+            <!--end::Modal body-->
+        </div>
+            <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+</div>
+<!-- end::Modal -investment- -->
+
 <!--begin::Modal - Create Profile-->
 <div class="modal fade" id="kt_modal_create_project" tabindex="-1" aria-hidden="true">
     <!--begin::Modal dialog-->
@@ -1429,6 +1772,687 @@
 <!-- end::Modal -approve-investment- -->
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+<!-- image delete -->
+<script type="text/javascript">
+    function delete_bill() {
+        document.getElementById('bill').value = null;
+        $("#preview-image-bill").attr("src", '');
+        $('#bill_image').hide();
+    }
+</script>
+<!-- image delete end -->
+
+<!-- Reset button -->
+<script type="text/javascript">
+    $(document).on('click', 'button[name^="reset"]', function(e) {
+        document.getElementById('amount').value = null;
+        jQuery('select[name="plan"]').empty();
+        $('select[name="plan"]').append('<option value="" selected>'+ 'Select' +'</option>');
+        $('select[name="plan"]').append('<option value="month">'+ 'Month' +'</option>');
+        $('select[name="plan"]').append('<option value="year">'+ 'Year' +'</option>');
+        $('#plan_type').hide();
+        jQuery('select[name="year"]').empty();
+        $('select[name="year"]').append('<option value="" selected>'+ 'Select' +'</option>');
+        for(var i=1; i<=10; i++){
+
+            $('select[name="year"]').append('<option value="'+i+'">'+ i +'</option>');
+        }
+        $('#year').hide();
+        document.getElementById('bill').value = null;
+        $("#preview-image-bill").attr("src", '');
+        $('#example').hide();
+        
+
+    });
+    
+</script>
+<!-- Reset button -->
+
+
+<!-- investment plan type -->
+<script type="text/javascript">
+    jQuery(document).ready(function ()
+    {
+        jQuery('select[name="plan"]').on('change',function(){
+            var plan = jQuery(this).val();
+            jQuery.ajax({
+                url : 'plan_type',
+                type: 'GET',
+                dataType: 'json',
+                data: { plan: plan},
+                success:function(data)
+                {
+                    if(plan == 'year'){
+                        console.log(data);
+                        $('#plan_type').show();
+                        jQuery('select[name="plan_id"]').empty();
+                        $('select[name="plan_id"]').append('<option value="">'+ "Select" +'</option>');
+                        jQuery.each(data, function(key,value){
+                            console.log(value)
+                            $('select[name="plan_id"]').append('<option value="'+ value.id +'">'+ value.name +'</option>');
+                        });
+                        $('#year').show();
+                    }
+                    else{
+                        console.log(data);
+                        $('#plan_type').hide();
+                        $('#year').hide();
+                        jQuery('select[name="plan_id"]').empty();
+                        $('select[name="plan_id"]').append('<option value="">'+ "Select" +'</option>');
+                        jQuery.each(data, function(key,value){
+                            console.log(value)
+                            $('select[name="plan_id"]').append('<option value="'+ value.id +'" selected>'+ value.name +'</option>');
+                        });
+
+                    }
+                }
+            });
+            
+        });
+    });
+</script>
+
+<!-- investment amount validation -->
+<script type="text/javascript">
+    jQuery(document).ready(function ()
+    {
+        jQuery('input[name="amount"]').on('change',function(){
+            var amount = jQuery(this).val();
+            if(amount)
+            {
+                if(amount < 100000)
+                {
+                    alertText = "Minimum amount should be 1,00000";
+                    var div = document.getElementById("amount_error");
+                    div.innerHTML = '';
+                    div.style.display = "block";
+                    $( ".amount_error" ).html('');
+                    var html ='<div class="text-danger">'+alertText+'</div>';
+                    $('.amount_error').html(html);
+                } 
+                else{
+                    $('#amount_error').hide();
+
+                }
+
+            }
+
+        });
+    });
+</script>
+
+<!-- bill image -->
+<script type="text/javascript">    
+    $(document).ready(function (e) {
+       $('#bill').change(function(){ 
+            $('#bill_image').show();  
+            let reader = new FileReader();
+            reader.onload = (e) => { 
+                $('#preview-image-bill').attr('src', e.target.result); 
+            }
+            reader.readAsDataURL(this.files[0]); 
+       });
+    });
+</script>
+
+<!-- example month table -->
+<script type="text/javascript">
+    jQuery(document).ready(function ()
+    {
+        jQuery('select[name="plan"]').on('change',function(){
+            
+            var plan = jQuery(this).val();
+            var amount = jQuery("#amount").val();
+            $('#example').show();
+            //to display today date in heading
+            var today = new Date();
+            var dd = today.getDate();
+            var mm = today.getMonth()+1; //January is 0!
+            var yyyy = today.getFullYear();
+            if(dd<10) {
+                dd = '0'+dd
+            } 
+
+            if(mm<10) {
+                mm = '0'+mm
+            } 
+            today = yyyy + '-' + mm + '-' + dd;
+            //to display today date in heading end
+
+            //next 30 days
+            var date = new Date();
+            date.setDate(date.getDate() + 30);
+            //console.log(date);
+            //next 30 days end
+            
+            //convert next 30 days with date 6
+            var new_date = new Date();
+            new_date.setDate(new_date.getDate() + 30);
+            new_date.setDate(6);
+            //console.log(new_date);
+            //convert next 30 days with date 6 end
+
+            if(date > new_date){
+                //console.log('yes');
+
+                var date = new Date();
+                date.setDate(date.getDate() + 60);
+                date.setDate(6);
+                //console.log(date);
+
+                //check day
+                var day = date.getDay();
+                console.log(day);
+                if(day == 2 || day ==  0 || day == 5){
+                    var date = new Date();
+                    date.setDate(date.getDate() + 60);
+                    date.setDate(7);
+                    //console.log(last);
+
+                    var dd = date.getDate();
+                    var mm = date.getMonth()+1; //January is 0!
+                    var yyyy = date.getFullYear();
+                    if(dd<10) {
+                        dd = '0'+dd
+                    } 
+                    if(mm<10) {
+                        mm = '0'+mm
+                    } 
+                    final = yyyy + '-' + mm + '-' + dd;
+
+                }
+                else{
+                    var date = new Date();
+                    date.setDate(date.getDate() + 60);
+                    date.setDate(6);
+
+                    var dd = date.getDate();
+                    var mm = date.getMonth()+1; //January is 0!
+                    var yyyy = date.getFullYear();
+                    if(dd<10) {
+                        dd = '0'+dd
+                    } 
+                    if(mm<10) {
+                        mm = '0'+mm
+                    } 
+                    final = yyyy + '-' + mm + '-' + dd;
+
+                }
+                //check day end
+            }
+            else{
+
+                //console.log('no');
+                var date = new Date();
+                date.setDate(date.getDate() + 30);
+                date.setDate(6);
+                //console.log(dateee);
+
+                var day = date.getDay();
+                console.log(day);
+                if(day == 2 || day ==  0 || day == 5){
+                    var date = new Date();
+                    date.setDate(date.getDate() + 30);
+                    date.setDate(7);
+                    //console.log(date);
+                    var dd = date.getDate();
+                    var mm = date.getMonth()+1; //January is 0!
+                    var yyyy = date.getFullYear();
+                    if(dd<10) {
+                        dd = '0'+dd
+                    } 
+                    if(mm<10) {
+                        mm = '0'+mm
+                    } 
+                    final = yyyy + '-' + mm + '-' + dd;
+                }
+                else{
+                    var date = new Date();
+                    date.setDate(date.getDate() + 30);
+                    date.setDate(6);
+                    var dd = date.getDate();
+                    var mm = date.getMonth()+1; //January is 0!
+                    var yyyy = date.getFullYear();
+                    if(dd<10) {
+                        dd = '0'+dd
+                    } 
+                    if(mm<10) {
+                        mm = '0'+mm
+                    } 
+                    final = yyyy + '-' + mm + '-' + dd;
+
+                }
+            }
+
+            if(plan == 'month'){
+                $( ".example" ).html('');
+                var html ='<div class="d-flex justify-content-center">Monthly Return Plan(If you start investment in '+today+')</div><table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4"><thead><tr class="fw-bolder text-muted"><th class="">Month</th><th class="">Investment Amount</th><th class="">Percentage(Sample)</th><th class="">Monthly return</th><th class="">Payment date</th></tr></thead><tbody class = "sample"></tbody></table>';
+                $('.example').html(html);
+                var output = '';
+                for(var count = 1; count <= 3; count++)
+                {
+                    
+                    output += '<tr>';
+                    output += '<td>'+count+'</td>';
+                    output += '<td>'+amount+'</td>';
+                    output += '<td>3%</td>';
+                    output += '<td>'+3/100*amount+'</td>';
+                    output += '<td>'+final+'</td>';
+                    output += '</tr>';
+
+
+                    
+                    date.setDate(date.getDate() + 30);
+                    date.setDate(6);
+                    //console.log(dateee);
+
+                    var day = date.getDay();
+                    //console.log(day);
+                    if(day == 2 || day ==  0 || day == 5){
+
+                        date.setDate(7);
+                        //console.log(date);
+                        var dd = date.getDate();
+                        var mm = date.getMonth()+1; //January is 0!
+                        var yyyy = date.getFullYear();
+                        if(dd<10) {
+                            dd = '0'+dd
+                        } 
+                        if(mm<10) {
+                            mm = '0'+mm
+                        } 
+                        final = yyyy + '-' + mm + '-' + dd;
+                    }
+                    else{
+                        date.setDate(6);
+                        var dd = date.getDate();
+                        var mm = date.getMonth()+1; //January is 0!
+                        var yyyy = date.getFullYear();
+                        if(dd<10) {
+                            dd = '0'+dd
+                        } 
+                        if(mm<10) {
+                            mm = '0'+mm
+                        } 
+                        final = yyyy + '-' + mm + '-' + dd;
+
+                    }
+                    
+                }
+                $('.sample').html(output);
+
+            }
+            else{
+                $( ".example" ).html('');
+                var html ='';
+                $('.example').html(html);
+
+
+            }
+        });
+    });
+</script>
+<!-- end example month table -->
+
+<!-- example year table -->
+<script type="text/javascript">
+    jQuery(document).ready(function ()
+    {
+        jQuery('select[name="plan_id"]').on('change',function(){
+            var plan_id = jQuery(this).val();
+            if(plan_id == '2'){
+                var amount = jQuery("#amount").val();
+                $('#example').show();
+                //to display today date in heading
+                var today = new Date();
+                var dd = today.getDate();
+                var mm = today.getMonth()+1; //January is 0!
+                var yyyy = today.getFullYear();
+                if(dd<10) {
+                    dd = '0'+dd
+                } 
+
+                if(mm<10) {
+                    mm = '0'+mm
+                } 
+                today = yyyy + '-' + mm + '-' + dd;
+                //to display today date in heading end
+
+
+                //year 2
+
+                //next 1 year
+                var date = new Date();
+                date.setFullYear(date.getFullYear() + 1);
+
+                var new_date = new Date();
+                new_date.setFullYear(new_date.getFullYear() + 1);
+                //date.setDate(date.getDate() + 360);
+                //next 1 year end
+                
+                var amnt = amount; 
+                //amount-loop
+                for (var i = 1; i <= 2; i++){
+
+                    for (var j = 1; j <= 12; j++){
+                        //amount
+                        var profit = 3/100 * amnt;
+                        amnt = parseFloat(profit) + parseFloat(amnt);
+                        //console.log(amnt);
+                    }
+                }
+                //console.log(Math.round(amnt));
+                //amount-loop-end
+
+                //payment-loop
+                for (var k = 2; k <= 2; k++){
+                    date.setFullYear(date.getFullYear() + 1);
+                    new_date.setFullYear(new_date.getFullYear() + 1);
+                    //date.setDate(date.getDate() + 360);
+                    
+                }
+                date.setMonth(date.getMonth() + 1);
+                //date.setDate(date.getDate() + 300);
+                date.setDate(6);
+                new_date.setMonth(new_date.getMonth() + 1);
+                if(new_date > date){
+                    date.setMonth(date.getMonth() + 1);
+                    var day = date.getDay();
+                    //console.log(day);
+                    if(day == 2 || day ==  0 || day == 5){
+
+                        date.setDate(7);
+                        //console.log(date);
+                        var dd = date.getDate();
+                        var mm = date.getMonth()+1; //January is 0!
+                        var yyyy = date.getFullYear();
+                        if(dd<10) {
+                            dd = '0'+dd
+                        } 
+                        if(mm<10) {
+                            mm = '0'+mm
+                        } 
+                        final = yyyy + '-' + mm + '-' + dd;
+                    }
+                    else{
+                        date.setDate(6);
+                        var dd = date.getDate();
+                        var mm = date.getMonth()+1; //January is 0!
+                        var yyyy = date.getFullYear();
+                        if(dd<10) {
+                            dd = '0'+dd
+                        } 
+                        if(mm<10) {
+                            mm = '0'+mm
+                        } 
+                        final = yyyy + '-' + mm + '-' + dd;
+                    }
+                }
+                else{
+                    var day = date.getDay();
+                    //console.log(day);
+                    if(day == 2 || day ==  0 || day == 5){
+
+                        date.setDate(7);
+                        //console.log(date);
+                        var dd = date.getDate();
+                        var mm = date.getMonth()+1; //January is 0!
+                        var yyyy = date.getFullYear();
+                        if(dd<10) {
+                            dd = '0'+dd
+                        } 
+                        if(mm<10) {
+                            mm = '0'+mm
+                        } 
+                        final = yyyy + '-' + mm + '-' + dd;
+                    }
+                    else{
+                        date.setDate(6);
+                        var dd = date.getDate();
+                        var mm = date.getMonth()+1; //January is 0!
+                        var yyyy = date.getFullYear();
+                        if(dd<10) {
+                            dd = '0'+dd
+                        } 
+                        if(mm<10) {
+                            mm = '0'+mm
+                        } 
+                        final = yyyy + '-' + mm + '-' + dd;
+                    }
+
+                }
+
+                //year 2 end
+
+
+                //year 3
+
+                //next 1 year
+                var date1 = new Date();
+                date1.setFullYear(date1.getFullYear() + 1);
+
+                var new_date1 = new Date();
+                new_date1.setFullYear(new_date1.getFullYear() + 1);
+                //date.setDate(date.getDate() + 360);
+                //next 1 year end
+                
+                var amnt1 = amount; 
+                //amount-loop
+                for (var l = 1; l <= 3; l++){
+
+                    for (var m = 1; m <= 12; m++){
+                        //amount
+                        var profit1 = 3/100 * amnt1;
+                        amnt1 = parseFloat(profit1) + parseFloat(amnt1);
+                    }
+                }
+                //console.log(amnt1);
+                //amount-loop-end
+
+                //payment-loop
+                for (var n = 2; n <= 3; n++){
+                    date1.setFullYear(date1.getFullYear() + 1);
+                    new_date1.setFullYear(new_date1.getFullYear() + 1);
+                    //date.setDate(date.getDate() + 360);
+                    
+                }
+                date1.setMonth(date1.getMonth() + 1);
+                //date.setDate(date.getDate() + 300);
+                date1.setDate(6);
+                new_date1.setMonth(new_date1.getMonth() + 1);
+                if(new_date1 > date1){
+                    date1.setMonth(date1.getMonth() + 1);
+                    var day = date1.getDay();
+                    //console.log(day);
+                    if(day == 2 || day ==  0 || day == 5){
+
+                        date1.setDate(7);
+                        //console.log(date);
+                        var dd = date1.getDate();
+                        var mm = date1.getMonth()+1; //January is 0!
+                        var yyyy = date1.getFullYear();
+                        if(dd<10) {
+                            dd = '0'+dd
+                        } 
+                        if(mm<10) {
+                            mm = '0'+mm
+                        } 
+                        final1 = yyyy + '-' + mm + '-' + dd;
+                    }
+                    else{
+                        date1.setDate(6);
+                        var dd = date1.getDate();
+                        var mm = date1.getMonth()+1; //January is 0!
+                        var yyyy = date1.getFullYear();
+                        if(dd<10) {
+                            dd = '0'+dd
+                        } 
+                        if(mm<10) {
+                            mm = '0'+mm
+                        } 
+                        final1 = yyyy + '-' + mm + '-' + dd;
+                    }
+                }
+                else{
+                    var day = date1.getDay();
+                    //console.log(day);
+                    if(day == 2 || day ==  0 || day == 5){
+
+                        date1.setDate(7);
+                        //console.log(date);
+                        var dd = date1.getDate();
+                        var mm = date1.getMonth()+1; //January is 0!
+                        var yyyy = date1.getFullYear();
+                        if(dd<10) {
+                            dd = '0'+dd
+                        } 
+                        if(mm<10) {
+                            mm = '0'+mm
+                        } 
+                        final1 = yyyy + '-' + mm + '-' + dd;
+                    }
+                    else{
+                        date1.setDate(6);
+                        var dd = date1.getDate();
+                        var mm = date1.getMonth()+1; //January is 0!
+                        var yyyy = date1.getFullYear();
+                        if(dd<10) {
+                            dd = '0'+dd
+                        } 
+                        if(mm<10) {
+                            mm = '0'+mm
+                        } 
+                        final1 = yyyy + '-' + mm + '-' + dd;
+                    }
+
+                }
+
+                //year 3 end
+
+                //year 4
+
+                //next 1 year
+                var date2 = new Date();
+                date2.setFullYear(date2.getFullYear() + 1);
+
+                var new_date2 = new Date();
+                new_date2.setFullYear(new_date2.getFullYear() + 1);
+                //date.setDate(date.getDate() + 360);
+                //next 1 year end
+                
+                var amnt2 = amount; 
+                //amount-loop
+                for (var o = 1; o <= 4; o++){
+
+                    for (var p = 1; p <= 12; p++){
+                        //amount
+                        var profit2 = 3/100 * amnt2;
+                        amnt2 = parseFloat(profit2) + parseFloat(amnt2);
+                    }
+                }
+                //console.log(amnt1);
+                //amount-loop-end
+
+                //payment-loop
+                for (var q = 2; q <= 4; q++){
+                    date2.setFullYear(date2.getFullYear() + 1);
+                    new_date2.setFullYear(new_date2.getFullYear() + 1);
+                    //date.setDate(date.getDate() + 360);
+                    
+                }
+                date2.setMonth(date2.getMonth() + 1);
+                //date.setDate(date.getDate() + 300);
+                date2.setDate(6);
+                new_date2.setMonth(new_date2.getMonth() + 1);
+                if(new_date2 > date2){
+                    date2.setMonth(date2.getMonth() + 1);
+                    var day = date2.getDay();
+                    //console.log(day);
+                    if(day == 2 || day ==  0 || day == 5){
+
+                        date2.setDate(7);
+                        //console.log(date);
+                        var dd = date2.getDate();
+                        var mm = date2.getMonth()+1; //January is 0!
+                        var yyyy = date2.getFullYear();
+                        if(dd<10) {
+                            dd = '0'+dd
+                        } 
+                        if(mm<10) {
+                            mm = '0'+mm
+                        } 
+                        final2 = yyyy + '-' + mm + '-' + dd;
+                    }
+                    else{
+                        date2.setDate(6);
+                        var dd = date2.getDate();
+                        var mm = date2.getMonth()+1; //January is 0!
+                        var yyyy = date2.getFullYear();
+                        if(dd<10) {
+                            dd = '0'+dd
+                        } 
+                        if(mm<10) {
+                            mm = '0'+mm
+                        } 
+                        final2 = yyyy + '-' + mm + '-' + dd;
+                    }
+                }
+                else{
+                    var day = date2.getDay();
+                    //console.log(day);
+                    if(day == 2 || day ==  0 || day == 5){
+
+                        date2.setDate(7);
+                        //console.log(date);
+                        var dd = date2.getDate();
+                        var mm = date2.getMonth()+1; //January is 0!
+                        var yyyy = date2.getFullYear();
+                        if(dd<10) {
+                            dd = '0'+dd
+                        } 
+                        if(mm<10) {
+                            mm = '0'+mm
+                        } 
+                        final2 = yyyy + '-' + mm + '-' + dd;
+                    }
+                    else{
+                        date2.setDate(6);
+                        var dd = date2.getDate();
+                        var mm = date2.getMonth()+1; //January is 0!
+                        var yyyy = date2.getFullYear();
+                        if(dd<10) {
+                            dd = '0'+dd
+                        } 
+                        if(mm<10) {
+                            mm = '0'+mm
+                        } 
+                        final2 = yyyy + '-' + mm + '-' + dd;
+                    }
+
+                }
+
+                //year 4 end
+                
+                
+                $( ".example" ).html('');
+                var html ='<div class="d-flex justify-content-center">Yearly- One time investment(If you start investment in '+today+')</div><table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4"><thead><tr class="fw-bolder text-muted"><th class="">Year</th><th class="">Investment Amount</th><th class="">Percentage(Sample)</th><th class="">Yearly Return</th><th class="">Payment date</th></tr></thead><tbody><tr><td>2</td><td>'+amount+'</td><td>3%</td><td>'+Math.round(amnt)+'</td><td>'+final+'</td></tr><tr><td>3</td><td>'+amount+'</td><td>3%</td><td>'+Math.round(amnt1)+'</td><td>'+final1+'</td></tr><tr><td>4</td><td>'+amount+'</td><td>3%</td><td>'+Math.round(amnt2)+'</td><td>'+final2+'</td></tr></tbody></table>';
+                $('.example').html(html);
+
+
+                
+
+            }
+            else{
+                $( ".example" ).html('');
+                var html ='<div class="d-flex justify-content-center">Monthly Invertment(If you start investment in 25-9-2022)</div><table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4"><thead><tr class="fw-bolder text-muted"><th class="">Year</th><th class="">Monthly Investment (1,00,000)</th><th class="">Percentage(Sample)</th><th class="">Yearly Return</th><th class="">Payment date</th></tr></thead><tbody><tr><td>2</td><td>24,00,000</td><td>3%</td><td>34,00,000</td><td>6-11-2024</td></tr><tr><td>3</td><td>36,00,000</td><td>3%</td><td>62,00,000</td><td>6-11-2025</td></tr><tr><td>4</td><td>48,00,000</td><td>3%</td><td>1,00,00,000</td><td>6-11-2026</td></tr></tbody></table>';
+                $('.example').html(html);
+
+            }
+        });
+    });
+</script>
+<!-- end example year table -->
 
 <!-- search -->
 <!-- <script type="application/javascript">
@@ -2660,6 +3684,7 @@
         document.getElementById("smart_finance").classList.remove("active");
         $('#user').show();
         $('#finance').hide();
+        $('#admin_finance').hide();
     }
 
     function finance() {
@@ -2667,6 +3692,7 @@
         document.getElementById("smart_finance").classList.add("active");
         $('#user').hide();
         $('#finance').show();
+        $('#admin_finance').show();
     }
 
 </script>

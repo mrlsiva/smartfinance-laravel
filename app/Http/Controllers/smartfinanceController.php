@@ -44,6 +44,7 @@ class smartfinanceController extends Controller
             'investment_date' => $investment_date,
             'no_of_year' => $request->year,
             'is_status' => 2,
+            'is_close' => 0,
         ]);
 
         //Bill
