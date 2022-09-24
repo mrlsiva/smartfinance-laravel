@@ -1,4 +1,4 @@
-<?php
+  <?php
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\loginController;
@@ -67,6 +67,7 @@ Route::get('/payment',[SmartFinanceController::class, 'payment'])->name('payment
 Route::get('investment_search',[SmartFinanceController::class, 'investment_search'])->name('investment_search');
 Route::get('investment_status',[SmartFinanceController::class, 'investment_status'])->name('investment_status');
 Route::get('investment_plan',[SmartFinanceController::class, 'investment_plan'])->name('investment_plan');
+Route::post('/store_next_month_payment',[SmartFinanceController::class, 'store_next_month_payment'])->name('store_next_month_payment');
 //Smart Finance end
 
 

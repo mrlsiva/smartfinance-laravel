@@ -135,8 +135,10 @@ body{
 									<div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
 										<!--begin::Number-->
 										<div class="d-flex align-items-center">
-
-											<div class="fs-2 fw-bolder" data-kt-countup="true"  data-kt-countup-prefix="">{{$smartfinance->investment_date}}</div>
+											@php
+												$date = Carbon\Carbon::parse($smartfinance->investment_date)->formatLocalized('%d %b %Y');
+											@endphp
+											<div class="fs-2 fw-bolder" data-kt-countup="true"  data-kt-countup-prefix="">{{$date}}</div>
 										</div>
 										<!--end::Number-->
 										<!--begin::Label-->
@@ -148,8 +150,15 @@ body{
 									<div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
 										<!--begin::Number-->
 										<div class="d-flex align-items-center">
+											@php
+												$date = Carbon\Carbon::parse($smartfinance->accepted_date)->formatLocalized('%d %b %Y');
+											@endphp
+											@if($smartfinance->accepted_date == Null)
+												<div class="fs-2 fw-bolder" data-kt-countup="true" data-kt-countup-prefix="">-</div>
+											@else
+												<div class="fs-2 fw-bolder" data-kt-countup="true" data-kt-countup-prefix="">{{$date}}</div>
 
-											<div class="fs-2 fw-bolder" data-kt-countup="true" data-kt-countup-prefix="">{{$smartfinance->accepted_date}}</div>
+											@endif
 										</div>
 										<!--end::Number-->
 										<!--begin::Label-->
@@ -159,8 +168,11 @@ body{
 									<div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
 										<!--begin::Number-->
 										<div class="d-flex align-items-center">
-
-											<div class="fs-2 fw-bolder" data-kt-countup="true"  data-kt-countup-prefix="%">{{$smartfinance->percentage}} %</div>
+											@if($smartfinance->percentage == Null)
+												<div class="fs-2 fw-bolder" data-kt-countup="true"  data-kt-countup-prefix="%">0 %</div>
+											@else
+												<div class="fs-2 fw-bolder" data-kt-countup="true"  data-kt-countup-prefix="%">{{$smartfinance->percentage}} %</div>
+											@endif
 										</div>
 										<!--end::Number-->
 										<!--begin::Label-->
@@ -184,111 +196,295 @@ body{
 				<!--end::Details-->
 			</div>
 		</div>
-		<div class="card mb-5 mb-xl-10" id="kt_profile_details_view">
-			<div class="card-body pt-9 pb-0">
-				@php
-				$user = Auth::guard('web')->user();
-				@endphp
+		@if($payment != NULL)
+			<div class="card mb-5 mb-xl-10" id="kt_profile_details_view">
+				<div class="card-body pt-9 pb-0">
+					@php
+					$user = Auth::guard('web')->user();
+					@endphp
 
-				<!--begin::Table-->
-				<table class="table align-middle table-row-dashed fs-6 gy-3" >
-					<!--begin::Table head-->
-					<thead>
-						<!--begin::Table row-->
-						<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-							@if($smartfinance->plan->type == 'month')
-							<th class="">MONTH</th>
-							@else
-							<th class="">YEAR</th>
-							@endif
-							<th class="">NEXT PAYMENT DATE</th>
-							@if($smartfinance->plan->type == 'month')
-							<th class="">MONTHLY RETURN</th>
-							@else
-							<th class="">YEARLY RETRUN</th>
-							@endif
-							<th class="">STATUS</th>
-							@if($user->role_id == 1 || $user->role_id == 2) 
-							<th class="">ACTION</th> 
-							@endif         
-						</tr>
-						<!--end::Table row-->
-					</thead>
-					<!--end::Table head-->
-					<!--begin::Table body-->
-					<tbody class="fw-bolder text-gray-600">
-						@foreach($smartfinance_payments as $smartfinance_payment)
-						<tr>
-							<td>
-								@if($smartfinance->plan->type == 'month')
-								{{$smartfinance_payment->month}}
-								@else
-								{{$smartfinance_payment->year}}
-								@endif
-							</td>
-							<td>{{$smartfinance_payment->payment_date}}</td>
-							
-							<td>Rs {{$smartfinance_payment->amount}}</td>
-							<td>
-								@if($smartfinance_payment->is_status == 0)
-								<span class="badge py-3 px-4 fs-7 badge-light-warning">Un Paid</span>
-								@elseif($smartfinance_payment->is_status == 1)
-								<span class="badge py-3 px-4 fs-7 badge-light-success">Paid</span>
-								@endif
-							</td>
-							@if($user->role_id == 1 || $user->role_id == 2)
-							<td>
-								<!--begin::Select-->
-								<select class="form-select form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="Select..." name="payment_status" id="payment_status">
-									<option value="0" {{ ("0" == $smartfinance_payment->is_status ) ? "selected":"" }}>Pending</option>
-									<option value="1" {{ ("1" == $smartfinance_payment->is_status ) ? "selected":"" }}>Paid</option>
-								</select>
-								<!--end::Select-->
-								<input type="hidden" name="payment_id" id="payment_id" value="{{$smartfinance_payment->id}}">
-							</td>
-							@endif
-						</tr>
-						@endforeach
-					</tbody>
-					<!--end::Table body-->
-				</table>
-				<!--end::Table-->
+					@if($payment->smartfinance->plan->id == 1 || $payment->smartfinance->plan->id == 2)
+							<!--begin::Table-->
+							<table class="table align-middle table-row-dashed fs-6 gy-3" >
+								<!--begin::Table head-->
+								<thead>
+									<!--begin::Table row-->
+									<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+										@if($smartfinance->plan->type == 'month')
+										<th class="">MONTH</th>
+										@else
+										<th class="">YEAR</th>
+										@endif
+										<th class="">NEXT PAYMENT DATE</th>
+										@if($smartfinance->plan->type == 'month')
+										<th class="">MONTHLY RETURN</th>
+										@else
+										<th class="">YEARLY RETRUN</th>
+										@endif
+										<th class="">STATUS</th>
+										@if($user->role_id == 1 || $user->role_id == 2) 
+										<th class="">ACTION</th> 
+										@endif         
+									</tr>
+									<!--end::Table row-->
+								</thead>
+								<!--end::Table head-->
+								<!--begin::Table body-->
+								<tbody class="fw-bolder text-gray-600">
+									@foreach($smartfinance_payments as $smartfinance_payment)
+									<tr>
+										<td>
+											@if($smartfinance->plan->type == 'month')
+											{{$smartfinance_payment->month}}
+											@else
+											{{$smartfinance_payment->year}}
+											@endif
+										</td>
+										<td>
+											@php
+												$date = Carbon\Carbon::parse($smartfinance_payment->payment_date)->formatLocalized('%d %b %Y');
+											@endphp
+											{{$date}}
+										</td>
+										
+										<td>Rs {{$smartfinance_payment->amount}}</td>
+										<td>
+											@if($smartfinance_payment->is_status == 0)
+											<span class="badge py-3 px-4 fs-7 badge-light-warning">Un Paid</span>
+											@elseif($smartfinance_payment->is_status == 1)
+											<span class="badge py-3 px-4 fs-7 badge-light-success">Paid</span>
+											@endif
+										</td>
+										@if($user->role_id == 1 || $user->role_id == 2)
+										<td>
+											<!--begin::Select-->
+											<select class="form-select form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="Select..." name="payment_status" id="payment_status">
+												<option value="0" {{ ("0" == $smartfinance_payment->is_status ) ? "selected":"" }}>Pending</option>
+												<option value="1" {{ ("1" == $smartfinance_payment->is_status ) ? "selected":"" }}>Paid</option>
+											</select>
+											<!--end::Select-->
+											<input type="hidden" name="payment_id" id="payment_id" value="{{$smartfinance_payment->id}}">
+										</td>
+										@endif
+									</tr>
+									@endforeach
+								</tbody>
+								<!--end::Table body-->
+							</table>
+							<!--end::Table-->
+					@else 
+							@if($user->id == $payment->smartfinance->user->id )
+			                	<div class="card-toolbar d-flex justify-content-end" data-bs-toggle="tooltip" data-bs-placement="top" >
+			                        <a class="btn btn-sm btn-light btn-active-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_new_month_investment" >
+			                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
+			                          	<span class="svg-icon svg-icon-3">
+			                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+			                                    <rect opacity="0.5" x="11.364" y="20.364" width="16" height="2" rx="1" transform="rotate(-90 11.364 20.364)" fill="black" />
+			                                    <rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="black" />
+			                                </svg>
+			                            </span>
+			                            <!--end::Svg Icon-->Next Month Investment 
+			                        </a>
+			                    </div>
+		                	@endif
+							<!--begin::Table-->
+							<table class="table align-middle table-row-dashed fs-6 gy-3" >
+								<!--begin::Table head-->
+								<thead>
+									<!--begin::Table row-->
+									<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+										
+										<th class="">MONTH</th>
+										<th class="">YEAR</th>
+										<th class="">INVESTED DATE</th>
+										<th class="">INVESTED AMOUNT</th>
+										<th class="">PROFIT</th>
+										<th class="">ACTION</th>         
+									</tr>
+									<!--end::Table row-->
+								</thead>
+								<!--end::Table head-->
+								<!--begin::Table body-->
+								<tbody class="fw-bolder text-gray-600">
+									@foreach($smartfinance_payments as $smartfinance_payment)
+									<tr>
+										<td>
+											{{$smartfinance_payment->month}}
+										</td>
+										<td>
+											{{$smartfinance_payment->year}}
+										</td>
+										<td>
+											@php
+											
+											$date = Carbon\Carbon::parse($smartfinance_payment->invested_date)->formatLocalized('%d %b %Y');
+											@endphp
+											{{$date}}
+										</td>
+										
+										<td>Rs {{$smartfinance_payment->investment_amount}}</td>
+										<td>{{$smartfinance_payment->intrest}}</td>
+										
+										<td></td>
+										
+									</tr>
+									@endforeach
+								</tbody>
+								<!--end::Table body-->
+							</table>
+							<!--end::Table-->
+					@endif
+				</div>
 			</div>
-		</div>
+		@endif
 		@if($finances_count != 0)
-		<div class="card mb-5 mb-xl-10" id="kt_profile_details_view">
-			<div class="card-header border-0 pt-5">
-				<h3 class="card-title align-items-start flex-column">
-					<span class="card-label fw-bolder text-dark">Other Investments</span>
-				</h3>
-			</div>
-			<div class="card-body pt-9 pb-0">
-				@php
-				$user = Auth::guard('web')->user();
-				@endphp
-				@if($user->role_id == '3')
-					<!--begin::Table container-->
-					<div class="table-responsive">
+			<div class="card mb-5 mb-xl-10" id="kt_profile_details_view">
+				<div class="card-header border-0 pt-5">
+					<h3 class="card-title align-items-start flex-column">
+						<span class="card-label fw-bolder text-dark">Other Investments</span>
+					</h3>
+				</div>
+				<div class="card-body pt-9 pb-0">
+					@php
+					$user = Auth::guard('web')->user();
+					@endphp
+					@if($user->role_id == '3')
+						<!--begin::Table container-->
+						<div class="table-responsive">
+							<!--begin::Table-->
+							<table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
+								<!--begin::Table head-->
+								<thead>
+									<tr class="fw-bolder text-muted">
+										<th class="">PLAN</th>
+										<th class="">INVESTMENT YEAR</th>
+										<th class="">INVESTMENT AMOUNT</th>
+										<th class="">INVESTED DATE</th>
+										<th class="">APPROVED DATE</th>
+										<th class="">RATE OF INTEREST</th>
+										<th class="">STATUS</th>
+										<th class="">ACTION</th>
+									</tr>
+								</thead>
+								<!--end::Table head-->
+								<!--begin::Table body-->
+								<tbody>
+									@foreach($finances as $finance)
+									<tr>
+										@php
+										$plan = App\Models\Plan::where('id',$finance->plan_id)->first();
+										@endphp
+										@if($plan != Null)
+										@if($plan->type == 'month')
+										<td class="">Month</td>
+										@else
+										<td class="">Year</td>
+										@endif
+										@endif
+										<td>
+											@if($finance->no_of_year != Null)
+											{{$finance->no_of_year}}
+											@else
+											-
+											@endif
+										</td>
+										<td>Rs {{$finance->amount}}</td>
+										<td>
+											@php
+												$date = Carbon\Carbon::parse($finance->investment_date)->formatLocalized('%d %b %Y');
+											@endphp
+											{{$date}}
+											
+										</td>
+										@if($finance->accepted_date != NULL)
+										<td>
+											@php
+												$date = Carbon\Carbon::parse($finance->accepted_date)->formatLocalized('%d %b %Y');
+											@endphp
+											{{$date}}
+										</td>
+										@else
+										<td>-</td>
+										@endif
+										@if($finance->percentage != NULL)
+										<td>{{$finance->percentage}}</td>
+										@else
+										<td>-</td>
+										@endif
+										@if($finance->is_status == 2)
+										<td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>
+										@elseif($finance->is_status == 1)
+										<td><span class="badge py-3 px-4 fs-7 badge-light-success">Approved</span></td>
+										@elseif($finance->is_status == 0)
+										<td><span class="badge py-3 px-4 fs-7 badge-light-danger">Rejected</span></td>
+										@endif
+										<td>
+											<div class=" flex-shrink-0">
+												<a class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary" href="{{route('view_finance', ['id' => $finance->id])}}">
+													<!--begin::Svg Icon | path: icons/duotune/arrows/arr064.svg-->
+													<span class="svg-icon svg-icon-2">
+														<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+															<rect opacity="0.5" x="18" y="13" width="13" height="2" rx="1" transform="rotate(-180 18 13)" fill="black"></rect>
+															<path d="M15.4343 12.5657L11.25 16.75C10.8358 17.1642 10.8358 17.8358 11.25 18.25C11.6642 18.6642 12.3358 18.6642 12.75 18.25L18.2929 12.7071C18.6834 12.3166 18.6834 11.6834 18.2929 11.2929L12.75 5.75C12.3358 5.33579 11.6642 5.33579 11.25 5.75C10.8358 6.16421 10.8358 6.83579 11.25 7.25L15.4343 11.4343C15.7467 11.7467 15.7467 12.2533 15.4343 12.5657Z" fill="black"></path>
+														</svg>
+													</span>
+													<!--end::Svg Icon-->
+												</a>
+											</div>
+										</td>
+									</tr>
+
+									@endforeach
+								</tbody>
+								<!--end::Table body-->
+							</table>
+							<!--end::Table-->
+
+							<div class="d-flex justify-content-end mb-3">
+								{{ $finances->links() }}
+							</div>
+						</div>
+	          			<!--end::Table container-->
+					@else
 						<!--begin::Table-->
 						<table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
 							<!--begin::Table head-->
 							<thead>
-								<tr class="fw-bolder text-muted">
+								<!--begin::Table row-->
+								<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+									<th class="">CUSTOMER</th>
 									<th class="">PLAN</th>
 									<th class="">INVESTMENT YEAR</th>
-									<th class="">INVESTMENT AMOUNT</th>
-									<th class="">INVESTED DATE</th>
+									<th class="">TOTAL AMOUNT INVESTED</th>
+									<th class="">INVESTMENT DATE</th>
 									<th class="">APPROVED DATE</th>
 									<th class="">RATE OF INTEREST</th>
 									<th class="">STATUS</th>
-									<th class="">ACTION</th>
+									<th class="">ACTION</th>               
 								</tr>
+								<!--end::Table row-->
 							</thead>
 							<!--end::Table head-->
 							<!--begin::Table body-->
-							<tbody>
+							<tbody class="fw-bolder text-gray-600">
 								@foreach($finances as $finance)
 								<tr>
+									<td>
+										<div class="d-flex align-items-center">
+											<div class="symbol symbol-45px me-5">
+												@php
+												$avatar = App\Models\UserDetail::where('user_id',$finance->user->id)->first();
+												@endphp
+												@if($avatar != NULL)
+												<img src="{{ $avatar->avatar}}" alt="" />
+												@endif
+											</div>
+											<div class="d-flex justify-content-start flex-column">
+												<a href="{{route('user', ['id' => $user->id])}}" class="text-dark fw-bolder text-hover-primary fs-6">{{$finance->user->first_name}} {{$finance->user->last_name}}</a>
+												<span class="text-muted fw-bold text-muted d-block fs-7">#{{$smartfinance->user->id}}</span>
+											</div>
+										</div>
+									</td>
 									@php
 									$plan = App\Models\Plan::where('id',$finance->plan_id)->first();
 									@endphp
@@ -306,10 +502,20 @@ body{
 										-
 										@endif
 									</td>
-									<td>Rs {{$finance->amount}}</td>
-									<td>{{$finance->investment_date}}</td>
+									<td class="">Rs {{$finance->amount}}</td>
+									<td class="">
+										@php
+											$date = Carbon\Carbon::parse($finance->investment_date)->formatLocalized('%d %b %Y');
+										@endphp
+										{{$date}}
+									</td>
 									@if($finance->accepted_date != NULL)
-									<td>{{$finance->accepted_date}}</td>
+									<td>
+										@php
+											$date = Carbon\Carbon::parse($finance->accepted_date)->formatLocalized('%d %b %Y');
+										@endphp
+										{{$date}}
+									</td>
 									@else
 									<td>-</td>
 									@endif
@@ -324,144 +530,115 @@ body{
 									<td><span class="badge py-3 px-4 fs-7 badge-light-success">Approved</span></td>
 									@elseif($finance->is_status == 0)
 									<td><span class="badge py-3 px-4 fs-7 badge-light-danger">Rejected</span></td>
-									@endif
-									<td>
-										<div class=" flex-shrink-0">
-											<a class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary" href="{{route('view_finance', ['id' => $finance->id])}}">
-												<!--begin::Svg Icon | path: icons/duotune/arrows/arr064.svg-->
-												<span class="svg-icon svg-icon-2">
-													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-														<rect opacity="0.5" x="18" y="13" width="13" height="2" rx="1" transform="rotate(-180 18 13)" fill="black"></rect>
-														<path d="M15.4343 12.5657L11.25 16.75C10.8358 17.1642 10.8358 17.8358 11.25 18.25C11.6642 18.6642 12.3358 18.6642 12.75 18.25L18.2929 12.7071C18.6834 12.3166 18.6834 11.6834 18.2929 11.2929L12.75 5.75C12.3358 5.33579 11.6642 5.33579 11.25 5.75C10.8358 6.16421 10.8358 6.83579 11.25 7.25L15.4343 11.4343C15.7467 11.7467 15.7467 12.2533 15.4343 12.5657Z" fill="black"></path>
-													</svg>
-												</span>
-												<!--end::Svg Icon-->
-											</a>
-										</div>
+									@endif      
+									<td class="">
+
+										<button class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary"name="approve_finance" data-system_id="{{$finance->id}}" title="Edit"><i class="fas fa-pencil-alt" id="fa"></i></button>
+
+										<a class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary" href="{{route('view_finance', ['id' => $finance->id])}}">
+											<!--begin::Svg Icon | path: icons/duotune/arrows/arr064.svg-->
+											<span class="svg-icon svg-icon-2">
+												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+													<rect opacity="0.5" x="18" y="13" width="13" height="2" rx="1" transform="rotate(-180 18 13)" fill="black"></rect>
+													<path d="M15.4343 12.5657L11.25 16.75C10.8358 17.1642 10.8358 17.8358 11.25 18.25C11.6642 18.6642 12.3358 18.6642 12.75 18.25L18.2929 12.7071C18.6834 12.3166 18.6834 11.6834 18.2929 11.2929L12.75 5.75C12.3358 5.33579 11.6642 5.33579 11.25 5.75C10.8358 6.16421 10.8358 6.83579 11.25 7.25L15.4343 11.4343C15.7467 11.7467 15.7467 12.2533 15.4343 12.5657Z" fill="black"></path>
+												</svg>
+											</span>
+											<!--end::Svg Icon-->
+										</a>
 									</td>
 								</tr>
-
 								@endforeach
 							</tbody>
 							<!--end::Table body-->
 						</table>
 						<!--end::Table-->
-
 						<div class="d-flex justify-content-end mb-3">
 							{{ $finances->links() }}
 						</div>
-					</div>
-          <!--end::Table container-->
-				@else
-					<!--begin::Table-->
-					<table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
-						<!--begin::Table head-->
-						<thead>
-							<!--begin::Table row-->
-							<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-								<th class="">CUSTOMER</th>
-								<th class="">PLAN</th>
-								<th class="">INVESTMENT YEAR</th>
-								<th class="">TOTAL AMOUNT INVESTED</th>
-								<th class="">INVESTMENT DATE</th>
-								<th class="">APPROVED DATE</th>
-								<th class="">RATE OF INTEREST</th>
-								<th class="">STATUS</th>
-								<th class="">ACTION</th>               
-							</tr>
-							<!--end::Table row-->
-						</thead>
-						<!--end::Table head-->
-						<!--begin::Table body-->
-						<tbody class="fw-bolder text-gray-600">
-							@foreach($finances as $finance)
-							<tr>
-								<td>
-									<div class="d-flex align-items-center">
-										<div class="symbol symbol-45px me-5">
-											@php
-											$avatar = App\Models\UserDetail::where('user_id',$finance->user->id)->first();
-											@endphp
-											@if($avatar != NULL)
-											<img src="{{ $avatar->avatar}}" alt="" />
-											@endif
-										</div>
-										<div class="d-flex justify-content-start flex-column">
-											<a href="{{route('user', ['id' => $user->id])}}" class="text-dark fw-bolder text-hover-primary fs-6">{{$finance->user->first_name}} {{$finance->user->last_name}}</a>
-											<span class="text-muted fw-bold text-muted d-block fs-7">#{{$smartfinance->user->id}}</span>
-										</div>
-									</div>
-								</td>
-								@php
-								$plan = App\Models\Plan::where('id',$finance->plan_id)->first();
-								@endphp
-								@if($plan != Null)
-								@if($plan->type == 'month')
-								<td class="">Month</td>
-								@else
-								<td class="">Year</td>
-								@endif
-								@endif
-								<td>
-									@if($finance->no_of_year != Null)
-									{{$finance->no_of_year}}
-									@else
-									-
-									@endif
-								</td>
-								<td class="">Rs {{$finance->amount}}</td>
-								<td class="">
-									{{$finance->investment_date}}
-								</td>
-								@if($finance->accepted_date != NULL)
-								<td>{{$finance->accepted_date}}</td>
-								@else
-								<td>-</td>
-								@endif
-								@if($finance->percentage != NULL)
-								<td>{{$finance->percentage}}</td>
-								@else
-								<td>-</td>
-								@endif
-								@if($finance->is_status == 2)
-								<td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>
-								@elseif($finance->is_status == 1)
-								<td><span class="badge py-3 px-4 fs-7 badge-light-success">Approved</span></td>
-								@elseif($finance->is_status == 0)
-								<td><span class="badge py-3 px-4 fs-7 badge-light-danger">Rejected</span></td>
-								@endif      
-								<td class="">
-
-									<button class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary"name="approve_finance" data-system_id="{{$finance->id}}" title="Edit"><i class="fas fa-pencil-alt" id="fa"></i></button>
-
-									<a class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary" href="{{route('view_finance', ['id' => $finance->id])}}">
-										<!--begin::Svg Icon | path: icons/duotune/arrows/arr064.svg-->
-										<span class="svg-icon svg-icon-2">
-											<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-												<rect opacity="0.5" x="18" y="13" width="13" height="2" rx="1" transform="rotate(-180 18 13)" fill="black"></rect>
-												<path d="M15.4343 12.5657L11.25 16.75C10.8358 17.1642 10.8358 17.8358 11.25 18.25C11.6642 18.6642 12.3358 18.6642 12.75 18.25L18.2929 12.7071C18.6834 12.3166 18.6834 11.6834 18.2929 11.2929L12.75 5.75C12.3358 5.33579 11.6642 5.33579 11.25 5.75C10.8358 6.16421 10.8358 6.83579 11.25 7.25L15.4343 11.4343C15.7467 11.7467 15.7467 12.2533 15.4343 12.5657Z" fill="black"></path>
-											</svg>
-										</span>
-										<!--end::Svg Icon-->
-									</a>
-								</td>
-							</tr>
-							@endforeach
-						</tbody>
-						<!--end::Table body-->
-					</table>
-					<!--end::Table-->
-					<div class="d-flex justify-content-end mb-3">
-						{{ $finances->links() }}
-					</div>
-				@endif
+					@endif
+				</div>
 			</div>
-		</div>
 		@endif
 	</div>
 </div>
 <!--end::Container-->
 
+<!-- begin::Modal -investment- -->
+<div class="modal fade" id="kt_modal_new_month_investment" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog mw-650px">
+        <!--begin::Modal content-->
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header pb-0 border-0 justify-content-end">
+                <!--begin::Close-->
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
+                            <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="black" />
+                        </svg>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--begin::Modal header-->
+            <!--begin::Modal body-->
+            <div class="modal-body scroll-y mx-5 mx-xl-18 pt-0 pb-15">
+                <!--begin::Heading-->
+
+                <!--end::Google Contacts Invite-->
+                <!--begin::Separator-->
+                <!--end::Separator-->
+                <!--begin::Textarea-->
+                <!--end::Textarea-->
+                <!--begin::Users-->
+                <div class="mb-10">
+                    <!--begin::Heading-->
+                    <div class="fs-4 fw-bolder mb-2">Next Month Payment</div>
+                    <!--end::Heading-->
+                    <form class="form w-100" novalidate="novalidate" id="selectform" method="post" action="{{route('store_next_month_payment')}}" enctype="multipart/form-data">
+                        @csrf
+                        <br>
+                        <!--begin::Input group-->
+                        <div class="fv-row mb-8">
+                            <!--begin::Label-->
+                            <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                <span class="required">Investment Amount</span>
+                                <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Investment Amount"></i>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="number" class="form-control form-control-solid @error('amount') is-invalid @enderror" placeholder="Investment Amount" value="" name="amount" id="amount" />
+                            <!--end::Input-->
+                            <div class=" amount_error" id="amount_error"></div>
+                            @error('amount')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <!--end::Input group-->
+                        @if($payment != NULL)
+                        	<input type="hidden" name="smartfinance_id" value="{{$payment->smartfinance->id}}">
+                        @endif
+                        
+                        <div class="d-flex justify-content-center">
+                            <button type="submit"  class="btn  btn-primary mt-5 mb-3">Submit</button> 
+                        </div>
+                    </form>
+                </div>
+                <!--end::Users-->
+                <!--begin::Notice-->
+                <!--end::Notice-->
+            </div>
+            <!--end::Modal body-->
+        </div>
+            <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+</div>
+<!-- end::Modal -investment- -->
 
 <!-- begin::Modal -approve-investment- -->
 <div class="modal fade" id="modal_approve_smart_finance" tabindex="-1" aria-hidden="true">
@@ -665,5 +842,35 @@ body{
 			}
 		});
 	});
+</script>
+
+
+<!-- amount validation -->
+<script type="text/javascript">
+    jQuery(document).ready(function ()
+    {
+        jQuery('input[name="amount"]').on('change',function(){
+            var amount = jQuery(this).val();
+            if(amount)
+            {
+                if(amount < 50000)
+                {
+                    alertText = "Minimum amount should be 50,000";
+                    var div = document.getElementById("amount_error");
+                    div.innerHTML = '';
+                    div.style.display = "block";
+                    $( ".amount_error" ).html('');
+                    var html ='<div class="text-danger">'+alertText+'</div>';
+                    $('.amount_error').html(html);
+                } 
+                else{
+                    $('#amount_error').hide();
+
+                }
+
+            }
+
+        });
+    });
 </script>
 @endsection

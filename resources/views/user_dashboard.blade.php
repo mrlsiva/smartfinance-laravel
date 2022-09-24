@@ -63,7 +63,7 @@
                                             </span>            
                                         </div>
                                         <span class="symbol symbol-50px">
-                                            <span class="px-3 py-1 fs-5 fw-bolder bg-warning text-dark">{{$smartfinance_count}}</span>
+                                            <span class="px-3 py-1 fs-5 fw-bolder bg-warning text-dark">0</span>
                                         </span>
                                     </div>
                                     Smart Finance
@@ -202,9 +202,18 @@
                                                         @endif
                                                     </td>
                                                     <td>Rs {{$smartfinance->amount}}</td>
-                                                    <td>{{$smartfinance->investment_date}}</td>
+                                                    <td>
+                                                        @php
+                                                            $date = Carbon\Carbon::parse($smartfinance->investment_date)->formatLocalized('%d %b %Y');
+                                                        @endphp
+                                                        {{$date}}
+                                                    </td>
                                                     @if($smartfinance->accepted_date != NULL)
-                                                        <td>{{$smartfinance->accepted_date}}</td>
+                                                        @php
+                                                            $date = Carbon\Carbon::parse($smartfinance->investment_date)->formatLocalized('%d %b %Y');
+                                                        @endphp
+                                                        
+                                                        <td>{{$date}}</td>
                                                     @else
                                                         <td>-</td>
                                                     @endif
@@ -1157,7 +1166,7 @@
 </script>
 
 <!-- investment amount validation -->
-<script type="text/javascript">
+<!-- <script type="text/javascript">
     jQuery(document).ready(function ()
     {
         jQuery('input[name="amount"]').on('change',function(){
@@ -1183,7 +1192,7 @@
 
         });
     });
-</script>
+</script> -->
 
 <!-- profile validation -->
 <script type="text/javascript">
@@ -1677,6 +1686,20 @@
             }
 
             if(plan == 'month'){
+                if(amount < 100000)
+                {
+                    alertText = "Minimum amount should be 1,00000";
+                    var div = document.getElementById("amount_error");
+                    div.innerHTML = '';
+                    div.style.display = "block";
+                    $( ".amount_error" ).html('');
+                    var html ='<div class="text-danger">'+alertText+'</div>';
+                    $('.amount_error').html(html);
+                } 
+                else{
+                    $('#amount_error').hide();
+
+                }
                 $( ".example" ).html('');
                 var html ='<div class="d-flex justify-content-center">Monthly Return Plan(If you start investment in '+today+')</div><table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4"><thead><tr class="fw-bolder text-muted"><th class="">Month</th><th class="">Investment Amount</th><th class="">Percentage(Sample)</th><th class="">Monthly return</th><th class="">Payment date</th></tr></thead><tbody class = "sample"></tbody></table>';
                 $('.example').html(html);
@@ -1754,6 +1777,20 @@
             var plan_id = jQuery(this).val();
             if(plan_id == '2'){
                 var amount = jQuery("#amount").val();
+                if(amount < 100000)
+                {
+                    alertText = "Minimum amount should be 1,00000";
+                    var div = document.getElementById("amount_error");
+                    div.innerHTML = '';
+                    div.style.display = "block";
+                    $( ".amount_error" ).html('');
+                    var html ='<div class="text-danger">'+alertText+'</div>';
+                    $('.amount_error').html(html);
+                } 
+                else{
+                    $('#amount_error').hide();
+
+                }
                 $('#example').show();
                 //to display today date in heading
                 var today = new Date();
@@ -2090,11 +2127,24 @@
                 var html ='<div class="d-flex justify-content-center">Yearly- One time investment(If you start investment in '+today+')</div><table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4"><thead><tr class="fw-bolder text-muted"><th class="">Year</th><th class="">Investment Amount</th><th class="">Percentage(Sample)</th><th class="">Yearly Return</th><th class="">Payment date</th></tr></thead><tbody><tr><td>2</td><td>'+amount+'</td><td>3%</td><td>'+Math.round(amnt)+'</td><td>'+final+'</td></tr><tr><td>3</td><td>'+amount+'</td><td>3%</td><td>'+Math.round(amnt1)+'</td><td>'+final1+'</td></tr><tr><td>4</td><td>'+amount+'</td><td>3%</td><td>'+Math.round(amnt2)+'</td><td>'+final2+'</td></tr></tbody></table>';
                 $('.example').html(html);
 
-
-                
-
             }
             else{
+                var amount = jQuery("#amount").val();
+                if(amount < 50000)
+                {
+                    alertText = "Minimum amount should be 50,000";
+                    var div = document.getElementById("amount_error");
+                    div.innerHTML = '';
+                    div.style.display = "block";
+                    $( ".amount_error" ).html('');
+                    var html ='<div class="text-danger">'+alertText+'</div>';
+                    $('.amount_error').html(html);
+                } 
+                else{
+                    $('#amount_error').hide();
+
+                }
+
                 $( ".example" ).html('');
                 var html ='<div class="d-flex justify-content-center">Monthly Invertment(If you start investment in 25-9-2022)</div><table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4"><thead><tr class="fw-bolder text-muted"><th class="">Year</th><th class="">Monthly Investment (1,00,000)</th><th class="">Percentage(Sample)</th><th class="">Yearly Return</th><th class="">Payment date</th></tr></thead><tbody><tr><td>2</td><td>24,00,000</td><td>3%</td><td>34,00,000</td><td>6-11-2024</td></tr><tr><td>3</td><td>36,00,000</td><td>3%</td><td>62,00,000</td><td>6-11-2025</td></tr><tr><td>4</td><td>48,00,000</td><td>3%</td><td>1,00,00,000</td><td>6-11-2026</td></tr></tbody></table>';
                 $('.example').html(html);

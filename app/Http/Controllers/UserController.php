@@ -149,27 +149,35 @@ class UserController extends Controller
         }
 
         $month_finances = Smartfinance::where([['user_id',$user->id],['plan_id',1]])->get();
+        $m_amount=0;
         foreach($month_finances as $month_finance){
             $month_amounts = SmartfinancePayment::where('smartfinance_id',$month_finance->id)->get();
-            $m_amount=0;
             foreach($month_amounts as $month_amount){
                 $m_amount += $month_amount->amount;
 
             }
         }
 
+        $y_amount=0;
         $year_finances = Smartfinance::where([['user_id',$user->id],['plan_id',2]])->get();
         foreach($year_finances as $year_finance){
             $year_amount = SmartfinancePayment::where('smartfinance_id',$year_finance->id)->first();
             $year_amount = $year_amount->amount - $year_finance->amount;
-            $y_amount=0;
+            
             $y_amount += $year_amount;
         }
 
         $earning_amount = $m_amount + $y_amount; 
 
         $investment_count = Smartfinance::where('user_id',$user->id)->count();
-        $earning_percentage = $percentage/$investment_count;
+
+        if($percentage != 0){
+            $earning_percentage = $percentage/$investment_count;
+        }
+        else{
+            $earning_percentage = 0;
+        }
+        
 
 
         return view('user_detail')->with('user',$user)->with('user_detail',$user_detail)->with('bank_detail',$bank_detail)->with('nominee_detail',$nominee_detail)->with('smartfinances',$smartfinances)->with('amount',$amount)->with('investment_count',$investment_count)->with('earning_percentage',$earning_percentage)->with('earning_amount',$earning_amount);

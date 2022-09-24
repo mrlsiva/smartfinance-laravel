@@ -734,46 +734,7 @@
 							<span class="card-label fw-bolder text-dark">Smart Inverstment</span>
 						</h3>
 						<!--end::Title-->
-						<!--begin::Actions-->
-						<div class="card-toolbar">
-							<!--begin::Filters-->
-							<div class="d-flex flex-stack flex-wrap gap-4">
-								<!--begin::Destination-->
-								<!--end::Destination-->
-								<!--begin::Status-->
-								<div class="d-flex align-items-center fw-bolder">
-									<!--begin::Label-->
-									<div class="text-muted fs-7 me-2">Status</div>
-									<!--end::Label-->
-									<!--begin::Select-->
-									<select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Select an option" data-kt-table-widget-4="filter_status">
-										<option></option>
-										<option value="Show All" selected="selected">Show All</option>
-										<option value="Shipped">Approved</option>
-										<option value="Confirmed">Confirmed</option>
-										<option value="Rejected">Rejected</option>
-										<option value="Pending">Pending</option>
-									</select>
-									<!--end::Select-->
-								</div>
-								<!--end::Status-->
-								<!--begin::Search-->
-								<div class="position-relative my-1">
-									<!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
-									<span class="svg-icon svg-icon-2 position-absolute top-50 translate-middle-y ms-4">
-										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-											<rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="black" />
-											<path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="black" />
-										</svg>
-									</span>
-									<!--end::Svg Icon-->
-									<input type="text" data-kt-table-widget-4="search" class="form-control w-150px fs-7 ps-12" placeholder="Search" />
-								</div>
-								<!--end::Search-->
-							</div>
-							<!--begin::Filters-->
-						</div>
-						<!--end::Actions-->
+						
 					</div>
 					<!--end::Card header-->
 					<!--begin::Card body-->
