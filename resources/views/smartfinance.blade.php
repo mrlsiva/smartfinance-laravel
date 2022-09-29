@@ -123,7 +123,11 @@ body{
 											<!--begin::Svg Icon | path: icons/duotune/arrows/arr066.svg-->
 
 											<!--end::Svg Icon-->
-											<div class="fs-2 fw-bolder" data-kt-countup="true" data-kt-countup-value="{{$smartfinance->amount}}" data-kt-countup-prefix="Rs">0</div>
+											@if($smartfinance->plan_id == 3)
+												<div class="fs-2 fw-bolder" data-kt-countup="true" data-kt-countup-value="{{$amount}}" data-kt-countup-prefix="Rs">0</div>
+											@else
+												<div class="fs-2 fw-bolder" data-kt-countup="true" data-kt-countup-value="{{$smartfinance->amount}}" data-kt-countup-prefix="Rs">0</div>
+											@endif
 										</div>
 										<!--end::Number-->
 										<!--begin::Label-->
@@ -204,135 +208,199 @@ body{
 					@endphp
 
 					@if($payment->smartfinance->plan->id == 1 || $payment->smartfinance->plan->id == 2)
-							<!--begin::Table-->
-							<table class="table align-middle table-row-dashed fs-6 gy-3" >
-								<!--begin::Table head-->
-								<thead>
-									<!--begin::Table row-->
-									<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-										@if($smartfinance->plan->type == 'month')
-										<th class="">MONTH</th>
-										@else
-										<th class="">YEAR</th>
-										@endif
-										<th class="">NEXT PAYMENT DATE</th>
-										@if($smartfinance->plan->type == 'month')
-										<th class="">MONTHLY RETURN</th>
-										@else
-										<th class="">YEARLY RETRUN</th>
-										@endif
-										<th class="">STATUS</th>
-										@if($user->role_id == 1 || $user->role_id == 2) 
-										<th class="">ACTION</th> 
-										@endif         
-									</tr>
-									<!--end::Table row-->
-								</thead>
-								<!--end::Table head-->
-								<!--begin::Table body-->
-								<tbody class="fw-bolder text-gray-600">
-									@foreach($smartfinance_payments as $smartfinance_payment)
-									<tr>
-										<td>
-											@if($smartfinance->plan->type == 'month')
-											{{$smartfinance_payment->month}}
-											@else
-											{{$smartfinance_payment->year}}
-											@endif
-										</td>
-										<td>
-											@php
-												$date = Carbon\Carbon::parse($smartfinance_payment->payment_date)->formatLocalized('%d %b %Y');
-											@endphp
-											{{$date}}
-										</td>
+						@if($user->role_id != 3 )
+						@php
+                            $payment_date = App\Models\SmartfinancePayment::where('smartfinance_id',$payment->smartfinance_id)->orderBy('id','Desc')->first();
+
+                            $new_date = Carbon\Carbon::parse($payment_date->payment_date)->subMonths(2)->format('Y-m-d');
+                            $now = Carbon\Carbon::now()->format('Y-m-d');
+                        @endphp
+                        	@if($new_date <= $now)
+								<div class="card-toolbar d-flex justify-content-end" data-bs-toggle="tooltip" data-bs-placement="top" >
+									
+										<input type="hidden" name="plan_id" id="plan_id" value="{{$payment->smartfinance->plan->id}}">
+	                        			<input type="hidden" name="smartfinance_id" id="smartfinance_id" value="{{$payment->smartfinance_id}}">
+
+										<!--begin::Label-->
+										<div class="text-muted fs-7 me-2">Status</div>
+										<!--end::Label-->
+										<!--begin::Select-->
+										<select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Select an option"  name="close_status" id="close_status" >
+											<option></option>
+											<option value=" " selected="selected">Select</option>
+											<option value="1">Pay Out</option>
+											<option value="2">Renewal</option>
+										</select>
+										<!--end::Select-->
 										
-										<td>Rs {{$smartfinance_payment->amount}}</td>
-										<td>
-											@if($smartfinance_payment->is_status == 0)
-											<span class="badge py-3 px-4 fs-7 badge-light-warning">Un Paid</span>
-											@elseif($smartfinance_payment->is_status == 1)
-											<span class="badge py-3 px-4 fs-7 badge-light-success">Paid</span>
-											@endif
-										</td>
-										@if($user->role_id == 1 || $user->role_id == 2)
-										<td>
-											<!--begin::Select-->
-											<select class="form-select form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="Select..." name="payment_status" id="payment_status">
-												<option value="0" {{ ("0" == $smartfinance_payment->is_status ) ? "selected":"" }}>Pending</option>
-												<option value="1" {{ ("1" == $smartfinance_payment->is_status ) ? "selected":"" }}>Paid</option>
-											</select>
-											<!--end::Select-->
-											<input type="hidden" name="payment_id" id="payment_id" value="{{$smartfinance_payment->id}}">
-										</td>
+									
+								</div>
+							@endif
+						@endif
+						<!--begin::Table-->
+						<table class="table align-middle table-row-dashed fs-6 gy-3" >
+							<!--begin::Table head-->
+							<thead>
+								<!--begin::Table row-->
+								<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+									@if($smartfinance->plan->type == 'month')
+									<th class="">MONTH</th>
+									@else
+									<th class="">YEAR</th>
+									@endif
+									<th class="">NEXT PAYMENT DATE</th>
+									@if($smartfinance->plan->type == 'month')
+									<th class="">MONTHLY RETURN</th>
+									@else
+									<th class="">YEARLY RETRUN</th>
+									@endif
+									<th class="">STATUS</th>
+									@if($user->role_id == 1 || $user->role_id == 2) 
+									<th class="">ACTION</th> 
+									@endif         
+								</tr>
+								<!--end::Table row-->
+							</thead>
+							<!--end::Table head-->
+							<!--begin::Table body-->
+							<tbody class="fw-bolder text-gray-600">
+								@foreach($smartfinance_payments as $smartfinance_payment)
+								<tr>
+									<td>
+										@if($smartfinance->plan->type == 'month')
+										{{$smartfinance_payment->month}}
+										@else
+										{{$smartfinance_payment->year}}
 										@endif
-									</tr>
-									@endforeach
-								</tbody>
-								<!--end::Table body-->
-							</table>
-							<!--end::Table-->
+									</td>
+									<td>
+										@php
+										$date = Carbon\Carbon::parse($smartfinance_payment->payment_date)->formatLocalized('%d %b %Y');
+										@endphp
+										{{$date}}
+									</td>
+
+									<td>Rs {{$smartfinance_payment->amount}}</td>
+									<td>
+										@if($smartfinance_payment->is_status == 0)
+										<span class="badge py-3 px-4 fs-7 badge-light-warning">Un Paid</span>
+										@elseif($smartfinance_payment->is_status == 1)
+										<span class="badge py-3 px-4 fs-7 badge-light-success">Paid</span>
+										@endif
+									</td>
+									@if($user->role_id == 1 || $user->role_id == 2)
+									<td>
+										<!--begin::Select-->
+										<select class="form-select form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="Select..." name="payment_status" id="payment_status">
+											<option value="0" {{ ("0" == $smartfinance_payment->is_status ) ? "selected":"" }}>Pending</option>
+											<option value="1" {{ ("1" == $smartfinance_payment->is_status ) ? "selected":"" }}>Paid</option>
+										</select>
+										<!--end::Select-->
+										<input type="hidden" name="payment_id" id="payment_id" value="{{$smartfinance_payment->id}}">
+									</td>
+									@endif
+								</tr>
+								@endforeach
+							</tbody>
+							<!--end::Table body-->
+						</table>
+						<!--end::Table-->
 					@else 
-							@if($user->id == $payment->smartfinance->user->id )
-			                	<div class="card-toolbar d-flex justify-content-end" data-bs-toggle="tooltip" data-bs-placement="top" >
-			                        <a class="btn btn-sm btn-light btn-active-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_new_month_investment" >
-			                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
-			                          	<span class="svg-icon svg-icon-3">
-			                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-			                                    <rect opacity="0.5" x="11.364" y="20.364" width="16" height="2" rx="1" transform="rotate(-90 11.364 20.364)" fill="black" />
-			                                    <rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="black" />
-			                                </svg>
-			                            </span>
-			                            <!--end::Svg Icon-->Next Month Investment 
-			                        </a>
-			                    </div>
-		                	@endif
-							<!--begin::Table-->
-							<table class="table align-middle table-row-dashed fs-6 gy-3" >
-								<!--begin::Table head-->
-								<thead>
-									<!--begin::Table row-->
-									<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-										
-										<th class="">MONTH</th>
-										<th class="">YEAR</th>
-										<th class="">INVESTED DATE</th>
-										<th class="">INVESTED AMOUNT</th>
-										<th class="">PROFIT</th>
-										<th class="">ACTION</th>         
-									</tr>
-									<!--end::Table row-->
-								</thead>
-								<!--end::Table head-->
-								<!--begin::Table body-->
-								<tbody class="fw-bolder text-gray-600">
-									@foreach($smartfinance_payments as $smartfinance_payment)
-									<tr>
-										<td>
-											{{$smartfinance_payment->month}}
-										</td>
-										<td>
-											{{$smartfinance_payment->year}}
-										</td>
-										<td>
-											@php
-											
-											$date = Carbon\Carbon::parse($smartfinance_payment->invested_date)->formatLocalized('%d %b %Y');
-											@endphp
-											{{$date}}
-										</td>
-										
-										<td>Rs {{$smartfinance_payment->investment_amount}}</td>
-										<td>{{$smartfinance_payment->intrest}}</td>
-										
-										<td></td>
-										
-									</tr>
-									@endforeach
-								</tbody>
-								<!--end::Table body-->
-							</table>
-							<!--end::Table-->
+						@if($user->id == $payment->smartfinance->user->id )
+							@if($payment->payment_date > $today )
+								<div class="card-toolbar d-flex justify-content-end" data-bs-toggle="tooltip" data-bs-placement="top" >
+									<a class="btn btn-sm btn-light btn-active-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_new_month_investment" >
+										<!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
+										<span class="svg-icon svg-icon-3">
+											<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+												<rect opacity="0.5" x="11.364" y="20.364" width="16" height="2" rx="1" transform="rotate(-90 11.364 20.364)" fill="black" />
+												<rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="black" />
+											</svg>
+										</span>
+										<!--end::Svg Icon-->Next Month Investment 
+									</a>
+								</div>
+							@endif
+						@endif
+						@if($user->role_id != 3 )
+							@php
+	                            $payment_date = App\Models\SmartfinancePayment::where('smartfinance_id',$payment->smartfinance_id)->orderBy('id','Desc')->first();
+
+	                            $new_date = Carbon\Carbon::parse($payment_date->payment_date)->subMonths(2)->format('Y-m-d');
+	                            $now = Carbon\Carbon::now()->format('Y-m-d');
+                        	@endphp
+                        	@if($new_date <= $now)
+								<div class="card-toolbar d-flex justify-content-end" data-bs-toggle="tooltip" data-bs-placement="top" >
+
+									<input type="hidden" name="plan_id" id="plan_id" value="{{$payment->smartfinance->plan->id}}">
+									<input type="hidden" name="smartfinance_id" id="smartfinance_id" value="{{$payment->smartfinance_id}}">
+
+									<!--begin::Label-->
+									<div class="text-muted fs-7 me-2">Status</div>
+									<!--end::Label-->
+									<!--begin::Select-->
+									<select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Select an option"  name="close_status" id="close_status" >
+										<option></option>
+										<option value=" " selected="selected">Select</option>
+										<option value="1">Pay Out</option>
+										<option value="2">Renewal</option>
+									</select>
+									<!--end::Select-->
+								</div>
+							@endif
+						@endif
+						<!--begin::Table-->
+						<table class="table align-middle table-row-dashed fs-6 gy-3" >
+							<!--begin::Table head-->
+							<thead>
+								<!--begin::Table row-->
+								<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+
+									<th class="">MONTH</th>
+									<th class="">YEAR</th>
+									<th class="">INVESTED DATE</th>
+									<th class="">INVESTED AMOUNT</th>
+									<th class="">TOTAL AMOUNT</th>
+									<th class="">PROFIT</th>
+									<th class="">ACTION</th>         
+								</tr>
+								<!--end::Table row-->
+							</thead>
+							<!--end::Table head-->
+							<!--begin::Table body-->
+							<tbody class="fw-bolder text-gray-600">
+								@foreach($smartfinance_payments as $smartfinance_payment)
+								<tr>
+									<td>
+										{{$smartfinance_payment->month}}
+									</td>
+									<td>
+										{{$smartfinance_payment->year}}
+									</td>
+									<td>
+										@php
+
+										$date = Carbon\Carbon::parse($smartfinance_payment->invested_date)->formatLocalized('%d %b %Y');
+										@endphp
+										{{$date}}
+									</td>
+
+									<td>Rs {{$smartfinance_payment->investment_amount}}</td>
+									<td>Rs {{$smartfinance_payment->next_amount}}</td>
+									@if($smartfinance_payment->month == 1)
+									<td>0</td>
+									@else
+									<td>{{$smartfinance_payment->intrest}}</td>
+									@endif
+
+									<td></td>
+
+								</tr>
+								@endforeach
+							</tbody>
+							<!--end::Table body-->
+						</table>
+						<!--end::Table-->
 					@endif
 				</div>
 			</div>
@@ -362,6 +430,8 @@ body{
 										<th class="">INVESTED DATE</th>
 										<th class="">APPROVED DATE</th>
 										<th class="">RATE OF INTEREST</th>
+										<th class="">NEXT PAYMENT</th>
+                 						<th class="">EXPIREY</th>
 										<th class="">STATUS</th>
 										<th class="">ACTION</th>
 									</tr>
@@ -388,7 +458,18 @@ body{
 											-
 											@endif
 										</td>
-										<td>Rs {{$finance->amount}}</td>
+										@if($finance->plan_id == 3)
+										@php
+										$payment_dates = App\Models\SmartfinancePayment::where('smartfinance_id',$finance->id)->get();
+										$amount=0;
+										foreach($payment_dates as $payment_date){
+											$amount = $amount+ $payment_date->investment_amount;
+										}
+										@endphp
+										<td>Rs {{$amount}}</td>
+										@else
+										<td class="">Rs {{$finance->amount}}</td>
+										@endif
 										<td>
 											@php
 												$date = Carbon\Carbon::parse($finance->investment_date)->formatLocalized('%d %b %Y');
@@ -410,6 +491,40 @@ body{
 										<td>{{$finance->percentage}}</td>
 										@else
 										<td>-</td>
+										@endif
+										@php
+											$payment_date = App\Models\SmartfinancePayment::where([['smartfinance_id',$finance->id],['is_status',0]])->first();
+										@endphp
+										@if($payment_date != Null)
+											<td>
+												@php
+													$date = Carbon\Carbon::parse($payment_date->payment_date)->formatLocalized('%d %b %Y');
+												@endphp
+												{{$date}}
+											</td>
+										@else
+											<td>-</td>
+										@endif
+										@php
+											$payment_date = App\Models\SmartfinancePayment::where('smartfinance_id',$finance->id)->orderBy('id','Desc')->first();
+										@endphp
+										@if($payment_date != Null)
+											<td>
+												@php
+													$date = Carbon\Carbon::parse($payment_date->payment_date)->formatLocalized('%d %b %Y');
+												@endphp
+												@php
+													$new_date = Carbon\Carbon::parse($payment_date->payment_date)->subMonths(2)->format('Y-m-d');
+													$now = Carbon\Carbon::now()->format('Y-m-d')
+												@endphp
+												@if($new_date <= $now)
+													<span class="badge py-3 px-4 fs-7 badge-light-danger">{{$date}}</span>
+												@else
+													<span class="badge py-3 px-4 fs-7 badge-light-success">{{$date}}</span>
+												@endif
+											</td>
+										@else
+											<td>-</td>
 										@endif
 										@if($finance->is_status == 2)
 										<td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>
@@ -459,6 +574,8 @@ body{
 									<th class="">INVESTMENT DATE</th>
 									<th class="">APPROVED DATE</th>
 									<th class="">RATE OF INTEREST</th>
+									<th class="">NEXT PAYMENT</th>
+                 					<th class="">EXPIREY</th>
 									<th class="">STATUS</th>
 									<th class="">ACTION</th>               
 								</tr>
@@ -502,7 +619,18 @@ body{
 										-
 										@endif
 									</td>
+									@if($finance->plan_id == 3)
+									@php
+									$payment_dates = App\Models\SmartfinancePayment::where('smartfinance_id',$finance->id)->get();
+									$amount=0;
+									foreach($payment_dates as $payment_date){
+										$amount = $amount+ $payment_date->investment_amount;
+									}
+									@endphp
+									<td>Rs {{$amount}}</td>
+									@else
 									<td class="">Rs {{$finance->amount}}</td>
+									@endif
 									<td class="">
 										@php
 											$date = Carbon\Carbon::parse($finance->investment_date)->formatLocalized('%d %b %Y');
@@ -521,6 +649,40 @@ body{
 									@endif
 									@if($finance->percentage != NULL)
 									<td>{{$finance->percentage}}</td>
+									@else
+									<td>-</td>
+									@endif
+									@php
+									$payment_date = App\Models\SmartfinancePayment::where([['smartfinance_id',$finance->id],['is_status',0]])->first();
+									@endphp
+									@if($payment_date != Null)
+									<td>
+										@php
+										$date = Carbon\Carbon::parse($payment_date->payment_date)->formatLocalized('%d %b %Y');
+										@endphp
+										{{$date}}
+									</td>
+									@else
+									<td>-</td>
+									@endif
+									@php
+									$payment_date = App\Models\SmartfinancePayment::where('smartfinance_id',$finance->id)->orderBy('id','Desc')->first();
+									@endphp
+									@if($payment_date != Null)
+									<td>
+										@php
+										$date = Carbon\Carbon::parse($payment_date->payment_date)->formatLocalized('%d %b %Y');
+										@endphp
+										@php
+										$new_date = Carbon\Carbon::parse($payment_date->payment_date)->subMonths(2)->format('Y-m-d');
+										$now = Carbon\Carbon::now()->format('Y-m-d')
+										@endphp
+										@if($new_date <= $now)
+										<span class="badge py-3 px-4 fs-7 badge-light-danger">{{$date}}</span>
+										@else
+										<span class="badge py-3 px-4 fs-7 badge-light-success">{{$date}}</span>
+										@endif
+									</td>
 									@else
 									<td>-</td>
 									@endif
@@ -769,6 +931,92 @@ body{
 </div>
 <!-- end::Modal -approve-investment- -->
 
+<!-- begin::Modal -->
+<div class="modal fade" id="get_year" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog mw-650px">
+        <!--begin::Modal content-->
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header pb-0 border-0 justify-content-end">
+                <!--begin::Close-->
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
+                            <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="black" />
+                        </svg>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--begin::Modal header-->
+            <!--begin::Modal body-->
+            <div class="modal-body scroll-y mx-5 mx-xl-18 pt-0 pb-15">
+                <!--begin::Heading-->
+
+                <!--end::Google Contacts Invite-->
+                <!--begin::Separator-->
+                <!--end::Separator-->
+                <!--begin::Textarea-->
+                <!--end::Textarea-->
+                <!--begin::Users-->
+                <div class="mb-10">
+                    <!--begin::Heading-->
+                    <div class="fs-6 fw-bold mb-2">Renewal plan</div>
+                    <!--end::Heading-->
+                    <form class="form w-100"  method="post" action="{{route('renewal_plan_year')}}" enctype="multipart/form-data">
+                        @csrf
+                        <input type="hidden" name="plan_id" id="plan_id" value="{{$payment->smartfinance->plan->id}}">
+                        <input type="hidden" name="smartfinance_id" id="smartfinance_id" value="{{$payment->smartfinance->id}}">
+                        
+                       
+                        
+                        
+                        <!--begin::List-->
+                        <div class="mh-300px scroll-y me-n7 pe-7">
+                            <div class="d-flex flex-stack py-4 border-bottom border-gray-300 border-bottom-dashed">
+                                <!--begin::Details-->
+                                <div class="d-flex align-items-center">
+                                   
+                                    <!--begin::Details-->
+                                    <div class="ms-5">
+                                        <span class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">No of years to extent</span>
+                                    </div>
+                                    <!--end::Details-->
+                                </div>
+                                <!--end::Details-->
+                                <!--begin::Access menu-->
+                                <div class="ms-2 w-150px">
+                                    <select class="form-select form-select-solid form-select-sm " data-control="select2" data-hide-search="true" name="year" id="year">
+                                		<option value="">Select</option>
+                               			@for ($i = 2; $i <= 10; $i++)
+                                    		<option value="{{$i}}">{{$i}}</option>
+                                		@endfor
+                            		</select>
+                                </div>
+                                <!--end::Access menu-->
+                            </div>
+                        </div>
+                        <!--end::List-->
+                        <div class="d-flex justify-content-center">
+                            <button type="submit"  class="btn  btn-primary mt-5 mb-3">Submit</button>
+                        </div>
+                    </form>
+                </div>
+                <!--end::Users-->
+                <!--begin::Notice-->
+                <!--end::Notice-->
+            </div>
+            <!--end::Modal body-->
+        </div>
+            <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+</div>
+<!-- end::Modal -->
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
@@ -818,6 +1066,7 @@ body{
 </script>
 <!-- end-finance -->
 
+<!-- payment_status -->
 <script type="application/javascript">
 	jQuery(document).ready(function ()
 	{
@@ -872,5 +1121,56 @@ body{
 
         });
     });
+</script>
+
+<!-- plan status -->
+<script type="text/javascript">
+	jQuery(document).ready(function ()
+	{
+		jQuery('select[name="close_status"]').on('change',function(){
+			var close_status = jQuery(this).val();
+			var plan_id = jQuery("#plan_id").val();
+			var smartfinance_id = jQuery("#smartfinance_id").val();
+			if(close_status == 2){
+				if(plan_id != 1){
+					jQuery('#get_year').modal('show');
+
+				}
+				else{
+					
+					jQuery.ajax({
+						url : '../renewal_plan',
+						type: 'GET',
+						
+						dataType: 'json',
+						data: { "plan_id": plan_id,"smartfinance_id" : smartfinance_id},
+						success:function(data)
+						{
+							console.log(data);
+							window.location.reload();
+						}
+					});
+				}
+			}
+			else{
+				jQuery.ajax({
+					url : '../payout_plan',
+					type: 'get',
+					dataType: 'json',
+					data: { "plan_id": plan_id,"smartfinance_id" : smartfinance_id},
+					success:function(data)
+					{
+						console.log(data);
+						window.location.reload();
+
+					}
+				});
+
+			}
+			
+
+		});	
+
+	});
 </script>
 @endsection

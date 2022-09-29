@@ -1,0 +1,112 @@
+13-9-22
+smart finance notification = done
+plan type = done
+profile incomplete status = done
+next investment button = done
+show correct month year calu = done
+date cal  eith client req
+
+
+
+buys
+14-9-22
+30 days, if 6,7 cross, go to next month 6,7 will pay = done
+admin action heading edit, and arrow edit for approval modal,arrow for display details. = done
+in detail page show all entry and have option to show they pay the amount in dropdown =done
+
+option to download bill = done
+text correction bill to recepit = done
+
+user
+user no edit option need view = done
+need to ask how many years they need to investment min 2 = done
+removed monthly investment table =done
+
+
+first table normal percentage cal 3/100*amt = done
+
+
+15-9-22
+need option to edit dates = done 
+year finance = done
+change monthly cal = done
+order in recent tran = done
+dynamic content change in profile page = done
+
+show city and email also = done
+
+
+
+16-9-22
+profile incomplete status = done
+show other transction details below = Done
+dynamic table change= month = complete
+
+
+19-9-22
+yearly show only last year
+dynamic table change= year = complete
+search=partial
+
+20-9-22
+montly cal bug - done
+yearly cal bug - done
+yearly example dynamic table for 4 years - done
+reset option for investment form
+name search for transaction table in dashboard  =done
+
+21-9-22
+
+filter for investment status - done
+filter for investment plan - done
+automatically changed status to paid if date crossed - done
+full box click action - done
+active button css for user dashboard -done
+Welcome -user name insted of white dashboard text -done
+bellow show email and phone -done
+y parents-active text in - done
+profile page- dynamic -done
+remove button in image -done
+automatically cloes completed investment - done
+
+
+22-9-22
+
+investment - yes,no in table - done
+option for investment for admin -done
+table to show admin investment -done
+m_amount error -done
+change amount valdation - done
+
+
+23-9-22
+
+date formart 10-jan-2022 -done
+yearly monthly dynamic table - done
+yearly monthly plan -process
+
+24-9-22
+yearly monthly plan -done
+
+bug list
+
+error does not go to error page
+close account (payout)or renewal
+remove smart finance,taxation
+table
+Display Next payment  (display the next payment amount)
+Expirey date in all table show in green color, if it reach last two months show in red color 
+reffer if give access show box in profile page
+refferal new modal select user and give amount
+
+
+
+
+
+$date = Carbon::now();
+$accepted_date = $date->toDateString();
+
+
+
+
+

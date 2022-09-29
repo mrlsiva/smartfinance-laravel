@@ -752,6 +752,8 @@
 									<th class="">INVESTMENT DATE</th>
 									<th class="">APPROVED DATE</th>
 									<th class="">RATE OF INTEREST</th>
+									<th class="">NEXT PAYMENT</th>
+                 	<th class="">EXPIREY</th>
 									<th class="">STATUS</th>
 									<th class="">ACTION</th>               
 								</tr>
@@ -795,7 +797,18 @@
 										-
 										@endif
 									</td>
+									@if($smartfinance->plan_id == 3)
+									@php
+									$payment_dates = App\Models\SmartfinancePayment::where('smartfinance_id',$smartfinance->id)->get();
+									$amount=0;
+									foreach($payment_dates as $payment_date){
+										$amount = $amount+ $payment_date->investment_amount;
+									}
+									@endphp
+									<td>Rs {{$amount}}</td>
+									@else
 									<td class="">Rs {{$smartfinance->amount}}</td>
+									@endif
 									<td class="">
 										{{$smartfinance->investment_date}}
 									</td>
@@ -808,6 +821,40 @@
 									<td>{{$smartfinance->percentage}}</td>
 									@else
 									<td>-</td>
+									@endif
+									@php
+										$payment_date = App\Models\SmartfinancePayment::where([['smartfinance_id',$smartfinance->id],['is_status',0]])->first();
+									@endphp
+									@if($payment_date != Null)
+									<td>
+										@php
+										$date = Carbon\Carbon::parse($payment_date->payment_date)->formatLocalized('%d %b %Y');
+										@endphp
+										{{$date}}
+									</td>
+									@else
+										<td>-</td>
+									@endif
+									@php
+										$payment_date = App\Models\SmartfinancePayment::where('smartfinance_id',$smartfinance->id)->orderBy('id','Desc')->first();
+									@endphp
+									@if($payment_date != Null)
+										<td>
+											@php
+												$date = Carbon\Carbon::parse($payment_date->payment_date)->formatLocalized('%d %b %Y');
+											@endphp
+											@php
+												$new_date = Carbon\Carbon::parse($payment_date->payment_date)->subMonths(2)->format('Y-m-d');
+												$now = Carbon\Carbon::now()->format('Y-m-d')
+											@endphp
+											@if($new_date <= $now)
+												<span class="badge py-3 px-4 fs-7 badge-light-danger">{{$date}}</span>
+											@else
+												<span class="badge py-3 px-4 fs-7 badge-light-success">{{$date}}</span>
+											@endif
+										</td>
+									@else
+										<td>-</td>
 									@endif
 									@if($smartfinance->is_status == 2)
 									<td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>

@@ -10,6 +10,7 @@ Use \Carbon\Carbon;
 use App\Models\Plan;
 use App\Models\Smartfinance;
 use App\Models\SmartfinancePayment;
+use App\Models\SmartfinanceRenewal;
 use Image;
 use DB;
 
@@ -456,14 +457,27 @@ class smartfinanceController extends Controller
 
 
         $smartfinance = Smartfinance::where('id',$id)->first();
+        $amount = 0;
+        if($smartfinance->plan_id == 3){
+            $smartfinance_payments = SmartfinancePayment::where('smartfinance_id',$id)->get();
+            
+            foreach ($smartfinance_payments as $smartfinance_payment) {
+
+                $amount = $amount + $smartfinance_payment->investment_amount;
+            }
+               
+
+
+        }
         $smartfinance_payments = SmartfinancePayment::where('smartfinance_id',$id)->get();
         $payment = SmartfinancePayment::where('smartfinance_id',$id)->first();
         
 
         $finances = Smartfinance::where([['user_id',$smartfinance->user_id],['id','!=',$id]])->simplePaginate(10);
         $finances_count = Smartfinance::where([['user_id',$smartfinance->user_id],['id','!=',$id]])->count();
+        //return $today;
 
-        return view('smartfinance')->with('smartfinance',$smartfinance)->with('smartfinance_payments',$smartfinance_payments)->with('payment',$payment)->with('finances',$finances)->with('finances_count',$finances_count);
+        return view('smartfinance')->with('smartfinance',$smartfinance)->with('smartfinance_payments',$smartfinance_payments)->with('payment',$payment)->with('finances',$finances)->with('finances_count',$finances_count)->with('amount',$amount)->with('today',$today);
         
     }
 
@@ -541,7 +555,7 @@ class smartfinanceController extends Controller
         $invested_date = $payment->invested_date;
         $next_payment = $payment->next_amount  + $amount;
         $intrest =  $smartfinance->percentage/100 * $payment->next_amount;
-        $profit = $payment->intrest + $intrest;
+        $profit = $payment->intrest + round($intrest);
         $balance = 0;
         while($profit >= 50000){
             $profit = $profit - 50000;
@@ -569,6 +583,173 @@ class smartfinanceController extends Controller
         return redirect()->back();
 
     }
+
+    public function renewal_plan(Request $request)
+    {
+        $plan_id = $request->plan_id; 
+        $smartfinance_id = $request->smartfinance_id; 
+        $finance = Smartfinance::where('id',$smartfinance_id)->first();
+        if($finance->plan->type == 'month')
+        {
+            $payment = SmartfinancePayment::where('smartfinance_id', $smartfinance_id)->orderBy('id','Desc')->first();
+            $date = Carbon::parse($payment->payment_date)->addMonths(1);
+            $payment_date = Carbon::parse($date)->setDay(6)->format('Y-m-d');
+                        // check day
+            $timestamp = strtotime($payment_date);
+            $day = date('l', $timestamp);
+            if($day == 'Tuesday' ||$day == 'Sunday' ||$day == 'Friday'){
+                $payment_date = Carbon::parse($payment_date)->setDay(7)->format('Y-m-d');
+            }
+            else{
+                $payment_date = Carbon::parse($payment_date)->setDay(6)->format('Y-m-d');
+            }
+            $initial = $payment->month+1;
+            $final = $payment->month+12;
+
+            for ($i = $initial; $i <= $final; $i++){
+
+                $smartfinance = SmartfinancePayment::create([
+                    'smartfinance_id' => $smartfinance_id,
+                    'month' => $i,
+                    'amount' => $finance->percentage/100 * $finance->amount ,
+                    'payment_date' => $payment_date,
+                    'is_status' => 0,
+                ]);
+
+                //next-payment
+                $date = Carbon::parse($payment_date)->addMonths(1);
+                $payment_date = Carbon::parse($date)->setDay(6)->format('Y-m-d');
+                $timestamp = strtotime($payment_date);
+                $day = date('l', $timestamp);
+                if($day == 'Tuesday' ||$day == 'Sunday' ||$day == 'Friday'){
+                    $payment_date = Carbon::parse($payment_date)->setDay(7)->format('Y-m-d');
+                }
+                else{
+                    $payment_date = Carbon::parse($payment_date)->setDay(6)->format('Y-m-d');
+                }
+                //end-next-payment
+            }
+
+            $dt = Carbon::now();
+            $date = $dt->toDateString();
+            $auth = Auth::user();
+            $smartfinance = SmartfinanceRenewal::create([
+                'smartfinance_id' => $smartfinance_id,
+                'date' => $date,
+                'renewaled_by' => $auth->id ,
+            ]);
+            return $smartfinance;
+
+        }
+        
+
+
+    }
+
+    public function renewal_plan_year(Request $request)
+    {
+
+        $plan_id = $request->plan_id; 
+        $smartfinance_id = $request->smartfinance_id; 
+        $finance = Smartfinance::where('id',$smartfinance_id)->first();
+
+        if($finance->plan->type == 'year' && $finance->plan->name == 'One time Invertment'){
+            $payment = SmartfinancePayment::where('smartfinance_id', $smartfinance_id)->orderBy('id','Desc')->first();
+            $year = $request->year;
+            $amnt = $payment->amount;  
+
+            //amount-loop
+            for ($i = 1; $i <= $year; $i++){
+
+                for ($j = 1; $j <= 12; $j++){
+                    //amount
+                    $profit = $finance->percentage/100 * $amnt;
+                    $amnt = $profit+$amnt;
+                }
+            }
+            //amount-loop-end
+
+            $payment_date = Carbon::parse($payment->payment_date)->addYears(1);
+
+                    //payment-loop
+            for ($k = 2; $k <= $year; $k++){
+
+                        //next-payment
+                $payment_date = Carbon::parse($payment_date)->addYears(1);
+
+                        //end-next-payment
+
+            }
+                    //payment-loop-end
+
+            $payment_date = Carbon::parse($payment_date)->addMonths(1);
+            $new_date = Carbon::parse($payment_date)->setDay(6)->format('Y-m-d');
+            if($payment_date > $new_date){
+                $payment_date = Carbon::parse($payment_date)->addMonths(1);
+                $payment_date = Carbon::parse($payment_date)->setDay(6)->format('Y-m-d');
+                        // check day
+                $timestamp = strtotime($payment_date);
+                $day = date('l', $timestamp);
+                if($day == 'Tuesday' ||$day == 'Sunday' ||$day == 'Friday'){
+                    $payment_date = Carbon::parse($payment_date)->setDay(7)->format('Y-m-d');
+                }
+                else{
+                    $payment_date = Carbon::parse($payment_date)->setDay(6)->format('Y-m-d');
+                }
+            }
+            else{
+
+                $payment_date = Carbon::parse($payment_date)->setDay(6)->format('Y-m-d');
+                        // check day
+                $timestamp = strtotime($payment_date);
+                $day = date('l', $timestamp);
+                if($day == 'Tuesday' ||$day == 'Sunday' ||$day == 'Friday'){
+                    $payment_date = Carbon::parse($payment_date)->setDay(7)->format('Y-m-d');
+                }
+                else{
+                    $payment_date = Carbon::parse($payment_date)->setDay(6)->format('Y-m-d');
+                }
+            }
+
+            $smartfinance = SmartfinancePayment::create([
+                'smartfinance_id' => $smartfinance_id,
+                'year' => $year,
+                'amount' => round($amnt),
+                'payment_date' => $payment_date,
+                'is_status' => 0,
+            ]);
+
+            $dt = Carbon::now();
+            $date = $dt->toDateString();
+            $auth = Auth::user();
+            $smartfinance = SmartfinanceRenewal::create([
+                'smartfinance_id' => $smartfinance_id,
+                'date' => $date,
+                'renewaled_by' => $auth->id ,
+            ]);
+
+            $smartfinance_payment = DB::table('smartfinance_payments')->where('smartfinance_id',$smartfinance_id)->update(['payment_date' => $payment_date]);
+
+        }
+
+
+
+        return redirect()->back();
+
+
+
+    }
+
+    public function payout_plan(Request $request)
+    {
+        $smartfinance_id = $request->smartfinance_id; 
+        $smartfinance = DB::table('smartfinances')->where('smartfinance_id',$smartfinance_id)->update(['is_close' => 1]);
+        return $smartfinance;
+
+
+
+    }
+
 
 
 

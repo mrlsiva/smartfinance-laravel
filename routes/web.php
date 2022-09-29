@@ -68,6 +68,10 @@ Route::get('investment_search',[SmartFinanceController::class, 'investment_searc
 Route::get('investment_status',[SmartFinanceController::class, 'investment_status'])->name('investment_status');
 Route::get('investment_plan',[SmartFinanceController::class, 'investment_plan'])->name('investment_plan');
 Route::post('/store_next_month_payment',[SmartFinanceController::class, 'store_next_month_payment'])->name('store_next_month_payment');
+Route::get('/renewal_plan',[SmartFinanceController::class, 'renewal_plan'])->name('renewal_plan');
+Route::post('/renewal_plan_year',[SmartFinanceController::class, 'renewal_plan_year'])->name('renewal_plan_year');
+Route::get('payout_plan',[SmartFinanceController::class, 'payout_plan'])->name('payout_plan');
+
 //Smart Finance end
 
 

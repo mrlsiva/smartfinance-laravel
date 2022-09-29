@@ -262,6 +262,7 @@
                                             <th class="">User</th>
                                             <th class="">Role</th>
                                             <th class="">NEXT PAYMENT</th>
+                                            <th class="">EXPIREY</th>
                                             <th class="">Profile</th>
                                             <th class="">Progress</th>
                                             <th class="">Status</th>
@@ -314,15 +315,66 @@
                                                 @else
                                                     <td>-</td>
                                                 @endif
-                                                <td class="">
-                                                    @if($user->is_profile_verified == 2)
-                                                        <span class="badge py-3 px-4 fs-7 badge-light-danger">Incomplete</span>
-                                                    @elseif($user->is_profile_verified == 0 || $user->is_profile_updated == 1)
-                                                        <span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span>
-                                                    @else
-                                                        <span class="badge py-3 px-4 fs-7 badge-light-success">Verified</span>
-                                                    @endif
-                                                </td>
+
+                                                @php
+                                                $result = [];
+                                                $result_month = [];
+                                                $result1 = [];
+                                                $result_year = [];
+                                                $smartfinance_ids = App\Models\Smartfinance::where([['user_id',$user->id],['plan_id',1],['is_status',1]])->get();
+                                                if($smartfinance_ids != Null){
+                                                    foreach($smartfinance_ids as $smartfinance_id){
+                                                        $result[] = $smartfinance_id->id;
+                                                    }
+
+                                                    $payment_date_months[] = App\Models\SmartfinancePayment::whereIn('smartfinance_id',$result)->where('is_status',0)->orderBy('payment_date','Desc')->first();
+                                                    if($payment_date_months[0] != NULL){
+                                                        foreach($payment_date_months as $payment_date_month){
+                                                            $result_month[] = $payment_date_month->payment_date;
+                                                        }
+                                                    }
+                                                }
+
+
+
+                                                $smartfinance_ids = App\Models\Smartfinance::where([['user_id',$user->id],['plan_id','!=',1],['is_status',1]])->get();
+                                                if($smartfinance_ids){
+                                                    foreach($smartfinance_ids as $smartfinance_id){
+                                                        $result1[] = $smartfinance_id->id;
+                                                    }
+
+                                                    $payment_date_years = App\Models\SmartfinancePayment::whereIn('smartfinance_id',$result1)->where('is_status',0)->DISTINCT('payment_date')->select('payment_date')->orderBy('payment_date','Desc')->get();
+                                                    if($payment_date_years != Null){
+                                                        foreach($payment_date_years as $payment_date_year){
+                                                            $result_year[] = $payment_date_year->payment_date;
+                                                        }
+                                                    }
+                                                }
+                                                $result2 = array_merge($result_month,$result_year);
+
+                                                $payment_date = collect($result2)->min();
+                                                @endphp
+                                                @if($payment_date != Null)
+                                                    <td>
+                                                        @php
+                                                            $date = Carbon\Carbon::parse($payment_date)->formatLocalized('%d %b %Y');
+                                                        
+                                                            $new_date = Carbon\Carbon::parse($payment_date)->subMonths(2)->format('Y-m-d');
+
+                                                            $now = Carbon\Carbon::now()->format('Y-m-d')
+                                                        @endphp
+                                                        @if($new_date <= $now)
+                                                            <span class="badge py-3 px-4 fs-7 badge-light-danger">{{$date}}</span>
+                                                        @else
+                                                        {{$user->id}}
+                                                            <span class="badge py-3 px-4 fs-7 badge-light-success">{{$date}}</span>
+                                                        
+                                                        @endif
+                                                    </td>
+                                                @else
+                                                    <td>-</td>
+                                                @endif
+                                                
                                                 <td class="">
                                                     @if($user->is_active == 0)
                                                         <span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span>
@@ -649,8 +701,6 @@
                                                 <th class="">INVESTMENT DATE</th>
                                                 <th class="">APPROVED DATE</th>
                                                 <th class="">RATE OF INTEREST</th>
-                                                <th class="">NEXT PAYMENT</th>
-                                        		<th class="">EXPIREY</th>
                                                 <th class="">STATUS</th>
                                                 <th class="">ACTION</th>               
                                             </tr>
@@ -694,18 +744,7 @@
                                                     -
                                                     @endif
                                                 </td>
-                                                @if($admin_finance->plan_id == 3)
-	                                                @php
-	                                                    $payment_dates = App\Models\SmartfinancePayment::where('smartfinance_id',$admin_finance->id)->get();
-	                                                    $amount=0;
-	                                                    foreach($payment_dates as $payment_date){
-	                                                        $amount = $amount+ $payment_date->investment_amount;
-	                                                    }
-	                                                @endphp
-	                                                <td>Rs {{$amount}}</td>
-                                            	@else
-                                                	<td class="">Rs {{$admin_finance->amount}}</td>
-                                            	@endif
+                                                <td class="">Rs {{$admin_finance->amount}}</td>
                                                 <td class="">
                                                     {{$admin_finance->investment_date}}
                                                 </td>
@@ -719,42 +758,6 @@
                                                 @else
                                                 <td>-</td>
                                                 @endif
-                                                
-                                                @php
-                                                $payment_date = App\Models\SmartfinancePayment::where([['smartfinance_id',$admin_finance->id],['is_status',0]])->first();
-                                                @endphp
-                                                @if($payment_date != Null)
-                                                <td>
-                                                	@php
-                                                	$date = Carbon\Carbon::parse($payment_date->payment_date)->formatLocalized('%d %b %Y');
-                                                	@endphp
-                                                	{{$date}}
-                                                </td>
-                                                @else
-                                                <td>-</td>
-                                                @endif
-                                                @php
-                                                $payment_date = App\Models\SmartfinancePayment::where([['smartfinance_id',$admin_finance->id],['is_status',0]])->orderBy('id','Desc')->first();
-                                                @endphp
-                                                @if($payment_date != Null)
-                                                <td>
-                                                	@php
-                                                	$date = Carbon\Carbon::parse($payment_date->payment_date)->formatLocalized('%d %b %Y');
-                                                	@endphp
-                                                	@php
-                                                	$new_date = Carbon\Carbon::parse($payment_date->payment_date)->subMonths(2)->format('Y-m-d');
-                                                	$now = Carbon\Carbon::now()->format('Y-m-d')
-                                                	@endphp
-                                                	@if($new_date <= $now)
-                                                	<span class="badge py-3 px-4 fs-7 badge-light-danger">{{$date}}</span>
-                                                	@else
-                                                	<span class="badge py-3 px-4 fs-7 badge-light-success">{{$date}}</span>
-                                                	@endif
-                                                </td>
-                                                @else
-                                                <td>-</td>
-                                                @endif
-
                                                 @if($admin_finance->is_status == 2)
                                                 <td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>
                                                 @elseif($admin_finance->is_status == 1)
@@ -3007,11 +3010,7 @@
 
                             output += '<td>'+data[count].name+'</td>';
                             
-                            if(data[count].is_profile_verified == 2){
-                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-danger">Incomplete</span></td>';
-
-                            }
-                            else if(data[count].is_profile_verified == 0 || data[count].is_profile_updated == 1){
+                            if(data[count].is_profile_verified == 0 || data[count].is_profile_updated == 1){
 
                                 output += '<td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>';
                             }
@@ -3100,11 +3099,7 @@
                             else{
                                 output += '<td>Yes</td>';
                             }
-                            if(data[count].is_profile_verified == 2){
-                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-danger">Incomplete</span></td>';
-
-                            }
-                            else if(data[count].is_profile_verified == 0 || data[count].is_profile_updated == 1){
+                            if(data[count].is_profile_verified == 0 || data[count].is_profile_updated == 1){
 
                                 output += '<td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>';
                             }
@@ -3195,11 +3190,7 @@
                             else{
                                 output += '<td>Yes</td>';
                             }
-                            if(data[count].is_profile_verified == 2){
-                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-danger">Incomplete</span></td>';
-
-                            }
-                            else if(data[count].is_profile_verified == 0 || data[count].is_profile_updated == 1){
+                            if(data[count].is_profile_verified == 0 || data[count].is_profile_updated == 1){
 
                                 output += '<td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>';
                             }
@@ -3385,11 +3376,7 @@
                             else{
                                 output += '<td>Yes</td>';
                             }
-                            if(data[count].is_profile_verified == 2){
-                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-danger">Incomplete</span></td>';
-
-                            }
-                            else if(data[count].is_profile_verified == 0 || data[count].is_profile_updated == 1){
+                            if(data[count].is_profile_verified == 0 || data[count].is_profile_updated == 1){
 
                                 output += '<td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>';
                             }
