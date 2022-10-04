@@ -98,8 +98,9 @@ year month plan  ask for bill while upload and accept each time module add amont
 
 4-10-22
 refferal box in profile page and user details page
-dynamic box in profile page
-total investment in user detail page and profile page
+refferal table for payments in both profile page and user details page
+changed boxes to dynamic in profile page
+correct total investment in user detail page and profile page
 
 
 
@@ -110,7 +111,6 @@ error does not go to error page
 close account (payout)or renewal
 remove smart finance,taxation
 table
-
 Expirey date in all table show in green color, if it reach last two months show in red color 
 
 

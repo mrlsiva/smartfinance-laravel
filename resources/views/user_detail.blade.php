@@ -250,6 +250,11 @@
 						<a class="nav-link text-active-primary ms-0 me-10 py-5" id="nominee" onclick="nominee()">Nominee Details</a>
 					</li>
 					<!--end::Nav item-->
+					<!--begin::Nav item-->
+					<li class="nav-item mt-2">
+						<a class="nav-link text-active-primary ms-0 me-10 py-5" id="reffer" onclick="reffer()">Refferal Details</a>
+					</li>
+					<!--end::Nav item-->
 				</ul>
 				<!--begin::Navs-->
 			</div>
@@ -739,6 +744,102 @@
 						<!--end::Col-->
 					</div>
 					<!--end::Input group-->
+					
+				</div>
+				<!--end::Card body-->
+			</div>
+		</div>
+		<!--end::nominee View-->
+		<!--begin::reffer View-->
+		<div id="reffer_detail" style="display:none;">
+			<div class="card mb-5 mb-xl-10">
+				<!--begin::Card header-->
+				<div class="card-header cursor-pointer">
+					<!--begin::Card title-->
+					<div class="card-title m-0">
+						<h3 class="fw-bolder m-0">Refferal Details</h3>
+					</div>
+					<!--end::Card title-->
+				</div>
+				<!--begin::Card header-->
+				<!--begin::Card body-->
+				<div class="card-body p-9">
+					
+					<table class="table align-middle table-row-dashed fs-6 gy-3" >
+						<!--begin::Table head-->
+						<thead>
+							<!--begin::Table row-->
+							<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+								<th class="">REFFERED</th>
+								<th class="">DATE</th>
+								<th class="">AMOUNT</th>     
+							</tr>
+							<!--end::Table row-->
+						</thead>
+						<!--end::Table head-->
+						<!--begin::Table body-->
+						<tbody class="fw-bolder text-gray-600">
+							@foreach($refferals as $refferal)
+								<tr>
+									@php
+										$year_finances = App\Models\Smartfinance::where([['user_id',$refferal->reffered],['plan_id',2],['is_status',1],['is_close',0]])->get();
+										$yearm_finances = App\Models\Smartfinance::where([['user_id',$refferal->reffered],['plan_id',3],['is_status',1],['is_close',0]])->get();
+										$month_finances = App\Models\Smartfinance::where([['user_id',$refferal->reffered],['plan_id',1],['is_status',1],['is_close',0]])->get();
+									@endphp
+									@if($year_finances != NULL)
+										@foreach($year_finances as $year_finance)
+											@php
+												$payment = App\Models\SmartfinancePayment::where('smartfinance_id',$year_finance->id)->first();
+											@endphp
+											<tr>
+												<td>{{$refferal->reffer->first_name}} {{$refferal->reffer->last_name}}<span class="text-muted fw-bold text-muted d-block fs-7">#{{$refferal->reffer->id}}</span></td>
+												@php
+                          $date = Carbon\Carbon::parse($payment->payment_date)->formatLocalized('%d %b %Y');
+                        @endphp
+												<td>{{$date}}</td>
+												<td>{{$refferal->amount}}</td>
+											</tr>
+										@endforeach
+									@endif
+									@if($yearm_finances != NULL)
+										@foreach($yearm_finances as $yearm_finance)
+											@php
+												$payment = App\Models\SmartfinancePayment::where([['smartfinance_id',$yearm_finance->id],['is_approve',1]])->first();
+											@endphp
+											@if($payment != NULL)
+												<tr>
+													<td>{{$refferal->reffer->first_name}} {{$refferal->reffer->last_name}}<span class="text-muted fw-bold text-muted d-block fs-7">#{{$refferal->reffer->id}}</span></td>
+													@php
+	                          $date = Carbon\Carbon::parse($payment->payment_date)->formatLocalized('%d %b %Y');
+	                        @endphp
+													<td>{{$date}}</td>
+													<td>{{$refferal->amount}}</td>
+												</tr>
+											@endif
+										@endforeach
+									@endif
+									@if($month_finances != NULL)
+										@foreach($month_finances as $month_finance)
+											@php
+												$payments = App\Models\SmartfinancePayment::where('smartfinance_id',$month_finance->id)->get();
+											@endphp
+											@foreach($payments as $payment)
+												<tr>
+													<td>{{$refferal->reffer->first_name}} {{$refferal->reffer->last_name}}<span class="text-muted fw-bold text-muted d-block fs-7">#{{$refferal->reffer->id}}</span></td>
+													@php
+	                          $date = Carbon\Carbon::parse($payment->payment_date)->formatLocalized('%d %b %Y');
+	                        @endphp
+													<td>{{$date}}</td>
+													<td>{{$refferal->amount}}</td>
+												</tr>
+											@endforeach
+										@endforeach
+									@endif
+								</tr>
+							@endforeach
+						</tbody>
+						<!--end::Table body-->
+					</table>
 					
 				</div>
 				<!--end::Card body-->
@@ -1673,6 +1774,7 @@
 </script>
 <!-- end-finance -->
 
+<!-- navigation -->
 <script type="text/javascript">
 	function basic() {
 
@@ -1680,22 +1782,26 @@
 		document.getElementById("additional").classList.remove("active");
 		document.getElementById("bank").classList.remove("active");
 		document.getElementById("nominee").classList.remove("active");
+		document.getElementById("reffer").classList.remove("active");
 		$('#basic_detail').show();
-        $('#additional_detail').hide();
-        $('#bank_detail').hide();
-        $('#nominee_detail').hide();
+		$('#additional_detail').hide();
+		$('#bank_detail').hide();
+		$('#nominee_detail').hide();
+		$('#reffer_detail').hide();
 
 	}
 	function additional() {
 
-        document.getElementById("basic").classList.remove("active");
+    document.getElementById("basic").classList.remove("active");
 		document.getElementById("additional").classList.add("active");
 		document.getElementById("bank").classList.remove("active");
 		document.getElementById("nominee").classList.remove("active");
+		document.getElementById("reffer").classList.remove("active");
 		$('#basic_detail').hide();
-        $('#additional_detail').show();
-        $('#bank_detail').hide();
-        $('#nominee_detail').hide();
+		$('#additional_detail').show();
+		$('#bank_detail').hide();
+		$('#nominee_detail').hide();
+		$('#reffer_detail').hide();
 
 	}
 	function bank() {
@@ -1704,25 +1810,45 @@
 		document.getElementById("additional").classList.remove("active");
 		document.getElementById("bank").classList.add("active");
 		document.getElementById("nominee").classList.remove("active");
+		document.getElementById("reffer").classList.remove("active");
 		$('#basic_detail').hide();
-        $('#additional_detail').hide();
-        $('#bank_detail').show();
-        $('#nominee_detail').hide();
+		$('#additional_detail').hide();
+		$('#bank_detail').show();
+		$('#nominee_detail').hide();
+		$('#reffer_detail').hide();
 
 	}
 	function nominee() {
 		
-        document.getElementById("basic").classList.remove("active");
+    document.getElementById("basic").classList.remove("active");
 		document.getElementById("additional").classList.remove("active");
 		document.getElementById("bank").classList.remove("active");
 		document.getElementById("nominee").classList.add("active");
+		document.getElementById("reffer").classList.remove("active");
 		$('#basic_detail').hide();
-        $('#additional_detail').hide();
-        $('#bank_detail').hide();
-        $('#nominee_detail').show();
+    $('#additional_detail').hide();
+   	$('#bank_detail').hide();
+    $('#nominee_detail').show();
+    $('#reffer_detail').hide();
+
+	}
+
+	function reffer() {
+		
+    document.getElementById("basic").classList.remove("active");
+		document.getElementById("additional").classList.remove("active");
+		document.getElementById("bank").classList.remove("active");
+		document.getElementById("nominee").classList.remove("active");
+		document.getElementById("reffer").classList.add("active");
+		$('#basic_detail').hide();
+    $('#additional_detail').hide();
+   	$('#bank_detail').hide();
+    $('#nominee_detail').hide();
+     $('#reffer_detail').show();
 
 	}
 </script>
+<!-- navigation end -->
 
 <script type="text/javascript">    
     $(document).ready(function (e) { 

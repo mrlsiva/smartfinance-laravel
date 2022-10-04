@@ -241,9 +241,11 @@ class UserController extends Controller
         else{
             $earning_percentage = 0;
         }
-        
 
-        return view('user_profile')->with('user',$user)->with('user_detail',$user_detail)->with('bank_detail',$bank_detail)->with('nominee_detail',$nominee_detail)->with('amount',$amount)->with('investment_count',$investment_count)->with('earning_percentage',$earning_percentage)->with('earning_amount',$earning_amount);
+        $refferals = Refferal::where('user_id',$user->id)->get();
+
+
+        return view('user_profile')->with('user',$user)->with('user_detail',$user_detail)->with('bank_detail',$bank_detail)->with('nominee_detail',$nominee_detail)->with('amount',$amount)->with('investment_count',$investment_count)->with('earning_percentage',$earning_percentage)->with('earning_amount',$earning_amount)->with('refferals',$refferals);
     }
 
     public function user($id){
@@ -313,10 +315,13 @@ class UserController extends Controller
         else{
             $earning_percentage = 0;
         }
+
+
+        $refferals = Refferal::where('user_id',$id)->get();
         
 
 
-        return view('user_detail')->with('user',$user)->with('user_detail',$user_detail)->with('bank_detail',$bank_detail)->with('nominee_detail',$nominee_detail)->with('smartfinances',$smartfinances)->with('amount',$amount)->with('investment_count',$investment_count)->with('earning_percentage',$earning_percentage)->with('earning_amount',$earning_amount);
+        return view('user_detail')->with('user',$user)->with('user_detail',$user_detail)->with('bank_detail',$bank_detail)->with('nominee_detail',$nominee_detail)->with('smartfinances',$smartfinances)->with('amount',$amount)->with('investment_count',$investment_count)->with('earning_percentage',$earning_percentage)->with('earning_amount',$earning_amount)->with('refferals',$refferals);
         
     }
 

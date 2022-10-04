@@ -517,9 +517,6 @@ body{
 										@endphp
 										@if($payment_date != Null)
 											<td>
-												@php
-													$date = Carbon\Carbon::parse($payment_date->payment_date)->formatLocalized('%d %b %Y');
-												@endphp
 												@if($payment_date->smartfinance->plan->id == 3)
 													@if($payment_date->month == 1)
 														-
@@ -685,14 +682,20 @@ body{
 									$payment_date = App\Models\SmartfinancePayment::where([['smartfinance_id',$finance->id],['is_status',0]])->first();
 									@endphp
 									@if($payment_date != Null)
-									<td>
-										@php
-										$date = Carbon\Carbon::parse($payment_date->payment_date)->formatLocalized('%d %b %Y');
-										@endphp
-										{{$date}}
-									</td>
+										<td>
+											@if($payment_date->smartfinance->plan->id == 3)
+												@if($payment_date->month == 1)
+													-
+												@else
+													Rs. {{$payment_date->intrest}}
+												@endif
+											@else
+												Rs. {{$payment_date->amount}}
+											@endif
+													
+										</td>
 									@else
-									<td>-</td>
+										<td>-</td>
 									@endif
 									@php
 									$payment_date = App\Models\SmartfinancePayment::where('smartfinance_id',$finance->id)->orderBy('id','Desc')->first();
