@@ -88,16 +88,26 @@ yearly monthly plan -process
 24-9-22
 yearly monthly plan -done
 
+
+3-10-22
+Display Next payment  (display the next payment amount)
+reffer if give access show box in profile page
+refferal new modal select user and give amount
+year both plan (payout)or renewal
+year month plan  ask for bill while upload and accept each time module add amont after accept.
+
+
+
+check for total investment in user detail page and profile page,invester in both page
 bug list
 
 error does not go to error page
 close account (payout)or renewal
 remove smart finance,taxation
 table
-Display Next payment  (display the next payment amount)
+
 Expirey date in all table show in green color, if it reach last two months show in red color 
-reffer if give access show box in profile page
-refferal new modal select user and give amount
+
 
 
 

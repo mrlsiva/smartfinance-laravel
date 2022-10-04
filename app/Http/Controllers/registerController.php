@@ -46,6 +46,7 @@ class registerController extends Controller
             'is_delete' => 0,
             'is_profile_verified' => 2,
             'is_profile_updated' => 0,
+            'is_reffer' => 0,
             'password' => \Hash::make($request->password),
         ]);
 

@@ -54,6 +54,8 @@ Route::get('user_profile',[UserController::class, 'user_profile'])->name('user_p
 Route::get('user_role',[UserController::class, 'user_role'])->name('user_role');
 Route::post('/save_profile',[UserController::class, 'save_profile'])->name('save_profile');
 Route::post('/edit_profile',[UserController::class, 'edit_profile'])->name('edit_profile');
+Route::get('/get_users',[UserController::class, 'get_users'])->name('get_users');
+Route::post('/refferal',[UserController::class, 'refferal'])->name('refferal');
 //User Management end
 
 //Smart Finance
@@ -68,6 +70,8 @@ Route::get('investment_search',[SmartFinanceController::class, 'investment_searc
 Route::get('investment_status',[SmartFinanceController::class, 'investment_status'])->name('investment_status');
 Route::get('investment_plan',[SmartFinanceController::class, 'investment_plan'])->name('investment_plan');
 Route::post('/store_next_month_payment',[SmartFinanceController::class, 'store_next_month_payment'])->name('store_next_month_payment');
+Route::get('/get_smart_finance_payment',[SmartFinanceController::class, 'get_smart_finance_payment'])->name('get_smart_finance_payment');
+Route::post('/approve_smart_finance_payment',[SmartFinanceController::class, 'approve_smart_finance_payment'])->name('approve_smart_finance_payment');
 Route::get('/renewal_plan',[SmartFinanceController::class, 'renewal_plan'])->name('renewal_plan');
 Route::post('/renewal_plan_year',[SmartFinanceController::class, 'renewal_plan_year'])->name('renewal_plan_year');
 Route::get('payout_plan',[SmartFinanceController::class, 'payout_plan'])->name('payout_plan');

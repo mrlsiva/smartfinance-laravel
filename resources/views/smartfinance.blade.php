@@ -103,7 +103,10 @@ body{
 									</p>&nbsp;&nbsp;&nbsp;
 									<p class="d-flex align-items-center text-gray-400  mb-2">
 										<i class="fa fa-bookmark"></i>&nbsp;Plan - {{$smartfinance->plan->name}}
-									</p>
+									</p>&nbsp;&nbsp;&nbsp;
+									@if($smartfinance->is_close == 1)
+										<span class="badge py-3 px-4 fs-7 badge-danger">Expired</span>
+									@endif
 								</div>
 								<!--end::Info-->
 							</div>
@@ -209,12 +212,12 @@ body{
 
 					@if($payment->smartfinance->plan->id == 1 || $payment->smartfinance->plan->id == 2)
 						@if($user->role_id != 3 )
-						@php
-                            $payment_date = App\Models\SmartfinancePayment::where('smartfinance_id',$payment->smartfinance_id)->orderBy('id','Desc')->first();
+							@php
+	                            $payment_date = App\Models\SmartfinancePayment::where('smartfinance_id',$payment->smartfinance_id)->orderBy('id','Desc')->first();
 
-                            $new_date = Carbon\Carbon::parse($payment_date->payment_date)->subMonths(2)->format('Y-m-d');
-                            $now = Carbon\Carbon::now()->format('Y-m-d');
-                        @endphp
+	                            $new_date = Carbon\Carbon::parse($payment_date->payment_date)->subMonths(2)->format('Y-m-d');
+	                            $now = Carbon\Carbon::now()->format('Y-m-d');
+	                        @endphp
                         	@if($new_date <= $now)
 								<div class="card-toolbar d-flex justify-content-end" data-bs-toggle="tooltip" data-bs-placement="top" >
 									
@@ -307,19 +310,21 @@ body{
 						<!--end::Table-->
 					@else 
 						@if($user->id == $payment->smartfinance->user->id )
-							@if($payment->payment_date > $today )
-								<div class="card-toolbar d-flex justify-content-end" data-bs-toggle="tooltip" data-bs-placement="top" >
-									<a class="btn btn-sm btn-light btn-active-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_new_month_investment" >
-										<!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
-										<span class="svg-icon svg-icon-3">
-											<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-												<rect opacity="0.5" x="11.364" y="20.364" width="16" height="2" rx="1" transform="rotate(-90 11.364 20.364)" fill="black" />
-												<rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="black" />
-											</svg>
-										</span>
-										<!--end::Svg Icon-->Next Month Investment 
-									</a>
-								</div>
+							@if($payment->smartfinance->is_close != 1)
+								@if($payment->payment_date > $today )
+									<div class="card-toolbar d-flex justify-content-end" data-bs-toggle="tooltip" data-bs-placement="top" >
+										<a class="btn btn-sm btn-light btn-active-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_new_month_investment" >
+											<!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
+											<span class="svg-icon svg-icon-3">
+												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+													<rect opacity="0.5" x="11.364" y="20.364" width="16" height="2" rx="1" transform="rotate(-90 11.364 20.364)" fill="black" />
+													<rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="black" />
+												</svg>
+											</span>
+											<!--end::Svg Icon-->Next Month Investment 
+										</a>
+									</div>
+								@endif
 							@endif
 						@endif
 						@if($user->role_id != 3 )
@@ -362,7 +367,10 @@ body{
 									<th class="">INVESTED AMOUNT</th>
 									<th class="">TOTAL AMOUNT</th>
 									<th class="">PROFIT</th>
-									<th class="">ACTION</th>         
+									<th class="">STATUS</th>
+									@if($user->role_id != 3)
+										<th class="">ACTION</th>   
+									@endif      
 								</tr>
 								<!--end::Table row-->
 							</thead>
@@ -392,8 +400,20 @@ body{
 									@else
 									<td>{{$smartfinance_payment->intrest}}</td>
 									@endif
+									@if($smartfinance_payment->is_approve == 1)
+										<td><span class="badge py-3 px-4 fs-7 badge-light-success">Approved</span></td>
+									@elseif($smartfinance_payment->is_approve == 0)
+										<td><span class="badge py-3 px-4 fs-7 badge-light-danger">Rejected</span></td>
+									@elseif($smartfinance_payment->is_approve == 2)
+										<td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>
+									@else
 
-									<td></td>
+									@endif
+									@if($user->role_id != 3)
+										<td>
+											<button class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary"name="approve" data-system_id="{{$smartfinance_payment->id}}" title="Edit"><i class="fas fa-pencil-alt" id="fa"></i></button>
+										</td>   
+									@endif
 
 								</tr>
 								@endforeach
@@ -460,7 +480,7 @@ body{
 										</td>
 										@if($finance->plan_id == 3)
 										@php
-										$payment_dates = App\Models\SmartfinancePayment::where('smartfinance_id',$finance->id)->get();
+										$payment_dates = App\Models\SmartfinancePayment::where([['smartfinance_id',$finance->id],['is_approve',1]])->get();
 										$amount=0;
 										foreach($payment_dates as $payment_date){
 											$amount = $amount+ $payment_date->investment_amount;
@@ -500,7 +520,16 @@ body{
 												@php
 													$date = Carbon\Carbon::parse($payment_date->payment_date)->formatLocalized('%d %b %Y');
 												@endphp
-												{{$date}}
+												@if($payment_date->smartfinance->plan->id == 3)
+													@if($payment_date->month == 1)
+														-
+													@else
+														Rs. {{$payment_date->intrest}}
+													@endif
+												@else
+													Rs. {{$payment_date->amount}}
+												@endif
+												
 											</td>
 										@else
 											<td>-</td>
@@ -784,6 +813,26 @@ body{
                         @if($payment != NULL)
                         	<input type="hidden" name="smartfinance_id" value="{{$payment->smartfinance->id}}">
                         @endif
+
+                        <!--begin::Input group-->
+                        <div class="fv-row mb-8">
+                            <!--begin::Label-->
+                            <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                <span class="required">Payment Receipt</span>
+                                <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Payment Receipt"></i>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="file" class="form-control form-control-solid custom-file-input " id="bill" placeholder="Payment Receipt" value="" name="bill" accept="image/*" />
+                            <div class="d-flex justify-content-center mt-3" >
+                                <img id="preview-image-bill" style="max-height: 200px;">
+                                <a href="#" class="text-hover-primary" onclick="delete_bill()"  style="display:none;" id="bill_image">X</a>
+                            </div>
+
+                            <!--end::Input-->
+                            
+                        </div>
+                        <!--end::Input group-->
                         
                         <div class="d-flex justify-content-center">
                             <button type="submit"  class="btn  btn-primary mt-5 mb-3">Submit</button> 
@@ -1018,6 +1067,91 @@ body{
 </div>
 <!-- end::Modal -->
 
+<!-- begin::Modal -approve-investment- -->
+<div class="modal fade" id="modal_approve_smart_finance_payment" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog mw-650px">
+        <!--begin::Modal content-->
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header pb-0 border-0 justify-content-end">
+                <!--begin::Close-->
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
+                            <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="black" />
+                        </svg>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--begin::Modal header-->
+            <!--begin::Modal body-->
+            <div class="modal-body scroll-y mx-5 mx-xl-18 pt-0 pb-15">
+                <!--begin::Heading-->
+
+                <!--end::Google Contacts Invite-->
+                <!--begin::Separator-->
+                <!--end::Separator-->
+                <!--begin::Textarea-->
+                <!--end::Textarea-->
+                <!--begin::Users-->
+                <div class="mb-10">
+                    <!--begin::Heading-->
+                    <div class="fs-4 fw-bolder mb-2">Approval of user investment</div>
+                    <!--end::Heading-->
+                    <form class="form w-100" novalidate="novalidate" id="kt_sign_in_form" method="post" action="{{route('approve_smart_finance_payment')}}" enctype="multipart/form-data">
+                        @csrf
+                        <input type="hidden" name="finance_payment_id" id="finance_payment_id">
+                        <!--begin::Input group-->
+                        <div class="fv-row mb-8">
+                            <!--begin::Label-->
+                            <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                <a href="" download class="col-lg-4 fw-bold fs-6 text-start text-muted text-hover-primary" id="receipt_bill"><span class="fs-6 fw-bold form-label mb-2" >Receipt</span>&nbsp;&nbsp;&nbsp;<i class="fa fa-download"></i></a>
+                            </label>
+                            <!--end::Label-->
+                            <img src="" alt="image" id="bill_receipt" width="60%" height="40%" />
+                        </div>
+                        <!--end::Input group-->
+
+                        <!--begin::Input group-->
+                        <div class="fv-row mb-8">
+                            <!--begin::Label-->
+                            <label class="required fs-6 fw-bold mb-2">Status</label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <select class="form-select form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="Select..." name="is_approve" id="is_approve">
+                                <option value="">Select</option>
+                                <option value="0">Reject</option>
+                                <option value="1">Approve</option>
+                            </select>
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+
+                       
+                        
+                        <div class="d-flex justify-content-center">
+                            <button type="submit"  class="btn  btn-primary mt-5 mb-3">Submit</button>
+                            
+                        </div>
+                    </form>
+                </div>
+                <!--end::Users-->
+                <!--begin::Notice-->
+                <!--end::Notice-->
+            </div>
+            <!--end::Modal body-->
+        </div>
+            <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+</div>
+<!-- end::Modal -approve-investment- -->
+
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
 <!-- smartfinance -->
@@ -1173,4 +1307,70 @@ body{
 
 	});
 </script>
+
+<!-- delete bill -->
+<script type="text/javascript">
+	function delete_bill() {
+        document.getElementById('bill').value = null;
+        $("#preview-image-bill").attr("src", '');
+        $('#bill_image').hide();
+    }
+</script>
+
+<!-- bill image -->
+<script type="text/javascript">    
+    $(document).ready(function (e) {
+       $('#bill').change(function(){ 
+            $('#bill_image').show();  
+            let reader = new FileReader();
+            reader.onload = (e) => { 
+                $('#preview-image-bill').attr('src', e.target.result); 
+            }
+            reader.readAsDataURL(this.files[0]); 
+       });
+    });
+</script>
+
+<!-- smartfinance -->
+<script type="text/javascript">
+    $(document).on('click', 'button[name^="approve"]', function(e) {
+        var system_id = $(this).data("system_id");
+        console.log(system_id);
+        
+        if(system_id)
+        {
+            jQuery.ajax({
+                url : '../get_smart_finance_payment',
+                type: 'GET',
+                dataType: 'json',
+                data: { id: system_id },
+                success:function(data)
+                { 
+                    jQuery('#modal_approve_smart_finance_payment').modal('show');
+                    document.getElementById("finance_payment_id").value = system_id;
+                    $("#bill_receipt").attr("src", data.bill);
+                    $("#receipt_bill").prop("href", data.bill);
+                    
+                    if(data.is_approve == 1){
+                        jQuery('select[name="is_approve"]').empty();
+                        $('select[name="is_approve"]').append('<option value="" >'+ 'Select' +'</option>');
+                        $('select[name="is_approve"]').append('<option value="0">'+ 'Reject' +'</option>');
+                        $('select[name="is_approve"]').append('<option value="1" selected>'+ 'Approve' +'</option>');
+                    }
+                    else if(data.is_approve == 0){
+
+                        jQuery('select[name="is_approve"]').empty();
+                        $('select[name="is_status"]').append('<option value="" >'+ 'Select' +'</option>');
+                        $('select[name="is_approve"]').append('<option value="0" selected>'+ 'Reject' +'</option>');
+                        $('select[name="is_approve"]').append('<option value="1" >'+ 'Approve' +'</option>');
+
+                    }
+
+                }
+            });
+}
+
+});
+</script>
+<!-- end-finance -->
 @endsection

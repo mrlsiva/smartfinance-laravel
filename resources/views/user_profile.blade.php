@@ -163,6 +163,25 @@
 										<div class="fw-bold fs-6 text-gray-400">Earnings percentage</div>
 										<!--end::Label-->
 									</div>
+									@if($user->is_reffer == 1 )
+									@php
+									$refferal_amount = 0;
+									$refferals = App\Models\Refferal::where('user_id',$user->id)->get();
+									foreach($refferals as $refferal){
+										$refferal_amount = $refferal_amount+$refferal->amount;
+									}
+									@endphp 
+									<div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
+										<!--begin::Number-->
+										<div class="d-flex align-items-center">
+											<div class="fs-2 fw-bolder" >{{$refferal->count()}}/{{$refferal_amount}}</div>
+										</div>
+										<!--end::Number-->
+										<!--begin::Label-->
+										<div class="fw-bold fs-6 text-gray-400">Refferal</div>
+										<!--end::Label-->
+									</div>
+									@endif
 									<!-- <div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3"> -->
 										<!--begin::Number-->
 										<!-- <div class="d-flex align-items-center">

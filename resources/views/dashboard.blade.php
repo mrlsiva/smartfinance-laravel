@@ -259,13 +259,13 @@
                                     <!--begin::Table head-->
                                     <thead>
                                         <tr class="fw-bolder text-muted">
-                                            <th class="">User</th>
-                                            <th class="">Role</th>
+                                            <th class="">USER</th>
+                                            <th class="">ROLE</th>
                                             <th class="">NEXT PAYMENT</th>
-                                            <th class="">Profile</th>
-                                            <th class="">Progress</th>
-                                            <th class="">Status</th>
-                                            <th class="">Actions</th>
+                                            <th class="">PROFILE</th>
+                                            <th class="">PROGRESS</th>
+                                            <th class="">STATUS</th>
+                                            <th class="">ACTIONS</th>
                                         </tr>
                                     </thead>
                                     <!--end::Table head-->
@@ -309,7 +309,16 @@
                                                         @php
                                                             $date = Carbon\Carbon::parse($payment_date->payment_date)->formatLocalized('%d %b %Y');
                                                         @endphp
-                                                        {{$date}}
+
+                                                        @if($payment_date->smartfinance->plan->id == 3)
+                                                            @if($payment_date->month == 1)
+                                                                -
+                                                            @else
+                                                                Rs. {{$payment_date->intrest}}
+                                                            @endif
+                                                        @else
+                                                            Rs. {{$payment_date->amount}}
+                                                        @endif
                                                     </td>
                                                 @else
                                                     <td>-</td>
@@ -341,15 +350,22 @@
                                                     <td class="">
                                                         <div class=" flex-shrink-0">
                                                             <button type="button"  class="btn  btn-light mb-5" onclick="super_admin()"><i class="fas fa-pencil-alt" id="fa"></i></button>
+                                                            @if($user->is_reffer == 1)
+                                                                <button type="button" id="kt_sign_in_submit" class="btn  btn-light mb-5" data-system_id="{{$user->id}}" name="reffer"><i class="fa fa-user-plus" id="fa"></i></button>
+                                                            @endif 
                                                         </div>
                                                     </td>
                                                 @else
                                                     <td class="">
                                                         <div class=" flex-shrink-0">
                                                             <button type="button" id="kt_sign_in_submit" class="btn  btn-light mb-5" data-system_id="{{$user->id}}" name="edit"><i class="fas fa-pencil-alt" id="fa"></i></button> 
+                                                            @if($user->is_reffer == 1)
+                                                                <button type="button" id="kt_sign_in_submit" class="btn  btn-light mb-5" data-system_id="{{$user->id}}" name="reffer"><i class="fa fa-user-plus" id="fa" ></i></button>
+                                                            @endif 
                                                         </div>
                                                     </td>
                                                 @endif
+
                                             </tr>
                                         
                                         @endforeach
@@ -503,7 +519,7 @@
                                             </td>
                                             @if($smartfinance->plan_id == 3)
                                                 @php
-                                                    $payment_dates = App\Models\SmartfinancePayment::where('smartfinance_id',$smartfinance->id)->get();
+                                                    $payment_dates = App\Models\SmartfinancePayment::where([['smartfinance_id',$smartfinance->id],['is_approve',1]])->get();
                                                     $amount=0;
                                                     foreach($payment_dates as $payment_date){
                                                         $amount = $amount+ $payment_date->investment_amount;
@@ -542,7 +558,15 @@
                                                     @php
                                                         $date = Carbon\Carbon::parse($payment_date->payment_date)->formatLocalized('%d %b %Y');
                                                     @endphp
-                                                    {{$date}}
+                                                    @if($payment_date->smartfinance->plan->id == 3)
+                                                        @if($payment_date->month == 1)
+                                                             -
+                                                        @else
+                                                            Rs. {{$payment_date->intrest}}
+                                                        @endif
+                                                    @else
+                                                        Rs. {{$payment_date->amount}}
+                                                    @endif
                                                 </td>
                                             @else
                                                 <td>-</td>
@@ -566,7 +590,16 @@
                                                     @endif
                                                 </td>
                                             @else
-                                                <td>-</td>
+                                                @php
+                                                    $payment_date = App\Models\SmartfinancePayment::where([['smartfinance_id',$smartfinance->id],['is_status',1]])->orderBy('id','Desc')->first();
+                                                @endphp
+                                                @if($payment_date != Null)
+                                                    <td><span class="badge py-3 px-4 fs-7 badge-secondary">Expired</span></td>
+                                                @else
+                                                    <td>-</td>
+                                                @endif
+
+                                                
                                             @endif
                                             @if($smartfinance->is_status == 2)
                                                 <td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>
@@ -696,7 +729,7 @@
                                                 </td>
                                                 @if($admin_finance->plan_id == 3)
 	                                                @php
-	                                                    $payment_dates = App\Models\SmartfinancePayment::where('smartfinance_id',$admin_finance->id)->get();
+	                                                    $payment_dates = App\Models\SmartfinancePayment::where([['smartfinance_id',$admin_finance->id],['is_approve',1]])->get();
 	                                                    $amount=0;
 	                                                    foreach($payment_dates as $payment_date){
 	                                                        $amount = $amount+ $payment_date->investment_amount;
@@ -728,7 +761,18 @@
                                                 	@php
                                                 	$date = Carbon\Carbon::parse($payment_date->payment_date)->formatLocalized('%d %b %Y');
                                                 	@endphp
-                                                	{{$date}}
+
+                                                    @if($payment_date->smartfinance->plan->id == 3)
+                                                        @if($payment_date->month == 1)
+                                                            -
+                                                        @else
+                                                            Rs. {{$payment_date->intrest}}
+                                                        @endif
+                                                    @else
+                                                        Rs. {{$payment_date->amount}}
+                                                    @endif
+
+                                                	
                                                 </td>
                                                 @else
                                                 <td>-</td>
@@ -1729,6 +1773,31 @@
                             </div>
                         </div>
                         <!--end::List-->
+
+                        <!--begin::List-->
+                        <div class="mh-300px scroll-y me-n7 pe-7">
+                            <div class="d-flex flex-stack py-4 border-bottom border-gray-300 border-bottom-dashed">
+                                <!--begin::Details-->
+                                <div class="d-flex align-items-center">
+                                    
+                                    <!--begin::Details-->
+                                    <div class="ms-5">
+                                        <span class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">Refferal</span>
+                                    </div>
+                                    <!--end::Details-->
+                                </div>
+                                <!--end::Details-->
+                                <!--begin::Access menu-->
+                                <div class="ms-2 w-150px">
+                                    <select class="form-select form-select-solid form-select-sm" data-control="select2" data-hide-search="true" name="refferal" id="refferal">
+                                        <option value="">Select</option>
+                                        
+                                    </select>
+                                </div>
+                                <!--end::Access menu-->
+                            </div>
+                        </div>
+                        <!--end::List-->
                         <div class="d-flex justify-content-center">
                             <button type="submit"  class="btn  btn-primary mt-5 mb-3">Submit</button>
                         </div>
@@ -1874,6 +1943,111 @@
     <!--end::Modal dialog-->
 </div>
 <!-- end::Modal -approve-investment- -->
+
+<!-- refferal_modal -->
+<div class="modal fade" id="refferal_modal" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog mw-650px">
+        <!--begin::Modal content-->
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header pb-0 border-0 justify-content-end">
+                <!--begin::Close-->
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
+                            <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="black" />
+                        </svg>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--begin::Modal header-->
+            <!--begin::Modal body-->
+            <div class="modal-body scroll-y mx-5 mx-xl-18 pt-0 pb-15">
+                <!--begin::Heading-->
+
+                <!--end::Google Contacts Invite-->
+                <!--begin::Separator-->
+                <!--end::Separator-->
+                <!--begin::Textarea-->
+                <!--end::Textarea-->
+                <!--begin::Users-->
+                <div class="mb-10">
+                    <!--begin::Heading-->
+                    <div class="fs-6 fw-bold mb-2">Refferal</div>
+                    <!--end::Heading-->
+                    <form class="form w-100" novalidate="novalidate" id="kt_sign_in_form" method="post" action="{{route('refferal')}}" enctype="multipart/form-data">
+                        @csrf
+                        <input type="hidden" name="userId" id="userId">
+                        
+                        
+                        <!--begin::List-->
+                        <div class="mh-300px scroll-y me-n7 pe-7">
+                            <div class="d-flex flex-stack py-4 border-bottom border-gray-300 border-bottom-dashed">
+                                <!--begin::Details-->
+                                <div class="d-flex align-items-center">
+                                    
+                                    <!--begin::Details-->
+                                    <div class="ms-5">
+                                        <span class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">User</span>
+                                    </div>
+                                    <!--end::Details-->
+                                </div>
+                                <!--end::Details-->
+                                <!--begin::Access menu-->
+                                <div class="ms-2 w-150px">
+                                    <select class="form-select form-select-solid form-select-sm" data-control="select2" data-hide-search="true" name="user" id="user">
+                                        <option value="">Select</option>
+                                    </select>
+                                </div>
+                                <!--end::Access menu-->
+                            </div>
+                        </div>
+                        <!--end::List-->
+
+                        <!--begin::List-->
+                        <div class="mh-300px scroll-y me-n7 pe-7">
+                            <div class="d-flex flex-stack py-4 border-bottom border-gray-300 border-bottom-dashed">
+                                <!--begin::Details-->
+                                <div class="d-flex align-items-center">
+                                    
+                                    <!--begin::Details-->
+                                    <div class="ms-5">
+                                        <span class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">Amount</span>
+                                    </div>
+                                    <!--end::Details-->
+                                </div>
+                                <!--end::Details-->
+                                <!--begin::Access menu-->
+                                <div class="ms-2 w-150px">
+                                    <input type="number" class="form-control form-control-solid" placeholder="Amount" value="" name="amount" id="amount" />
+                                </div>
+                                <!--end::Access menu-->
+                            </div>
+                        </div>
+                        <!--end::List-->
+                        
+                        
+                        <div class="d-flex justify-content-center">
+                            <button type="submit"  class="btn  btn-primary mt-5 mb-3">Submit</button>
+                        </div>
+                    </form>
+                </div>
+                <!--end::Users-->
+                <!--begin::Notice-->
+                <!--end::Notice-->
+            </div>
+            <!--end::Modal body-->
+        </div>
+            <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+</div>
+<!-- end::refferal_modal -->
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
@@ -4102,6 +4276,17 @@
                         $('select[name="profile"]').append('<option value="'+ '0' +'" selected>'+ 'Pending' +'</option>');
                         $('select[name="profile"]').append('<option value="'+ '1' +'">'+ 'Approved' +'</option>');
                     }
+                    if(data.is_reffer == 1)
+                    {
+                        jQuery('select[name="refferal"]').empty();
+                        $('select[name="refferal"]').append('<option value="'+ '1' +'" selected>'+ 'Yes' +'</option>');
+                        $('select[name="refferal"]').append('<option value="'+ '0' +'">'+ 'No' +'</option>');
+                    }
+                    else{
+                        jQuery('select[name="refferal"]').empty();
+                        $('select[name="refferal"]').append('<option value="'+ '0' +'" selected>'+ 'No' +'</option>');
+                        $('select[name="refferal"]').append('<option value="'+ '1' +'">'+ 'Yes' +'</option>');
+                    }
 
                 }
             });
@@ -4229,6 +4414,21 @@
                         document.getElementById("accepted_date").value = today;
 
                     }
+                    if(data.is_status == 1){
+                        jQuery('select[name="is_status"]').empty();
+                        $('select[name="is_status"]').append('<option value="" >'+ 'Select' +'</option>');
+                        $('select[name="is_status"]').append('<option value="0">'+ 'Reject' +'</option>');
+                        $('select[name="is_status"]').append('<option value="1" selected>'+ 'Approve' +'</option>');
+                    }
+                    else if(data.is_status == 0){
+
+                        jQuery('select[name="is_status"]').empty();
+                        $('select[name="is_status"]').append('<option value="" >'+ 'Select' +'</option>');
+                        $('select[name="is_status"]').append('<option value="0" selected>'+ 'Reject' +'</option>');
+                        $('select[name="is_status"]').append('<option value="1" >'+ 'Approve' +'</option>');
+
+                    }
+
                 }
             });
 }
@@ -4287,6 +4487,40 @@
     
 </script>
 <!-- end-reject-finance -->
+
+
+<!-- reffer -->
+<script type="text/javascript">
+
+    $(document).on('click', 'button[name^="reffer"]', function(e) {
+        var system_id = $(this).data("system_id");
+        console.log(system_id);
+
+        if(system_id)
+        {
+            jQuery.ajax({
+                url : 'get_users',
+                type: 'GET',
+                dataType: 'json',
+                data: { id: system_id },
+                success:function(data)
+                { 
+                    console.log(data);
+                    jQuery('#refferal_modal').modal('show');
+                    document.getElementById("userId").value = system_id;
+                    jQuery('select[name="user"]').empty();
+                    $('select[name="user"]').append('<option value="" selected>'+ 'Select' +'</option>');
+                    
+                    jQuery.each(data, function(key,value){
+                        $('select[name="user"]').append('<option value="'+ value.id +'">'+value.first_name+' '+value.last_name+'</option>');
+                    });
+                }
+            });
+        }
+        
+    });
+
+</script>
 
 
 @endsection

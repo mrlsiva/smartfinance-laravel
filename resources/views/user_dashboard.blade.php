@@ -244,7 +244,15 @@
                                                         @php
                                                         $date = Carbon\Carbon::parse($payment_date->payment_date)->formatLocalized('%d %b %Y');
                                                         @endphp
-                                                        {{$date}}
+                                                        @if($payment_date->smartfinance->plan->id == 3)
+                                                            @if($payment_date->month == 1)
+                                                                -
+                                                            @else
+                                                                Rs. {{$payment_date->intrest}}
+                                                            @endif
+                                                        @else
+                                                            Rs. {{$payment_date->amount}}
+                                                        @endif
                                                     </td>
                                                     @else
                                                     <td>-</td>
@@ -268,7 +276,14 @@
                                                         @endif
                                                     </td>
                                                     @else
-                                                    <td>-</td>
+                                                        @php
+                                                            $payment_date = App\Models\SmartfinancePayment::where([['smartfinance_id',$smartfinance->id],['is_status',1]])->orderBy('id','Desc')->first();
+                                                        @endphp
+                                                        @if($payment_date != Null)
+                                                            <td><span class="badge py-3 px-4 fs-7 badge-secondary">Expired</span></td>
+                                                        @else
+                                                            <td>-</td>
+                                                        @endif
                                                     @endif
 
                                                     @if($smartfinance->is_status == 2)

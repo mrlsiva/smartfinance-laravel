@@ -14,6 +14,7 @@ use App\Models\BankDetail;
 use App\Models\NomineeDetail;
 use App\Models\Smartfinance;
 use App\Models\SmartfinancePayment;
+use App\Models\Refferal;
 use Image;
 use DB;
 
@@ -132,13 +133,23 @@ class UserController extends Controller
         return $user;     
     }
 
+    public function get_users(Request $request) 
+    { 
+        $id=$request->id;  
+        $users = User::where('id','!=',$id)->get();
+        return $users;     
+    }
+
      public function change_user_status(Request $request)
     {
+
         $id = $request->user_id;
         $role_id = $request->role;
         $is_lock = $request->status;
         $is_active = $request->progress;
         $is_profile_verified = $request->profile;
+        $refferal = $request->refferal;
+
 
         if($role_id != 3){
             $is_profile_verified = DB::table('users')->where('id',$id)->select('is_profile_verified')->first()->is_profile_verified;
@@ -148,7 +159,7 @@ class UserController extends Controller
 
             }
             else{
-                DB::table('users')->where('id',$id)->update(['role_id' => $role_id,'is_lock' => $is_lock,'is_active' => $is_active,'is_profile_verified' => $is_profile_verified]);
+                DB::table('users')->where('id',$id)->update(['role_id' => $role_id,'is_lock' => $is_lock,'is_active' => $is_active,'is_profile_verified' => $is_profile_verified,'is_reffer' => $refferal]);
                 if($is_profile_verified == 1){
 
                     DB::table('users')->where('id',$id)->update(['is_profile_updated' => 0]);
@@ -157,7 +168,7 @@ class UserController extends Controller
             }
         }
         else{
-            DB::table('users')->where('id',$id)->update(['role_id' => $role_id,'is_lock' => $is_lock,'is_active' => $is_active,'is_profile_verified' => $is_profile_verified]);
+            DB::table('users')->where('id',$id)->update(['role_id' => $role_id,'is_lock' => $is_lock,'is_active' => $is_active,'is_profile_verified' => $is_profile_verified,'is_reffer' => $refferal]);
             if($is_profile_verified == 1){
 
                 DB::table('users')->where('id',$id)->update(['is_profile_updated' => 0]);
@@ -592,4 +603,22 @@ class UserController extends Controller
 
         return $users;
     }
+
+    public function refferal(Request $request) 
+    {
+        //return $request;
+        $refferal = Refferal::create([
+            'user_id' => $request->userId,
+            'reffered' => $request->user,
+            'amount' => $request->amount,
+        ]);
+
+        return redirect()->back()->with('alert', 'Refferal Added Successfully!!');
+
+
+
+    }
+
+
+
 }
