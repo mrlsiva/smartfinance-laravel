@@ -119,7 +119,7 @@
 											<!--begin::Svg Icon | path: icons/duotune/arrows/arr066.svg-->
 
 											<!--end::Svg Icon-->
-											<div class="fs-2 fw-bolder" data-kt-countup="true" data-kt-countup-value="5" data-kt-countup-prefix="No.">0</div>
+											<div class="fs-2 fw-bolder" data-kt-countup="true" data-kt-countup-value="{{$investment_count}}" data-kt-countup-prefix="No.">0</div>
 										</div>
 										<!--end::Number-->
 										<!--begin::Label-->
@@ -145,7 +145,7 @@
 										<!--begin::Number-->
 										<div class="d-flex align-items-center">
 
-											<div class="fs-2 fw-bolder" data-kt-countup="true" data-kt-countup-value="60" data-kt-countup-prefix="Rs.">10000</div>
+											<div class="fs-2 fw-bolder" data-kt-countup="true" data-kt-countup-value="{{$earning_amount}}" data-kt-countup-prefix="Rs.">10000</div>
 										</div>
 										<!--end::Number-->
 										<!--begin::Label-->
@@ -156,7 +156,7 @@
 										<!--begin::Number-->
 										<div class="d-flex align-items-center">
 
-											<div class="fs-2 fw-bolder" data-kt-countup="true" data-kt-countup-value="60" data-kt-countup-prefix="%">5</div>
+											<div class="fs-2 fw-bolder" data-kt-countup="true" data-kt-countup-value="{{$earning_percentage}}" data-kt-countup-prefix="%">5</div>
 										</div>
 										<!--end::Number-->
 										<!--begin::Label-->
