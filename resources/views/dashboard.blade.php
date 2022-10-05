@@ -303,25 +303,96 @@
                                                         $result[] = $smartfinance_id->id;
                                                     }
                                                     $payment_date = App\Models\SmartfinancePayment::whereIn('smartfinance_id',$result)->where('is_status',0)->orderBy('payment_date', 'asc')->first();
+
+                                                    $refferals = App\Models\Refferal::where('user_id',$user->id)->get();
+                                                    $result = [];
+                                                    foreach($refferals as $refferal){
+                                                        $year_finances = App\Models\Smartfinance::where([['user_id',$refferal->reffered],['plan_id',2],['is_status',1],['is_close',0]])->get();
+                                                        $yearm_finances = App\Models\Smartfinance::where([['user_id',$refferal->reffered],['plan_id',3],['is_status',1],['is_close',0]])->get();
+                                                        $month_finances = App\Models\Smartfinance::where([['user_id',$refferal->reffered],['plan_id',1],['is_status',1],['is_close',0]])->get();
+                                                        if($year_finances != NULL){
+                                                            foreach($year_finances as $year_finance){
+                                                                $payment = App\Models\SmartfinancePayment::where([['smartfinance_id',$year_finance->id],['is_status',0]])->first();
+                                                                if($payment != Null){
+                                                                    array_push($result, $payment->payment_date."_".$refferal->amount);
+                                                                }
+                                                            }
+                                                        }
+                                                        if($yearm_finances != NULL){
+                                                            foreach($yearm_finances as $yearm_finance){
+                                                                $payment = App\Models\SmartfinancePayment::where([['smartfinance_id',$yearm_finance->id],['is_approve',1]])->first();
+                                                                if($payment != Null){
+                                                                    array_push($result, $payment->payment_date."_".$refferal->amount);
+                                                                }
+                                                            }
+                                                        }
+                                                        if($month_finances != NULL){
+                                                            foreach($month_finances as $month_finance){
+                                                                $payments = App\Models\SmartfinancePayment::where([['smartfinance_id',$month_finance->id],['is_status',0]])->get();
+                                                                foreach($payments as $payment){
+                                                                    if($payment != Null){
+                                                                        array_push($result, $payment->payment_date."_".$refferal->amount);
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    if($result != NULL){
+                                                        $minValue = $result[0];
+                                                        foreach($result as $key => $val){
+                                                            if($minValue > $val){
+                                                                $minValue = $val;
+                                                            }
+                                                        }
+                                                        $final = explode('_', $minValue);
+                                                    }
                                                 @endphp
                                                 @if($payment_date != Null)
-                                                    <td>
-                                                        @php
-                                                            $date = Carbon\Carbon::parse($payment_date->payment_date)->formatLocalized('%d %b %Y');
-                                                        @endphp
-
-                                                        @if($payment_date->smartfinance->plan->id == 3)
-                                                            @if($payment_date->month == 1)
-                                                                -
+                                                    @if(count($result) > 0)
+                                                        <td>
+                                                            @if($payment_date->payment_date == $final[0] )
+                                                                @if($payment_date->smartfinance->plan->id == 3)
+                                                                    @if($payment_date->month == 1)
+                                                                        {{$final[1]}}
+                                                                    @else
+                                                                        Rs. {{$payment_date->intrest+$final[1]}}
+                                                                    @endif
+                                                                @else
+                                                                    Rs. {{$payment_date->amount+$final[1]}}
+                                                                @endif
+                                                            @elseif($payment_date->payment_date < $final[0] )
+                                                                @if($payment_date->smartfinance->plan->id == 3)
+                                                                    @if($payment_date->month == 1)
+                                                                        -
+                                                                    @else
+                                                                        Rs. {{$payment_date->intrest}}
+                                                                    @endif
+                                                                @else
+                                                                    Rs. {{$payment_date->amount}}
+                                                                @endif
                                                             @else
-                                                                Rs. {{$payment_date->intrest}}
+                                                                Rs. {{$final[1]}}
                                                             @endif
-                                                        @else
-                                                            Rs. {{$payment_date->amount}}
-                                                        @endif
-                                                    </td>
+                                                        </td>
+                                                    @else
+                                                        <td>
+                                                            @if($payment_date->smartfinance->plan->id == 3)
+                                                                @if($payment_date->month == 1)
+                                                                    -
+                                                                @else
+                                                                    Rs. {{$payment_date->intrest}}
+                                                                @endif
+                                                            @else
+                                                                Rs. {{$payment_date->amount}}
+                                                            @endif
+                                                        </td>
+                                                    @endif
                                                 @else
-                                                    <td>-</td>
+                                                    @if($result != Null)
+                                                        <td>Rs. {{$final[1]}}<td>
+                                                    @else
+                                                        <td>-</td>
+                                                    @endif
                                                 @endif
                                                 <td class="">
                                                     @if($user->is_profile_verified == 2)
@@ -553,19 +624,17 @@
                                             @php
                                                 $payment_date = App\Models\SmartfinancePayment::where([['smartfinance_id',$smartfinance->id],['is_status',0]])->first();
                                             @endphp
+
                                             @if($payment_date != Null)
                                                 <td>
-                                                    @php
-                                                        $date = Carbon\Carbon::parse($payment_date->payment_date)->formatLocalized('%d %b %Y');
-                                                    @endphp
                                                     @if($payment_date->smartfinance->plan->id == 3)
-                                                        @if($payment_date->month == 1)
-                                                             -
-                                                        @else
-                                                            Rs. {{$payment_date->intrest}}
-                                                        @endif
+                                                    @if($payment_date->month == 1)
+                                                    -
                                                     @else
-                                                        Rs. {{$payment_date->amount}}
+                                                    Rs. {{$payment_date->intrest}}
+                                                    @endif
+                                                    @else
+                                                    Rs. {{$payment_date->amount}}
                                                     @endif
                                                 </td>
                                             @else
@@ -683,7 +752,7 @@
                                                 <th class="">APPROVED DATE</th>
                                                 <th class="">RATE OF INTEREST</th>
                                                 <th class="">NEXT PAYMENT</th>
-                                        		<th class="">EXPIREY</th>
+                                                <th class="">EXPIREY</th>
                                                 <th class="">STATUS</th>
                                                 <th class="">ACTION</th>               
                                             </tr>
@@ -728,17 +797,17 @@
                                                     @endif
                                                 </td>
                                                 @if($admin_finance->plan_id == 3)
-	                                                @php
-	                                                    $payment_dates = App\Models\SmartfinancePayment::where([['smartfinance_id',$admin_finance->id],['is_approve',1]])->get();
-	                                                    $amount=0;
-	                                                    foreach($payment_dates as $payment_date){
-	                                                        $amount = $amount+ $payment_date->investment_amount;
-	                                                    }
-	                                                @endphp
-	                                                <td>Rs {{$amount}}</td>
-                                            	@else
-                                                	<td class="">Rs {{$admin_finance->amount}}</td>
-                                            	@endif
+                                                    @php
+                                                        $payment_dates = App\Models\SmartfinancePayment::where([['smartfinance_id',$admin_finance->id],['is_approve',1]])->get();
+                                                        $amount=0;
+                                                        foreach($payment_dates as $payment_date){
+                                                            $amount = $amount+ $payment_date->investment_amount;
+                                                        }
+                                                    @endphp
+                                                    <td>Rs {{$amount}}</td>
+                                                @else
+                                                    <td class="">Rs {{$admin_finance->amount}}</td>
+                                                @endif
                                                 <td class="">
                                                     {{$admin_finance->investment_date}}
                                                 </td>
@@ -758,9 +827,9 @@
                                                 @endphp
                                                 @if($payment_date != Null)
                                                 <td>
-                                                	@php
-                                                	$date = Carbon\Carbon::parse($payment_date->payment_date)->formatLocalized('%d %b %Y');
-                                                	@endphp
+                                                    @php
+                                                    $date = Carbon\Carbon::parse($payment_date->payment_date)->formatLocalized('%d %b %Y');
+                                                    @endphp
 
                                                     @if($payment_date->smartfinance->plan->id == 3)
                                                         @if($payment_date->month == 1)
@@ -772,7 +841,7 @@
                                                         Rs. {{$payment_date->amount}}
                                                     @endif
 
-                                                	
+                                                    
                                                 </td>
                                                 @else
                                                 <td>-</td>
@@ -782,18 +851,18 @@
                                                 @endphp
                                                 @if($payment_date != Null)
                                                 <td>
-                                                	@php
-                                                	$date = Carbon\Carbon::parse($payment_date->payment_date)->formatLocalized('%d %b %Y');
-                                                	@endphp
-                                                	@php
-                                                	$new_date = Carbon\Carbon::parse($payment_date->payment_date)->subMonths(2)->format('Y-m-d');
-                                                	$now = Carbon\Carbon::now()->format('Y-m-d')
-                                                	@endphp
-                                                	@if($new_date <= $now)
-                                                	<span class="badge py-3 px-4 fs-7 badge-light-danger">{{$date}}</span>
-                                                	@else
-                                                	<span class="badge py-3 px-4 fs-7 badge-light-success">{{$date}}</span>
-                                                	@endif
+                                                    @php
+                                                    $date = Carbon\Carbon::parse($payment_date->payment_date)->formatLocalized('%d %b %Y');
+                                                    @endphp
+                                                    @php
+                                                    $new_date = Carbon\Carbon::parse($payment_date->payment_date)->subMonths(2)->format('Y-m-d');
+                                                    $now = Carbon\Carbon::now()->format('Y-m-d')
+                                                    @endphp
+                                                    @if($new_date <= $now)
+                                                    <span class="badge py-3 px-4 fs-7 badge-light-danger">{{$date}}</span>
+                                                    @else
+                                                    <span class="badge py-3 px-4 fs-7 badge-light-success">{{$date}}</span>
+                                                    @endif
                                                 </td>
                                                 @else
                                                 <td>-</td>
