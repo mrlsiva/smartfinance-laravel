@@ -16,6 +16,7 @@ use App\Models\NomineeDetail;
 use App\Models\Smartfinance;
 use App\Models\SmartfinancePayment;
 use App\Models\Refferal;
+use App\Models\UserAmount;
 use Image;
 use DB;
 
@@ -73,7 +74,7 @@ class UserController extends Controller
                 $users = User::where('is_delete',0)->orderBy('id','Desc')->simplePaginate(10);
                 $user_count = User::where('is_active',0)->orWhere('is_profile_verified',0)->count();
                 $smartfinance_count = Smartfinance::where('is_status',2)->count();
-                $smartfinances = Smartfinance::orderBy('id','Desc')->simplePaginate(10);
+                $smartfinances = Smartfinance::orderBy('id','Desc')->get();
                 $admin_finances = Smartfinance::where('user_id',$user->id)->orderBy('id','Desc')->simplePaginate(10);
                 $admin_finance_count = Smartfinance::where('user_id',$user->id)->count();
 
@@ -116,64 +117,64 @@ class UserController extends Controller
 
                 // $payment_date = collect($result2)->min();
 
-                $refferals = Refferal::where('user_id',500012)->get();
-                //$result = new Collection();
-                $payment_date = [];
-                $payment_date1 = [];
-                foreach($refferals as $refferal){
-                    $year_finances = Smartfinance::where([['user_id',$refferal->reffered],['plan_id',2],['is_status',1],['is_close',0]])->get();
-                    $yearm_finances = Smartfinance::where([['user_id',$refferal->reffered],['plan_id',3],['is_status',1],['is_close',0]])->get();
-                    $month_finances = Smartfinance::where([['user_id',$refferal->reffered],['plan_id',1],['is_status',1],['is_close',0]])->get();
+                // $refferals = Refferal::where('user_id',500012)->get();
+                // //$result = new Collection();
+                // $payment_date = [];
+                // $payment_date1 = [];
+                // foreach($refferals as $refferal){
+                //     $year_finances = Smartfinance::where([['user_id',$refferal->reffered],['plan_id',2],['is_status',1],['is_close',0]])->get();
+                //     $yearm_finances = Smartfinance::where([['user_id',$refferal->reffered],['plan_id',3],['is_status',1],['is_close',0]])->get();
+                //     $month_finances = Smartfinance::where([['user_id',$refferal->reffered],['plan_id',1],['is_status',1],['is_close',0]])->get();
 
-                    //$payment_date = array();
+                //     //$payment_date = array();
                     
-                    if($year_finances != NULL){
-                        foreach($year_finances as $year_finance){
-                            $payment = SmartfinancePayment::where([['smartfinance_id',$year_finance->id],['is_status',0]])->first();
-                            //$result->push($payment->payment_date);
-                            if($payment != Null){
-                                array_push($payment_date, $payment->payment_date);
-                                array_push($payment_date1, $payment->payment_date."_".$refferal->amount);
-                            }
+                //     if($year_finances != NULL){
+                //         foreach($year_finances as $year_finance){
+                //             $payment = SmartfinancePayment::where([['smartfinance_id',$year_finance->id],['is_status',0]])->first();
+                //             //$result->push($payment->payment_date);
+                //             if($payment != Null){
+                //                 array_push($payment_date, $payment->payment_date);
+                //                 array_push($payment_date1, $payment->payment_date."_".$refferal->amount);
+                //             }
                             
-                        }
-                    }
+                //         }
+                //     }
 
-                    if($yearm_finances != NULL){
-                        foreach($yearm_finances as $yearm_finance){
-                            $payment = SmartfinancePayment::where([['smartfinance_id',$yearm_finance->id],['is_approve',1]])->first();
-                            //$result->push($payment->payment_date);
-                            if($payment != Null){
-                                array_push($payment_date, $payment->payment_date);
-                                array_push($payment_date1, $payment->payment_date."_".$refferal->amount);
-                            }
+                //     if($yearm_finances != NULL){
+                //         foreach($yearm_finances as $yearm_finance){
+                //             $payment = SmartfinancePayment::where([['smartfinance_id',$yearm_finance->id],['is_approve',1]])->first();
+                //             //$result->push($payment->payment_date);
+                //             if($payment != Null){
+                //                 array_push($payment_date, $payment->payment_date);
+                //                 array_push($payment_date1, $payment->payment_date."_".$refferal->amount);
+                //             }
 
-                        }
-                    }
+                //         }
+                //     }
 
-                    if($month_finances != NULL){
-                        foreach($month_finances as $month_finance){
-                            $payments = SmartfinancePayment::where([['smartfinance_id',$month_finance->id],['is_status',0]])->get();
-                            foreach($payments as $payment){
-                                //$result->push($payment->payment_date);
-                                if($payment != Null){
-                                    array_push($payment_date, $payment->payment_date);
-                                    array_push($payment_date1, $payment->payment_date."_".$refferal->amount);
-                                }
-                            }
-                        }
-                    }
-                    //return $result;
-                }
-                //return count($payment_date1);
+                //     if($month_finances != NULL){
+                //         foreach($month_finances as $month_finance){
+                //             $payments = SmartfinancePayment::where([['smartfinance_id',$month_finance->id],['is_status',0]])->get();
+                //             foreach($payments as $payment){
+                //                 //$result->push($payment->payment_date);
+                //                 if($payment != Null){
+                //                     array_push($payment_date, $payment->payment_date);
+                //                     array_push($payment_date1, $payment->payment_date."_".$refferal->amount);
+                //                 }
+                //             }
+                //         }
+                //     }
+                //     //return $result;
+                // }
+                // //return count($payment_date1);
 
-                $minValue = $payment_date1[0];
-                foreach($payment_date1 as $key => $val){
-                    if($minValue > $val){
-                        $minValue = $val;
-                    }
-                }  
-                $test = explode('_', $minValue);
+                // $minValue = $payment_date1[0];
+                // foreach($payment_date1 as $key => $val){
+                //     if($minValue > $val){
+                //         $minValue = $val;
+                //     }
+                // }  
+                // $test = explode('_', $minValue);
                 //return $test[0];
                 
 
@@ -748,12 +749,21 @@ class UserController extends Controller
         $refferal = Refferal::create([
             'user_id' => $request->userId,
             'reffered' => $request->user,
-            'amount' => $request->amount,
         ]);
 
         return redirect()->back()->with('alert', 'Refferal Added Successfully!!');
 
+    }
 
+    public function refferal_amount(Request $request) 
+    {
+        //return $request;
+        $refferal_amount = UserAmount::create([
+            'user_id' => $request->user_Id,
+            'amount' => $request->amount,
+        ]);
+
+        return redirect()->back()->with('alert', 'Refferal Amount Added Successfully!!');
 
     }
 
