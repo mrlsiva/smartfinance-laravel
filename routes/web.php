@@ -56,6 +56,7 @@ Route::post('/save_profile',[UserController::class, 'save_profile'])->name('save
 Route::post('/edit_profile',[UserController::class, 'edit_profile'])->name('edit_profile');
 Route::get('/get_users',[UserController::class, 'get_users'])->name('get_users');
 Route::post('/refferal',[UserController::class, 'refferal'])->name('refferal');
+Route::post('/refferal_amount',[UserController::class, 'refferal_amount'])->name('refferal_amount');
 //User Management end
 
 //Smart Finance

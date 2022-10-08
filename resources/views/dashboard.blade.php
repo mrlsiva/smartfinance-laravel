@@ -262,6 +262,7 @@
                                             <th class="">USER</th>
                                             <th class="">ROLE</th>
                                             <th class="">NEXT PAYMENT</th>
+                                            <th class="">TOTAL PAYMENT</th>
                                             <th class="">PROFILE</th>
                                             <th class="">PROGRESS</th>
                                             <th class="">STATUS</th>
@@ -304,96 +305,55 @@
                                                     }
                                                     $payment_date = App\Models\SmartfinancePayment::whereIn('smartfinance_id',$result)->where('is_status',0)->orderBy('payment_date', 'asc')->first();
 
-                                                    $refferals = App\Models\Refferal::where('user_id',$user->id)->get();
-                                                    $result = [];
-                                                    foreach($refferals as $refferal){
-                                                        $year_finances = App\Models\Smartfinance::where([['user_id',$refferal->reffered],['plan_id',2],['is_status',1],['is_close',0]])->get();
-                                                        $yearm_finances = App\Models\Smartfinance::where([['user_id',$refferal->reffered],['plan_id',3],['is_status',1],['is_close',0]])->get();
-                                                        $month_finances = App\Models\Smartfinance::where([['user_id',$refferal->reffered],['plan_id',1],['is_status',1],['is_close',0]])->get();
-                                                        if($year_finances != NULL){
-                                                            foreach($year_finances as $year_finance){
-                                                                $payment = App\Models\SmartfinancePayment::where([['smartfinance_id',$year_finance->id],['is_status',0]])->first();
-                                                                if($payment != Null){
-                                                                    array_push($result, $payment->payment_date."_".$refferal->amount);
-                                                                }
-                                                            }
-                                                        }
-                                                        if($yearm_finances != NULL){
-                                                            foreach($yearm_finances as $yearm_finance){
-                                                                $payment = App\Models\SmartfinancePayment::where([['smartfinance_id',$yearm_finance->id],['is_approve',1]])->first();
-                                                                if($payment != Null){
-                                                                    array_push($result, $payment->payment_date."_".$refferal->amount);
-                                                                }
-                                                            }
-                                                        }
-                                                        if($month_finances != NULL){
-                                                            foreach($month_finances as $month_finance){
-                                                                $payments = App\Models\SmartfinancePayment::where([['smartfinance_id',$month_finance->id],['is_status',0]])->get();
-                                                                foreach($payments as $payment){
-                                                                    if($payment != Null){
-                                                                        array_push($result, $payment->payment_date."_".$refferal->amount);
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                    if($result != NULL){
-                                                        $minValue = $result[0];
-                                                        foreach($result as $key => $val){
-                                                            if($minValue > $val){
-                                                                $minValue = $val;
-                                                            }
-                                                        }
-                                                        $final = explode('_', $minValue);
-                                                    }
+                                                    
                                                 @endphp
                                                 @if($payment_date != Null)
-                                                    @if(count($result) > 0)
-                                                        <td>
-                                                            @if($payment_date->payment_date == $final[0] )
-                                                                @if($payment_date->smartfinance->plan->id == 3)
-                                                                    @if($payment_date->month == 1)
-                                                                        {{$final[1]}}
-                                                                    @else
-                                                                        Rs. {{$payment_date->intrest+$final[1]}}
-                                                                    @endif
-                                                                @else
-                                                                    Rs. {{$payment_date->amount+$final[1]}}
-                                                                @endif
-                                                            @elseif($payment_date->payment_date < $final[0] )
-                                                                @if($payment_date->smartfinance->plan->id == 3)
-                                                                    @if($payment_date->month == 1)
-                                                                        -
-                                                                    @else
-                                                                        Rs. {{$payment_date->intrest}}
-                                                                    @endif
-                                                                @else
-                                                                    Rs. {{$payment_date->amount}}
-                                                                @endif
-                                                            @else
-                                                                Rs. {{$final[1]}}
-                                                            @endif
-                                                        </td>
-                                                    @else
-                                                        <td>
+                                                    <td>
+                                                        @if($payment_date->smartfinance->plan->id == 3)
+                                                        @if($payment_date->month == 1)
+                                                        -
+                                                        @else
+                                                        Rs. {{$payment_date->intrest}}
+                                                        @endif
+                                                        @else
+                                                        Rs. {{$payment_date->amount}}
+                                                        @endif
+                                                    </td>
+                                                @else
+                                                    <td>-</td>
+                                                @endif
+                                                @php
+                                                    $refferal_amount = App\Models\UserAmount::where('user_id',$user->id)->first();
+                                                @endphp
+                                                <td>
+                                                    @if($refferal_amount != NULL)
+                                                        @if($payment_date != Null)
                                                             @if($payment_date->smartfinance->plan->id == 3)
                                                                 @if($payment_date->month == 1)
-                                                                    -
+                                                                    Rs. {{$refferal_amount->amount}}
                                                                 @else
-                                                                    Rs. {{$payment_date->intrest}}
+                                                                    Rs. {{$payment_date->intrest+$refferal_amount->amount}}
                                                                 @endif
                                                             @else
-                                                                Rs. {{$payment_date->amount}}
+                                                                Rs. {{$payment_date->amount+$refferal_amount->amount}}
                                                             @endif
-                                                        </td>
-                                                    @endif
-                                                @else
-                                                    @if($result != Null)
-                                                        <td>Rs. {{$final[1]}}<td>
+                                                        @else
+                                                            Rs. {{$refferal_amount->amount}}
+                                                        @endif
+                                                    @elseif($payment_date != Null)
+                                                        @if($payment_date->smartfinance->plan->id == 3)
+                                                            @if($payment_date->month == 1)
+                                                                -
+                                                            @else
+                                                                Rs. {{$payment_date->intrest}}
+                                                            @endif
+                                                        @else
+                                                            Rs. {{$payment_date->amount}}
+                                                        @endif
                                                     @else
-                                                        <td>-</td>
+                                                        -
                                                     @endif
-                                                @endif
+                                                </td>
                                                 <td class="">
                                                     @if($user->is_profile_verified == 2)
                                                         <span class="badge py-3 px-4 fs-7 badge-light-danger">Incomplete</span>
@@ -417,6 +377,10 @@
                                                         <span class="badge py-3 px-4 fs-7 badge-light-danger">Locked</span>
                                                     @endif
                                                 </td>
+                                                @php
+                                                    $refferals = App\Models\Refferal::where('user_id',$user->id)->first();
+                                                @endphp
+
                                                 @if($user->role_id == 1)
                                                     <td class="">
                                                         <div class=" flex-shrink-0">
@@ -424,6 +388,9 @@
                                                             @if($user->is_reffer == 1)
                                                                 <button type="button" id="kt_sign_in_submit" class="btn  btn-light mb-5" data-system_id="{{$user->id}}" name="reffer"><i class="fa fa-user-plus" id="fa"></i></button>
                                                             @endif 
+                                                            @if($refferals != Null)
+                                                                <button type="button"  class="btn  btn-light mb-5" data-system_userid="{{$user->id}}" name="reffer_amount"><i class="fa fa-plus-circle" id="fa"></i></button>
+                                                            @endif
                                                         </div>
                                                     </td>
                                                 @else
@@ -433,6 +400,9 @@
                                                             @if($user->is_reffer == 1)
                                                                 <button type="button" id="kt_sign_in_submit" class="btn  btn-light mb-5" data-system_id="{{$user->id}}" name="reffer"><i class="fa fa-user-plus" id="fa" ></i></button>
                                                             @endif 
+                                                            @if($refferals != Null)
+                                                                <button type="button" class="btn  btn-light mb-5" data-system_userid="{{$user->id}}" name="reffer_amount"><i class="fa fa-plus-circle" id="fa"></i></button>
+                                                            @endif
                                                         </div>
                                                     </td>
                                                 @endif
@@ -698,9 +668,7 @@
                                 <!--end::Table body-->
                             </table>
                             <!--end::Table-->
-                            <div class="d-flex justify-content-end mb-3">
-                                {{ $smartfinances->links() }}
-                            </div>
+                            
                         </div>
                         <!--end::Card body-->
                     </div>
@@ -2077,29 +2045,6 @@
                             </div>
                         </div>
                         <!--end::List-->
-
-                        <!--begin::List-->
-                        <div class="mh-300px scroll-y me-n7 pe-7">
-                            <div class="d-flex flex-stack py-4 border-bottom border-gray-300 border-bottom-dashed">
-                                <!--begin::Details-->
-                                <div class="d-flex align-items-center">
-                                    
-                                    <!--begin::Details-->
-                                    <div class="ms-5">
-                                        <span class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">Amount</span>
-                                    </div>
-                                    <!--end::Details-->
-                                </div>
-                                <!--end::Details-->
-                                <!--begin::Access menu-->
-                                <div class="ms-2 w-150px">
-                                    <input type="number" class="form-control form-control-solid" placeholder="Amount" value="" name="amount" id="amount" />
-                                </div>
-                                <!--end::Access menu-->
-                            </div>
-                        </div>
-                        <!--end::List-->
-                        
                         
                         <div class="d-flex justify-content-center">
                             <button type="submit"  class="btn  btn-primary mt-5 mb-3">Submit</button>
@@ -2117,6 +2062,86 @@
     <!--end::Modal dialog-->
 </div>
 <!-- end::refferal_modal -->
+
+<!-- refferal_amount_modal -->
+<div class="modal fade" id="refferal_amount_modal" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog mw-650px">
+        <!--begin::Modal content-->
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header pb-0 border-0 justify-content-end">
+                <!--begin::Close-->
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
+                            <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="black" />
+                        </svg>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--begin::Modal header-->
+            <!--begin::Modal body-->
+            <div class="modal-body scroll-y mx-5 mx-xl-18 pt-0 pb-15">
+                <!--begin::Heading-->
+
+                <!--end::Google Contacts Invite-->
+                <!--begin::Separator-->
+                <!--end::Separator-->
+                <!--begin::Textarea-->
+                <!--end::Textarea-->
+                <!--begin::Users-->
+                <div class="mb-10">
+                    <!--begin::Heading-->
+                    <div class="fs-6 fw-bold mb-2">Refferal Amount</div>
+                    <!--end::Heading-->
+                    <form class="form w-100" novalidate="novalidate" id="kt_sign_in_form" method="post" action="{{route('refferal_amount')}}" enctype="multipart/form-data">
+                        @csrf
+                        <input type="hidden" name="user_Id" id="user_Id">
+                        
+                        
+                        <!--begin::List-->
+                        <div class="mh-300px scroll-y me-n7 pe-7">
+                            <div class="d-flex flex-stack py-4 border-bottom border-gray-300 border-bottom-dashed">
+                                <!--begin::Details-->
+                                <div class="d-flex align-items-center">
+                                    
+                                    <!--begin::Details-->
+                                    <div class="ms-5">
+                                        <span class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">Amount</span>
+                                    </div>
+                                    <!--end::Details-->
+                                </div>
+                                <!--end::Details-->
+                                <!--begin::Access menu-->
+                                <div class="ms-2 w-150px">
+                                    <input type="number" class="form-control form-control-solid" placeholder="Amount" name="amount" />
+                                </div>
+                                <!--end::Access menu-->
+                            </div>
+                        </div>
+                        <!--end::List-->
+                        
+                        <div class="d-flex justify-content-center">
+                            <button type="submit"  class="btn  btn-primary mt-5 mb-3">Submit</button>
+                        </div>
+                    </form>
+                </div>
+                <!--end::Users-->
+                <!--begin::Notice-->
+                <!--end::Notice-->
+            </div>
+            <!--end::Modal body-->
+        </div>
+            <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+</div>
+<!-- end::refferal_amount_modal -->
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
@@ -4585,6 +4610,24 @@
                     });
                 }
             });
+        }
+        
+    });
+
+</script>
+
+<!-- reffer amount -->
+<script type="text/javascript">
+
+    $(document).on('click', 'button[name^="reffer_amount"]', function(e) {
+        var system_id = $(this).data("system_userid");
+        console.log(system_id);
+
+        if(system_id)
+        {
+            jQuery('#refferal_amount_modal').modal('show');
+            document.getElementById("user_Id").value = system_id;
+            
         }
         
     });

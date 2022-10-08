@@ -257,6 +257,7 @@ body{
 									@else
 									<th class="">YEARLY RETRUN</th>
 									@endif
+									<th class="">PAYMENT</th>
 									<th class="">STATUS</th>
 									@if($user->role_id == 1 || $user->role_id == 2) 
 									<th class="">ACTION</th> 
@@ -284,6 +285,13 @@ body{
 									</td>
 
 									<td>Rs {{$smartfinance_payment->amount}}</td>
+									<td>
+										@if($smartfinance->plan->type == 'month')
+											Rs {{$smartfinance_payment->amount+$smartfinance->amount}}
+										@else
+											Rs {{$smartfinance_payment->amount}}
+										@endif
+									</td>
 									<td>
 										@if($smartfinance_payment->is_status == 0)
 										<span class="badge py-3 px-4 fs-7 badge-light-warning">Un Paid</span>
@@ -367,6 +375,7 @@ body{
 									<th class="">INVESTED AMOUNT</th>
 									<th class="">TOTAL AMOUNT</th>
 									<th class="">PROFIT</th>
+									<th class="">PAYMENT</th>
 									<th class="">STATUS</th>
 									@if($user->role_id != 3)
 										<th class="">ACTION</th>   
@@ -400,6 +409,13 @@ body{
 									@else
 									<td>{{$smartfinance_payment->intrest}}</td>
 									@endif
+									<td>
+										@if($smartfinance_payment->month == 1)
+											{{0+$smartfinance_payment->next_amount+$smartfinance_payment->balance}}
+										@else
+											{{$smartfinance_payment->intrest+$smartfinance_payment->next_amount+$smartfinance_payment->balance}}
+										@endif
+									</td>
 									@if($smartfinance_payment->is_approve == 1)
 										<td><span class="badge py-3 px-4 fs-7 badge-light-success">Approved</span></td>
 									@elseif($smartfinance_payment->is_approve == 0)
@@ -983,7 +999,7 @@ body{
 </div>
 <!-- end::Modal -approve-investment- -->
 
-<!-- begin::Modal -->
+<!-- begin::Get Year Modal -->
 <div class="modal fade" id="get_year" tabindex="-1" aria-hidden="true">
     <!--begin::Modal dialog-->
     <div class="modal-dialog mw-650px">
@@ -1044,7 +1060,7 @@ body{
                                 <div class="ms-2 w-150px">
                                     <select class="form-select form-select-solid form-select-sm " data-control="select2" data-hide-search="true" name="year" id="year">
                                 		<option value="">Select</option>
-                               			@for ($i = 2; $i <= 10; $i++)
+                               			@for ($i = 1; $i <= 10; $i++)
                                     		<option value="{{$i}}">{{$i}}</option>
                                 		@endfor
                             		</select>
