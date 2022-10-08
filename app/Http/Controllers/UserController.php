@@ -116,65 +116,65 @@ class UserController extends Controller
 
                 // $payment_date = collect($result2)->min();
 
-                $refferals = Refferal::where('user_id',500012)->get();
-                //$result = new Collection();
-                $payment_date = [];
-                $payment_date1 = [];
-                foreach($refferals as $refferal){
-                    $year_finances = Smartfinance::where([['user_id',$refferal->reffered],['plan_id',2],['is_status',1],['is_close',0]])->get();
-                    $yearm_finances = Smartfinance::where([['user_id',$refferal->reffered],['plan_id',3],['is_status',1],['is_close',0]])->get();
-                    $month_finances = Smartfinance::where([['user_id',$refferal->reffered],['plan_id',1],['is_status',1],['is_close',0]])->get();
+                // $refferals = Refferal::where('user_id',500012)->get();
+                // //$result = new Collection();
+                // $payment_date = [];
+                // $payment_date1 = [];
+                // foreach($refferals as $refferal){
+                //     $year_finances = Smartfinance::where([['user_id',$refferal->reffered],['plan_id',2],['is_status',1],['is_close',0]])->get();
+                //     $yearm_finances = Smartfinance::where([['user_id',$refferal->reffered],['plan_id',3],['is_status',1],['is_close',0]])->get();
+                //     $month_finances = Smartfinance::where([['user_id',$refferal->reffered],['plan_id',1],['is_status',1],['is_close',0]])->get();
 
-                    //$payment_date = array();
+                //     //$payment_date = array();
                     
-                    if($year_finances != NULL){
-                        foreach($year_finances as $year_finance){
-                            $payment = SmartfinancePayment::where([['smartfinance_id',$year_finance->id],['is_status',0]])->first();
-                            //$result->push($payment->payment_date);
-                            if($payment != Null){
-                                array_push($payment_date, $payment->payment_date);
-                                array_push($payment_date1, $payment->payment_date."_".$refferal->amount);
-                            }
+                //     if($year_finances != NULL){
+                //         foreach($year_finances as $year_finance){
+                //             $payment = SmartfinancePayment::where([['smartfinance_id',$year_finance->id],['is_status',0]])->first();
+                //             //$result->push($payment->payment_date);
+                //             if($payment != Null){
+                //                 array_push($payment_date, $payment->payment_date);
+                //                 array_push($payment_date1, $payment->payment_date."_".$refferal->amount);
+                //             }
                             
-                        }
-                    }
+                //         }
+                //     }
 
-                    if($yearm_finances != NULL){
-                        foreach($yearm_finances as $yearm_finance){
-                            $payment = SmartfinancePayment::where([['smartfinance_id',$yearm_finance->id],['is_approve',1]])->first();
-                            //$result->push($payment->payment_date);
-                            if($payment != Null){
-                                array_push($payment_date, $payment->payment_date);
-                                array_push($payment_date1, $payment->payment_date."_".$refferal->amount);
-                            }
+                //     if($yearm_finances != NULL){
+                //         foreach($yearm_finances as $yearm_finance){
+                //             $payment = SmartfinancePayment::where([['smartfinance_id',$yearm_finance->id],['is_approve',1]])->first();
+                //             //$result->push($payment->payment_date);
+                //             if($payment != Null){
+                //                 array_push($payment_date, $payment->payment_date);
+                //                 array_push($payment_date1, $payment->payment_date."_".$refferal->amount);
+                //             }
 
-                        }
-                    }
+                //         }
+                //     }
 
-                    if($month_finances != NULL){
-                        foreach($month_finances as $month_finance){
-                            $payments = SmartfinancePayment::where([['smartfinance_id',$month_finance->id],['is_status',0]])->get();
-                            foreach($payments as $payment){
-                                //$result->push($payment->payment_date);
-                                if($payment != Null){
-                                    array_push($payment_date, $payment->payment_date);
-                                    array_push($payment_date1, $payment->payment_date."_".$refferal->amount);
-                                }
-                            }
-                        }
-                    }
-                    //return $result;
-                }
-                //return count($payment_date1);
+                //     if($month_finances != NULL){
+                //         foreach($month_finances as $month_finance){
+                //             $payments = SmartfinancePayment::where([['smartfinance_id',$month_finance->id],['is_status',0]])->get();
+                //             foreach($payments as $payment){
+                //                 //$result->push($payment->payment_date);
+                //                 if($payment != Null){
+                //                     array_push($payment_date, $payment->payment_date);
+                //                     array_push($payment_date1, $payment->payment_date."_".$refferal->amount);
+                //                 }
+                //             }
+                //         }
+                //     }
+                //     //return $result;
+                // }
+                // //return count($payment_date1);
 
-                $minValue = $payment_date1[0];
-                foreach($payment_date1 as $key => $val){
-                    if($minValue > $val){
-                        $minValue = $val;
-                    }
-                }  
-                $test = explode('_', $minValue);
-                //return $test[0];
+                // $minValue = $payment_date1[0];
+                // foreach($payment_date1 as $key => $val){
+                //     if($minValue > $val){
+                //         $minValue = $val;
+                //     }
+                // }  
+                // $test = explode('_', $minValue);
+                // //return $test[0];
                 
 
                 return view('dashboard')->with('users',$users)->with('user_count',$user_count)->with('smartfinances',$smartfinances)->with('smartfinance_count',$smartfinance_count)->with('admin_finances',$admin_finances)->with('admin_finance_count',$admin_finance_count);
