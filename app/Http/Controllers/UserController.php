@@ -16,6 +16,7 @@ use App\Models\NomineeDetail;
 use App\Models\Smartfinance;
 use App\Models\SmartfinancePayment;
 use App\Models\Refferal;
+use App\Models\UserAmount;
 use Image;
 use DB;
 
@@ -73,7 +74,7 @@ class UserController extends Controller
                 $users = User::where('is_delete',0)->orderBy('id','Desc')->simplePaginate(10);
                 $user_count = User::where('is_active',0)->orWhere('is_profile_verified',0)->count();
                 $smartfinance_count = Smartfinance::where('is_status',2)->count();
-                $smartfinances = Smartfinance::orderBy('id','Desc')->simplePaginate(10);
+                $smartfinances = Smartfinance::orderBy('id','Desc')->get();
                 $admin_finances = Smartfinance::where('user_id',$user->id)->orderBy('id','Desc')->simplePaginate(10);
                 $admin_finance_count = Smartfinance::where('user_id',$user->id)->count();
 
@@ -174,7 +175,7 @@ class UserController extends Controller
                 //     }
                 // }  
                 // $test = explode('_', $minValue);
-                // //return $test[0];
+                //return $test[0];
                 
 
                 return view('dashboard')->with('users',$users)->with('user_count',$user_count)->with('smartfinances',$smartfinances)->with('smartfinance_count',$smartfinance_count)->with('admin_finances',$admin_finances)->with('admin_finance_count',$admin_finance_count);
@@ -748,12 +749,21 @@ class UserController extends Controller
         $refferal = Refferal::create([
             'user_id' => $request->userId,
             'reffered' => $request->user,
-            'amount' => $request->amount,
         ]);
 
         return redirect()->back()->with('alert', 'Refferal Added Successfully!!');
 
+    }
 
+    public function refferal_amount(Request $request) 
+    {
+        //return $request;
+        $refferal_amount = UserAmount::create([
+            'user_id' => $request->user_Id,
+            'amount' => $request->amount,
+        ]);
+
+        return redirect()->back()->with('alert', 'Refferal Amount Added Successfully!!');
 
     }
 

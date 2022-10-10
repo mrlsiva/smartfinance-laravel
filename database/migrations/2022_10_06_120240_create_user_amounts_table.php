@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRefferalsTable extends Migration
+class CreateUserAmountsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,10 @@ class CreateRefferalsTable extends Migration
      */
     public function up()
     {
-        Schema::create('refferals', function (Blueprint $table) {
+        Schema::create('user_amounts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();
-            $table->string('reffered');
-            $table->string('amount')->nullable();
+            $table->string('amount');
             $table->timestamps();
         });
     }
@@ -29,6 +28,6 @@ class CreateRefferalsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('refferals');
+        Schema::dropIfExists('user_amounts');
     }
 }

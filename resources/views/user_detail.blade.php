@@ -181,18 +181,12 @@
 										<!--end::Label-->
 									</div>
 
-									@if($user->is_reffer == 1 )
-									@php
-									$refferal_amount = 0;
-									$refferals = App\Models\Refferal::where('user_id',$user->id)->get();
-									foreach($refferals as $refferal){
-										$refferal_amount = $refferal_amount+$refferal->amount;
-									}
-									@endphp
+									@if($user->is_reffer == 1  )
+
 									<div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
 										<!--begin::Number-->
 										<div class="d-flex align-items-center">
-											<div class="fs-2 fw-bolder" >{{$refferal->count()}}/{{$refferal_amount}}</div>
+											<div class="fs-2 fw-bolder" >{{$refferals->count()}}</div>
 
 											
 										</div>
@@ -771,8 +765,9 @@
 							<!--begin::Table row-->
 							<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
 								<th class="">REFFERED</th>
-								<th class="">PAYMENT DATE</th>
-								<th class="">AMOUNT</th>     
+								<th class="">MONTHLY INVESTMENT</th>
+								<th class="">YEARLY INVESTMENT</th>
+								<th class="">YEARLY MONTHLY INVESTMENT</th>     
 							</tr>
 							<!--end::Table row-->
 						</thead>
@@ -780,62 +775,43 @@
 						<!--begin::Table body-->
 						<tbody class="fw-bolder text-gray-600">
 							@foreach($refferals as $refferal)
-								<tr>
+								
 									@php
-										$year_finances = App\Models\Smartfinance::where([['user_id',$refferal->reffered],['plan_id',2],['is_status',1],['is_close',0]])->get();
-										$yearm_finances = App\Models\Smartfinance::where([['user_id',$refferal->reffered],['plan_id',3],['is_status',1],['is_close',0]])->get();
 										$month_finances = App\Models\Smartfinance::where([['user_id',$refferal->reffered],['plan_id',1],['is_status',1],['is_close',0]])->get();
+										$month_amount = 0;
+										if($month_finances != NULL){
+											foreach($month_finances as $month_finance){
+												$month_amount = $month_amount + $month_finance->amount;
+
+											}
+
+										}
+
+										$year_finances = App\Models\Smartfinance::where([['user_id',$refferal->reffered],['plan_id',2],['is_status',1],['is_close',0]])->get();
+										$year_amount = 0;
+										if($year_finances != NULL){
+											foreach($year_finances as $year_finance){
+												$year_amount = $year_amount + $year_finance->amount;
+											}
+										}
+
+										$yearm_finances = App\Models\Smartfinance::where([['user_id',$refferal->reffered],['plan_id',3],['is_status',1],['is_close',0]])->get();
+										$yearm_amount = 0;
+										if($yearm_finances != NULL){
+											foreach($yearm_finances as $yearm_finance){
+												$payments = App\Models\SmartfinancePayment::where([['smartfinance_id',$yearm_finance->id],['is_approve',1]])->get();
+												foreach($payments as $payment){
+													$yearm_amount = $yearm_amount + $payment->investment_amount;
+												}
+											}
+										}
 									@endphp
-									@if($year_finances != NULL)
-										@foreach($year_finances as $year_finance)
-											@php
-												$payment = App\Models\SmartfinancePayment::where('smartfinance_id',$year_finance->id)->first();
-											@endphp
-											<tr>
-												<td>{{$refferal->reffer->first_name}} {{$refferal->reffer->last_name}}<span class="text-muted fw-bold text-muted d-block fs-7">#{{$refferal->reffer->id}}</span></td>
-												@php
-                          $date = Carbon\Carbon::parse($payment->payment_date)->formatLocalized('%d %b %Y');
-                        @endphp
-												<td>{{$date}}</td>
-												<td>{{$refferal->amount}}</td>
-											</tr>
-										@endforeach
-									@endif
-									@if($yearm_finances != NULL)
-										@foreach($yearm_finances as $yearm_finance)
-											@php
-												$payment = App\Models\SmartfinancePayment::where([['smartfinance_id',$yearm_finance->id],['is_approve',1]])->first();
-											@endphp
-											@if($payment != NULL)
-												<tr>
-													<td>{{$refferal->reffer->first_name}} {{$refferal->reffer->last_name}}<span class="text-muted fw-bold text-muted d-block fs-7">#{{$refferal->reffer->id}}</span></td>
-													@php
-	                          $date = Carbon\Carbon::parse($payment->payment_date)->formatLocalized('%d %b %Y');
-	                        @endphp
-													<td>{{$date}}</td>
-													<td>{{$refferal->amount}}</td>
-												</tr>
-											@endif
-										@endforeach
-									@endif
-									@if($month_finances != NULL)
-										@foreach($month_finances as $month_finance)
-											@php
-												$payments = App\Models\SmartfinancePayment::where('smartfinance_id',$month_finance->id)->get();
-											@endphp
-											@foreach($payments as $payment)
-												<tr>
-													<td>{{$refferal->reffer->first_name}} {{$refferal->reffer->last_name}}<span class="text-muted fw-bold text-muted d-block fs-7">#{{$refferal->reffer->id}}</span></td>
-													@php
-	                          $date = Carbon\Carbon::parse($payment->payment_date)->formatLocalized('%d %b %Y');
-	                        @endphp
-													<td>{{$date}}</td>
-													<td>{{$refferal->amount}}</td>
-												</tr>
-											@endforeach
-										@endforeach
-									@endif
-								</tr>
+									<tr>
+										<td>{{$refferal->reffer->first_name}} {{$refferal->reffer->last_name}}<span class="text-muted fw-bold text-muted d-block fs-7">#{{$refferal->reffer->id}}</span></td>
+										<td>Rs. {{$month_amount}}</td>
+										<td>Rs. {{$year_amount}}</td>
+										<td>Rs. {{$yearm_amount}}</td>
+									</tr>
 							@endforeach
 						</tbody>
 						<!--end::Table body-->
@@ -845,7 +821,7 @@
 				<!--end::Card body-->
 			</div>
 		</div>
-		<!--end::nominee View-->
+		<!--end::reffer View-->
 		<!--begin::Row-->
 		<div class="row gy-5 g-xl-8">
 			<div class="col-xl-12 mb-5 mb-xl-10">
