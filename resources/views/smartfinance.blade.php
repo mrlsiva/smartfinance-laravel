@@ -186,6 +186,27 @@ body{
 										<div class="fw-bold fs-6 text-gray-400">Percentage</div>
 										<!--end::Label-->
 									</div>
+
+									@php
+										$payment_date = App\Models\SmartfinancePayment::where('smartfinance_id',$payment->smartfinance_id)->orderBy('id','Desc')->first();
+
+										$new_date = Carbon\Carbon::parse($payment_date->payment_date)->subMonths(2)->format('Y-m-d');
+
+										$now = Carbon\Carbon::now()->format('Y-m-d');
+									@endphp
+									@if($new_date <= $now)
+										<div class="border bg-danger border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
+											<div class="d-flex align-items-center">
+												<select class="form-select-transparent fs-2 fw-bolder border-none bg-danger text-white" data-hide-search="true" data-dropdown-css-class="w-250px" data-placeholder="Select an option" name="close_status" id="close_status" style="border: 20px;">
+													<option></option>
+													<option value=" " selected="selected">Select</option>
+													<option value="1">Pay Out</option>
+													<option value="2">Renewal</option>
+												</select>
+											</div>
+											<div class="fw-bold fs-6 text-primary-400 text-white">Status</div>
+										</div>
+									@endif
 									
 									<!--end::Stat-->
 								</div>
@@ -212,7 +233,7 @@ body{
 
 					@if($payment->smartfinance->plan->id == 1 || $payment->smartfinance->plan->id == 2)
 						@if($user->role_id != 3 )
-							@php
+							<!-- @php
 	                            $payment_date = App\Models\SmartfinancePayment::where('smartfinance_id',$payment->smartfinance_id)->orderBy('id','Desc')->first();
 
 	                            $new_date = Carbon\Carbon::parse($payment_date->payment_date)->subMonths(2)->format('Y-m-d');
@@ -221,24 +242,18 @@ body{
                         	@if($new_date <= $now)
 								<div class="card-toolbar d-flex justify-content-end" data-bs-toggle="tooltip" data-bs-placement="top" >
 									
-										<input type="hidden" name="plan_id" id="plan_id" value="{{$payment->smartfinance->plan->id}}">
-	                        			<input type="hidden" name="smartfinance_id" id="smartfinance_id" value="{{$payment->smartfinance_id}}">
-
-										<!--begin::Label-->
-										<div class="text-muted fs-7 me-2">Status</div>
-										<!--end::Label-->
-										<!--begin::Select-->
-										<select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Select an option"  name="close_status" id="close_status" >
-											<option></option>
-											<option value=" " selected="selected">Select</option>
-											<option value="1">Pay Out</option>
-											<option value="2">Renewal</option>
-										</select>
-										<!--end::Select-->
-										
-									
+									<input type="hidden" name="plan_id" id="plan_id" value="{{$payment->smartfinance->plan->id}}">
+	                        		<input type="hidden" name="smartfinance_id" id="smartfinance_id" value="{{$payment->smartfinance_id}}">
+	
+									<div class="text-muted fs-7 me-2">Status</div>
+									<select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Select an option"  name="close_status" id="close_status" >
+										<option></option>
+										<option value=" " selected="selected">Select</option>
+										<option value="1">Pay Out</option>
+										<option value="2">Renewal</option>
+									</select>	
 								</div>
-							@endif
+							@endif -->
 						@endif
 						<!--begin::Table-->
 						<table class="table align-middle table-row-dashed fs-6 gy-3" >
@@ -336,7 +351,7 @@ body{
 							@endif
 						@endif
 						@if($user->role_id != 3 )
-							@php
+							<!-- @php
 	                            $payment_date = App\Models\SmartfinancePayment::where('smartfinance_id',$payment->smartfinance_id)->orderBy('id','Desc')->first();
 
 	                            $new_date = Carbon\Carbon::parse($payment_date->payment_date)->subMonths(2)->format('Y-m-d');
@@ -344,23 +359,17 @@ body{
                         	@endphp
                         	@if($new_date <= $now)
 								<div class="card-toolbar d-flex justify-content-end" data-bs-toggle="tooltip" data-bs-placement="top" >
-
 									<input type="hidden" name="plan_id" id="plan_id" value="{{$payment->smartfinance->plan->id}}">
 									<input type="hidden" name="smartfinance_id" id="smartfinance_id" value="{{$payment->smartfinance_id}}">
-
-									<!--begin::Label-->
 									<div class="text-muted fs-7 me-2">Status</div>
-									<!--end::Label-->
-									<!--begin::Select-->
 									<select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Select an option"  name="close_status" id="close_status" >
 										<option></option>
 										<option value=" " selected="selected">Select</option>
 										<option value="1">Pay Out</option>
 										<option value="2">Renewal</option>
 									</select>
-									<!--end::Select-->
 								</div>
-							@endif
+							@endif -->
 						@endif
 						<!--begin::Table-->
 						<table class="table align-middle table-row-dashed fs-6 gy-3" >

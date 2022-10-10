@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRefferalsTable extends Migration
+class AddRoleIdToUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,8 @@ class CreateRefferalsTable extends Migration
      */
     public function up()
     {
-        Schema::create('refferals', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained();
-            $table->string('reffered');
-            $table->string('amount')->nullable();
-            $table->timestamps();
+        Schema::table('users', function (Blueprint $table) {
+            $table->foreignId('role_id')->constrained();
         });
     }
 
@@ -29,6 +25,8 @@ class CreateRefferalsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('refferals');
+        Schema::table('users', function (Blueprint $table) {
+            //
+        });
     }
 }
