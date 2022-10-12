@@ -62,7 +62,7 @@
                     <div class="w-lg-500px p-10 p-lg-15 mx-auto">
                         <!--begin::Form-->
                         <form class="form w-100" novalidate="novalidate" id="kt_sign_in_form" method="post" action="{{route('login')}}" enctype="multipart/form-data">
-                        	@csrf
+                            @csrf
                             <!--begin::Heading-->
                             <div class="text-center mb-10">
                                 <!--begin::Title-->
@@ -119,10 +119,10 @@
                             <div class="text-center">
                                 <!--begin::Submit button-->
                                 <button type="submit"  class="btn btn-lg btn-primary w-100 mb-5">
-										<span class="indicator-label">Continue</span>
-										<span class="indicator-progress">Please wait...
-										<span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
-									</button>
+                                        <span class="indicator-label">Continue</span>
+                                        <span class="indicator-progress">Please wait...
+                                        <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+                                    </button>
                                 <!--end::Submit button-->
                                 <!--begin::Separator-->
 

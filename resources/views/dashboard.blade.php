@@ -2037,7 +2037,7 @@
                                 <!--end::Details-->
                                 <!--begin::Access menu-->
                                 <div class="ms-2 w-150px">
-                                    <select class="form-select form-select-solid form-select-sm" data-control="select2" data-hide-search="true" name="user" id="user">
+                                    <select class="form-select form-select-solid form-select-sm"  data-hide-search="true" name="user" id="user">
                                         <option value="">Select</option>
                                     </select>
                                 </div>

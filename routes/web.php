@@ -1,4 +1,4 @@
-  <?php
+<?php
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\loginController;
@@ -22,6 +22,16 @@ use App\Http\Middleware\PreventBackHistory;
 // Route::get('/', function () {
 //     return view('welcome');
 // });
+
+
+Route::get('/clear', function() {
+    Artisan::call('cache:clear');
+    Artisan::call('config:clear');
+    Artisan::call('config:cache');
+    Artisan::call('view:clear');
+    return "Cleared!!!";
+ });
+ 
 
 //Welcome
 Route::get('/',[registerController::class, 'home'])->name('home');
