@@ -244,11 +244,19 @@
 						<a class="nav-link text-active-primary ms-0 me-10 py-5" id="nominee" onclick="nominee()">Nominee Details</a>
 					</li>
 					<!--end::Nav item-->
+					@if($user->is_reffer == 1  )
+						<!--begin::Nav item-->
+						<li class="nav-item mt-2">
+							<a class="nav-link text-active-primary ms-0 me-10 py-5" id="reffer" onclick="reffer()">Refferal Details</a>
+						</li>
+						<!--end::Nav item-->
+					@else
 					<!--begin::Nav item-->
-					<li class="nav-item mt-2">
+					<li class="nav-item mt-2" style="display:none;">
 						<a class="nav-link text-active-primary ms-0 me-10 py-5" id="reffer" onclick="reffer()">Refferal Details</a>
 					</li>
 					<!--end::Nav item-->
+					@endif
 				</ul>
 				<!--begin::Navs-->
 			</div>
