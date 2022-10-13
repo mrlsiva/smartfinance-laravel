@@ -640,13 +640,40 @@
 
                                                 
                                             @endif
-                                            @if($smartfinance->is_status == 2)
-                                                <td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>
-                                            @elseif($smartfinance->is_status == 1)
-                                                <td><span class="badge py-3 px-4 fs-7 badge-light-success">Approved</span></td>
-                                            @elseif($smartfinance->is_status == 0)
-                                                <td><span class="badge py-3 px-4 fs-7 badge-light-danger">Rejected</span></td>
-                                            @endif      
+                                            
+                                            @if($smartfinance->plan_id == 3)
+                                                @php
+                                                    $payment = App\Models\SmartfinancePayment::where([['smartfinance_id',$smartfinance->id],['is_approve',2]])->first();
+                                                @endphp
+
+                                                @if($payment != null)
+
+                                                    @if($smartfinance->is_status == 2||$payment->is_approve == 2)
+                                                        <td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>
+                                                    @elseif($smartfinance->is_status == 1)
+                                                        <td><span class="badge py-3 px-4 fs-7 badge-light-success">Approved</span></td>
+                                                    @elseif($smartfinance->is_status == 0)
+                                                        <td><span class="badge py-3 px-4 fs-7 badge-light-danger">Rejected</span></td>
+                                                    @endif
+                                                @else
+                                                    @if($smartfinance->is_status == 2)
+                                                        <td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>
+                                                    @elseif($smartfinance->is_status == 1)
+                                                        <td><span class="badge py-3 px-4 fs-7 badge-light-success">Approved</span></td>
+                                                    @elseif($smartfinance->is_status == 0)
+                                                        <td><span class="badge py-3 px-4 fs-7 badge-light-danger">Rejected</span></td>
+                                                    @endif
+                                                @endif
+                                            @else
+                                                @if($smartfinance->is_status == 2)
+                                                    <td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>
+                                                @elseif($smartfinance->is_status == 1)
+                                                    <td><span class="badge py-3 px-4 fs-7 badge-light-success">Approved</span></td>
+                                                @elseif($smartfinance->is_status == 0)
+                                                    <td><span class="badge py-3 px-4 fs-7 badge-light-danger">Rejected</span></td>
+                                                @endif 
+                                            @endif 
+
                                             <td class="">
 
                                                 <button class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary"name="approve" data-system_id="{{$smartfinance->id}}" title="Edit"><i class="fas fa-pencil-alt" id="fa"></i></button>

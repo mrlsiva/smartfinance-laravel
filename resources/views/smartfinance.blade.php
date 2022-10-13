@@ -127,9 +127,13 @@ body{
 
 											<!--end::Svg Icon-->
 											@if($smartfinance->plan_id == 3)
+												
 												<div class="fs-2 fw-bolder" data-kt-countup="true" data-kt-countup-value="{{$amount}}" data-kt-countup-prefix="Rs">0</div>
-											@else
+											@elseif($smartfinance->is_status == 1)
 												<div class="fs-2 fw-bolder" data-kt-countup="true" data-kt-countup-value="{{$smartfinance->amount}}" data-kt-countup-prefix="Rs">0</div>
+											@else
+												<div class="fs-2 fw-bolder" data-kt-countup="true" data-kt-countup-value="0" data-kt-countup-prefix="Rs">0</div>
+
 											@endif
 										</div>
 										<!--end::Number-->
@@ -186,26 +190,27 @@ body{
 										<div class="fw-bold fs-6 text-gray-400">Percentage</div>
 										<!--end::Label-->
 									</div>
+									@if($payment != NULL)
+										@php
+											$payment_date = App\Models\SmartfinancePayment::where('smartfinance_id',$payment->smartfinance_id)->orderBy('id','Desc')->first();
 
-									@php
-										$payment_date = App\Models\SmartfinancePayment::where('smartfinance_id',$payment->smartfinance_id)->orderBy('id','Desc')->first();
+											$new_date = Carbon\Carbon::parse($payment_date->payment_date)->subMonths(2)->format('Y-m-d');
 
-										$new_date = Carbon\Carbon::parse($payment_date->payment_date)->subMonths(2)->format('Y-m-d');
-
-										$now = Carbon\Carbon::now()->format('Y-m-d');
-									@endphp
-									@if($new_date <= $now)
-										<div class="border bg-danger border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
-											<div class="d-flex align-items-center">
-												<select class="form-select-transparent fs-2 fw-bolder border-none bg-danger text-white" data-hide-search="true" data-dropdown-css-class="w-250px" data-placeholder="Select an option" name="close_status" id="close_status" style="border: 20px;">
-													<option></option>
-													<option value=" " selected="selected">Select</option>
-													<option value="1">Pay Out</option>
-													<option value="2">Renewal</option>
-												</select>
+											$now = Carbon\Carbon::now()->format('Y-m-d');
+										@endphp
+										@if($new_date <= $now)
+											<div class="border bg-danger border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
+												<div class="d-flex align-items-center">
+													<select class="form-select-transparent fs-2 fw-bolder border-none bg-danger text-white" data-hide-search="true" data-dropdown-css-class="w-250px" data-placeholder="Select an option" name="close_status" id="close_status" style="border: 20px;">
+														<option></option>
+														<option value=" " selected="selected">Select</option>
+														<option value="1">Pay Out</option>
+														<option value="2">Renewal</option>
+													</select>
+												</div>
+												<div class="fw-bold fs-6 text-primary-400 text-white">Status</div>
 											</div>
-											<div class="fw-bold fs-6 text-primary-400 text-white">Status</div>
-										</div>
+										@endif
 									@endif
 									
 									<!--end::Stat-->
@@ -1046,11 +1051,10 @@ body{
                     <!--end::Heading-->
                     <form class="form w-100"  method="post" action="{{route('renewal_plan_year')}}" enctype="multipart/form-data">
                         @csrf
-                        <input type="hidden" name="plan_id" id="plan_id" value="{{$payment->smartfinance->plan->id}}">
-                        <input type="hidden" name="smartfinance_id" id="smartfinance_id" value="{{$payment->smartfinance->id}}">
-                        
-                       
-                        
+                        @if($payment != NULL)
+	                        <input type="hidden" name="plan_id" id="plan_id" value="{{$payment->smartfinance->plan->id}}">
+	                        <input type="hidden" name="smartfinance_id" id="smartfinance_id" value="{{$payment->smartfinance->id}}">
+	                    @endif
                         
                         <!--begin::List-->
                         <div class="mh-300px scroll-y me-n7 pe-7">
