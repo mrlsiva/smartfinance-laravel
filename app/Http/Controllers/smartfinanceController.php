@@ -888,15 +888,37 @@ class smartfinanceController extends Controller
         return $finance;     
     }
 
-     public function approve_smart_finance_payment(Request $request) {
+    public function approve_smart_finance_payment(Request $request) {
         $id=$request->finance_payment_id;
         $approve = $request->is_approve;
          $smartfinances = DB::table('smartfinance_payments')->where('id',$id)->update(['is_approve' => $approve]);
           return redirect()->back();
+    }
 
+    public function pro_book_upload(Request $request) {
 
+        if($files=$request->file('pro_book')){  
+            $name=$files->getClientOriginalName();  
+            $files->move('storage/app/public/pro_book',$name); 
+            DB::table('smartfinances')->where('id',$request->smartfinance_Id)->update(['pro_book' => $name]); 
+        }  
 
-     }
+        //Pro_file
+        // $image = $request->file('pro_book');
+        // $rand_name = time() . Str::random(12);
+        // $filename = $rand_name . '.jpg';
+        // $photo = Image::make($image)->encode('jpg', 80);
+        // Storage::disk('public')->put(config('path.pro_book').$filename, $photo);
+        // DB::table('smartfinances')->where('id',$request->smartfinance_Id)->update(['pro_book' => $filename]);
+        return redirect()->back();
+    }
+
+    public function get_pro_book(Request $request) 
+    { 
+        $id=$request->id;  
+        $smartfinance = Smartfinance::where('id',$id)->first();
+        return $smartfinance;     
+    }
 
 
 

@@ -86,6 +86,8 @@ Route::post('/approve_smart_finance_payment',[SmartFinanceController::class, 'ap
 Route::get('/renewal_plan',[SmartFinanceController::class, 'renewal_plan'])->name('renewal_plan');
 Route::post('/renewal_plan_year',[SmartFinanceController::class, 'renewal_plan_year'])->name('renewal_plan_year');
 Route::get('payout_plan',[SmartFinanceController::class, 'payout_plan'])->name('payout_plan');
+Route::post('/pro_book_upload',[SmartFinanceController::class, 'pro_book_upload'])->name('pro_book_upload');
+Route::get('get_pro_book',[SmartFinanceController::class, 'get_pro_book'])->name('get_pro_book');
 
 //Smart Finance end
 
