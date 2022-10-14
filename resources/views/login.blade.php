@@ -106,7 +106,7 @@
                                     <label class="form-label fw-bolder text-dark fs-6 mb-0">Password</label>
                                     <!--end::Label-->
                                     <!--begin::Link-->
-                                    <a href="password-reset.html" class="link-primary fs-6 fw-bolder">Forgot Password ?</a>
+                                    
                                     <!--end::Link-->
                                 </div>
                                 <!--end::Wrapper-->
@@ -124,9 +124,7 @@
                                         <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
                                     </button>
                                 <!--end::Submit button-->
-                                <!--begin::Separator-->
-
-                                <!--end::Google link-->
+                               <a href="password-reset.html" class="link-primary fs-6 fw-bolder">Forgot Password ?</a>
                             </div>
                             <!--end::Actions-->
                         </form>
