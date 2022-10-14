@@ -118,10 +118,17 @@ closing payment amount in finance detail page
 8-10-22
 migration and seeding for db
 
-12-12-22
+12-10-22
 server buy
 refferal buy
 notification remove
+
+13-10-22
+fixed buy in status shows pending when approval pending in yearly monthly investment
+fixed buy in investment amount and total investment amount in user detail and profile page
+
+14-10-22
+Pro book upload and download
 
 
 

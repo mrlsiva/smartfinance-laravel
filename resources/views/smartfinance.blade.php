@@ -190,6 +190,38 @@ body{
 										<div class="fw-bold fs-6 text-gray-400">Percentage</div>
 										<!--end::Label-->
 									</div>
+									@php
+										$user = Auth::guard('web')->user();
+									@endphp
+									@if($user->role_id != 3 )
+										<div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
+											<!--begin::Number-->
+											<div class="d-flex align-items-center">
+												<button type="button" class="text-hover-primary btn  btn-light" data-system_id="{{$smartfinance->id}}" name="pro_book" >
+													<i class="fa fa-upload" style="font-size:24px;color:black;"></i>
+												</button>
+											</div>
+											<!--end::Number-->
+											<!--begin::Label-->
+											<div class="fw-bold fs-6 text-gray-400">Pro File</div>
+											<!--end::Label-->
+										</div>
+									@else
+										<div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
+											<!--begin::Number-->
+											<div class="d-flex align-items-center">
+												<a href="{{ $smartfinance->pro_book }}" download class="col-lg-4 fw-bold fs-6 text-start text-muted text-hover-primary">
+													<i class="fa fa-download" style="font-size:24px;color:black;"></i>
+												</a>
+											</div>
+											<!--end::Number-->
+											<!--begin::Label-->
+											<div class="fw-bold fs-6 text-gray-400">Pro File</div>
+											<!--end::Label-->
+										</div>
+
+									@endif
+
 									@if($payment != NULL)
 										@php
 											$payment_date = App\Models\SmartfinancePayment::where('smartfinance_id',$payment->smartfinance_id)->orderBy('id','Desc')->first();
@@ -1184,7 +1216,129 @@ body{
 </div>
 <!-- end::Modal -approve-investment- -->
 
+<!-- pro_book_modal -->
+<div class="modal fade" id="pro_book_modal" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog mw-650px">
+        <!--begin::Modal content-->
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header pb-0 border-0 justify-content-end">
+                <!--begin::Close-->
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
+                            <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="black" />
+                        </svg>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--begin::Modal header-->
+            <!--begin::Modal body-->
+            <div class="modal-body scroll-y mx-5 mx-xl-18 pt-0 pb-15">
+                <!--begin::Heading-->
+
+                <!--end::Google Contacts Invite-->
+                <!--begin::Separator-->
+                <!--end::Separator-->
+                <!--begin::Textarea-->
+                <!--end::Textarea-->
+                <!--begin::Users-->
+                <div class="mb-10">
+                    <!--begin::Heading-->
+                    <div class="row">
+                    	<div class=" col-md-6 text-start fs-6 fw-bold mb-2">Pro Book</div>
+                    	<div class=" col-md-6 text-end" style="display: none;" id="view"><a class="text-hover-primary" target="_blank" href="" id="book">View Book</a></div>
+                    	
+                    </div>
+                   
+
+                    <!--end::Heading-->
+                    <form class="form w-100" novalidate="novalidate" id="kt_sign_in_form" method="post" action="{{route('pro_book_upload')}}" enctype="multipart/form-data">
+                        @csrf
+                        <input type="hidden" name="smartfinance_Id" id="smartfinance_Id">
+                        
+                        
+                        <!--begin::Input-->
+                        <input type="file" class="form-control form-control-solid custom-file-input" id="pro_book_id" placeholder="Pro Book" value="" name="pro_book" />
+                        <!-- <div class="d-flex justify-content-center mt-3">
+                        	<img id="preview-image-pro_book" style="max-height: 200px;">
+                        	<a href="#" class="text-hover-primary" onclick="delete_pro_book()"  style="display:none;" id="pro_book_image">X</a>
+
+                        </div> -->
+                        
+                        <div class="d-flex justify-content-center">
+                            <button type="submit"  class="btn  btn-primary mt-5 mb-3">Submit</button>
+                        </div>
+                    </form>
+                </div>
+                <!--end::Users-->
+                <!--begin::Notice-->
+                <!--end::Notice-->
+            </div>
+            <!--end::Modal body-->
+        </div>
+            <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+</div>
+<!-- end::pro_book_modal -->
+
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+
+<!-- pro_book -->
+<script type="text/javascript">    
+    $(document).ready(function (e) { 
+       $('#pro_book').change(function(){ 
+            $('#pro_book_image').show();   
+            let reader = new FileReader();
+            reader.onload = (e) => { 
+                $('#preview-image-pro_book').attr('src', e.target.result); 
+            }
+            reader.readAsDataURL(this.files[0]); 
+       });
+
+    });
+
+    function delete_pro_book() {
+        document.getElementById('pro_book').value = null;
+        $("#preview-image-pro_book").attr("src", '');
+        $('#pro_book_image').hide();
+    }
+
+</script>
+
+<script type="text/javascript">
+	
+	$(document).on('click', 'button[name^="pro_book"]', function(e) {
+		var system_id = $(this).data("system_id");
+		console.log(system_id);
+		jQuery.ajax({
+			url : '../get_pro_book',
+			type: 'GET',
+			dataType: 'json',
+			data: { id: system_id },
+			success:function(data)
+			{ 
+				console.log(data.pro_book);
+				jQuery('#pro_book_modal').modal('show');
+				document.getElementById("smartfinance_Id").value = data.id;
+				if(data.pro_book != null){
+					$('#view').show();
+					$("#book").prop("href", data.pro_book);
+				}
+				
+
+			}
+		});
+	});
+</script>
+
 
 <!-- smartfinance -->
 <script type="text/javascript">

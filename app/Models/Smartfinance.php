@@ -27,4 +27,9 @@ class Smartfinance extends Model
     {
         return $value ? url('storage/app/public/'.config('path.bill').$value ): null;
     }
+
+    public function getProBookAttribute($value)
+    {
+        return $value ? url('storage/app/public/'.config('path.pro_book').$value ): null;
+    }
 }
