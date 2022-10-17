@@ -766,64 +766,115 @@
 				<!--begin::Card header-->
 				<!--begin::Card body-->
 				<div class="card-body p-9">
-					
-					<table class="table align-middle table-row-dashed fs-6 gy-3" >
-						<!--begin::Table head-->
-						<thead>
-							<!--begin::Table row-->
-							<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-								<th class="">REFFERED</th>
-								<th class="">MONTHLY INVESTMENT</th>
-								<th class="">YEARLY INVESTMENT</th>
-								<th class="">YEARLY MONTHLY INVESTMENT</th>     
-							</tr>
-							<!--end::Table row-->
-						</thead>
-						<!--end::Table head-->
-						<!--begin::Table body-->
-						<tbody class="fw-bolder text-gray-600">
-							@foreach($refferals as $refferal)
-								
-									@php
-										$month_finances = App\Models\Smartfinance::where([['user_id',$refferal->reffered],['plan_id',1],['is_status',1],['is_close',0]])->get();
-										$month_amount = 0;
-										if($month_finances != NULL){
-											foreach($month_finances as $month_finance){
-												$month_amount = $month_amount + $month_finance->amount;
+					<!--begin::Navs-->
+					<ul class="nav nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 fw-bolder">
+						<!--begin::Nav item-->
+						<li class="nav-item mt-2">
+							<a class="nav-link text-active-primary ms-0 me-10 py-5 active" id="reffered_user" onclick="reffered_user()">Reffered User Details</a>
+						</li>
+						<!--end::Nav item-->
+						<!--begin::Nav item-->
+						<li class="nav-item mt-2">
+							<a class="nav-link text-active-primary ms-0 me-10 py-5" id="refferal_amount" onclick="refferal_amount()">Refferal Amount Details</a>
+						</li>
+						<!--end::Nav item-->
+					</ul>
+					<!--begin::Navs-->
+					<div id="refferal_user_detail">
+						<br>
+						<table class="table align-middle table-row-dashed fs-6 gy-3" >
+							<!--begin::Table head-->
+							<thead>
+								<!--begin::Table row-->
+								<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+									<th class="">REFFERED</th>
+									<th class="">MONTHLY INVESTMENT</th>
+									<th class="">YEARLY INVESTMENT</th>
+									<th class="">YEARLY MONTHLY INVESTMENT</th>     
+								</tr>
+								<!--end::Table row-->
+							</thead>
+							<!--end::Table head-->
+							<!--begin::Table body-->
+							<tbody class="fw-bolder text-gray-600">
+								@foreach($refferals as $refferal)
+									
+										@php
+											$month_finances = App\Models\Smartfinance::where([['user_id',$refferal->reffered],['plan_id',1],['is_status',1],['is_close',0]])->get();
+											$month_amount = 0;
+											if($month_finances != NULL){
+												foreach($month_finances as $month_finance){
+													$month_amount = $month_amount + $month_finance->amount;
+
+												}
 
 											}
 
-										}
-
-										$year_finances = App\Models\Smartfinance::where([['user_id',$refferal->reffered],['plan_id',2],['is_status',1],['is_close',0]])->get();
-										$year_amount = 0;
-										if($year_finances != NULL){
-											foreach($year_finances as $year_finance){
-												$year_amount = $year_amount + $year_finance->amount;
-											}
-										}
-
-										$yearm_finances = App\Models\Smartfinance::where([['user_id',$refferal->reffered],['plan_id',3],['is_status',1],['is_close',0]])->get();
-										$yearm_amount = 0;
-										if($yearm_finances != NULL){
-											foreach($yearm_finances as $yearm_finance){
-												$payments = App\Models\SmartfinancePayment::where([['smartfinance_id',$yearm_finance->id],['is_approve',1]])->get();
-												foreach($payments as $payment){
-													$yearm_amount = $yearm_amount + $payment->investment_amount;
+											$year_finances = App\Models\Smartfinance::where([['user_id',$refferal->reffered],['plan_id',2],['is_status',1],['is_close',0]])->get();
+											$year_amount = 0;
+											if($year_finances != NULL){
+												foreach($year_finances as $year_finance){
+													$year_amount = $year_amount + $year_finance->amount;
 												}
 											}
-										}
-									@endphp
+
+											$yearm_finances = App\Models\Smartfinance::where([['user_id',$refferal->reffered],['plan_id',3],['is_status',1],['is_close',0]])->get();
+											$yearm_amount = 0;
+											if($yearm_finances != NULL){
+												foreach($yearm_finances as $yearm_finance){
+													$payments = App\Models\SmartfinancePayment::where([['smartfinance_id',$yearm_finance->id],['is_approve',1]])->get();
+													foreach($payments as $payment){
+														$yearm_amount = $yearm_amount + $payment->investment_amount;
+													}
+												}
+											}
+										@endphp
+										<tr>
+											<td>{{$refferal->reffer->first_name}} {{$refferal->reffer->last_name}}<span class="text-muted fw-bold text-muted d-block fs-7">#{{$refferal->reffer->id}}</span></td>
+											<td>Rs. {{$month_amount}}</td>
+											<td>Rs. {{$year_amount}}</td>
+											<td>Rs. {{$yearm_amount}}</td>
+										</tr>
+								@endforeach
+							</tbody>
+							<!--end::Table body-->
+						</table>
+					</div>
+
+					<div id="reffered_amount_detail" style="display:none;">
+						<br>
+						<table class="table align-middle table-row-dashed fs-6 gy-3" >
+							<!--begin::Table head-->
+							<thead>
+								<!--begin::Table row-->
+								<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+									<th class="">DATE</th>
+									<th class="">AMOUNT</th>
+									<th class="">STATUS</th>     
+								</tr>
+								<!--end::Table row-->
+							</thead>
+							<!--end::Table head-->
+							<!--begin::Table body-->
+							<tbody class="fw-bolder text-gray-600">
+								@foreach($refferal_amounts as $refferal_amount)
 									<tr>
-										<td>{{$refferal->reffer->first_name}} {{$refferal->reffer->last_name}}<span class="text-muted fw-bold text-muted d-block fs-7">#{{$refferal->reffer->id}}</span></td>
-										<td>Rs. {{$month_amount}}</td>
-										<td>Rs. {{$year_amount}}</td>
-										<td>Rs. {{$yearm_amount}}</td>
+										@php
+											$date = Carbon\Carbon::parse($refferal_amount->date)->formatLocalized('%d %b %Y');
+										@endphp
+										<td>{{$date}}</td>
+										<td>Rs. {{$refferal_amount->amount}}</td>
+										@if($refferal_amount->is_status == 1)
+											<td><span class="badge py-3 px-4 fs-7 badge-light-success">Paid</span></td>
+										@else
+											<td><span class="badge py-3 px-4 fs-7 badge-light-danger">Pending</span></td>
+										@endif
 									</tr>
-							@endforeach
-						</tbody>
-						<!--end::Table body-->
-					</table>
+								@endforeach
+							</tbody>
+							<!--end::Table body-->
+						</table>
+					</div>
 					
 				</div>
 				<!--end::Card body-->
@@ -1829,8 +1880,24 @@
    	$('#bank_detail').hide();
     $('#nominee_detail').hide();
      $('#reffer_detail').show();
-
 	}
+
+	function reffered_user() {
+		
+    document.getElementById("reffered_user").classList.add("active");
+		document.getElementById("refferal_amount").classList.remove("active");
+		$('#refferal_user_detail').show();
+    $('#reffered_amount_detail').hide();
+	}
+
+	function refferal_amount() {
+		
+    document.getElementById("reffered_user").classList.remove("active");
+		document.getElementById("refferal_amount").classList.add("active");
+		$('#refferal_user_detail').hide();
+    $('#reffered_amount_detail').show();
+	}
+
 </script>
 <!-- navigation end -->
 
