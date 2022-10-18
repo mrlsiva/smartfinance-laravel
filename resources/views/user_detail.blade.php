@@ -867,7 +867,7 @@
 										@if($refferal_amount->is_status == 1)
 											<td><span class="badge py-3 px-4 fs-7 badge-light-success">Paid</span></td>
 										@else
-											<td><span class="badge py-3 px-4 fs-7 badge-light-danger">Pending</span></td>
+											<td><span class="badge py-3 px-4 fs-7 badge-light-warning">Un Paid</span></td>
 										@endif
 									</tr>
 								@endforeach

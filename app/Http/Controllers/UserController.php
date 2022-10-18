@@ -241,9 +241,11 @@ class UserController extends Controller
         }
 
         $refferals = Refferal::where('user_id',$user->id)->get();
+        $refferal_amounts = UserAmount::where('user_id',$user->id)->get();
 
 
-        return view('user_profile')->with('user',$user)->with('user_detail',$user_detail)->with('bank_detail',$bank_detail)->with('nominee_detail',$nominee_detail)->with('amount',$amount)->with('investment_count',$investment_count)->with('earning_percentage',$earning_percentage)->with('earning_amount',$earning_amount)->with('refferals',$refferals);
+
+        return view('user_profile')->with('user',$user)->with('user_detail',$user_detail)->with('bank_detail',$bank_detail)->with('nominee_detail',$nominee_detail)->with('amount',$amount)->with('investment_count',$investment_count)->with('earning_percentage',$earning_percentage)->with('earning_amount',$earning_amount)->with('refferals',$refferals)->with('refferal_amounts',$refferal_amounts);
     }
 
     public function user($id){
