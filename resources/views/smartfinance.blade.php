@@ -309,7 +309,7 @@ body{
 									@else
 									<th class="">YEARLY RETRUN</th>
 									@endif
-									<th class="">PAYMENT</th>
+									<th class="">CLOSING AMOUNT</th>
 									<th class="">STATUS</th>
 									@if($user->role_id == 1 || $user->role_id == 2) 
 									<th class="">ACTION</th> 
@@ -421,7 +421,7 @@ body{
 									<th class="">INVESTED AMOUNT</th>
 									<th class="">TOTAL AMOUNT</th>
 									<th class="">PROFIT</th>
-									<th class="">PAYMENT</th>
+									<th class="">CLOSING AMOUNT</th>
 									<th class="">STATUS</th>
 									@if($user->role_id != 3)
 										<th class="">ACTION</th>   

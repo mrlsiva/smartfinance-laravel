@@ -16,7 +16,9 @@ class CreateUserAmountsTable extends Migration
         Schema::create('user_amounts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();
+            $table->date('date');
             $table->string('amount');
+            $table->boolean('is_status');
             $table->timestamps();
         });
     }

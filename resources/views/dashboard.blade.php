@@ -82,7 +82,7 @@
                                             </span>            
                                         </div>
                                         <span class="symbol symbol-50px">
-                                            <span class="px-3 py-1 fs-5 fw-bolder bg-warning text-dark">{{$smartfinance_count}}</span>
+                                            <span class="px-3 py-1 fs-5 fw-bolder bg-warning text-dark">{{$smartfinance_count+$payment_count}}</span>
                                         </span>
                                     </div>
                                     Smart Finance
@@ -262,6 +262,7 @@
                                             <th class="">USER</th>
                                             <th class="">ROLE</th>
                                             <th class="">NEXT PAYMENT</th>
+                                            <th class="" style="width:17%;">REFFERAL AMOUNT</th>
                                             <th class="">TOTAL PAYMENT</th>
                                             <th class="">PROFILE</th>
                                             <th class="">PROGRESS</th>
@@ -323,7 +324,50 @@
                                                     <td>-</td>
                                                 @endif
                                                 @php
-                                                    $refferal_amount = App\Models\UserAmount::where('user_id',$user->id)->first();
+                                                    $refferal = App\Models\Refferal::where('user_id',$user->id)->first();
+                                                @endphp
+                                                
+                                                @if($refferal != NULL)
+                                                    @php
+                                                        $refferal_amount = App\Models\UserAmount::where([['user_id',$user->id],['is_status',0]])->orderBy('id','Desc')->first();
+                                                    @endphp
+                                                    @if($refferal_amount != NULL)
+                                                    <td>
+                                                    <div class="row">
+                                                        <div class="col-md-9 text-start">
+                                                            <input type="number" class="form-control form-control-solid" placeholder="Amount" name="refferal_amount" id="refferal_amount{{$user->id}}" value="{{$refferal_amount->amount}}" style="width:100%;" />
+                                                        </div>
+                                                        <div class="col-md-3 text-end">
+                                                            <button type="button" class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary" name="button_reffer" data-system_id="{{$user->id}}">
+                                                                <i class="fa fa-check-circle" style="font-size:14px"></i> 
+                                                            </button>    
+                                                        </div>
+                                                                
+                                                        <div class=" refferal_amount_error{{$user->id}}" id="refferal_amount_error"></div>
+                                                    </div>
+                                                    </td>
+                                                    @else
+                                                    <td>
+                                                    <div class="row">
+                                                        <div class="col-md-9 text-start">
+                                                            <input type="number" class="form-control form-control-solid" placeholder="Amount" name="refferal_amount" id="refferal_amount{{$user->id}}" style="width:100%;" />
+                                                        </div>
+                                                        <div class="col-md-3 text-end">
+                                                            <button type="button" class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary" name="button_reffer" data-system_id="{{$user->id}}">
+                                                                <i class="fa fa-check-circle" style="font-size:14px"></i>
+                                                                        
+                                                            </button>
+                                                        </div>
+                                                                
+                                                        <div class=" refferal_amount_error{{$user->id}}" id="refferal_amount_error"></div>
+                                                    </div>
+                                                    </td>
+                                                    @endif
+                                                @else
+                                                   <td> - </td>
+                                                @endif
+                                                @php
+                                                    $refferal_amount = App\Models\UserAmount::where([['user_id',$user->id],['is_status',0]])->first();
                                                 @endphp
                                                 <td>
                                                     @if($refferal_amount != NULL)
@@ -387,9 +431,6 @@
                                                             <button type="button"  class="btn  btn-light mb-5" onclick="super_admin()"><i class="fas fa-pencil-alt" id="fa"></i></button>
                                                             @if($user->is_reffer == 1)
                                                                 <button type="button" id="kt_sign_in_submit" class="btn  btn-light mb-5" data-system_id="{{$user->id}}" name="reffer"><i class="fa fa-user-plus" id="fa"></i></button>
-                                                            @endif 
-                                                            @if($refferals != Null)
-                                                                <button type="button"  class="btn  btn-light mb-5" data-system_userid="{{$user->id}}" name="reffer_amount"><i class="fa fa-plus-circle" id="fa"></i></button>
                                                             @endif
                                                         </div>
                                                     </td>
@@ -399,16 +440,11 @@
                                                             <button type="button" id="kt_sign_in_submit" class="btn  btn-light mb-5" data-system_id="{{$user->id}}" name="edit"><i class="fas fa-pencil-alt" id="fa"></i></button> 
                                                             @if($user->is_reffer == 1)
                                                                 <button type="button" id="kt_sign_in_submit" class="btn  btn-light mb-5" data-system_id="{{$user->id}}" name="reffer"><i class="fa fa-user-plus" id="fa" ></i></button>
-                                                            @endif 
-                                                            @if($refferals != Null)
-                                                                <button type="button" class="btn  btn-light mb-5" data-system_userid="{{$user->id}}" name="reffer_amount"><i class="fa fa-plus-circle" id="fa"></i></button>
                                                             @endif
                                                         </div>
                                                     </td>
                                                 @endif
-
                                             </tr>
-                                        
                                         @endforeach
                                     </tbody>
                                     <!--end::Table body-->
@@ -620,7 +656,7 @@
                                                     @endphp
                                                     @php
                                                         $new_date = Carbon\Carbon::parse($payment_date->payment_date)->subMonths(2)->format('Y-m-d');
-                                                        $now = Carbon\Carbon::now()->format('Y-m-d')
+                                                        $now = Carbon\Carbon::now()->format('Y-m-d');
                                                     @endphp
                                                     @if($new_date <= $now)
                                                         <span class="badge py-3 px-4 fs-7 badge-light-danger">{{$date}}</span>
@@ -2090,87 +2126,46 @@
 </div>
 <!-- end::refferal_modal -->
 
-<!-- refferal_amount_modal -->
-<div class="modal fade" id="refferal_amount_modal" tabindex="-1" aria-hidden="true">
-    <!--begin::Modal dialog-->
-    <div class="modal-dialog mw-650px">
-        <!--begin::Modal content-->
-        <div class="modal-content">
-            <!--begin::Modal header-->
-            <div class="modal-header pb-0 border-0 justify-content-end">
-                <!--begin::Close-->
-                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                    <span class="svg-icon svg-icon-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
-                            <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="black" />
-                        </svg>
-                    </span>
-                    <!--end::Svg Icon-->
-                </div>
-                <!--end::Close-->
-            </div>
-            <!--begin::Modal header-->
-            <!--begin::Modal body-->
-            <div class="modal-body scroll-y mx-5 mx-xl-18 pt-0 pb-15">
-                <!--begin::Heading-->
-
-                <!--end::Google Contacts Invite-->
-                <!--begin::Separator-->
-                <!--end::Separator-->
-                <!--begin::Textarea-->
-                <!--end::Textarea-->
-                <!--begin::Users-->
-                <div class="mb-10">
-                    <!--begin::Heading-->
-                    <div class="fs-6 fw-bold mb-2">Refferal Amount</div>
-                    <!--end::Heading-->
-                    <form class="form w-100" novalidate="novalidate" id="kt_sign_in_form" method="post" action="{{route('refferal_amount')}}" enctype="multipart/form-data">
-                        @csrf
-                        <input type="hidden" name="user_Id" id="user_Id">
-                        
-                        
-                        <!--begin::List-->
-                        <div class="mh-300px scroll-y me-n7 pe-7">
-                            <div class="d-flex flex-stack py-4 border-bottom border-gray-300 border-bottom-dashed">
-                                <!--begin::Details-->
-                                <div class="d-flex align-items-center">
-                                    
-                                    <!--begin::Details-->
-                                    <div class="ms-5">
-                                        <span class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">Amount</span>
-                                    </div>
-                                    <!--end::Details-->
-                                </div>
-                                <!--end::Details-->
-                                <!--begin::Access menu-->
-                                <div class="ms-2 w-150px">
-                                    <input type="number" class="form-control form-control-solid" placeholder="Amount" name="amount" />
-                                </div>
-                                <!--end::Access menu-->
-                            </div>
-                        </div>
-                        <!--end::List-->
-                        
-                        <div class="d-flex justify-content-center">
-                            <button type="submit"  class="btn  btn-primary mt-5 mb-3">Submit</button>
-                        </div>
-                    </form>
-                </div>
-                <!--end::Users-->
-                <!--begin::Notice-->
-                <!--end::Notice-->
-            </div>
-            <!--end::Modal body-->
-        </div>
-            <!--end::Modal content-->
-    </div>
-    <!--end::Modal dialog-->
-</div>
-<!-- end::refferal_amount_modal -->
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+<script type="application/javascript">
+    jQuery(document).ready(function ()
+    {
+        $(document).on('click', 'button[name^="button_reffer"]', function(e) {
+            var system_id = $(this).data("system_id");
+            console.log(system_id);
+            var amount = jQuery("#refferal_amount"+system_id).val();
+            console.log(amount);
+            if(amount < 1){
+                console.log('hai');
+                alertText = "Amount should be greater than 1rs";
+                var div = document.getElementById("refferal_amount_error");
+                div.innerHTML = '';
+                div.style.display = "block";
+                $( ".refferal_amount_error"+system_id).html('');
+                var html ='<div class="text-danger">'+alertText+'</div>';
+                $('.refferal_amount_error'+system_id).html(html);
+
+            }
+            else{
+                $('#refferal_amount_error').hide();
+                jQuery.ajax({
+                    url : 'refferal_amount',
+                    type: 'GET',
+                    dataType: 'json',
+                    data: { "amount": amount,"user_id" : system_id},
+                    success:function(data)
+                    {
+                        console.log(data);
+                        window.location.reload();
+
+                    }
+                });
+            }
+        });
+    });
+</script>
 
 <!-- image delete -->
 <script type="text/javascript">
@@ -4442,13 +4437,13 @@
 <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.min.css'>
 
 <script>
-@if (session('alert'))
-    Swal.fire(
-        "{{ session('alert') }}",
-        ' ',
-        'success'
-    )
-@endif
+    @if (session('alert'))
+        Swal.fire(
+            "{{ session('alert') }}",
+            ' ',
+            'success'
+        )
+    @endif
 </script>
 
 <script type="text/javascript">

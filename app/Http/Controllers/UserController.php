@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Collection;
+Use \Carbon\Carbon;
 use App\Models\User;
 use App\Models\UserDetail;
 use App\Models\BankDetail;
@@ -47,6 +48,23 @@ class UserController extends Controller
                     }
                 }
 
+                $finance = [];
+                $user_amount = UserAmount::where([['user_id',$user->id],['is_status',0]])->first();
+                if($user_amount != Null){
+                    $smartfinance_ids = Smartfinance::where([['user_id',$user->id],['is_status',1],['is_close',0]])->get();
+                    if($smartfinance_ids != NULL){
+                        foreach($smartfinance_ids as $smartfinance_id){
+                            $finance[] = $smartfinance_id->id;
+                        }
+                        $payment_date = SmartfinancePayment::whereIn('smartfinance_id',$finance)->where('is_status',0)->orderBy('payment_date', 'asc')->first();
+                        $closing_date = $payment_date->payment_date;
+                        $now = Carbon::now()->format('Y-m-d');
+                        if($closing_date < $now){
+                            $status = DB::table('user_amounts')->where('user_id',$user->id)->update(['is_status' => 1]);
+                        } 
+                    }
+                }
+
                 $smartfinances = Smartfinance::where('user_id',$user->id)->orderBy('id','Desc')->simplePaginate(10);
                 $smartfinance_count = Smartfinance::where('is_status',2)->count();
 
@@ -55,130 +73,52 @@ class UserController extends Controller
             }
             else{
 
-                // $smartfinances = Smartfinance::where([['is_close',0],['is_status',1]])->get();
-                // if($smartfinances != NULL){
-                //     foreach($smartfinances as $smartfinance){
+                $smartfinances = Smartfinance::where([['is_close',0],['is_status',1]])->get();
+                if($smartfinances != NULL){
+                    foreach($smartfinances as $smartfinance){
 
-                //         $count = SmartfinancePayment::where('smartfinance_id',$smartfinance->id)->count();
-                //         $count1 = SmartfinancePayment::where([['smartfinance_id',$smartfinance->id],['is_status',1]])->count();
-                //         $smartfinance_payment = SmartfinancePayment::where([['smartfinance_id',$smartfinance->id],['is_status',1]])->first();
+                        $count = SmartfinancePayment::where('smartfinance_id',$smartfinance->id)->count();
+                        $count1 = SmartfinancePayment::where([['smartfinance_id',$smartfinance->id],['is_status',1]])->count();
+                        $smartfinance_payment = SmartfinancePayment::where([['smartfinance_id',$smartfinance->id],['is_status',1]])->first();
 
-                //         if($count == $count1){
+                        if($count == $count1){
 
-                //             DB::table('smartfinances')->where('id',$smartfinance_payment->smartfinance_id)->update(['is_close' => 1]);
-                //         }
-                //     }
-                // }
+                            DB::table('smartfinances')->where('id',$smartfinance_payment->smartfinance_id)->update(['is_close' => 1]);
+                        }
+                    }
+                }
+
+                $finance = [];
+                $users = UserAmount::where('is_status',0)->get();
+                if($users != Null){
+                    foreach($users as $user){
+                        $smartfinance_ids = Smartfinance::where([['user_id',$user->user_id],['is_status',1],['is_close',0]])->get();
+                        if($smartfinance_ids != NULL){
+                            foreach($smartfinance_ids as $smartfinance_id){
+                                $finance[] = $smartfinance_id->id;
+                            }
+                            $payment_date = SmartfinancePayment::whereIn('smartfinance_id',$finance)->where('is_status',0)->orderBy('payment_date', 'asc')->first();
+                            $closing_date = $payment_date->payment_date;
+                            $now = Carbon::now()->format('Y-m-d');
+                            if($closing_date < $now){
+                                $status = DB::table('user_amounts')->where('user_id',$user->user_id)->update(['is_status' => 1]);
+                            } 
+                        }
+                    }
+                }
                 
 
                 $users = User::where('is_delete',0)->orderBy('id','Desc')->simplePaginate(10);
                 $user_count = User::where('is_active',0)->orWhere('is_profile_verified',0)->count();
                 $smartfinance_count = Smartfinance::where('is_status',2)->count();
+                $payment_count = SmartfinancePayment::where('is_approve',2)->count();
+
                 $smartfinances = Smartfinance::orderBy('id','Desc')->get();
                 $admin_finances = Smartfinance::where('user_id',$user->id)->orderBy('id','Desc')->simplePaginate(10);
                 $admin_finance_count = Smartfinance::where('user_id',$user->id)->count();
-
                 
 
-                // $result = [];
-                // $result_month = [];
-                // $result1 = [];
-                // $result_year = [];
-                // $smartfinance_ids = Smartfinance::where([['user_id','500007'],['plan_id',1],['is_status',1]])->get();
-                // if($smartfinance_ids != Null){
-                //     foreach($smartfinance_ids as $smartfinance_id){
-                //         $result[] = $smartfinance_id->id;
-                //     }
-                
-                //     $payment_date_months[] = SmartfinancePayment::whereIn('smartfinance_id',$result)->where('is_status',0)->orderBy('payment_date','Desc')->first();
-                //     if($payment_date_months[0] != NULL){
-                //         foreach($payment_date_months as $payment_date_month){
-                //             $result_month[] = $payment_date_month->payment_date;
-                //         }
-                //     }
-                // }
-
-
-                
-                // $smartfinance_ids = Smartfinance::where([['user_id','500007'],['plan_id','!=',1],['is_status',1]])->get();
-                // if($smartfinance_ids){
-                //     foreach($smartfinance_ids as $smartfinance_id){
-                //         $result1[] = $smartfinance_id->id;
-                //     }
-                
-                //     $payment_date_years = SmartfinancePayment::whereIn('smartfinance_id',$result1)->where('is_status',0)->DISTINCT('payment_date')->select('payment_date')->orderBy('payment_date','Desc')->get();
-                //     if($payment_date_years != Null){
-                //         foreach($payment_date_years as $payment_date_year){
-                //             $result_year[] = $payment_date_year->payment_date;
-                //         }
-                //     }
-                // }
-                // $result2 = array_merge($result_month,$result_year);
-
-                // $payment_date = collect($result2)->min();
-
-                // $refferals = Refferal::where('user_id',500012)->get();
-                // //$result = new Collection();
-                // $payment_date = [];
-                // $payment_date1 = [];
-                // foreach($refferals as $refferal){
-                //     $year_finances = Smartfinance::where([['user_id',$refferal->reffered],['plan_id',2],['is_status',1],['is_close',0]])->get();
-                //     $yearm_finances = Smartfinance::where([['user_id',$refferal->reffered],['plan_id',3],['is_status',1],['is_close',0]])->get();
-                //     $month_finances = Smartfinance::where([['user_id',$refferal->reffered],['plan_id',1],['is_status',1],['is_close',0]])->get();
-
-                //     //$payment_date = array();
-                    
-                //     if($year_finances != NULL){
-                //         foreach($year_finances as $year_finance){
-                //             $payment = SmartfinancePayment::where([['smartfinance_id',$year_finance->id],['is_status',0]])->first();
-                //             //$result->push($payment->payment_date);
-                //             if($payment != Null){
-                //                 array_push($payment_date, $payment->payment_date);
-                //                 array_push($payment_date1, $payment->payment_date."_".$refferal->amount);
-                //             }
-                            
-                //         }
-                //     }
-
-                //     if($yearm_finances != NULL){
-                //         foreach($yearm_finances as $yearm_finance){
-                //             $payment = SmartfinancePayment::where([['smartfinance_id',$yearm_finance->id],['is_approve',1]])->first();
-                //             //$result->push($payment->payment_date);
-                //             if($payment != Null){
-                //                 array_push($payment_date, $payment->payment_date);
-                //                 array_push($payment_date1, $payment->payment_date."_".$refferal->amount);
-                //             }
-
-                //         }
-                //     }
-
-                //     if($month_finances != NULL){
-                //         foreach($month_finances as $month_finance){
-                //             $payments = SmartfinancePayment::where([['smartfinance_id',$month_finance->id],['is_status',0]])->get();
-                //             foreach($payments as $payment){
-                //                 //$result->push($payment->payment_date);
-                //                 if($payment != Null){
-                //                     array_push($payment_date, $payment->payment_date);
-                //                     array_push($payment_date1, $payment->payment_date."_".$refferal->amount);
-                //                 }
-                //             }
-                //         }
-                //     }
-                //     //return $result;
-                // }
-                // //return count($payment_date1);
-
-                // $minValue = $payment_date1[0];
-                // foreach($payment_date1 as $key => $val){
-                //     if($minValue > $val){
-                //         $minValue = $val;
-                //     }
-                // }  
-                // $test = explode('_', $minValue);
-                //return $test[0];
-                
-
-                return view('dashboard')->with('users',$users)->with('user_count',$user_count)->with('smartfinances',$smartfinances)->with('smartfinance_count',$smartfinance_count)->with('admin_finances',$admin_finances)->with('admin_finance_count',$admin_finance_count);
+                return view('dashboard')->with('users',$users)->with('user_count',$user_count)->with('smartfinances',$smartfinances)->with('smartfinance_count',$smartfinance_count)->with('admin_finances',$admin_finances)->with('admin_finance_count',$admin_finance_count)->with('payment_count',$payment_count);
             }
         }
         
@@ -301,9 +241,11 @@ class UserController extends Controller
         }
 
         $refferals = Refferal::where('user_id',$user->id)->get();
+        $refferal_amounts = UserAmount::where('user_id',$user->id)->get();
 
 
-        return view('user_profile')->with('user',$user)->with('user_detail',$user_detail)->with('bank_detail',$bank_detail)->with('nominee_detail',$nominee_detail)->with('amount',$amount)->with('investment_count',$investment_count)->with('earning_percentage',$earning_percentage)->with('earning_amount',$earning_amount)->with('refferals',$refferals);
+
+        return view('user_profile')->with('user',$user)->with('user_detail',$user_detail)->with('bank_detail',$bank_detail)->with('nominee_detail',$nominee_detail)->with('amount',$amount)->with('investment_count',$investment_count)->with('earning_percentage',$earning_percentage)->with('earning_amount',$earning_amount)->with('refferals',$refferals)->with('refferal_amounts',$refferal_amounts);
     }
 
     public function user($id){
@@ -375,10 +317,11 @@ class UserController extends Controller
 
 
         $refferals = Refferal::where('user_id',$id)->get();
+        $refferal_amounts = UserAmount::where('user_id',$id)->get();
         
 
 
-        return view('user_detail')->with('user',$user)->with('user_detail',$user_detail)->with('bank_detail',$bank_detail)->with('nominee_detail',$nominee_detail)->with('smartfinances',$smartfinances)->with('amount',$amount)->with('investment_count',$investment_count)->with('earning_percentage',$earning_percentage)->with('earning_amount',$earning_amount)->with('refferals',$refferals);
+        return view('user_detail')->with('user',$user)->with('user_detail',$user_detail)->with('bank_detail',$bank_detail)->with('nominee_detail',$nominee_detail)->with('smartfinances',$smartfinances)->with('amount',$amount)->with('investment_count',$investment_count)->with('earning_percentage',$earning_percentage)->with('earning_amount',$earning_amount)->with('refferals',$refferals)->with('refferal_amounts',$refferal_amounts);
         
     }
 
@@ -756,13 +699,25 @@ class UserController extends Controller
 
     public function refferal_amount(Request $request) 
     {
-        //return $request;
-        $refferal_amount = UserAmount::create([
-            'user_id' => $request->user_Id,
-            'amount' => $request->amount,
-        ]);
+        $user_id = $request->user_id;
+        $amount = $request->amount;
+        $user_amount = UserAmount::where([['user_id',$user_id],['is_status',0]])->first();
+        if($user_amount != NULL){
 
-        return redirect()->back()->with('alert', 'Refferal Amount Added Successfully!!');
+            $status = DB::table('user_amounts')->where('user_id',$user->user_id)->update(['amount' => $amount]);
+        }
+        else{
+
+            $date = Carbon::now()->format('Y-m-d');
+            $user_amount = UserAmount::create([
+                'user_id' => $user_id,
+                'amount' => $amount,
+                'date' => $date,
+                'is_status' => 0
+            ]);
+        }
+
+        return $user_amount;
 
     }
 
