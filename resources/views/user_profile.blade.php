@@ -220,10 +220,14 @@
 						<a class="nav-link text-active-primary ms-0 me-10 py-5" id="bank" onclick="bank()">Bank Details</a>
 					</li>
 					<!--end::Nav item-->
+					<li class="nav-item mt-2">
+						<a class="nav-link text-active-primary ms-0 me-10 py-5" id="review" onclick="review()">Review</a>
+					</li>
 					<!--begin::Nav item-->
 					<li class="nav-item mt-2">
 						<a class="nav-link text-active-primary ms-0 me-10 py-5" id="nominee" onclick="nominee()">Nominee Details</a>
 					</li>
+
 					<!--end::Nav item-->
 					@if($user->is_reffer == 1  )
 						<!--begin::Nav item-->
@@ -675,6 +679,102 @@
 								@else
 								<img src="{{ $nominee_detail->aadhaar }}" alt="image" />
 								@endif
+							</div>
+						</div>
+						<!--end::Col-->
+					</div>
+					<!--end::Input group-->
+					
+				</div>
+				<!--end::Card body-->
+			</div>
+		</div>
+		<div id="review_detail" style="display:none;">
+			<div class="card mb-5 mb-xl-10">
+				<!--begin::Card header-->
+				<div class="card-header cursor-pointer">
+					<!--begin::Card title-->
+					<div class="card-title m-0">
+						<h3 class="fw-bolder m-0">Review</h3>
+					</div>
+					<!--end::Card title-->
+					{{-- @if($nominee_detail != NULL) --}}
+					<!--begin::Action-->
+					<a href="#" class="btn align-self-center" data-bs-toggle="modal" >Edit Review</a>
+					<!--end::Action-->
+					{{-- @endif --}}
+				</div>
+				<!--begin::Card header-->
+				<!--begin::Card body-->
+				<div class="card-body p-9">
+					<!--begin::Row-->
+					<div class="row mb-7">
+						<!--begin::Label-->
+						<label class="col-lg-4 fw-bold text-muted">Review title</label>
+						<!--end::Label-->
+						<!--begin::Col-->
+						<div class="col-md-8">
+							<div class="fv-row mb-8 col-md-6">
+								<!--begin::Label-->
+								<label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+									<span class="">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</span>
+								</label>
+								<!--end::Label-->
+								<!--begin::Input-->
+								<input type="text" class="form-control form-control-solid" placeholder="Review title"  name="" id="" />
+								
+								<!--end::Input-->
+							</div>
+						</div>
+						<!--end::Col-->
+					</div>
+					<!--end::Row-->
+					<!--begin::Input group-->
+					<div class="row mb-7">
+						<!--begin::Label-->
+						<label class="col-lg-4 fw-bold text-muted">Review Detail</label>
+						<!--end::Label-->
+						<!--begin::Col-->
+						<div class="col-md-8">
+							<div class="fv-row mb-8 col-md-6">
+								<!--begin::Label-->
+								<label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+									<span class="">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</span>
+								</label>
+								<!--end::Label-->
+								<!--begin::Input-->
+								
+								<textarea type="text" class="form-control form-control-solid" placeholder="Review Detail"  rows="4" cols="50">
+								</textarea>
+								<!--end::Input-->
+							</div>
+						</div>
+						<!--end::Col-->
+					</div>
+					<!--end::Input group-->
+					<!--begin::Input group-->
+					<div class="row mb-7">
+						<!--begin::Label-->
+						<label class="col-lg-4 fw-bold text-muted">Ratings</label>
+						<!--end::Label-->
+						<!--begin::Col-->
+						<div class="col-lg-8 fv-row">
+							<div class="rating mb-6">
+								<div class="rating-label me-2 checked">
+									<i class="bi bi-star-fill fs-5"></i>
+								</div>
+								<div class="rating-label me-2 checked">
+									<i class="bi bi-star-fill fs-5"></i>
+								</div>
+								<div class="rating-label me-2 ">
+									<i class="bi bi-star-fill fs-5"></i>
+								</div>
+								<div class="rating-label me-2 ">
+									<i class="bi bi-star-fill fs-5"></i>
+								</div>
+								<div class="rating-label me-2 ">
+									<i class="bi bi-star-fill fs-5"></i>
+								</div>
 							</div>
 						</div>
 						<!--end::Col-->
@@ -1396,11 +1496,15 @@
 		document.getElementById("bank").classList.remove("active");
 		document.getElementById("nominee").classList.remove("active");
 		document.getElementById("reffer").classList.remove("active");
+		document.getElementById("review").classList.remove("active");
+
 		$('#basic_detail').show();
 		$('#additional_detail').hide();
 		$('#bank_detail').hide();
 		$('#nominee_detail').hide();
 		$('#reffer_detail').hide();
+		$('#review_detail').hide();
+
 
 	}
 	function additional() {
@@ -1410,11 +1514,15 @@
 		document.getElementById("bank").classList.remove("active");
 		document.getElementById("nominee").classList.remove("active");
 		document.getElementById("reffer").classList.remove("active");
+		document.getElementById("review").classList.remove("active");
+
 		$('#basic_detail').hide();
 		$('#additional_detail').show();
 		$('#bank_detail').hide();
 		$('#nominee_detail').hide();
 		$('#reffer_detail').hide();
+		$('#review_detail').hide();
+
 
 	}
 	function bank() {
@@ -1424,11 +1532,15 @@
 		document.getElementById("bank").classList.add("active");
 		document.getElementById("nominee").classList.remove("active");
 		document.getElementById("reffer").classList.remove("active");
+		document.getElementById("review").classList.remove("active");
+
 		$('#basic_detail').hide();
 		$('#additional_detail').hide();
 		$('#bank_detail').show();
 		$('#nominee_detail').hide();
 		$('#reffer_detail').hide();
+		$('#review_detail').hide();
+
 
 	}
 	function nominee() {
@@ -1438,14 +1550,33 @@
 		document.getElementById("bank").classList.remove("active");
 		document.getElementById("nominee").classList.add("active");
 		document.getElementById("reffer").classList.remove("active");
+		document.getElementById("review").classList.remove("active");
+
 		$('#basic_detail').hide();
 		$('#additional_detail').hide();
 		$('#bank_detail').hide();
 		$('#nominee_detail').show();
 		$('#reffer_detail').hide();
+		$('#review_detail').hide();
+
 
 	}
-
+	function review() {
+		
+		document.getElementById("basic").classList.remove("active");
+			document.getElementById("additional").classList.remove("active");
+			document.getElementById("bank").classList.remove("active");
+			document.getElementById("nominee").classList.remove("active");
+			document.getElementById("reffer").classList.remove("active");
+			document.getElementById("review").classList.add("active");
+			$('#basic_detail').hide();
+		$('#additional_detail').hide();
+		   $('#bank_detail').hide();
+		$('#review_detail').show();
+		$('#nominee_detail').hide();
+		$('#reffer_detail').hide();
+	
+		}
 	function reffer() {
 		
 		document.getElementById("basic").classList.remove("active");
@@ -1453,11 +1584,15 @@
 		document.getElementById("bank").classList.remove("active");
 		document.getElementById("nominee").classList.remove("active");
 		document.getElementById("reffer").classList.add("active");
+		document.getElementById("review").classList.remove("active");
+
 		$('#basic_detail').hide();
 		$('#additional_detail').hide();
 		$('#bank_detail').hide();
 		$('#nominee_detail').hide();
 		$('#reffer_detail').show();
+		$('#review_detail').hide();
+
 
 	}
 
