@@ -18,6 +18,7 @@ use App\Models\Smartfinance;
 use App\Models\SmartfinancePayment;
 use App\Models\Refferal;
 use App\Models\UserAmount;
+use App\Models\ReviewRating;
 use Image;
 use DB;
 
@@ -242,10 +243,11 @@ class UserController extends Controller
 
         $refferals = Refferal::where('user_id',$user->id)->get();
         $refferal_amounts = UserAmount::where('user_id',$user->id)->get();
+        $review_rating = ReviewRating::where('user_id',$user->id)->first();
 
 
 
-        return view('user_profile')->with('user',$user)->with('user_detail',$user_detail)->with('bank_detail',$bank_detail)->with('nominee_detail',$nominee_detail)->with('amount',$amount)->with('investment_count',$investment_count)->with('earning_percentage',$earning_percentage)->with('earning_amount',$earning_amount)->with('refferals',$refferals)->with('refferal_amounts',$refferal_amounts);
+        return view('user_profile')->with('user',$user)->with('user_detail',$user_detail)->with('bank_detail',$bank_detail)->with('nominee_detail',$nominee_detail)->with('amount',$amount)->with('investment_count',$investment_count)->with('earning_percentage',$earning_percentage)->with('earning_amount',$earning_amount)->with('refferals',$refferals)->with('refferal_amounts',$refferal_amounts)->with('review_rating',$review_rating);
     }
 
     public function user($id){
@@ -318,10 +320,11 @@ class UserController extends Controller
 
         $refferals = Refferal::where('user_id',$id)->get();
         $refferal_amounts = UserAmount::where('user_id',$id)->get();
+        $review_rating = ReviewRating::where('user_id',$user->id)->first();
         
 
 
-        return view('user_detail')->with('user',$user)->with('user_detail',$user_detail)->with('bank_detail',$bank_detail)->with('nominee_detail',$nominee_detail)->with('smartfinances',$smartfinances)->with('amount',$amount)->with('investment_count',$investment_count)->with('earning_percentage',$earning_percentage)->with('earning_amount',$earning_amount)->with('refferals',$refferals)->with('refferal_amounts',$refferal_amounts);
+        return view('user_detail')->with('user',$user)->with('user_detail',$user_detail)->with('bank_detail',$bank_detail)->with('nominee_detail',$nominee_detail)->with('smartfinances',$smartfinances)->with('amount',$amount)->with('investment_count',$investment_count)->with('earning_percentage',$earning_percentage)->with('earning_amount',$earning_amount)->with('refferals',$refferals)->with('refferal_amounts',$refferal_amounts)->with('review_rating',$review_rating);
         
     }
 
@@ -718,6 +721,66 @@ class UserController extends Controller
         }
 
         return $user_amount;
+
+    }
+
+
+    public function store_review_rating(Request $request)
+    {
+        //return $request;
+        $validatedData = $request->validate([
+            'user' => 'required',
+            'review_title' => 'required',
+            'review' => 'required',
+            'star' => 'required',
+        ]);
+
+        $now = Carbon::now()->format('Y-m-d');
+        $review_rating = ReviewRating::create([
+            'user_id' => $request->user,
+            'placed_on' => $now,
+            'review_title' => $request->review_title,
+            'review' => $request->review,
+            'rating' => $request->star,
+            'is_status' => 2,
+        ]);
+
+        return redirect()->back();
+
+    }
+
+
+    public function edit_review_rating(Request $request)
+    {
+        //return $request;
+        $validatedData = $request->validate([
+            'review_id' => 'required',
+            'review_title' => 'required',
+            'review' => 'required',
+            'star' => 'required',
+        ]);
+
+        $smartfinances = DB::table('review_ratings')->where('id',$request->review_id)->update(['review_title' => $request->review_title,'review' => $request->review,'rating' => $request->star]);
+
+        return redirect()->back();
+
+    }
+
+    public function accept_review_rating($id,Request $request)
+    {
+
+        $smartfinances = DB::table('review_ratings')->where('id',$id)->update(['is_status' => 1]);
+
+        return redirect()->back();
+
+    }
+
+    public function decline_review_rating($id,Request $request)
+    {
+
+        $smartfinances = DB::table('review_ratings')->where('id',$id)->delete();
+
+        return redirect()->back();
 
     }
 

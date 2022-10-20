@@ -1,6 +1,50 @@
 @extends('layouts.master')
 @section('body')
 
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+
+<style>
+	a.rating-label.checked>i, label.rating-label>i {
+    	color: #ffad0f;
+	}
+
+
+	div.stars {
+		width: 270px;
+		display: inline-block;
+	}
+
+	input.star { display: none; }
+
+	label.star {
+		float: right;
+		padding: 15px;
+		font-size: 25px;
+		color: #444;
+		transition: all .2s;
+	}
+
+	input.star:checked ~ label.star:before {
+		content: '\f005';
+		color: #FD4;
+		transition: all .25s;
+	}
+
+	input.star-5:checked ~ label.star:before {
+		color: #FE7;
+		text-shadow: 0 0 20px #952;
+	}
+
+	input.star-1:checked ~ label.star:before { color: #F62; }
+
+	label.star:hover { transform: rotate(-15deg) scale(1.3); }
+
+	label.star:before {
+		content: '\f006';
+		font-family: FontAwesome;
+	}
+</style>
+
 <!--begin::Toolbar-->
 <div class="toolbar py-5 py-lg-15" id="kt_toolbar">
 	<!--begin::Container-->
@@ -220,12 +264,12 @@
 						<a class="nav-link text-active-primary ms-0 me-10 py-5" id="bank" onclick="bank()">Bank Details</a>
 					</li>
 					<!--end::Nav item-->
-					<li class="nav-item mt-2">
-						<a class="nav-link text-active-primary ms-0 me-10 py-5" id="review" onclick="review()">Review</a>
-					</li>
 					<!--begin::Nav item-->
 					<li class="nav-item mt-2">
 						<a class="nav-link text-active-primary ms-0 me-10 py-5" id="nominee" onclick="nominee()">Nominee Details</a>
+					</li>
+					<li class="nav-item mt-2">
+						<a class="nav-link text-active-primary ms-0 me-10 py-5" id="review" onclick="review()">Review and Rating</a>
 					</li>
 
 					<!--end::Nav item-->
@@ -689,102 +733,6 @@
 				<!--end::Card body-->
 			</div>
 		</div>
-		<div id="review_detail" style="display:none;">
-			<div class="card mb-5 mb-xl-10">
-				<!--begin::Card header-->
-				<div class="card-header cursor-pointer">
-					<!--begin::Card title-->
-					<div class="card-title m-0">
-						<h3 class="fw-bolder m-0">Review</h3>
-					</div>
-					<!--end::Card title-->
-					{{-- @if($nominee_detail != NULL) --}}
-					<!--begin::Action-->
-					<a href="#" class="btn align-self-center" data-bs-toggle="modal" >Edit Review</a>
-					<!--end::Action-->
-					{{-- @endif --}}
-				</div>
-				<!--begin::Card header-->
-				<!--begin::Card body-->
-				<div class="card-body p-9">
-					<!--begin::Row-->
-					<div class="row mb-7">
-						<!--begin::Label-->
-						<label class="col-lg-4 fw-bold text-muted">Review title</label>
-						<!--end::Label-->
-						<!--begin::Col-->
-						<div class="col-md-8">
-							<div class="fv-row mb-8 col-md-6">
-								<!--begin::Label-->
-								<label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
-									<span class="">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</span>
-								</label>
-								<!--end::Label-->
-								<!--begin::Input-->
-								<input type="text" class="form-control form-control-solid" placeholder="Review title"  name="" id="" />
-								
-								<!--end::Input-->
-							</div>
-						</div>
-						<!--end::Col-->
-					</div>
-					<!--end::Row-->
-					<!--begin::Input group-->
-					<div class="row mb-7">
-						<!--begin::Label-->
-						<label class="col-lg-4 fw-bold text-muted">Review Detail</label>
-						<!--end::Label-->
-						<!--begin::Col-->
-						<div class="col-md-8">
-							<div class="fv-row mb-8 col-md-6">
-								<!--begin::Label-->
-								<label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
-									<span class="">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</span>
-								</label>
-								<!--end::Label-->
-								<!--begin::Input-->
-								
-								<textarea type="text" class="form-control form-control-solid" placeholder="Review Detail"  rows="4" cols="50">
-								</textarea>
-								<!--end::Input-->
-							</div>
-						</div>
-						<!--end::Col-->
-					</div>
-					<!--end::Input group-->
-					<!--begin::Input group-->
-					<div class="row mb-7">
-						<!--begin::Label-->
-						<label class="col-lg-4 fw-bold text-muted">Ratings</label>
-						<!--end::Label-->
-						<!--begin::Col-->
-						<div class="col-lg-8 fv-row">
-							<div class="rating mb-6">
-								<div class="rating-label me-2 checked">
-									<i class="bi bi-star-fill fs-5"></i>
-								</div>
-								<div class="rating-label me-2 checked">
-									<i class="bi bi-star-fill fs-5"></i>
-								</div>
-								<div class="rating-label me-2 ">
-									<i class="bi bi-star-fill fs-5"></i>
-								</div>
-								<div class="rating-label me-2 ">
-									<i class="bi bi-star-fill fs-5"></i>
-								</div>
-								<div class="rating-label me-2 ">
-									<i class="bi bi-star-fill fs-5"></i>
-								</div>
-							</div>
-						</div>
-						<!--end::Col-->
-					</div>
-					<!--end::Input group-->
-					
-				</div>
-				<!--end::Card body-->
-			</div>
-		</div>
 		<!--end::nominee View-->
 		<!--begin::reffer View-->
 		<div id="reffer_detail" style="display:none;">
@@ -915,6 +863,207 @@
 			</div>
 		</div>
 		<!--end::reffer View-->
+		<!--begin::review View-->
+		<div id="review_detail" style="display:none;">
+			<div class="card mb-5 mb-xl-10">
+				<!--begin::Card header-->
+				<div class="card-header cursor-pointer">
+					<!--begin::Card title-->
+					<div class="card-title m-0">
+						<h3 class="fw-bolder m-0">Review</h3>
+					</div>
+					@if($review_rating != NULL)
+						@if($review_rating->is_status == 2)
+							<div class="text-warning fw-bold fs-5 m-5 align-self-center">
+								Your Review and Rating is under verification.
+							</div>
+						@elseif($review_rating->is_status == 1)
+							<div class="text-success fw-bold fs-5 m-5 align-self-center">
+								Your Review and Rating has been successfully submitted.
+							</div>
+						@endif
+					@endif
+				</div>
+				<!--begin::Card header-->
+				<!--begin::Card body-->
+				<div class="card-body p-9">
+					<form class="form w-100"  method="post" action="{{route('store_review_rating')}}" enctype="multipart/form-data">
+					@csrf
+						<input type="hidden" name="user" value="{{$user->id}}">
+						<!--begin::Row-->
+						<div class="row mb-7">
+							<!--begin::Label-->
+							<label class="col-lg-4 fw-bold text-muted">Review title</label>
+							<!--end::Label-->
+							<!--begin::Col-->
+							<div class="col-md-8">
+								<div class="fv-row mb-8 col-md-6">
+									@if($review_rating != NULL)
+										<!--begin::Input-->
+										<input type="text" class="form-control form-control-solid" placeholder="Review title"  name="review_title" id=""  value="{{$review_rating->review_title}}" readonly />
+										<!--end::Input-->
+									@else
+										<!--begin::Input-->
+										<input type="text" class="form-control form-control-solid" placeholder="Review title"  name="review_title" id="" />
+										<!--end::Input-->
+									@endif
+								</div>
+							</div>
+							<!--end::Col-->
+						</div>
+						<!--end::Row-->
+						<!--begin::Input group-->
+						<div class="row mb-7">
+							<!--begin::Label-->
+							<label class="col-lg-4 fw-bold text-muted">Review Detail</label>
+							<!--end::Label-->
+							<!--begin::Col-->
+							<div class="col-md-8">
+								<div class="fv-row mb-8 col-md-6">
+									@if($review_rating != NULL)
+										<!--begin::Input-->
+										<textarea type="text" class="form-control form-control-solid" placeholder="Review Detail" name="review"  rows="4" cols="50" readonly>{!! $review_rating->review !!}
+										</textarea>
+										<!--end::Input-->
+									@else
+										<!--begin::Input-->
+										<textarea type="text" class="form-control form-control-solid" placeholder="Review Detail" name="review"  rows="4" cols="50">
+										</textarea>
+										<!--end::Input-->
+									@endif
+								</div>
+							</div>
+							<!--end::Col-->
+						</div>
+						<!--end::Input group-->
+						<!--begin::Input group-->
+						<div class="row mb-7">
+							<!--begin::Label-->
+							<label class="col-lg-4 fw-bold text-muted">Ratings</label>
+							<!--end::Label-->
+							<!--begin::Col-->
+							<div class="col-lg-8 fv-row">
+								@if($review_rating != NULL)
+									@if($review_rating->rating == 1)
+                                        <div class="rating mb-6">
+                                            <div class="rating-label me-2 checked">
+                                                <i class="bi bi-star-fill fs-5"></i>
+                                            </div>
+                                            <div class="rating-label me-2 ">
+                                                <i class="bi bi-star-fill fs-5"></i>
+                                            </div>
+                                            <div class="rating-label me-2 ">
+                                                <i class="bi bi-star-fill fs-5"></i>
+                                            </div>
+                                            <div class="rating-label me-2 ">
+                                                <i class="bi bi-star-fill fs-5"></i>
+                                            </div>
+                                            <div class="rating-label me-2 ">
+                                                <i class="bi bi-star-fill fs-5"></i>
+                                            </div>
+                                        </div>
+                                    @elseif($review_rating->rating == 2)
+                                        <div class="rating mb-6">
+                                            <div class="rating-label me-2 checked">
+                                                <i class="bi bi-star-fill fs-5"></i>
+                                            </div>
+                                            <div class="rating-label me-2 checked">
+                                                <i class="bi bi-star-fill fs-5"></i>
+                                            </div>
+                                            <div class="rating-label me-2 ">
+                                                <i class="bi bi-star-fill fs-5"></i>
+                                            </div>
+                                            <div class="rating-label me-2 ">
+                                                <i class="bi bi-star-fill fs-5"></i>
+                                            </div>
+                                            <div class="rating-label me-2 ">
+                                                <i class="bi bi-star-fill fs-5"></i>
+                                            </div>
+                                        </div>
+                                    @elseif($review_rating->rating == 3)
+                                        <div class="rating mb-6">
+                                            <div class="rating-label me-2 checked">
+                                                <i class="bi bi-star-fill fs-5"></i>
+                                            </div>
+                                            <div class="rating-label me-2 checked">
+                                                <i class="bi bi-star-fill fs-5"></i>
+                                            </div>
+                                            <div class="rating-label me-2 checked ">
+                                                <i class="bi bi-star-fill fs-5"></i>
+                                            </div>
+                                            <div class="rating-label me-2 ">
+                                                <i class="bi bi-star-fill fs-5"></i>
+                                            </div>
+                                            <div class="rating-label me-2 ">
+                                                <i class="bi bi-star-fill fs-5"></i>
+                                            </div>
+                                        </div>
+                                    @elseif($review_rating->rating == 4)
+                                        <div class="rating mb-6">
+                                            <div class="rating-label me-2 checked">
+                                                <i class="bi bi-star-fill fs-5"></i>
+                                            </div>
+                                            <div class="rating-label me-2 checked">
+                                                <i class="bi bi-star-fill fs-5"></i>
+                                            </div>
+                                            <div class="rating-label me-2 checked ">
+                                                <i class="bi bi-star-fill fs-5"></i>
+                                            </div>
+                                            <div class="rating-label me-2 checked ">
+                                                <i class="bi bi-star-fill fs-5"></i>
+                                            </div>
+                                            <div class="rating-label me-2 ">
+                                                <i class="bi bi-star-fill fs-5"></i>
+                                            </div>
+                                        </div>
+                                    @elseif($review_rating->rating == 5)
+                                        <div class="rating mb-6">
+                                            <div class="rating-label me-2 checked">
+                                                <i class="bi bi-star-fill fs-5"></i>
+                                            </div>
+                                            <div class="rating-label me-2 checked">
+                                                <i class="bi bi-star-fill fs-5"></i>
+                                            </div>
+                                            <div class="rating-label me-2 checked ">
+                                                <i class="bi bi-star-fill fs-5"></i>
+                                            </div>
+                                            <div class="rating-label me-2 checked ">
+                                                <i class="bi bi-star-fill fs-5"></i>
+                                            </div>
+                                            <div class="rating-label me-2 checked ">
+                                                <i class="bi bi-star-fill fs-5"></i>
+                                            </div>
+                                        </div>
+                                    @endif
+								@else
+									<div class="stars mb-6">
+										<input class="star star-5" id="star-5" type="radio" name="star" value="5"  />
+										<label class="star star-5" for="star-5"></label>
+										<input class="star star-4" id="star-4" type="radio" name="star" value="4" />
+										<label class="star star-4" for="star-4"></label>
+										<input class="star star-3" id="star-3" type="radio" name="star" value="3" />
+										<label class="star star-3" for="star-3"></label>
+										<input class="star star-2" id="star-2" type="radio" name="star" value="2" />
+										<label class="star star-2" for="star-2"></label>
+										<input class="star star-1" id="star-1" type="radio" name="star" value="1" />
+										<label class="star star-1" for="star-1"></label>
+									</div>
+								@endif
+							</div>
+							<!--end::Col-->
+						</div>
+						<!--end::Input group-->
+						@if($review_rating == NULL)
+							<div class="d-flex justify-content-center">
+								<button type="submit"  class="btn  btn-primary mt-5 mb-3">Submit</button>
+							</div>
+						@endif
+					</form>
+				</div>
+				<!--end::Card body-->
+			</div>
+		</div>
+		<!--end::review View-->
 
     </div>
     <!--end::Post-->
@@ -1489,8 +1638,8 @@
 
 <!-- navigation -->
 <script type="text/javascript">
-	function basic() {
 
+	function basic() {
 		document.getElementById("basic").classList.add("active");
 		document.getElementById("additional").classList.remove("active");
 		document.getElementById("bank").classList.remove("active");
@@ -1504,11 +1653,9 @@
 		$('#nominee_detail').hide();
 		$('#reffer_detail').hide();
 		$('#review_detail').hide();
-
-
 	}
-	function additional() {
 
+	function additional() {
 		document.getElementById("basic").classList.remove("active");
 		document.getElementById("additional").classList.add("active");
 		document.getElementById("bank").classList.remove("active");
@@ -1523,10 +1670,9 @@
 		$('#reffer_detail').hide();
 		$('#review_detail').hide();
 
-
 	}
-	function bank() {
 
+	function bank() {
 		document.getElementById("basic").classList.remove("active");
 		document.getElementById("additional").classList.remove("active");
 		document.getElementById("bank").classList.add("active");
@@ -1540,11 +1686,9 @@
 		$('#nominee_detail').hide();
 		$('#reffer_detail').hide();
 		$('#review_detail').hide();
-
-
 	}
+
 	function nominee() {
-		
 		document.getElementById("basic").classList.remove("active");
 		document.getElementById("additional").classList.remove("active");
 		document.getElementById("bank").classList.remove("active");
@@ -1558,27 +1702,10 @@
 		$('#nominee_detail').show();
 		$('#reffer_detail').hide();
 		$('#review_detail').hide();
-
-
 	}
-	function review() {
-		
-		document.getElementById("basic").classList.remove("active");
-			document.getElementById("additional").classList.remove("active");
-			document.getElementById("bank").classList.remove("active");
-			document.getElementById("nominee").classList.remove("active");
-			document.getElementById("reffer").classList.remove("active");
-			document.getElementById("review").classList.add("active");
-			$('#basic_detail').hide();
-		$('#additional_detail').hide();
-		   $('#bank_detail').hide();
-		$('#review_detail').show();
-		$('#nominee_detail').hide();
-		$('#reffer_detail').hide();
-	
-		}
+
+
 	function reffer() {
-		
 		document.getElementById("basic").classList.remove("active");
 		document.getElementById("additional").classList.remove("active");
 		document.getElementById("bank").classList.remove("active");
@@ -1592,12 +1719,25 @@
 		$('#nominee_detail').hide();
 		$('#reffer_detail').show();
 		$('#review_detail').hide();
+	}
 
+	function review() {
+		document.getElementById("basic").classList.remove("active");
+		document.getElementById("additional").classList.remove("active");
+		document.getElementById("bank").classList.remove("active");
+		document.getElementById("nominee").classList.remove("active");
+		document.getElementById("reffer").classList.remove("active");
+		document.getElementById("review").classList.add("active");
 
+		$('#basic_detail').hide();
+		$('#additional_detail').hide();
+		$('#bank_detail').hide();
+		$('#review_detail').show();
+		$('#nominee_detail').hide();
+		$('#reffer_detail').hide();
 	}
 
 	function reffered_user() {
-		
     	document.getElementById("reffered_user").classList.add("active");
 		document.getElementById("refferal_amount").classList.remove("active");
 		$('#refferal_user_detail').show();
@@ -1605,7 +1745,6 @@
 	}
 
 	function refferal_amount() {
-		
     	document.getElementById("reffered_user").classList.remove("active");
 		document.getElementById("refferal_amount").classList.add("active");
 		$('#refferal_user_detail').hide();

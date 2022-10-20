@@ -67,6 +67,10 @@ Route::post('/edit_profile',[UserController::class, 'edit_profile'])->name('edit
 Route::get('/get_users',[UserController::class, 'get_users'])->name('get_users');
 Route::post('/refferal',[UserController::class, 'refferal'])->name('refferal');
 Route::get('/refferal_amount',[UserController::class, 'refferal_amount'])->name('refferal_amount');
+Route::post('/store_review_rating',[UserController::class, 'store_review_rating'])->name('store_review_rating');
+Route::post('/edit_review_rating',[UserController::class, 'edit_review_rating'])->name('edit_review_rating');
+Route::get('/accept_review_rating/{id}',[UserController::class, 'accept_review_rating'])->name('accept_review_rating');
+Route::get('/decline_review_rating/{id}',[UserController::class, 'decline_review_rating'])->name('decline_review_rating');
 //User Management end
 
 //Smart Finance

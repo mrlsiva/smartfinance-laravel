@@ -27,7 +27,7 @@ class CreateSmartfinancePaymentsTable extends Migration
             $table->string('payment_date');
             $table->string('paid_by')->nullable();
             $table->string('bill')->nullable();
-             $table->boolean('is_approve')->nullable();
+            $table->boolean('is_approve')->nullable();
             $table->boolean('is_status');
             $table->timestamps();
         });

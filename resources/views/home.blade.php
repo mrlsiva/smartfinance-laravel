@@ -22,6 +22,48 @@
 </head>
 <!--end::Head-->
 <!--begin::Body-->
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+<style>
+    a.rating-label.checked>i, label.rating-label>i {
+        color: #ffad0f;
+    }
+
+
+    div.stars {
+        width: 270px;
+        display: inline-block;
+    }
+
+    input.star { display: none; }
+
+    label.star {
+        float: right;
+        padding: 10px;
+        font-size: 20px;
+        color: #444;
+        transition: all .2s;
+    }
+
+    input.star:checked ~ label.star:before {
+        content: '\f005';
+        color: #FD4;
+        transition: all .25s;
+    }
+
+    input.star-5:checked ~ label.star:before {
+        color: #FE7;
+        text-shadow: 0 0 20px #952;
+    }
+
+    input.star-1:checked ~ label.star:before { color: #F62; }
+
+    label.star:hover { transform: rotate(-15deg) scale(1.3); }
+
+    label.star:before {
+        content: '\f006';
+        font-family: FontAwesome;
+    }
+</style>
 
 <body id="kt_body" style="background-image: url(public/assets/media/patterns/header-bg.jpg)" data-bs-spy="scroll" data-bs-target="#kt_landing_menu" data-bs-offset="200" class="bg-white position-relative">
     <!--begin::Main-->
@@ -764,165 +806,135 @@
                 <!--end::Heading-->
                 <!--begin::Row-->
                 <div class="row g-lg-10 mb-10 mb-lg-20">
-                    <!--begin::Col-->
-                    <div class="col-lg-4">
-                        <!--begin::Testimonial-->
-                        <div class="d-flex flex-column justify-content-between h-lg-100 px-10 px-lg-0 pe-lg-10 mb-15 mb-lg-0">
-                            <!--begin::Wrapper-->
-                            <div class="mb-7">
-                                <!--begin::Rating-->
-                                <div class="rating mb-6">
-                                    <div class="rating-label me-2 checked">
-                                        <i class="bi bi-star-fill fs-5"></i>
-                                    </div>
-                                    <div class="rating-label me-2 checked">
-                                        <i class="bi bi-star-fill fs-5"></i>
-                                    </div>
-                                    <div class="rating-label me-2 checked">
-                                        <i class="bi bi-star-fill fs-5"></i>
-                                    </div>
-                                    <div class="rating-label me-2 checked">
-                                        <i class="bi bi-star-fill fs-5"></i>
-                                    </div>
-                                    <div class="rating-label me-2 checked">
-                                        <i class="bi bi-star-fill fs-5"></i>
-                                    </div>
+
+                    @foreach($reviews as $review)
+                        <!--begin::Col-->
+                        <div class="col-lg-4">
+                            <!--begin::Testimonial-->
+                            <div class="d-flex flex-column justify-content-between h-lg-100 px-10 px-lg-0 pe-lg-10 mb-15 mb-lg-0">
+                                <!--begin::Wrapper-->
+                                <div class="mb-7">
+                                    <!--begin::Rating-->
+                                    @if($review->rating == 1)
+                                        <div class="rating mb-6">
+                                            <div class="rating-label me-2 checked">
+                                                <i class="bi bi-star-fill fs-5"></i>
+                                            </div>
+                                            <div class="rating-label me-2 ">
+                                                <i class="bi bi-star-fill fs-5"></i>
+                                            </div>
+                                            <div class="rating-label me-2 ">
+                                                <i class="bi bi-star-fill fs-5"></i>
+                                            </div>
+                                            <div class="rating-label me-2 ">
+                                                <i class="bi bi-star-fill fs-5"></i>
+                                            </div>
+                                            <div class="rating-label me-2 ">
+                                                <i class="bi bi-star-fill fs-5"></i>
+                                            </div>
+                                        </div>
+                                    @elseif($review->rating == 2)
+                                        <div class="rating mb-6">
+                                            <div class="rating-label me-2 checked">
+                                                <i class="bi bi-star-fill fs-5"></i>
+                                            </div>
+                                            <div class="rating-label me-2 checked">
+                                                <i class="bi bi-star-fill fs-5"></i>
+                                            </div>
+                                            <div class="rating-label me-2 ">
+                                                <i class="bi bi-star-fill fs-5"></i>
+                                            </div>
+                                            <div class="rating-label me-2 ">
+                                                <i class="bi bi-star-fill fs-5"></i>
+                                            </div>
+                                            <div class="rating-label me-2 ">
+                                                <i class="bi bi-star-fill fs-5"></i>
+                                            </div>
+                                        </div>
+                                    @elseif($review->rating == 3)
+                                        <div class="rating mb-6">
+                                            <div class="rating-label me-2 checked">
+                                                <i class="bi bi-star-fill fs-5"></i>
+                                            </div>
+                                            <div class="rating-label me-2 checked">
+                                                <i class="bi bi-star-fill fs-5"></i>
+                                            </div>
+                                            <div class="rating-label me-2 checked ">
+                                                <i class="bi bi-star-fill fs-5"></i>
+                                            </div>
+                                            <div class="rating-label me-2 ">
+                                                <i class="bi bi-star-fill fs-5"></i>
+                                            </div>
+                                            <div class="rating-label me-2 ">
+                                                <i class="bi bi-star-fill fs-5"></i>
+                                            </div>
+                                        </div>
+                                    @elseif($review->rating == 4)
+                                        <div class="rating mb-6">
+                                            <div class="rating-label me-2 checked">
+                                                <i class="bi bi-star-fill fs-5"></i>
+                                            </div>
+                                            <div class="rating-label me-2 checked">
+                                                <i class="bi bi-star-fill fs-5"></i>
+                                            </div>
+                                            <div class="rating-label me-2 checked ">
+                                                <i class="bi bi-star-fill fs-5"></i>
+                                            </div>
+                                            <div class="rating-label me-2 checked ">
+                                                <i class="bi bi-star-fill fs-5"></i>
+                                            </div>
+                                            <div class="rating-label me-2 ">
+                                                <i class="bi bi-star-fill fs-5"></i>
+                                            </div>
+                                        </div>
+                                    @elseif($review->rating == 5)
+                                        <div class="rating mb-6">
+                                            <div class="rating-label me-2 checked">
+                                                <i class="bi bi-star-fill fs-5"></i>
+                                            </div>
+                                            <div class="rating-label me-2 checked">
+                                                <i class="bi bi-star-fill fs-5"></i>
+                                            </div>
+                                            <div class="rating-label me-2 checked ">
+                                                <i class="bi bi-star-fill fs-5"></i>
+                                            </div>
+                                            <div class="rating-label me-2 checked ">
+                                                <i class="bi bi-star-fill fs-5"></i>
+                                            </div>
+                                            <div class="rating-label me-2 checked ">
+                                                <i class="bi bi-star-fill fs-5"></i>
+                                            </div>
+                                        </div>
+                                    @endif
+                                    <!--end::Rating-->
+                                    <!--begin::Title-->
+                                    <div class="fs-2 fw-bolder text-dark mb-3">{{$review->review_title}}</div>
+                                    <!--end::Title-->
+                                    <!--begin::Feedback-->
+                                    <div class="text-gray-500 fw-bold fs-4">{{$review->review}}</div>
+                                    <!--end::Feedback-->
                                 </div>
-                                <!--end::Rating-->
-                                <!--begin::Title-->
-                                <div class="fs-2 fw-bolder text-dark mb-3">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</div>
-                                <!--end::Title-->
-                                <!--begin::Feedback-->
-                                <div class="text-gray-500 fw-bold fs-4">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to
-                                    make a type specimen book.</div>
-                                <!--end::Feedback-->
+                                <!--end::Wrapper-->
+                                <!--begin::Author-->
+                                <div class="d-flex align-items-center">
+                                    <!--begin::Avatar-->
+                                    <div class="symbol symbol-circle symbol-50px me-5">
+                                        <img src="{{$review->user->avatar}}" class="" alt="" />
+                                    </div>
+                                    <!--end::Avatar-->
+                                    <!--begin::Name-->
+                                    <div class="flex-grow-1">
+                                        <a href="#" class="text-dark fw-bolder text-hover-primary fs-6">{{$review->user->first_name}}</a>
+                                        <span class="text-muted d-block fw-bold">{{$review->user->email}}</span>
+                                    </div>
+                                    <!--end::Name-->
+                                </div>
+                                <!--end::Author-->
                             </div>
-                            <!--end::Wrapper-->
-                            <!--begin::Author-->
-                            <div class="d-flex align-items-center">
-                                <!--begin::Avatar-->
-                                <div class="symbol symbol-circle symbol-50px me-5">
-                                    <img src="{{ asset('public/assets/media/avatars/300-1.jpg') }}" class="" alt="" />
-                                </div>
-                                <!--end::Avatar-->
-                                <!--begin::Name-->
-                                <div class="flex-grow-1">
-                                    <a href="#" class="text-dark fw-bolder text-hover-primary fs-6">Paul Miles</a>
-                                    <span class="text-muted d-block fw-bold">Development Lead</span>
-                                </div>
-                                <!--end::Name-->
-                            </div>
-                            <!--end::Author-->
+                            <!--end::Testimonial-->
                         </div>
-                        <!--end::Testimonial-->
-                    </div>
-                    <!--end::Col-->
-                    <!--begin::Col-->
-                    <div class="col-lg-4">
-                        <!--begin::Testimonial-->
-                        <div class="d-flex flex-column justify-content-between h-lg-100 px-10 px-lg-0 pe-lg-10 mb-15 mb-lg-0">
-                            <!--begin::Wrapper-->
-                            <div class="mb-7">
-                                <!--begin::Rating-->
-                                <div class="rating mb-6">
-                                    <div class="rating-label me-2 checked">
-                                        <i class="bi bi-star-fill fs-5"></i>
-                                    </div>
-                                    <div class="rating-label me-2 checked">
-                                        <i class="bi bi-star-fill fs-5"></i>
-                                    </div>
-                                    <div class="rating-label me-2 checked">
-                                        <i class="bi bi-star-fill fs-5"></i>
-                                    </div>
-                                    <div class="rating-label me-2 checked">
-                                        <i class="bi bi-star-fill fs-5"></i>
-                                    </div>
-                                    <div class="rating-label me-2 checked">
-                                        <i class="bi bi-star-fill fs-5"></i>
-                                    </div>
-                                </div>
-                                <!--end::Rating-->
-                                <!--begin::Title-->
-                                <div class="fs-2 fw-bolder text-dark mb-3">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</div>
-                                <!--end::Title-->
-                                <!--begin::Feedback-->
-                                <div class="text-gray-500 fw-bold fs-4">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to
-                                    make a type specimen book.</div>
-                                <!--end::Feedback-->
-                            </div>
-                            <!--end::Wrapper-->
-                            <!--begin::Author-->
-                            <div class="d-flex align-items-center">
-                                <!--begin::Avatar-->
-                                <div class="symbol symbol-circle symbol-50px me-5">
-                                    <img src="{{ asset('public/assets/media/avatars/300-2.jpg') }}" class="" alt="" />
-                                </div>
-                                <!--end::Avatar-->
-                                <!--begin::Name-->
-                                <div class="flex-grow-1">
-                                    <a href="#" class="text-dark fw-bolder text-hover-primary fs-6">Janya Clebert</a>
-                                    <span class="text-muted d-block fw-bold">Development Lead</span>
-                                </div>
-                                <!--end::Name-->
-                            </div>
-                            <!--end::Author-->
-                        </div>
-                        <!--end::Testimonial-->
-                    </div>
-                    <!--end::Col-->
-                    <!--begin::Col-->
-                    <div class="col-lg-4">
-                        <!--begin::Testimonial-->
-                        <div class="d-flex flex-column justify-content-between h-lg-100 px-10 px-lg-0 pe-lg-10 mb-15 mb-lg-0">
-                            <!--begin::Wrapper-->
-                            <div class="mb-7">
-                                <!--begin::Rating-->
-                                <div class="rating mb-6">
-                                    <div class="rating-label me-2 checked">
-                                        <i class="bi bi-star-fill fs-5"></i>
-                                    </div>
-                                    <div class="rating-label me-2 checked">
-                                        <i class="bi bi-star-fill fs-5"></i>
-                                    </div>
-                                    <div class="rating-label me-2 checked">
-                                        <i class="bi bi-star-fill fs-5"></i>
-                                    </div>
-                                    <div class="rating-label me-2 checked">
-                                        <i class="bi bi-star-fill fs-5"></i>
-                                    </div>
-                                    <div class="rating-label me-2 checked">
-                                        <i class="bi bi-star-fill fs-5"></i>
-                                    </div>
-                                </div>
-                                <!--end::Rating-->
-                                <!--begin::Title-->
-                                <div class="fs-2 fw-bolder text-dark mb-3">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</div>
-                                <!--end::Title-->
-                                <!--begin::Feedback-->
-                                <div class="text-gray-500 fw-bold fs-4">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to
-                                    make a type specimen book.</div>
-                                <!--end::Feedback-->
-                            </div>
-                            <!--end::Wrapper-->
-                            <!--begin::Author-->
-                            <div class="d-flex align-items-center">
-                                <!--begin::Avatar-->
-                                <div class="symbol symbol-circle symbol-50px me-5">
-                                    <img src="{{ asset('public/assets/media/avatars/300-16.jpg') }}" class="" alt="" />
-                                </div>
-                                <!--end::Avatar-->
-                                <!--begin::Name-->
-                                <div class="flex-grow-1">
-                                    <a href="#" class="text-dark fw-bolder text-hover-primary fs-6">Steave Brown</a>
-                                    <span class="text-muted d-block fw-bold">Development Lead</span>
-                                </div>
-                                <!--end::Name-->
-                            </div>
-                            <!--end::Author-->
-                        </div>
-                        <!--end::Testimonial-->
-                    </div>
-                    <!--end::Col-->
+                        <!--end::Col-->
+                    @endforeach
                 </div>
                 <!--end::Row-->
                 <!--begin::Highlight-->

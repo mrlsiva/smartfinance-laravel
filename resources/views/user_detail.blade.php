@@ -1,5 +1,8 @@
 @extends('layouts.master')
 @section('body')
+
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+
 <style type="text/css">
 	body{
 		background-image: url(../public/assets/img/header-bg.jpg)!important;
@@ -8,14 +11,54 @@
 		background-image: url(../public/assets/media/misc/pattern-1.jpg)!important;
 	}
 	.scroll {
-  -ms-overflow-style: none; /* for Internet Explorer, Edge */
-  scrollbar-width: none; /* for Firefox */
-  overflow-y: scroll; 
-}
+		-ms-overflow-style: none; /* for Internet Explorer, Edge */
+		scrollbar-width: none; /* for Firefox */
+		overflow-y: scroll; 
+	}
 
-.scroll::-webkit-scrollbar {
-  display: none; /* for Chrome, Safari, and Opera */
-}
+	.scroll::-webkit-scrollbar {
+		display: none; /* for Chrome, Safari, and Opera */
+	}
+
+	a.rating-label.checked>i, label.rating-label>i {
+		color: #ffad0f;
+	}
+
+
+	div.stars {
+		width: 270px;
+		display: inline-block;
+	}
+
+	input.star { display: none; }
+
+	label.star {
+		float: right;
+		padding: 15px;
+		font-size: 25px;
+		color: #444;
+		transition: all .2s;
+	}
+
+	input.star:checked ~ label.star:before {
+		content: '\f005';
+		color: #FD4;
+		transition: all .25s;
+	}
+
+	input.star-5:checked ~ label.star:before {
+		color: #FE7;
+		text-shadow: 0 0 20px #952;
+	}
+
+	input.star-1:checked ~ label.star:before { color: #F62; }
+
+	label.star:hover { transform: rotate(-15deg) scale(1.3); }
+
+	label.star:before {
+		content: '\f006';
+		font-family: FontAwesome;
+	}
 </style>
 
 <!--begin::Toolbar-->
@@ -244,6 +287,19 @@
 						<a class="nav-link text-active-primary ms-0 me-10 py-5" id="nominee" onclick="nominee()">Nominee Details</a>
 					</li>
 					<!--end::Nav item-->
+					@if($review_rating != NULL)
+						<!--begin::Nav item-->
+						<li class="nav-item mt-2">
+							<a class="nav-link text-active-primary ms-0 me-10 py-5" id="review" onclick="review()">Review and Rating</a>
+						</li>
+						<!--end::Nav item-->
+					@else
+						<!--begin::Nav item-->
+						<li class="nav-item mt-2" style="display:none;">
+							<a class="nav-link text-active-primary ms-0 me-10 py-5" id="review" onclick="review()">Review and Rating</a>
+						</li>
+						<!--end::Nav item-->
+					@endif
 					@if($user->is_reffer == 1  )
 						<!--begin::Nav item-->
 						<li class="nav-item mt-2">
@@ -752,6 +808,106 @@
 			</div>
 		</div>
 		<!--end::nominee View-->
+		<!--begin::review View-->
+		<div id="review_detail" style="display:none;">
+			<div class="card mb-5 mb-xl-10">
+				<!--begin::Card header-->
+				<div class="card-header cursor-pointer">
+					<!--begin::Card title-->
+					<div class="card-title m-0">
+						<h3 class="fw-bolder m-0">Review</h3>
+					</div>
+					@if($review_rating != NULL)
+						@if($review_rating->is_status == 2)
+							<div class="m-5 align-self-center">
+								<a href="{{route('accept_review_rating', ['id' => $review_rating->id])}}">
+								<button type="button" class="btn  btn-success mb-5" name="accept">Accept</button></a>
+								<a href="{{route('decline_review_rating', ['id' => $review_rating->id])}}">
+								<button type="button" class="btn  btn-danger mb-5" name="accept">Decline</button></a>
+							</div>
+						@elseif($review_rating->is_status == 1)
+							<div class="m-5 align-self-center">
+								<div class="text-success fw-bold fs-5">
+									You have approved this Review and Rating.
+								</div>
+							</div>
+						@endif
+					@endif
+				</div>
+				<!--begin::Card header-->
+				<!--begin::Card body-->
+				<div class="card-body p-9">
+					@if($review_rating != NULL)
+						<form class="form w-100"  method="post" action="{{route('edit_review_rating')}}" enctype="multipart/form-data">
+							@csrf
+							<input type="hidden" name="review_id" value="{{$review_rating->id}}">
+							<!--begin::Row-->
+							<div class="row mb-7">
+								<!--begin::Label-->
+								<label class="col-lg-4 fw-bold text-muted">Review title</label>
+								<!--end::Label-->
+								<!--begin::Col-->
+								<div class="col-md-8">
+									<div class="fv-row mb-8 col-md-6">
+										<!--begin::Input-->
+										<input type="text" class="form-control form-control-solid" placeholder="Review title"  name="review_title" id=""  value="{{$review_rating->review_title}}" />
+										<!--end::Input-->
+									</div>
+								</div>
+								<!--end::Col-->
+							</div>
+							<!--end::Row-->
+							<!--begin::Input group-->
+							<div class="row mb-7">
+								<!--begin::Label-->
+								<label class="col-lg-4 fw-bold text-muted">Review Detail</label>
+								<!--end::Label-->
+								<!--begin::Col-->
+								<div class="col-md-8">
+									<div class="fv-row mb-8 col-md-6">
+										
+										<!--begin::Input-->
+										<textarea type="text" class="form-control form-control-solid" placeholder="Review Detail" name="review"  rows="4" cols="50" >{!! $review_rating->review !!}
+										</textarea>
+										<!--end::Input-->
+									</div>
+								</div>
+								<!--end::Col-->
+							</div>
+							<!--end::Input group-->
+							<!--begin::Input group-->
+							<div class="row mb-7">
+								<!--begin::Label-->
+								<label class="col-lg-4 fw-bold text-muted">Ratings</label>
+								<!--end::Label-->
+								<!--begin::Col-->
+								<div class="col-lg-8 fv-row">
+									<div class="stars mb-6">
+										<input class="star star-5" id="star-5" type="radio" name="star" value="5" {{ ("5" == $review_rating->rating ) ? "checked":"" }} />
+										<label class="star star-5" for="star-5"></label>
+										<input class="star star-4" id="star-4" type="radio" name="star" value="4" {{ ("4" == $review_rating->rating ) ? "checked":"" }}/>
+										<label class="star star-4" for="star-4"></label>
+										<input class="star star-3" id="star-3" type="radio" name="star" value="3" {{ ("3" == $review_rating->rating ) ? "checked":"" }}/>
+										<label class="star star-3" for="star-3"></label>
+										<input class="star star-2" id="star-2" type="radio" name="star" value="2" {{ ("2" == $review_rating->rating ) ? "checked":"" }}/>
+										<label class="star star-2" for="star-2"></label>
+										<input class="star star-1" id="star-1" type="radio" name="star" value="1" {{ ("1" == $review_rating->rating ) ? "checked":"" }} />
+										<label class="star star-1" for="star-1"></label>
+									</div>
+								</div>
+								<!--end::Col-->
+							</div>
+							<!--end::Input group-->
+							<div class="d-flex justify-content-center">
+								<button type="submit"  class="btn  btn-primary mt-5 mb-3">Submit</button>
+							</div>
+						</form>
+					@endif
+				</div>
+				<!--end::Card body-->
+			</div>
+		</div>
+		<!--end::review View-->
 		<!--begin::reffer View-->
 		<div id="reffer_detail" style="display:none;">
 			<div class="card mb-5 mb-xl-10">
@@ -1818,11 +1974,13 @@
 		document.getElementById("bank").classList.remove("active");
 		document.getElementById("nominee").classList.remove("active");
 		document.getElementById("reffer").classList.remove("active");
+		document.getElementById("review").classList.remove("active");
 		$('#basic_detail').show();
 		$('#additional_detail').hide();
 		$('#bank_detail').hide();
 		$('#nominee_detail').hide();
 		$('#reffer_detail').hide();
+		$('#review_detail').hide();
 
 	}
 	function additional() {
@@ -1832,11 +1990,13 @@
 		document.getElementById("bank").classList.remove("active");
 		document.getElementById("nominee").classList.remove("active");
 		document.getElementById("reffer").classList.remove("active");
+		document.getElementById("review").classList.remove("active");
 		$('#basic_detail').hide();
 		$('#additional_detail').show();
 		$('#bank_detail').hide();
 		$('#nominee_detail').hide();
 		$('#reffer_detail').hide();
+		$('#review_detail').hide();
 
 	}
 	function bank() {
@@ -1846,11 +2006,13 @@
 		document.getElementById("bank").classList.add("active");
 		document.getElementById("nominee").classList.remove("active");
 		document.getElementById("reffer").classList.remove("active");
+		document.getElementById("review").classList.remove("active");
 		$('#basic_detail').hide();
 		$('#additional_detail').hide();
 		$('#bank_detail').show();
 		$('#nominee_detail').hide();
 		$('#reffer_detail').hide();
+		$('#review_detail').hide();
 
 	}
 	function nominee() {
@@ -1860,11 +2022,13 @@
 		document.getElementById("bank").classList.remove("active");
 		document.getElementById("nominee").classList.add("active");
 		document.getElementById("reffer").classList.remove("active");
+		document.getElementById("review").classList.remove("active");
 		$('#basic_detail').hide();
     $('#additional_detail').hide();
    	$('#bank_detail').hide();
     $('#nominee_detail').show();
     $('#reffer_detail').hide();
+    $('#review_detail').hide();
 
 	}
 
@@ -1875,11 +2039,29 @@
 		document.getElementById("bank").classList.remove("active");
 		document.getElementById("nominee").classList.remove("active");
 		document.getElementById("reffer").classList.add("active");
+		document.getElementById("review").classList.remove("active");
 		$('#basic_detail').hide();
     $('#additional_detail').hide();
    	$('#bank_detail').hide();
     $('#nominee_detail').hide();
-     $('#reffer_detail').show();
+    $('#reffer_detail').show();
+    $('#review_detail').hide();
+	}
+
+	function review() {
+		document.getElementById("basic").classList.remove("active");
+		document.getElementById("additional").classList.remove("active");
+		document.getElementById("bank").classList.remove("active");
+		document.getElementById("nominee").classList.remove("active");
+		document.getElementById("reffer").classList.remove("active");
+		document.getElementById("review").classList.add("active");
+
+		$('#basic_detail').hide();
+		$('#additional_detail').hide();
+		$('#bank_detail').hide();
+		$('#review_detail').show();
+		$('#nominee_detail').hide();
+		$('#reffer_detail').hide();
 	}
 
 	function reffered_user() {

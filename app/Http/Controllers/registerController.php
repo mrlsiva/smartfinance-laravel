@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use App\Models\ReviewRating;
 use App\Models\User;
 use Image;
 
@@ -12,7 +13,9 @@ class registerController extends Controller
 {
     public function home(){
 
-        return view('home');
+        $reviews = ReviewRating::where('is_status', 1)->latest()->take(3)->get();
+        //return $reviews;
+        return view('home')->with('reviews',$reviews);
     }
 
     public function sign_up(){
@@ -20,7 +23,7 @@ class registerController extends Controller
         return view('register');
     }
 
-     public function register(Request $request)
+    public function register(Request $request)
     {
         //return $request;
         $validatedData = $request->validate([
