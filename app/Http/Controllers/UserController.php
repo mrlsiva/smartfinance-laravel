@@ -707,7 +707,7 @@ class UserController extends Controller
         $user_amount = UserAmount::where([['user_id',$user_id],['is_status',0]])->first();
         if($user_amount != NULL){
 
-            $status = DB::table('user_amounts')->where('user_id',$user->user_id)->update(['amount' => $amount]);
+            $status = DB::table('user_amounts')->where('user_id',$user_id)->update(['amount' => $amount]);
         }
         else{
 
