@@ -34,21 +34,6 @@ class UserController extends Controller
         else{
             if($user->role_id == '3'){
 
-                $smartfinances = Smartfinance::where([['user_id',$user->id],['is_close',0],['is_status',1]])->get();
-                if($smartfinances != NULL){
-                    foreach($smartfinances as $smartfinance){
-
-                        $count = SmartfinancePayment::where('smartfinance_id',$smartfinance->id)->count();
-                        $count1 = SmartfinancePayment::where([['smartfinance_id',$smartfinance->id],['is_status',1]])->count();
-                        $smartfinance_payment = SmartfinancePayment::where([['smartfinance_id',$smartfinance->id],['is_status',1]])->first();
-
-                        if($count == $count1){
-
-                            DB::table('smartfinances')->where('id',$smartfinance_payment->smartfinance_id)->update(['is_close' => 1]);
-                        }
-                    }
-                }
-
                 $finance = [];
                 $user_amount = UserAmount::where([['user_id',$user->id],['is_status',0]])->first();
                 if($user_amount != Null){
@@ -65,6 +50,35 @@ class UserController extends Controller
                         } 
                     }
                 }
+
+
+                $today = Carbon::now()->format('Y-m-d');
+                $smartfinances = Smartfinance::where([['user_id',$user->id],['is_close',0],['is_status',1]])->get();
+                if($smartfinances != NULL){
+                    foreach($smartfinances as $smartfinance){
+                        $smartfinance_payments = SmartfinancePayment::where([['smartfinance_id',$smartfinance->id],['payment_date','<',$today],['is_status',0]])->get();
+                        foreach($smartfinance_payments as $smartfinance_payment){
+                            $smartfinance_payment_status = DB::table('smartfinance_payments')->where('id',$smartfinance_payment->id)->update(['is_status' => 1]);
+                        }
+                    }
+                }
+
+                $smartfinances = Smartfinance::where([['user_id',$user->id],['is_close',0],['is_status',1]])->get();
+                if($smartfinances != NULL){
+                    foreach($smartfinances as $smartfinance){
+
+                        $count = SmartfinancePayment::where('smartfinance_id',$smartfinance->id)->count();
+                        $count1 = SmartfinancePayment::where([['smartfinance_id',$smartfinance->id],['is_status',1]])->count();
+                        $smartfinance_payment = SmartfinancePayment::where([['smartfinance_id',$smartfinance->id],['is_status',1]])->first();
+
+                        if($count == $count1){
+
+                            DB::table('smartfinances')->where('id',$smartfinance_payment->smartfinance_id)->update(['is_close' => 1]);
+                        }
+                    }
+                }
+
+
 
                 $smartfinances = Smartfinance::where('user_id',$user->id)->orderBy('id','Desc')->simplePaginate(10);
                 $smartfinance_count = Smartfinance::where('is_status',2)->count();
