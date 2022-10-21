@@ -71,6 +71,7 @@ Route::post('/store_review_rating',[UserController::class, 'store_review_rating'
 Route::post('/edit_review_rating',[UserController::class, 'edit_review_rating'])->name('edit_review_rating');
 Route::get('/accept_review_rating/{id}',[UserController::class, 'accept_review_rating'])->name('accept_review_rating');
 Route::get('/decline_review_rating/{id}',[UserController::class, 'decline_review_rating'])->name('decline_review_rating');
+Route::get('/review_rating',[UserController::class, 'review_rating'])->name('review_rating');
 //User Management end
 
 //Smart Finance

@@ -22,48 +22,6 @@
 </head>
 <!--end::Head-->
 <!--begin::Body-->
-<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
-<style>
-    a.rating-label.checked>i, label.rating-label>i {
-        color: #ffad0f;
-    }
-
-
-    div.stars {
-        width: 270px;
-        display: inline-block;
-    }
-
-    input.star { display: none; }
-
-    label.star {
-        float: right;
-        padding: 10px;
-        font-size: 20px;
-        color: #444;
-        transition: all .2s;
-    }
-
-    input.star:checked ~ label.star:before {
-        content: '\f005';
-        color: #FD4;
-        transition: all .25s;
-    }
-
-    input.star-5:checked ~ label.star:before {
-        color: #FE7;
-        text-shadow: 0 0 20px #952;
-    }
-
-    input.star-1:checked ~ label.star:before { color: #F62; }
-
-    label.star:hover { transform: rotate(-15deg) scale(1.3); }
-
-    label.star:before {
-        content: '\f006';
-        font-family: FontAwesome;
-    }
-</style>
 
 <body id="kt_body" style="background-image: url(public/assets/media/patterns/header-bg.jpg)" data-bs-spy="scroll" data-bs-target="#kt_landing_menu" data-bs-offset="200" class="bg-white position-relative">
     <!--begin::Main-->
@@ -806,7 +764,6 @@
                 <!--end::Heading-->
                 <!--begin::Row-->
                 <div class="row g-lg-10 mb-10 mb-lg-20">
-
                     @foreach($reviews as $review)
                         <!--begin::Col-->
                         <div class="col-lg-4">
@@ -935,6 +892,7 @@
                         </div>
                         <!--end::Col-->
                     @endforeach
+                     <a href="{{route('review_rating')}}" class="text-primary text-center text-decoration-underline fs-5 fw-bold">View More</a>
                 </div>
                 <!--end::Row-->
                 <!--begin::Highlight-->

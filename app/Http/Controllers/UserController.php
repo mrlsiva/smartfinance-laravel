@@ -177,6 +177,17 @@ class UserController extends Controller
 
                     DB::table('users')->where('id',$id)->update(['is_profile_updated' => 0]);
                 }
+                if($refferal == 0){
+
+                    $refferal = Refferal::where('user_id',$id)->count();
+                    if($refferal > 0){
+                        $refferal = Refferal::where('user_id',$id)->delete();
+                    }
+                    $user_amount = UserAmount::where('user_id',$id)->count();
+                    if($user_amount > 0){
+                        $user_amount = UserAmount::where('user_id',$id)->delete();
+                    }
+                }
                 return redirect()->back()->with('alert', 'Successfully Updated!!');
             }
         }
@@ -185,6 +196,17 @@ class UserController extends Controller
             if($is_profile_verified == 1){
 
                 DB::table('users')->where('id',$id)->update(['is_profile_updated' => 0]);
+            }
+            if($refferal == 0){
+
+                $refferal = Refferal::where('user_id',$id)->count();
+                if($refferal > 0){
+                    $refferal = Refferal::where('user_id',$id)->delete();
+                }
+                $user_amount = UserAmount::where('user_id',$id)->count();
+                if($user_amount > 0){
+                    $user_amount = UserAmount::where('user_id',$id)->delete();
+                }
             }
             return redirect()->back()->with('alert', 'Successfully Updated!!');
         }
@@ -791,10 +813,16 @@ class UserController extends Controller
 
     public function decline_review_rating($id,Request $request)
     {
-
         $smartfinances = DB::table('review_ratings')->where('id',$id)->delete();
-
         return redirect()->back();
+    }
+
+    public function review_rating(Request $request)
+    {
+
+        $reviews = ReviewRating::where('is_status', 1)->orderBy('id','Desc')->get();
+        return view('review_rating')->with('reviews',$reviews);
+
 
     }
 

@@ -143,6 +143,11 @@ review and rating in user login
 20-10-22
 review and rating accept and decline, showing review and rating in home page.
 
+21-10-22
+fixed bug in refferal amount. 
+if you give no in refferal after yes delete all entry.
+view all option for review and rating both ui and functionality.
+
 
 
 
