@@ -193,6 +193,12 @@
                                         </div> -->
                                         <!--end::Menu item-->
                                         <!--begin::Menu item-->
+                                        @if($user->role_id != 3 )
+                                            <div class="menu-item px-5">
+                                                <a href="{{route('payout_list')}}" class="menu-link px-5">Next Month Payout List</a>
+                                            </div>
+                                        @endif
+
                                         <div class="menu-item px-5">
                                             <a href="{{route('logout')}}" class="menu-link px-5">Sign Out</a>
                                         </div>

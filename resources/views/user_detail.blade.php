@@ -1068,7 +1068,7 @@
 									<th class="">APPROVED DATE</th>
 									<th class="">RATE OF INTEREST</th>
 									<th class="">NEXT PAYMENT</th>
-                 	<th class="">EXPIREY</th>
+                 					<th class="">EXPIREY</th>
 									<th class="">STATUS</th>
 									<th class="">ACTION</th>               
 								</tr>
@@ -1120,9 +1120,9 @@
 										$amount = $amount+ $payment_date->investment_amount;
 									}
 									@endphp
-									<td>Rs {{$amount}}</td>
+									<td>Rs {{$payment_date->commafun($amount)}}</td>
 									@else
-									<td class="">Rs {{$smartfinance->amount}}</td>
+									<td class="">Rs {{$payment_date->commafun($smartfinance->amount)}}</td>
 									@endif
 									<td class="">
 										{{$smartfinance->investment_date}}
@@ -1149,10 +1149,10 @@
 											@if($payment_date->month == 1)
 												-
 											@else
-												Rs. {{$payment_date->intrest}}
+												Rs. {{$payment_date->commafun($payment_date->intrest)}}
 											@endif
 										@else
-											Rs. {{$payment_date->amount}}
+											Rs. {{$payment_date->commafun($payment_date->amount)}}
 										@endif
 									</td>
 									@else

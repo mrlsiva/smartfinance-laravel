@@ -11,6 +11,9 @@ use App\Models\Plan;
 use App\Models\Smartfinance;
 use App\Models\SmartfinancePayment;
 use App\Models\SmartfinanceRenewal;
+use App\Models\NextMonthPayout;
+use App\Exports\NextMonthPayoutsExport;
+use Maatwebsite\Excel\Facades\Excel;
 use Image;
 use DB;
 
@@ -857,16 +860,8 @@ class smartfinanceController extends Controller
 
             $smartfinance_payment = DB::table('smartfinance_payments')->where('smartfinance_id',$smartfinance_id)->update(['payment_date' => $payment_date,'year'=> $total_years]);
             $smartfinance_payment = DB::table('smartfinances')->where('id',$smartfinance_id)->update(['no_of_year' => $total_years]);
-
-
-
         }
-
-
-
         return redirect()->back();
-
-
 
     }
 
@@ -876,8 +871,6 @@ class smartfinanceController extends Controller
         $payment = DB::table('smartfinance_payments')->where('smartfinance_id',$smartfinance_id)->update(['is_status' => 1]);
         $smartfinance = DB::table('smartfinances')->where('id',$smartfinance_id)->update(['is_close' => 1]);
         return $smartfinance;
-
-
 
     }
 
@@ -920,13 +913,39 @@ class smartfinanceController extends Controller
         return $smartfinance;     
     }
 
+    public function payout_list(Request $request) 
+    {
+        $month = Carbon::now()->addMonth()->format('m');
+        $year = Carbon::now()->addMonth()->format('Y');
+        $payments = SmartfinancePayment::whereMonth('payment_date',$month)->whereYear('payment_date', $year)->get();
 
+        $payout_delete = NextMonthPayout::truncate();
+        foreach($payments as $payment){
+            $payout = NextMonthPayout::create([
 
+                'id' => $payment->smartfinance->user->id,
+                'name' => $payment->smartfinance->user->first_name.' '.$payment->smartfinance->user->last_name,
+                'date' => $payment->payment_date,
+                'plan' => $payment->smartfinance->plan->name
+            ]);
 
+            if($payment->smartfinance->plan_id != 3){
 
+                DB::table('next_month_payouts')->where('id',$payout->id)->update(['next_payout_amount' => $payment->amount]);
+            }
+            else{
 
+                DB::table('next_month_payouts')->where('id',$payout->id)->update(['next_payout_amount' => $payment->intrest+$payment->next_amount+$payment->balance]);
+            }
+        }
 
+        return view('payout_list')->with('payments',$payments);
 
-    
+    }
+
+    public function exportExcelCSV($slug) 
+    {
+        return Excel::download(new NextMonthPayoutsExport, 'next_month_payouts.'.$slug);
+    }  
 
 }

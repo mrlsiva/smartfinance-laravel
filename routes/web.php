@@ -93,7 +93,8 @@ Route::post('/renewal_plan_year',[SmartFinanceController::class, 'renewal_plan_y
 Route::get('payout_plan',[SmartFinanceController::class, 'payout_plan'])->name('payout_plan');
 Route::post('/pro_book_upload',[SmartFinanceController::class, 'pro_book_upload'])->name('pro_book_upload');
 Route::get('get_pro_book',[SmartFinanceController::class, 'get_pro_book'])->name('get_pro_book');
-
+Route::get('payout_list',[SmartFinanceController::class, 'payout_list'])->name('payout_list');
+Route::get('export-excel-csv-file/{slug}', [SmartFinanceController::class, 'exportExcelCSV']);
 //Smart Finance end
 
 

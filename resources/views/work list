@@ -148,6 +148,15 @@ fixed bug in refferal amount.
 if you give no in refferal after yes delete all entry.
 view all option for review and rating both ui and functionality.
 
+25-10-22
+Fixed buy in earnings
+next month payout list ui and functionality
+
+26-10-22
+make all display of money with comma(function)
+Export option for next month payout list
+add refferal amount to earning, user view, next month payout list
+
 
 
 

@@ -22,6 +22,7 @@ use App\Models\ReviewRating;
 use Image;
 use DB;
 
+
 class UserController extends Controller
 {
     public function dashboard(){
@@ -88,6 +89,9 @@ class UserController extends Controller
             }
             else{
 
+                // $amount = '100000';
+                // $amount = UserController::moneyFormatIndia( $amount );
+                //return $amount;
 
                 $finance = [];
                 $users = UserAmount::where('is_status',0)->get();
@@ -146,6 +150,7 @@ class UserController extends Controller
                 $payment_count = SmartfinancePayment::where('is_approve',2)->count();
 
                 $smartfinances = Smartfinance::orderBy('id','Desc')->get();
+                $user = Auth::user();
                 $admin_finances = Smartfinance::where('user_id',$user->id)->orderBy('id','Desc')->simplePaginate(10);
                 $admin_finance_count = Smartfinance::where('user_id',$user->id)->count();
                 
@@ -252,26 +257,31 @@ class UserController extends Controller
         $m_amount=0;
         $month_finances = Smartfinance::where([['user_id',$user->id],['plan_id',1],['is_status',1]])->get();
         foreach($month_finances as $month_finance){
-            $month_amounts = SmartfinancePayment::where('smartfinance_id',$month_finance->id)->get();
+            $month_amounts = SmartfinancePayment::where([['smartfinance_id',$month_finance->id],['is_status',1]])->get();
             foreach($month_amounts as $month_amount){
                 $m_amount += $month_amount->amount;
 
             }
         }
 
+
         $y_amount=0;
         $year_finances = Smartfinance::where([['user_id',$user->id],['plan_id',2],['is_status',1]])->get();
-        foreach($year_finances as $year_finance){
-            $year_amount = SmartfinancePayment::where('smartfinance_id',$year_finance->id)->first();
-            $year_amount = $year_amount->amount - $year_finance->amount;
-            
-            $y_amount += $year_amount;
+        if($year_finances != NULL){
+            foreach($year_finances as $year_finance){
+                $year_amount = SmartfinancePayment::where([['smartfinance_id',$year_finance->id],['is_status',1]])->first();
+                if($year_amount != NULL){
+                    $year_amount = $year_amount->amount - $year_finance->amount;
+                    $y_amount += $year_amount;
+                }
+            }
         }
+        
 
         $ym_amount=0;
         $year_month_finances = Smartfinance::where([['user_id',$user->id],['plan_id',3],['is_status',1]])->get();
         foreach($year_month_finances as $year_month_finance){
-            $year_month_amounts = SmartfinancePayment::where([['smartfinance_id', $year_month_finance->id],['is_approve',1]])->get();
+            $year_month_amounts = SmartfinancePayment::where([['smartfinance_id', $year_month_finance->id],['is_approve',1],['is_status',1]])->get();
 
             foreach($year_month_amounts as $year_month_amount){
                 $ym_amount += $year_month_amount->intrest;
@@ -279,7 +289,15 @@ class UserController extends Controller
             
             
         }
-        $earning_amount = $m_amount + $y_amount + $ym_amount; 
+
+        $refferal_amount = UserAmount::where([['user_id',$user->id],['is_status',1]])->first();
+        if($refferal_amount != NULL){
+            $earning_amount = $m_amount + $y_amount + $ym_amount + $refferal_amount->amount; 
+        }
+        else{
+            $earning_amount = $m_amount + $y_amount + $ym_amount; 
+        }
+        
 
         $percentage = 0;
         $investment_count = Smartfinance::where([['user_id',$user->id],['is_status',1]])->count();
@@ -328,7 +346,7 @@ class UserController extends Controller
         $m_amount=0;
         $month_finances = Smartfinance::where([['user_id',$user->id],['plan_id',1],['is_status',1]])->get();
         foreach($month_finances as $month_finance){
-            $month_amounts = SmartfinancePayment::where('smartfinance_id',$month_finance->id)->get();
+            $month_amounts = SmartfinancePayment::where([['smartfinance_id',$month_finance->id],['is_status',1]])->get();
             foreach($month_amounts as $month_amount){
                 $m_amount += $month_amount->amount;
 
@@ -337,17 +355,21 @@ class UserController extends Controller
 
         $y_amount=0;
         $year_finances = Smartfinance::where([['user_id',$user->id],['plan_id',2],['is_status',1]])->get();
-        foreach($year_finances as $year_finance){
-            $year_amount = SmartfinancePayment::where('smartfinance_id',$year_finance->id)->first();
-            $year_amount = $year_amount->amount - $year_finance->amount;
-            
-            $y_amount += $year_amount;
+        if($year_finances != NULL){
+            foreach($year_finances as $year_finance){
+                $year_amount = SmartfinancePayment::where([['smartfinance_id',$year_finance->id],['is_status',1]])->first();
+                if($year_amount != NULL){
+                    $year_amount = $year_amount->amount - $year_finance->amount;
+                    
+                    $y_amount += $year_amount;
+                }
+            }
         }
 
         $ym_amount=0;
         $year_month_finances = Smartfinance::where([['user_id',$user->id],['plan_id',3],['is_status',1]])->get();
         foreach($year_month_finances as $year_month_finance){
-            $year_month_amounts = SmartfinancePayment::where([['smartfinance_id', $year_month_finance->id],['is_approve',1]])->get();
+            $year_month_amounts = SmartfinancePayment::where([['smartfinance_id', $year_month_finance->id],['is_approve',1],['is_status',1]])->get();
 
             foreach($year_month_amounts as $year_month_amount){
                 $ym_amount += $year_month_amount->intrest;
@@ -355,7 +377,14 @@ class UserController extends Controller
             
             
         }
-        $earning_amount = $m_amount + $y_amount + $ym_amount; 
+
+        $refferal_amount = UserAmount::where([['user_id',$user->id],['is_status',1]])->first();
+        if($refferal_amount != NULL){
+            $earning_amount = $m_amount + $y_amount + $ym_amount + $refferal_amount->amount; 
+        }
+        else{
+            $earning_amount = $m_amount + $y_amount + $ym_amount; 
+        } 
 
         $percentage = 0;
         $investment_count = Smartfinance::where([['user_id',$user->id],['is_status',1]])->count();
@@ -841,6 +870,31 @@ class UserController extends Controller
         return view('review_rating')->with('reviews',$reviews);
 
 
+    }
+
+
+    function moneyFormatIndia($num) {
+        $explrestunits = "" ;
+        if(strlen($num)>3) {
+            $lastthree = substr($num, strlen($num)-3, strlen($num));
+            $restunits = substr($num, 0, strlen($num)-3); 
+            $restunits = (strlen($restunits)%2 == 1)?"0".$restunits:$restunits; 
+            $expunit = str_split($restunits, 2);
+            for($i=0; $i<sizeof($expunit); $i++) {
+
+                if($i==0) {
+                    $explrestunits .= (int)$expunit[$i].",";
+                } 
+                else {
+                    $explrestunits .= $expunit[$i].",";
+                }
+            }
+            $thecash = $explrestunits.$lastthree;
+        } 
+        else {
+            $thecash = $num;
+        }
+        return $thecash; 
     }
 
 

@@ -211,9 +211,9 @@
                                                         $amount = $amount+ $payment_date->investment_amount;
                                                     }
                                                     @endphp
-                                                    <td>Rs {{$amount}}</td>
+                                                    <td>Rs {{$payment_date->commafun($amount)}}</td>
                                                     @else
-                                                    <td class="">Rs {{$smartfinance->amount}}</td>
+                                                    <td class="">Rs {{$payment_date->commafun($smartfinance->amount)}}</td>
                                                     @endif
                                                     <td>
                                                         @php
@@ -248,10 +248,10 @@
                                                             @if($payment_date->month == 1)
                                                                 -
                                                             @else
-                                                                Rs. {{$payment_date->intrest}}
+                                                                Rs. {{$payment_date->commafun($payment_date->intrest)}}
                                                             @endif
                                                         @else
-                                                            Rs. {{$payment_date->amount}}
+                                                            Rs. {{$payment_date->commafun($payment_date->amount)}}
                                                         @endif
                                                     </td>
                                                     @else
