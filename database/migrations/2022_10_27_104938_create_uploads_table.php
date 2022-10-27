@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateNextMonthPayoutsTable extends Migration
+class CreateUploadsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,12 @@ class CreateNextMonthPayoutsTable extends Migration
      */
     public function up()
     {
-        Schema::create('next_month_payouts', function (Blueprint $table) {
+        Schema::create('uploads', function (Blueprint $table) {
             $table->id();
-            $table->string('user_id');
-            $table->date('date');
-            $table->string('plan');
-            $table->string('next_payout_amount')->nullable();
+            $table->string('type');
+            $table->string('banner')->nullable();
+            $table->string('banner_link')->nullable();
+            $table->string('youtube_link')->nullable();
             $table->timestamps();
         });
     }
@@ -30,6 +30,6 @@ class CreateNextMonthPayoutsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('next_month_payouts');
+        Schema::dropIfExists('uploads');
     }
 }

@@ -197,6 +197,9 @@
                                             <div class="menu-item px-5">
                                                 <a href="{{route('payout_list')}}" class="menu-link px-5">Next Month Payout List</a>
                                             </div>
+                                            <div class="menu-item px-5">
+                                                <a href="{{route('uploads')}}" class="menu-link px-5">Uploads</a>
+                                            </div>
                                         @endif
 
                                         <div class="menu-item px-5">

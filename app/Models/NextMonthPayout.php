@@ -10,6 +10,11 @@ class NextMonthPayout extends Model
     use HasFactory;
 
     protected $fillable = [
-        'id','name','date','plan','next_month_payout'
+        'user_id','name','date','plan','next_month_payout'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo('App\Models\User');
+    }
 }

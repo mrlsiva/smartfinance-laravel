@@ -5,6 +5,7 @@ use App\Http\Controllers\loginController;
 use App\Http\Controllers\registerController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\smartfinanceController;
+use App\Http\Controllers\generalController;
 use App\Http\Middleware\PreventBackHistory;
 
 
@@ -73,6 +74,12 @@ Route::get('/accept_review_rating/{id}',[UserController::class, 'accept_review_r
 Route::get('/decline_review_rating/{id}',[UserController::class, 'decline_review_rating'])->name('decline_review_rating');
 Route::get('/review_rating',[UserController::class, 'review_rating'])->name('review_rating');
 //User Management end
+
+//General
+Route::get('/uploads',[generalController::class, 'uploads'])->name('uploads');
+Route::post('/save_uploads',[generalController::class, 'save_uploads'])->name('save_uploads');
+Route::get('/delete_upload/{id}',[generalController::class, 'delete_upload'])->name('delete_upload');
+//General End
 
 //Smart Finance
 Route::post('/store_smart_finance',[SmartFinanceController::class, 'store_smart_finance'])->name('store_smart_finance');

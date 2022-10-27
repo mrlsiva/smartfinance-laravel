@@ -66,73 +66,36 @@
 					<!--end::Table head-->
 					<!--begin::Table body-->
 					<tbody class="fw-bolder text-gray-600">
-						@foreach($payments as $payment)
+						@foreach($payouts as $payout)
 
 						<tr>
 							<td class="">
 								<div class="d-flex align-items-center">
 									<div class="symbol symbol-45px me-5">
-										@if($payment->smartfinance->user->avatar != NULL)
-										<img src="{{ $payment->smartfinance->user->avatar}}" alt="" />
+										@if($payout->user->avatar != NULL)
+										<img src="{{$payout->user->avatar}}" alt="" />
 										@else
 										<img src="{{ asset('public/assets/media/avatars/blank.png') }}" alt="" />
 										@endif
 									</div>
 									<div class="d-flex justify-content-start flex-column">
-										<a href="{{route('user', ['id' => $payment->smartfinance->user->id])}}" class="text-dark fw-bolder text-hover-primary fs-6">{{$payment->smartfinance->user->first_name}} {{$payment->smartfinance->user->last_name}}</a>
-										<span class="text-muted fw-bold text-muted d-block fs-7">#{{$payment->smartfinance->user->id}}</span>
+										<a href="{{route('user', ['id' => $payout->user->id])}}" class="text-dark fw-bolder text-hover-primary fs-6">{{$payout->user->first_name}} {{$payout->user->last_name}}</a>
+										<span class="text-muted fw-bold text-muted d-block fs-7">#{{$payout->user->id}}</span>
 									</div>
 								</div>
 							</td>
 							<td class="">
 								@php
-									$date = Carbon\Carbon::parse($payment->payment_date)->formatLocalized('%d %b %Y');
+									$date = Carbon\Carbon::parse($payout->date)->formatLocalized('%d %b %Y');
 								@endphp
 								{{$date}}
 							</td>
 							<td class="">
-								{{$payment->smartfinance->plan->name}}
+								{{$payout->plan}}
 							</td>
-
-							@php
-								$result=[];
-								$smartfinance_ids = App\Models\Smartfinance::where('user_id',$payment->smartfinance->user->id)->get();
-								foreach($smartfinance_ids as $smartfinance_id){
-									$result[] = $smartfinance_id->id;
-								}
-								$payment_date = App\Models\SmartfinancePayment::whereIn('smartfinance_id',$result)->where('is_status',0)->orderBy('payment_date', 'asc')->first();
-
-								$user_amount = App\Models\UserAmount::where([['user_id',$payment->smartfinance->user->id],['is_status',0]])->first();
-
-							@endphp
-
-							@if($payment_date->payment_date == $payment->payment_date )
-								@if($user_amount != NULL)
-									<td class="">
-										@if($payment->smartfinance->plan_id != 3)
-											Rs {{$payment->commafun($payment->amount+$user_amount->amount)}}
-										@else
-											Rs {{$payment->commafun($payment->intrest+$payment->next_amount+$payment->balance+$user_amount->amount)}}
-										@endif
-									</td>
-								@else
-									<td class="">
-										@if($payment->smartfinance->plan_id != 3)
-											Rs {{$payment->commafun($payment->amount)}}
-										@else
-											Rs {{$payment->commafun($payment->intrest+$payment->next_amount+$payment->balance)}}
-										@endif
-									</td>
-								@endif
-							@else
-								<td class="">
-									@if($payment->smartfinance->plan_id != 3)
-										Rs {{$payment->commafun($payment->amount)}}
-									@else
-										Rs {{$payment->commafun($payment->intrest+$payment->next_amount+$payment->balance)}}
-									@endif
-								</td>
-							@endif
+							<td class="">
+								{{$payout->next_payout_amount}}
+							</td>
 						</tr>
 
 						@endforeach

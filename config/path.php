@@ -7,4 +7,5 @@ return array(
     'pan_card'    => 'pan_card/',
     'bill'    => 'bill/',
     'pro_book'    => 'pro_book/',
+    'banner'    => 'banner/',
 );

@@ -12,6 +12,7 @@ use App\Models\Smartfinance;
 use App\Models\SmartfinancePayment;
 use App\Models\SmartfinanceRenewal;
 use App\Models\NextMonthPayout;
+use App\Models\UserAmount;
 use App\Exports\NextMonthPayoutsExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Image;
@@ -917,29 +918,102 @@ class smartfinanceController extends Controller
     {
         $month = Carbon::now()->addMonth()->format('m');
         $year = Carbon::now()->addMonth()->format('Y');
-        $payments = SmartfinancePayment::whereMonth('payment_date',$month)->whereYear('payment_date', $year)->get();
+
+        $payments = SmartfinancePayment::join('smartfinances','smartfinance_payments.smartfinance_id','=','smartfinances.id')->whereMonth('smartfinance_payments.payment_date',$month)->whereYear('smartfinance_payments.payment_date', $year)->where('smartfinances.plan_id','!=',3)->select('smartfinance_payments.*')->get();
 
         $payout_delete = NextMonthPayout::truncate();
         foreach($payments as $payment){
             $payout = NextMonthPayout::create([
 
-                'id' => $payment->smartfinance->user->id,
+                'user_id' => $payment->smartfinance->user->id,
                 'name' => $payment->smartfinance->user->first_name.' '.$payment->smartfinance->user->last_name,
                 'date' => $payment->payment_date,
                 'plan' => $payment->smartfinance->plan->name
             ]);
 
-            if($payment->smartfinance->plan_id != 3){
+            $result=[];
+            $smartfinance_ids = Smartfinance::where('user_id',$payment->smartfinance->user->id)->get();
+            foreach($smartfinance_ids as $smartfinance_id){
+                $result[] = $smartfinance_id->id;
+            }
+            $next_payment_date = SmartfinancePayment::whereIn('smartfinance_id',$result)->where('is_status',0)->orderBy('payment_date', 'asc')->first();
 
-                DB::table('next_month_payouts')->where('id',$payout->id)->update(['next_payout_amount' => $payment->amount]);
+            $user_amount = UserAmount::where([['user_id',$payment->smartfinance->user->id],['is_status',0]])->first();
+
+            if($next_payment_date->payment_date == $payment->payment_date )
+            {
+                if($user_amount != NULL){
+                    if($payment->smartfinance->plan_id != 3){
+
+                        DB::table('next_month_payouts')->where('id',$payout->id)->update(['next_payout_amount' => $payment->amount + $user_amount->amount ]);
+                    }
+                    else{
+
+                        DB::table('next_month_payouts')->where('id',$payout->id)->update(['next_payout_amount' => $payment->intrest+$payment->next_amount+$payment->balance + $user_amount->amount]);
+                    }
+                }
+                else{
+                    if($payment->smartfinance->plan_id != 3){
+
+                        DB::table('next_month_payouts')->where('id',$payout->id)->update(['next_payout_amount' => $payment->amount]);
+                    }
+                    else{
+
+                        DB::table('next_month_payouts')->where('id',$payout->id)->update(['next_payout_amount' => $payment->intrest+$payment->next_amount+$payment->balance]);
+                    }
+                }
             }
             else{
 
+                if($payment->smartfinance->plan_id != 3){
+
+                    DB::table('next_month_payouts')->where('id',$payout->id)->update(['next_payout_amount' => $payment->amount]);
+                }
+                else{
+
+                    DB::table('next_month_payouts')->where('id',$payout->id)->update(['next_payout_amount' => $payment->intrest+$payment->next_amount+$payment->balance]);
+                }
+
+            }
+        }
+
+        $payment = SmartfinancePayment::join('smartfinances','smartfinance_payments.smartfinance_id','=','smartfinances.id')->whereMonth('smartfinance_payments.payment_date',$month)->whereYear('smartfinance_payments.payment_date', $year)->where('smartfinances.plan_id','=',3)->select('smartfinance_payments.*')->orderBy('smartfinance_payments.id','Desc')->first();
+        if($payment != NULL){
+            $payout = NextMonthPayout::create([
+
+                'user_id' => $payment->smartfinance->user->id,
+                'name' => $payment->smartfinance->user->first_name.' '.$payment->smartfinance->user->last_name,
+                'date' => $payment->payment_date,
+                'plan' => $payment->smartfinance->plan->name
+            ]);
+
+            $result=[];
+            $smartfinance_ids = Smartfinance::where('user_id',$payment->smartfinance->user->id)->get();
+            foreach($smartfinance_ids as $smartfinance_id){
+                $result[] = $smartfinance_id->id;
+            }
+            $next_payment_date = SmartfinancePayment::whereIn('smartfinance_id',$result)->where('is_status',0)->orderBy('payment_date', 'asc')->first();
+
+            $user_amount = UserAmount::where([['user_id',$payment->smartfinance->user->id],['is_status',0]])->first();
+
+            if($next_payment_date->payment_date == $payment->payment_date )
+            {
+                if($user_amount != NULL){
+                    DB::table('next_month_payouts')->where('id',$payout->id)->update(['next_payout_amount' => $payment->intrest+$payment->next_amount+$payment->balance + $user_amount->amount]);
+                }
+                else{
+
+                    DB::table('next_month_payouts')->where('id',$payout->id)->update(['next_payout_amount' => $payment->intrest+$payment->next_amount+$payment->balance]);
+                }
+            }
+            else{
                 DB::table('next_month_payouts')->where('id',$payout->id)->update(['next_payout_amount' => $payment->intrest+$payment->next_amount+$payment->balance]);
             }
         }
 
-        return view('payout_list')->with('payments',$payments);
+        $payouts = NextMonthPayout::all();
+
+        return view('payout_list')->with('payouts',$payouts);
 
     }
 
