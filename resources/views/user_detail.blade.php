@@ -1116,7 +1116,7 @@
 									@php
 									$payment_dates = App\Models\SmartfinancePayment::where('smartfinance_id',$smartfinance->id)->get();
 									$amount=0;
-									foreach($payment_dates as $payment_date){
+									foreach($payment_dates as $payment_date){ 
 										$amount = $amount+ $payment_date->investment_amount;
 									}
 									@endphp
