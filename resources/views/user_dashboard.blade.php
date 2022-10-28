@@ -238,25 +238,29 @@
 
                                                     @php
                                                     $payment_date = App\Models\SmartfinancePayment::where([['smartfinance_id',$smartfinance->id],['is_status',0]])->first();
+                                                    $date = Carbon\Carbon::now()->format('Y-m-d');
                                                     @endphp
+
                                                     @if($payment_date != Null)
-                                                    <td>
-                                                        @php
-                                                        $date = Carbon\Carbon::parse($payment_date->payment_date)->formatLocalized('%d %b %Y');
-                                                        @endphp
+                                                        <td>
                                                         @if($payment_date->smartfinance->plan->id == 3)
-                                                            @if($payment_date->month == 1)
-                                                                -
+                                                            @if($date == $payment_date->payment_date)
+                                                                @php
+                                                                $payment_ym = App\Models\SmartfinancePayment::where('smartfinance_id',$smartfinance->id)->orderBy('id','Desc')->first();
+                                                                @endphp
+                                                            
+                                                                Rs. {{$smartfinance->commafun($payment_ym->intrest + $payment_ym->next_amount + $payment_ym->balance)}}
                                                             @else
-                                                                Rs. {{$payment_date->commafun($payment_date->intrest)}}
+                                                                -
                                                             @endif
                                                         @else
-                                                            Rs. {{$payment_date->commafun($payment_date->amount)}}
+                                                            Rs. {{$smartfinance->commafun($payment_date->amount)}}
                                                         @endif
-                                                    </td>
+                                                        </td>
                                                     @else
-                                                    <td>-</td>
+                                                        <td>-</td>
                                                     @endif
+
                                                     @php
                                                     $payment_date = App\Models\SmartfinancePayment::where([['smartfinance_id',$smartfinance->id],['is_status',0]])->orderBy('id','Desc')->first();
                                                     @endphp

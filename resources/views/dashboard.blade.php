@@ -306,20 +306,30 @@
                                                         $result[] = $smartfinance_id->id;
                                                     }
                                                     $payment_date = App\Models\SmartfinancePayment::whereIn('smartfinance_id',$result)->where('is_status',0)->orderBy('payment_date', 'asc')->first();
-
-                                                    
                                                 @endphp
+
                                                 @if($payment_date != Null)
                                                     <td>
-                                                        @if($payment_date->smartfinance->plan->id == 3)
-                                                        @if($payment_date->month == 1)
-                                                        -
-                                                        @else
-                                                        Rs. {{$user->commafun($payment_date->intrest)}}
-                                                        @endif
-                                                        @else
-                                                        Rs. {{$user->commafun($payment_date->amount)}}
-                                                        @endif
+                                                        @php
+                                                        $payment_amount = 0;
+                                                        $amounts = App\Models\SmartfinancePayment::join('smartfinances','smartfinance_payments.smartfinance_id','=','smartfinances.id')->where('smartfinance_payments.payment_date',$payment_date->payment_date)->where('smartfinances.user_id',$user->id)->where('smartfinances.plan_id','!=',3)->select('smartfinance_payments.*')->get();
+
+                                                        foreach($amounts as $amount){
+                                                            $payment_amount = $payment_amount + $amount->amount;
+                                                        }
+
+                                                        $payment_yms = App\Models\SmartfinancePayment::join('smartfinances','smartfinance_payments.smartfinance_id','=','smartfinances.id')->where('smartfinance_payments.payment_date',$payment_date->payment_date)->where('smartfinances.user_id',$user->id)->where('smartfinances.plan_id','=',3)->groupBy('smartfinance_payments.smartfinance_id')->select('smartfinance_payments.*')->get();
+
+                                                        foreach($payment_yms as $payment_ym){
+
+                                                            $payment_m = App\Models\SmartfinancePayment::where('smartfinance_id',$payment_ym->smartfinance_id)->orderBy('id','Desc')->first();
+                                                            $payment_amount = $payment_amount + $payment_m->next_amount + $payment_m->intrest + $payment_m->balance;
+                                                        }
+
+
+                                                        @endphp
+
+                                                        Rs. {{$user->commafun($payment_amount)}}
                                                     </td>
                                                 @else
                                                     <td>-</td>
@@ -373,28 +383,44 @@
                                                 <td>
                                                     @if($refferal_amount != NULL)
                                                         @if($payment_date != Null)
-                                                            @if($payment_date->smartfinance->plan->id == 3)
-                                                                @if($payment_date->month == 1)
-                                                                    Rs. {{$user->commafun($refferal_amount->amount)}}
-                                                                @else
-                                                                    Rs. {{$user->commafun($payment_date->intrest+$refferal_amount->amount)}}
-                                                                @endif
-                                                            @else
-                                                                Rs. {{$user->commafun($payment_date->amount+$refferal_amount->amount)}}
-                                                            @endif
+                                                            @php
+                                                            $payment_amount = 0;
+                                                            $amounts = App\Models\SmartfinancePayment::join('smartfinances','smartfinance_payments.smartfinance_id','=','smartfinances.id')->where('smartfinance_payments.payment_date',$payment_date->payment_date)->where('smartfinances.user_id',$user->id)->where('smartfinances.plan_id','!=',3)->select('smartfinance_payments.*')->get();
+
+                                                            foreach($amounts as $amount){
+                                                                $payment_amount = $payment_amount + $amount->amount;
+                                                            }
+                                                            $payment_yms = App\Models\SmartfinancePayment::join('smartfinances','smartfinance_payments.smartfinance_id','=','smartfinances.id')->where('smartfinance_payments.payment_date',$payment_date->payment_date)->where('smartfinances.user_id',$user->id)->where('smartfinances.plan_id','=',3)->groupBy('smartfinance_payments.smartfinance_id')->select('smartfinance_payments.*')->get();
+
+                                                            foreach($payment_yms as $payment_ym){
+
+                                                                $payment_m = App\Models\SmartfinancePayment::where('smartfinance_id',$payment_ym->smartfinance_id)->orderBy('id','Desc')->first();
+                                                                $payment_amount = $payment_amount + $payment_m->next_amount + $payment_m->intrest + $payment_m->balance;
+                                                            }
+                                                            @endphp
+
+                                                            Rs. {{$user->commafun($payment_amount+$refferal_amount->amount)}}
                                                         @else
                                                             Rs. {{$user->commafun($refferal_amount->amount)}}
                                                         @endif
                                                     @elseif($payment_date != Null)
-                                                        @if($payment_date->smartfinance->plan->id == 3)
-                                                            @if($payment_date->month == 1)
-                                                                -
-                                                            @else
-                                                                Rs. {{$user->commafun($payment_date->intrest)}}
-                                                            @endif
-                                                        @else
-                                                            Rs. {{$user->commafun($payment_date->amount)}}
-                                                        @endif
+                                                        @php
+                                                        $payment_amount = 0;
+                                                        $amounts = App\Models\SmartfinancePayment::join('smartfinances','smartfinance_payments.smartfinance_id','=','smartfinances.id')->where('smartfinance_payments.payment_date',$payment_date->payment_date)->where('smartfinances.user_id',$user->id)->where('smartfinances.plan_id','!=',3)->select('smartfinance_payments.*')->get();
+
+                                                        foreach($amounts as $amount){
+                                                            $payment_amount = $payment_amount + $amount->amount;
+                                                        }
+
+                                                        $payment_yms = App\Models\SmartfinancePayment::join('smartfinances','smartfinance_payments.smartfinance_id','=','smartfinances.id')->where('smartfinance_payments.payment_date',$payment_date->payment_date)->where('smartfinances.user_id',$user->id)->where('smartfinances.plan_id','=',3)->groupBy('smartfinance_payments.smartfinance_id')->select('smartfinance_payments.*')->get();
+
+                                                        foreach($payment_yms as $payment_ym){
+
+                                                            $payment_m = App\Models\SmartfinancePayment::where('smartfinance_id',$payment_ym->smartfinance_id)->orderBy('id','Desc')->first();
+                                                            $payment_amount = $payment_amount + $payment_m->next_amount + $payment_m->intrest + $payment_m->balance;
+                                                        }
+                                                        @endphp
+                                                        Rs. {{$user->commafun($payment_amount)}}
                                                     @else
                                                         -
                                                     @endif
@@ -632,17 +658,21 @@
                                             @endif
                                             @php
                                                 $payment_date = App\Models\SmartfinancePayment::where([['smartfinance_id',$smartfinance->id],['is_status',0]])->first();
+                                                $date = Carbon\Carbon::now()->format('Y-m-d');
                                             @endphp
 
                                             @if($payment_date != Null)
                                                 <td>
                                                     @if($payment_date->smartfinance->plan->id == 3)
-                                                    @if($payment_date->month == 1)
-                                                    -
-                                                    @else
-
-                                                    Rs. {{$smartfinance->commafun($payment_date->intrest)}}
-                                                    @endif
+                                                        @if($date == $payment_date->payment_date)
+                                                            @php
+                                                            $payment_ym = App\Models\SmartfinancePayment::where('smartfinance_id',$smartfinance->id)->orderBy('id','Desc')->first();
+                                                            @endphp
+                                                            
+                                                            Rs. {{$smartfinance->commafun($payment_ym->intrest + $payment_ym->next_amount + $payment_ym->balance)}}
+                                                        @else
+                                                            -
+                                                        @endif
                                                     @else
                                                     Rs. {{$smartfinance->commafun($payment_date->amount)}}
                                                     @endif

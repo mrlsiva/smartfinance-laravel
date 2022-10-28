@@ -430,8 +430,7 @@
                             </ul> -->
                             <!--end::Tabs-->
                         </div>
-                        <iframe width="420" height="315" src="https://www.youtube.com/embed/eI4an8aSsgw" allowfullscreen>
-</iframe>
+                        <!-- <iframe width="420" height="315" src="https://www.youtube.com/embed/eI4an8aSsgw" allowfullscreen></iframe> -->
                         <!--end::Tabs wrapper-->
                         <!--begin::Tabs content-->
                         <div class="tab-content">
@@ -894,7 +893,9 @@
                         </div>
                         <!--end::Col-->
                     @endforeach
-                     <a href="{{route('review_rating')}}" class="text-primary text-center text-decoration-underline fs-5 fw-bold">View More</a>
+                    @if(count($reviews) > 3)
+                        <a href="{{route('review_rating')}}" class="text-primary text-center text-decoration-underline fs-5 fw-bold">View More</a>
+                    @endif
                 </div>
                 <!--end::Row-->
                 <!--begin::Highlight-->
