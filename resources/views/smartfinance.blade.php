@@ -715,9 +715,9 @@ body{
 										$amount = $amount+ $payment_date->investment_amount;
 									}
 									@endphp
-									<td>Rs {{$payment_date->commafun($amount)}}</td>
+									<td>Rs {{$finance->commafun($amount)}}</td>
 									@else
-									<td class="">Rs {{$payment_date->commafun($finance->amount)}}</td>
+									<td class="">Rs {{$finance->commafun($finance->amount)}}</td>
 									@endif
 									<td class="">
 										@php

@@ -18,7 +18,6 @@ class NextMonthPayoutsExport implements FromCollection,WithHeadings, ShouldAutoS
             'ID',
             'NAME',
             'DATE',
-            'PLAN',
             'NEXT PAYOUT AMOUNT' 
         ];
     }
@@ -26,6 +25,6 @@ class NextMonthPayoutsExport implements FromCollection,WithHeadings, ShouldAutoS
 
     public function collection()
     {
-        return NextMonthPayout::select('user_id','name','date','plan','next_payout_amount')->get();
+        return NextMonthPayout::select('user_id','name','date','next_payout_amount')->get();
     }
 }

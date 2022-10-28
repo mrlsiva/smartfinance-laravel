@@ -47,7 +47,10 @@
 					<div class="card-title m-0">
 						<h3 class="fw-bolder m-0">Payout List</h3>
 					</div>
-					<a href="{{url('export-excel-csv-file/xlsx')}}" class="btn btn-sm btn-light btn-active-primary align-self-center">Export data</a>
+					@if(count($payouts) != 0)
+						<a href="{{url('export-excel-csv-file/xlsx')}}" class="btn btn-sm btn-light btn-active-primary align-self-center">Export data</a>
+					@endif
+
 					<!--end::Card title-->
 				</div>
 				<!--end::Card header-->
@@ -58,7 +61,6 @@
 						<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
 							<th class="">NAME</th>
 							<th class="">DATE</th>
-							<th class="">PLAN</th>
 							<th class="">NEXT PAYOUT AMOUNT</th>     
 						</tr>
 						<!--end::Table row-->
@@ -91,10 +93,7 @@
 								{{$date}}
 							</td>
 							<td class="">
-								{{$payout->plan}}
-							</td>
-							<td class="">
-								{{$payout->next_payout_amount}}
+								{{$payout->commafun($payout->next_payout_amount)}}
 							</td>
 						</tr>
 

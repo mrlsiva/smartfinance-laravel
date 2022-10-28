@@ -39,7 +39,7 @@ class UserController extends Controller
                 $user_amount = UserAmount::where([['user_id',$user->id],['is_status',0]])->first();
                 if($user_amount != Null){
                     $smartfinance_ids = Smartfinance::where([['user_id',$user->id],['is_status',1],['is_close',0]])->get();
-                    if($smartfinance_ids != NULL){
+                    if(count($smartfinance_ids) != 0){
                         foreach($smartfinance_ids as $smartfinance_id){
                             $finance[] = $smartfinance_id->id;
                         }
@@ -98,7 +98,8 @@ class UserController extends Controller
                 if($users != Null){
                     foreach($users as $user){
                         $smartfinance_ids = Smartfinance::where([['user_id',$user->user_id],['is_status',1],['is_close',0]])->get();
-                        if($smartfinance_ids != NULL){
+                        //return $smartfinance_ids; 
+                        if(count($smartfinance_ids) != 0){
                             foreach($smartfinance_ids as $smartfinance_id){
                                 $finance[] = $smartfinance_id->id;
                             }
@@ -131,13 +132,17 @@ class UserController extends Controller
                     foreach($smartfinances as $smartfinance){
 
                         $count = SmartfinancePayment::where('smartfinance_id',$smartfinance->id)->count();
+
                         $count1 = SmartfinancePayment::where([['smartfinance_id',$smartfinance->id],['is_status',1]])->count();
                         $smartfinance_payment = SmartfinancePayment::where([['smartfinance_id',$smartfinance->id],['is_status',1]])->first();
+                        if($smartfinance_payment != NULL){
 
-                        if($count == $count1){
+                            if($count == $count1){
 
-                            DB::table('smartfinances')->where('id',$smartfinance_payment->smartfinance_id)->update(['is_close' => 1]);
+                                DB::table('smartfinances')->where('id',$smartfinance_payment->smartfinance_id)->update(['is_close' => 1]);
+                            }
                         }
+
                     }
                 }
 
