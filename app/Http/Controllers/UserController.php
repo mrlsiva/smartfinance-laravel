@@ -52,7 +52,7 @@ class UserController extends Controller
                     }
                     else{
 
-                        $user_amount = UserAmount::where([['is_status',0],['user_id',$user->user_id]])->first();
+                        $user_amount = UserAmount::where([['is_status',0],['user_id',$user->id]])->first();
                         $now = Carbon::now()->format('Y-m-d');
                         $date = Carbon::parse($user_amount->date)->addMonths(1);
                         $new_date = Carbon::parse($date)->setDay(6)->format('Y-m-d');
@@ -63,7 +63,7 @@ class UserController extends Controller
                             $date = Carbon::parse($new_date)->setDay(7)->format('Y-m-d');
                         }
                         if($date < $now){
-                            $status = DB::table('user_amounts')->where('user_id',$user->user_id)->update(['is_status' => 1]);
+                            $status = DB::table('user_amounts')->where('user_id',$user->id)->update(['is_status' => 1]);
                         }
                     }
                 }
