@@ -997,7 +997,11 @@ class smartfinanceController extends Controller
 
     public function exportExcelCSV($slug) 
     {
-        return Excel::download(new NextMonthPayoutsExport, 'next_month_payouts.'.$slug);
+
+        $time = Carbon::now()->toTimeString();
+        $date = Carbon::now()->formatLocalized('%d %b %Y');
+        $now = $date.'_'.$time;
+        return Excel::download(new NextMonthPayoutsExport, 'next_month_payouts_'.$now.'.'.$slug);
     }  
 
 }

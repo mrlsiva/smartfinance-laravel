@@ -110,12 +110,12 @@
 						<div class="fv-row mb-8">
 							<!--begin::Label-->
 							<label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
-								<span class="required">Link</span>
-								<i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Youtube_link"></i>
+								<span class="required">Code</span>
+								<i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Youtube Code"></i>
 							</label>
 							<!--end::Label-->
 							<!--begin::Input-->
-							<input type="text" class="form-control form-control-solid" placeholder="Youtube Link" value="" name="youtube_link" id="youtube_link" />
+							<input type="text" class="form-control form-control-solid" placeholder="Youtube Code" value="" name="youtube_link" id="youtube_link" />
 							<!--end::Input-->
 						</div>
 						<div class="d-flex justify-content-center mb-5" > 
@@ -159,7 +159,7 @@
 				<div class="card-header cursor-pointer">
 					<!--begin::Card title-->
 					<div class="card-title m-0">
-						<h3 class="fw-bolder m-0">Uploaded Links</h3>
+						<h3 class="fw-bolder m-0">Uploaded Youtube Codes</h3>
 					</div>
 					<!--end::Card title-->
 				</div>
@@ -170,7 +170,7 @@
 				<br><br>
 				<div class="row g-lg-10 mb-10 mb-lg-20">
 					@foreach($youtubes as $youtube)
-						<a href="{{$youtube->youtube_link}}" target="_blank" class="fw-bold fs-3 text-hover-primary">{{$youtube->youtube_link}}</a>
+						<a href="https://www.youtube.com/embed/{{$youtube->youtube_link}}" target="_blank" class="fw-bold fs-3 text-hover-primary">{{$youtube->youtube_link}}</a>
 						<a href="{{route('delete_upload', ['id' => $youtube->id])}}">
 						<button class="btn btn-sm btn-danger">Delete</button></a>
 					@endforeach

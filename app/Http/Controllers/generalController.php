@@ -51,7 +51,7 @@ class generalController extends Controller
                 'youtube_link' => $request->youtube_link,
             ]);
 
-            return redirect()->back()->with('alert', 'Youtube link added successfully.');
+            return redirect()->back()->with('alert', 'Youtube code added successfully.');
         }
     }
 
@@ -61,6 +61,14 @@ class generalController extends Controller
         $youtubes = Upload::where('id',$id)->delete();
         return redirect()->back()->with('alert', 'Deleted successfully.');
     }
+
+    public function videos(Request $request)
+    {
+        $youtubes = Upload::where('type','youtube')->get();
+        return view('video')->with('youtubes',$youtubes);
+    }
+
+
 
 
 }

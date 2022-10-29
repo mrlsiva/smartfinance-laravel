@@ -39,18 +39,7 @@
                         <div class="d-flex align-items-center justify-content-between">
                             <!--begin::Logo-->
                             <div class="d-flex align-items-center flex-equal">
-                                <!--begin::Mobile menu toggle-->
-                                <button class="btn btn-icon btn-active-color-primary me-3 d-flex d-lg-none" id="kt_landing_menu_toggle">
-										<!--begin::Svg Icon | path: icons/duotune/abstract/abs015.svg-->
-										<span class="svg-icon svg-icon-2hx">
-											<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-												<path d="M21 7H3C2.4 7 2 6.6 2 6V4C2 3.4 2.4 3 3 3H21C21.6 3 22 3.4 22 4V6C22 6.6 21.6 7 21 7Z" fill="black" />
-												<path opacity="0.3" d="M21 14H3C2.4 14 2 13.6 2 13V11C2 10.4 2.4 10 3 10H21C21.6 10 22 10.4 22 11V13C22 13.6 21.6 14 21 14ZM22 20V18C22 17.4 21.6 17 21 17H3C2.4 17 2 17.4 2 18V20C2 20.6 2.4 21 3 21H21C21.6 21 22 20.6 22 20Z" fill="black" />
-											</svg>
-										</span>
-										<!--end::Svg Icon-->
-									</button>
-                                <!--end::Mobile menu toggle-->
+                                
                                 <!--begin::Logo image-->
                                 <a href="">
                                     <img alt="Logo" src="{{ asset('public/assets/img/full-logo.png') }}" class="logo-default h-25px h-lg-30px" />
@@ -123,21 +112,25 @@
                         <!--begin::Slider-->
                         <div data-tns="true" data-tns-loop="true" data-tns-swipe-angle="false" data-tns-speed="2000" data-tns-autoplay="true" data-tns-autoplay-timeout="18000" data-tns-controls="true" data-tns-nav="false" data-tns-items="1" data-tns-center="false" data-tns-dots="false"
                             data-tns-prev-button="#kt_team_slider_prev1" data-tns-next-button="#kt_team_slider_next1">
-                            <!--begin::Item-->
-                            <div class="text-center px-5 pt-5 pt-lg-10 px-lg-10">
-                                <img src="{{ asset('public/assets/img/slider.jpg') }}" class="card-rounded shadow mw-100" alt="" />
-                            </div>
-                            <!--end::Item-->
-                            <!--begin::Item-->
-                            <div class="text-center px-5 pt-5 pt-lg-10 px-lg-10">
-                                <img src="{{ asset('public/assets/img/slider-2.jpg') }}" class="card-rounded shadow mw-100" alt="" />
-                            </div>
-                            <!--end::Item-->
-                            <!--begin::Item-->
-                            <div class="text-center px-5 pt-5 pt-lg-10 px-lg-10">
-                                <img src="{{ asset('public/assets/img/slider-3.jpg') }}" class="card-rounded shadow mw-100" alt="" />
-                            </div>
-                            <!--end::Item-->
+                            @foreach($banners as $banner)
+                                @if($banner->banner_link != NULL)
+                                    <!--begin::Item-->
+                                    <div class="text-center px-5 pt-5 pt-lg-10 px-lg-10">
+                                        <a href="{{$banner->banner_link}}" target="_blank">
+                                            <img src="{{ $banner->banner }}" class="card-rounded shadow mw-100" alt="" />
+                                        </a>
+                                    </div>
+                                    <!--end::Item-->
+                                @else
+                                    <!--begin::Item-->
+                                    <div class="text-center px-5 pt-5 pt-lg-10 px-lg-10">
+                                        <a href="#">
+                                            <img src="{{ $banner->banner }}" class="card-rounded shadow mw-100" alt="" />
+                                        </a>
+                                    </div>
+                                    <!--end::Item-->
+                                @endif
+                            @endforeach
                         </div>
                         <!--end::Slider-->
                         <!--begin::Slider button-->
@@ -395,531 +388,474 @@
 
         </div>
 
-
-        <!--begin::Projects Section-->
-        <div class="mb-lg-n15 position-relative z-index-2">
-            <!--begin::Container-->
-            <div class="container">
-                <!--begin::Card-->
-                <div class="card" style="filter: drop-shadow(0px 0px 40px rgba(68, 81, 96, 0.08))">
-                    <!--begin::Card body-->
-                    <div class="card-body p-lg-20">
-                        <!--begin::Heading-->
-                        <div class="text-center mb-5 mb-lg-10">
-                            <!--begin::Title-->
-                            <h3 class="fs-2hx text-dark mb-5" id="our-Videos" data-kt-scroll-offset="{default: 100, lg: 150}">Our Projects</h3>
-                            <!--end::Title-->
+        @if(count($youtubes)>0)
+            <!--begin::Projects Section-->
+            <div class="mb-lg-n15 position-relative z-index-2">
+                <!--begin::Container-->
+                <div class="container">
+                    <!--begin::Card-->
+                    <div class="card" style="filter: drop-shadow(0px 0px 40px rgba(68, 81, 96, 0.08))">
+                        <!--begin::Card body-->
+                        <div class="card-body p-lg-20">
+                            <!--begin::Heading-->
+                            <div class="text-center mb-5 mb-lg-10">
+                                <!--begin::Title-->
+                                <h3 class="fs-2hx text-dark mb-5" id="our-Videos" data-kt-scroll-offset="{default: 100, lg: 150}">Our Projects</h3>
+                                <!--end::Title-->
+                            </div>
+                            <!--end::Heading-->
+                            <!--begin::Tabs wrapper-->
+                            <div class="d-flex flex-center mb-5 mb-lg-15">
+                                <!--begin::Tabs-->
+                                <!-- <ul class="nav border-transparent flex-center fs-5 fw-bold">
+                                    <li class="nav-item">
+                                        <a class="nav-link text-gray-500 text-active-primary px-3 px-lg-6 active" href="#" data-bs-toggle="tab" data-bs-target="#kt_landing_projects_latest">Latest</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-gray-500 text-active-primary px-3 px-lg-6" href="#" data-bs-toggle="tab" data-bs-target="#kt_landing_projects_web_design">Web Design</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-gray-500 text-active-primary px-3 px-lg-6" href="#" data-bs-toggle="tab" data-bs-target="#kt_landing_projects_mobile_apps">Mobile Apps</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-gray-500 text-active-primary px-3 px-lg-6" href="#" data-bs-toggle="tab" data-bs-target="#kt_landing_projects_development">Development</a>
+                                    </li>
+                                </ul> -->
+                                <!--end::Tabs-->
+                            </div>
+                            <!-- <iframe width="420" height="315" src="https://www.youtube.com/embed/eI4an8aSsgw" allowfullscreen></iframe> -->
+                            <!--end::Tabs wrapper-->
+                            <!--begin::Tabs content-->
+                            <div class="tab-content">
+                                <!--begin::Tab pane-->
+                                <div class="tab-pane fade show active" id="kt_landing_projects_latest">
+                                    <!--begin::Row-->
+                                    <div class="row g-10">
+                                        @foreach($youtubes as $youtube)
+                                            <!--begin::Col-->
+                                            <div class="col-lg-6">
+                                                <iframe width="420" height="315" src="https://www.youtube.com/embed/{{$youtube->youtube_link}}" allowfullscreen></iframe>
+                                            </div>
+                                            <!--end::Col-->
+                                        @endforeach
+                                        <a href="{{route('videos')}}" class="text-primary text-center text-decoration-underline fs-5 fw-bold">View More</a>
+                                    </div>
+                                    <!--end::Row-->
+                                    
+                                </div>
+                                <!--end::Tab pane-->
+                                <!--begin::Tab pane-->
+                                <div class="tab-pane fade" id="kt_landing_projects_web_design">
+                                    <!--begin::Row-->
+                                    <div class="row g-10">
+                                        <!--begin::Col-->
+                                        <div class="col-lg-6">
+                                            <!--begin::Item-->
+                                            <a class="d-block card-rounded overlay h-lg-100" data-fslightbox="lightbox-projects" href="{{ asset('public/assets/media/stock/600x600/img-11.jpg') }}">
+                                                <!--begin::Image-->
+                                                <div class="overlay-wrapper bgi-no-repeat bgi-position-center bgi-size-cover card-rounded h-lg-100 min-h-250px" style="background-image:url('public/assets/media/stock/600x600/img-11.jpg')"></div>
+                                                <!--end::Image-->
+                                                <!--begin::Action-->
+                                                <div class="overlay-layer card-rounded bg-dark bg-opacity-25">
+                                                    <i class="bi bi-eye-fill fs-3x text-white"></i>
+                                                </div>
+                                                <!--end::Action-->
+                                            </a>
+                                            <!--end::Item-->
+                                        </div>
+                                        <!--end::Col-->
+                                        <!--begin::Col-->
+                                        <div class="col-lg-6">
+                                            <!--begin::Row-->
+                                            <div class="row g-10 mb-10">
+                                                <!--begin::Col-->
+                                                <div class="col-lg-6">
+                                                    <!--begin::Item-->
+                                                    <a class="d-block card-rounded overlay" data-fslightbox="lightbox-projects" href="public/assets/media/stock/600x600/img-12.jpg">
+                                                        <!--begin::Image-->
+                                                        <div class="overlay-wrapper bgi-no-repeat bgi-position-center bgi-size-cover card-rounded h-250px" style="background-image:url('public/assets/media/stock/600x600/img-12.jpg')"></div>
+                                                        <!--end::Image-->
+                                                        <!--begin::Action-->
+                                                        <div class="overlay-layer card-rounded bg-dark bg-opacity-25">
+                                                            <i class="bi bi-eye-fill fs-3x text-white"></i>
+                                                        </div>
+                                                        <!--end::Action-->
+                                                    </a>
+                                                    <!--end::Item-->
+                                                </div>
+                                                <!--end::Col-->
+                                                <!--begin::Col-->
+                                                <div class="col-lg-6">
+                                                    <!--begin::Item-->
+                                                    <a class="d-block card-rounded overlay" data-fslightbox="lightbox-projects" href="{{ asset('public/assets/media/stock/600x600/img-21.jpg') }}">
+                                                        <!--begin::Image-->
+                                                        <div class="overlay-wrapper bgi-no-repeat bgi-position-center bgi-size-cover card-rounded h-250px" style="background-image:url('public/assets/media/stock/600x600/img-21.jpg')"></div>
+                                                        <!--end::Image-->
+                                                        <!--begin::Action-->
+                                                        <div class="overlay-layer card-rounded bg-dark bg-opacity-25">
+                                                            <i class="bi bi-eye-fill fs-3x text-white"></i>
+                                                        </div>
+                                                        <!--end::Action-->
+                                                    </a>
+                                                    <!--end::Item-->
+                                                </div>
+                                                <!--end::Col-->
+                                            </div>
+                                            <!--end::Row-->
+                                            <!--begin::Item-->
+                                            <a class="d-block card-rounded overlay" data-fslightbox="lightbox-projects" href="../assets/media/stock/600x400/img-20.jpg">
+                                                <!--begin::Image-->
+                                                <div class="overlay-wrapper bgi-no-repeat bgi-position-center bgi-size-cover card-rounded h-250px" style="background-image:url('public/assets/media/stock/600x600/img-20.jpg')"></div>
+                                                <!--end::Image-->
+                                                <!--begin::Action-->
+                                                <div class="overlay-layer card-rounded bg-dark bg-opacity-25">
+                                                    <i class="bi bi-eye-fill fs-3x text-white"></i>
+                                                </div>
+                                                <!--end::Action-->
+                                            </a>
+                                            <!--end::Item-->
+                                        </div>
+                                        <!--end::Col-->
+                                    </div>
+                                    <!--end::Row-->
+                                </div>
+                                <!--end::Tab pane-->
+                                <!--begin::Tab pane-->
+                                <div class="tab-pane fade" id="kt_landing_projects_mobile_apps">
+                                    <!--begin::Row-->
+                                    <div class="row g-10">
+                                        <!--begin::Col-->
+                                        <div class="col-lg-6">
+                                            <!--begin::Row-->
+                                            <div class="row g-10 mb-10">
+                                                <!--begin::Col-->
+                                                <div class="col-lg-6">
+                                                    <!--begin::Item-->
+                                                    <a class="d-block card-rounded overlay" data-fslightbox="lightbox-projects" href="{{ asset('public/assets/media/stock/600x600/img-16.jpg') }}">
+                                                        <!--begin::Image-->
+                                                        <div class="overlay-wrapper bgi-no-repeat bgi-position-center bgi-size-cover card-rounded h-250px" style="background-image:url('public/assets/media/stock/600x600/img-16.jpg')"></div>
+                                                        <!--end::Image-->
+                                                        <!--begin::Action-->
+                                                        <div class="overlay-layer card-rounded bg-dark bg-opacity-25">
+                                                            <i class="bi bi-eye-fill fs-3x text-white"></i>
+                                                        </div>
+                                                        <!--end::Action-->
+                                                    </a>
+                                                    <!--end::Item-->
+                                                </div>
+                                                <!--end::Col-->
+                                                <!--begin::Col-->
+                                                <div class="col-lg-6">
+                                                    <!--begin::Item-->
+                                                    <a class="d-block card-rounded overlay" data-fslightbox="lightbox-projects" href="{{ asset('public/assets/media/stock/600x600/img-12.jpg') }}">
+                                                        <!--begin::Image-->
+                                                        <div class="overlay-wrapper bgi-no-repeat bgi-position-center bgi-size-cover card-rounded h-250px" style="background-image:url('public/assets/media/stock/600x600/img-12.jpg')"></div>
+                                                        <!--end::Image-->
+                                                        <!--begin::Action-->
+                                                        <div class="overlay-layer card-rounded bg-dark bg-opacity-25">
+                                                            <i class="bi bi-eye-fill fs-3x text-white"></i>
+                                                        </div>
+                                                        <!--end::Action-->
+                                                    </a>
+                                                    <!--end::Item-->
+                                                </div>
+                                                <!--end::Col-->
+                                            </div>
+                                            <!--end::Row-->
+                                            <!--begin::Item-->
+                                            <a class="d-block card-rounded overlay" data-fslightbox="lightbox-projects" href="{{ asset('public/assets/media/stock/600x400/img-15.jpg') }}">
+                                                <!--begin::Image-->
+                                                <div class="overlay-wrapper bgi-no-repeat bgi-position-center bgi-size-cover card-rounded h-250px" style="background-image:url('public/assets/media/stock/600x600/img-15.jpg')"></div>
+                                                <!--end::Image-->
+                                                <!--begin::Action-->
+                                                <div class="overlay-layer card-rounded bg-dark bg-opacity-25">
+                                                    <i class="bi bi-eye-fill fs-3x text-white"></i>
+                                                </div>
+                                                <!--end::Action-->
+                                            </a>
+                                            <!--end::Item-->
+                                        </div>
+                                        <!--end::Col-->
+                                        <!--begin::Col-->
+                                        <div class="col-lg-6">
+                                            <!--begin::Item-->
+                                            <a class="d-block card-rounded overlay h-lg-100" data-fslightbox="lightbox-projects" href="{{ asset('public/assets/media/stock/600x600/img-23.jpg') }}">
+                                                <!--begin::Image-->
+                                                <div class="overlay-wrapper bgi-no-repeat bgi-position-center bgi-size-cover card-rounded h-lg-100 min-h-250px" style="background-image:url('public/assets/media/stock/600x600/img-23.jpg')"></div>
+                                                <!--end::Image-->
+                                                <!--begin::Action-->
+                                                <div class="overlay-layer card-rounded bg-dark bg-opacity-25">
+                                                    <i class="bi bi-eye-fill fs-3x text-white"></i>
+                                                </div>
+                                                <!--end::Action-->
+                                            </a>
+                                            <!--end::Item-->
+                                        </div>
+                                        <!--end::Col-->
+                                    </div>
+                                    <!--end::Row-->
+                                </div>
+                                <!--end::Tab pane-->
+                                <!--begin::Tab pane-->
+                                <div class="tab-pane fade" id="kt_landing_projects_development">
+                                    <!--begin::Row-->
+                                    <div class="row g-10">
+                                        <!--begin::Col-->
+                                        <div class="col-lg-6">
+                                            <!--begin::Item-->
+                                            <a class="d-block card-rounded overlay h-lg-100" data-fslightbox="lightbox-projects" href="{{ asset('public/assets/media/stock/600x600/img-15.jpg') }}">
+                                                <!--begin::Image-->
+                                                <div class="overlay-wrapper bgi-no-repeat bgi-position-center bgi-size-cover card-rounded h-lg-100 min-h-250px" style="background-image:url('public/assets/media/stock/600x600/img-15.jpg')"></div>
+                                                <!--end::Image-->
+                                                <!--begin::Action-->
+                                                <div class="overlay-layer card-rounded bg-dark bg-opacity-25">
+                                                    <i class="bi bi-eye-fill fs-3x text-white"></i>
+                                                </div>
+                                                <!--end::Action-->
+                                            </a>
+                                            <!--end::Item-->
+                                        </div>
+                                        <!--end::Col-->
+                                        <!--begin::Col-->
+                                        <div class="col-lg-6">
+                                            <!--begin::Row-->
+                                            <div class="row g-10 mb-10">
+                                                <!--begin::Col-->
+                                                <div class="col-lg-6">
+                                                    <!--begin::Item-->
+                                                    <a class="d-block card-rounded overlay" data-fslightbox="lightbox-projects" href="{{ asset('public/assets/media/stock/600x600/img-22.jpg') }}">
+                                                        <!--begin::Image-->
+                                                        <div class="overlay-wrapper bgi-no-repeat bgi-position-center bgi-size-cover card-rounded h-250px" style="background-image:url('public/assets/media/stock/600x600/img-22.jpg')"></div>
+                                                        <!--end::Image-->
+                                                        <!--begin::Action-->
+                                                        <div class="overlay-layer card-rounded bg-dark bg-opacity-25">
+                                                            <i class="bi bi-eye-fill fs-3x text-white"></i>
+                                                        </div>
+                                                        <!--end::Action-->
+                                                    </a>
+                                                    <!--end::Item-->
+                                                </div>
+                                                <!--end::Col-->
+                                                <!--begin::Col-->
+                                                <div class="col-lg-6">
+                                                    <!--begin::Item-->
+                                                    <a class="d-block card-rounded overlay" data-fslightbox="lightbox-projects" href="{{ asset('public/assets/media/stock/600x600/img-21.jpg') }}">
+                                                        <!--begin::Image-->
+                                                        <div class="overlay-wrapper bgi-no-repeat bgi-position-center bgi-size-cover card-rounded h-250px" style="background-image:url('public/assets/media/stock/600x600/img-21.jpg')"></div>
+                                                        <!--end::Image-->
+                                                        <!--begin::Action-->
+                                                        <div class="overlay-layer card-rounded bg-dark bg-opacity-25">
+                                                            <i class="bi bi-eye-fill fs-3x text-white"></i>
+                                                        </div>
+                                                        <!--end::Action-->
+                                                    </a>
+                                                    <!--end::Item-->
+                                                </div>
+                                                <!--end::Col-->
+                                            </div>
+                                            <!--end::Row-->
+                                            <!--begin::Item-->
+                                            <a class="d-block card-rounded overlay" data-fslightbox="lightbox-projects" href="{{ asset('public/assets/media/stock/600x400/img-14.jpg') }}">
+                                                <!--begin::Image-->
+                                                <div class="overlay-wrapper bgi-no-repeat bgi-position-center bgi-size-cover card-rounded h-250px" style="background-image:url('public/assets/media/stock/600x600/img-14.jpg')"></div>
+                                                <!--end::Image-->
+                                                <!--begin::Action-->
+                                                <div class="overlay-layer card-rounded bg-dark bg-opacity-25">
+                                                    <i class="bi bi-eye-fill fs-3x text-white"></i>
+                                                </div>
+                                                <!--end::Action-->
+                                            </a>
+                                            <!--end::Item-->
+                                        </div>
+                                        <!--end::Col-->
+                                    </div>
+                                    <!--end::Row-->
+                                </div>
+                                <!--end::Tab pane-->
+                            </div>
+                            <!--end::Tabs content-->
                         </div>
-                        <!--end::Heading-->
-                        <!--begin::Tabs wrapper-->
-                        <div class="d-flex flex-center mb-5 mb-lg-15">
-                            <!--begin::Tabs-->
-                            <!-- <ul class="nav border-transparent flex-center fs-5 fw-bold">
-                                <li class="nav-item">
-                                    <a class="nav-link text-gray-500 text-active-primary px-3 px-lg-6 active" href="#" data-bs-toggle="tab" data-bs-target="#kt_landing_projects_latest">Latest</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-gray-500 text-active-primary px-3 px-lg-6" href="#" data-bs-toggle="tab" data-bs-target="#kt_landing_projects_web_design">Web Design</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-gray-500 text-active-primary px-3 px-lg-6" href="#" data-bs-toggle="tab" data-bs-target="#kt_landing_projects_mobile_apps">Mobile Apps</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-gray-500 text-active-primary px-3 px-lg-6" href="#" data-bs-toggle="tab" data-bs-target="#kt_landing_projects_development">Development</a>
-                                </li>
-                            </ul> -->
-                            <!--end::Tabs-->
-                        </div>
-                        <!-- <iframe width="420" height="315" src="https://www.youtube.com/embed/eI4an8aSsgw" allowfullscreen></iframe> -->
-                        <!--end::Tabs wrapper-->
-                        <!--begin::Tabs content-->
-                        <div class="tab-content">
-                            <!--begin::Tab pane-->
-                            <div class="tab-pane fade show active" id="kt_landing_projects_latest">
-                                <!--begin::Row-->
-                                <div class="row g-10">
-                                    <!--begin::Col-->
-                                    <div class="col-lg-6">
-                                        <!--begin::Item-->
-                                        <a class="d-block card-rounded overlay h-lg-100" data-fslightbox="lightbox-projects" href="#">
-                                            <!--begin::Image-->
-                                            <div class="overlay-wrapper bgi-no-repeat bgi-position-center bgi-size-cover card-rounded h-lg-100 min-h-250px" style="background-image:url('public/assets/img/video.jpg')"></div>
-                                            <!--end::Image-->
-                                            <!--begin::Action-->
-                                            <div class="overlay-layer card-rounded bg-dark bg-opacity-25">
-                                                <i class="bi bi-eye-fill fs-3x text-white"></i>
-                                            </div>
-                                            <!--end::Action-->
-                                        </a>
-                                        <!--end::Item-->
-                                    </div>
-                                    <!--end::Col-->
-                                    <!--begin::Col-->
-                                    <div class="col-lg-6">
-                                        <!--begin::Row-->
-                                        <div class="row g-10 mb-10">
-                                            <!--begin::Col-->
-                                            <div class="col-lg-6">
-                                                <!--begin::Item-->
-                                                <a class="d-block card-rounded overlay" data-fslightbox="lightbox-projects" href="#">
-                                                    <!--begin::Image-->
-                                                    <div class="overlay-wrapper bgi-no-repeat bgi-position-center bgi-size-cover card-rounded h-250px" style="background-image:url('public/assets/img/video.jpg')"></div>
-                                                    <!--end::Image-->
-                                                    <!--begin::Action-->
-                                                    <div class="overlay-layer card-rounded bg-dark bg-opacity-25">
-                                                        <i class="bi bi-eye-fill fs-3x text-white"></i>
-                                                    </div>
-                                                    <!--end::Action-->
-                                                </a>
-                                                <!--end::Item-->
-                                            </div>
-                                            <!--end::Col-->
-                                            <!--begin::Col-->
-                                            <div class="col-lg-6">
-                                                <!--begin::Item-->
-                                                <a class="d-block card-rounded overlay" data-fslightbox="lightbox-projects" href="#">
-                                                    <!--begin::Image-->
-                                                    <div class="overlay-wrapper bgi-no-repeat bgi-position-center bgi-size-cover card-rounded h-250px" style="background-image:url('public/assets/img/video.jpg')"></div>
-                                                    <!--end::Image-->
-                                                    <!--begin::Action-->
-                                                    <div class="overlay-layer card-rounded bg-dark bg-opacity-25">
-                                                        <i class="bi bi-eye-fill fs-3x text-white"></i>
-                                                    </div>
-                                                    <!--end::Action-->
-                                                </a>
-                                                <!--end::Item-->
-                                            </div>
-                                            <!--end::Col-->
-                                        </div>
-                                        <!--end::Row-->
-                                        <!--begin::Item-->
-                                        <a class="d-block card-rounded overlay" data-fslightbox="lightbox-projects" href="#">
-                                            <!--begin::Image-->
-                                            <div class="overlay-wrapper bgi-no-repeat bgi-position-center bgi-size-cover card-rounded h-250px" style="background-image:url('public/assets/img/video.jpg')"></div>
-                                            <!--end::Image-->
-                                            <!--begin::Action-->
-                                            <div class="overlay-layer card-rounded bg-dark bg-opacity-25">
-                                                <i class="bi bi-eye-fill fs-3x text-white"></i>
-                                            </div>
-                                            <!--end::Action-->
-                                        </a>
-                                        <!--end::Item-->
-                                    </div>
-                                    <!--end::Col-->
-                                </div>
-                                <!--end::Row-->
-                            </div>
-                            <!--end::Tab pane-->
-                            <!--begin::Tab pane-->
-                            <div class="tab-pane fade" id="kt_landing_projects_web_design">
-                                <!--begin::Row-->
-                                <div class="row g-10">
-                                    <!--begin::Col-->
-                                    <div class="col-lg-6">
-                                        <!--begin::Item-->
-                                        <a class="d-block card-rounded overlay h-lg-100" data-fslightbox="lightbox-projects" href="{{ asset('public/assets/media/stock/600x600/img-11.jpg') }}">
-                                            <!--begin::Image-->
-                                            <div class="overlay-wrapper bgi-no-repeat bgi-position-center bgi-size-cover card-rounded h-lg-100 min-h-250px" style="background-image:url('public/assets/media/stock/600x600/img-11.jpg')"></div>
-                                            <!--end::Image-->
-                                            <!--begin::Action-->
-                                            <div class="overlay-layer card-rounded bg-dark bg-opacity-25">
-                                                <i class="bi bi-eye-fill fs-3x text-white"></i>
-                                            </div>
-                                            <!--end::Action-->
-                                        </a>
-                                        <!--end::Item-->
-                                    </div>
-                                    <!--end::Col-->
-                                    <!--begin::Col-->
-                                    <div class="col-lg-6">
-                                        <!--begin::Row-->
-                                        <div class="row g-10 mb-10">
-                                            <!--begin::Col-->
-                                            <div class="col-lg-6">
-                                                <!--begin::Item-->
-                                                <a class="d-block card-rounded overlay" data-fslightbox="lightbox-projects" href="public/assets/media/stock/600x600/img-12.jpg">
-                                                    <!--begin::Image-->
-                                                    <div class="overlay-wrapper bgi-no-repeat bgi-position-center bgi-size-cover card-rounded h-250px" style="background-image:url('public/assets/media/stock/600x600/img-12.jpg')"></div>
-                                                    <!--end::Image-->
-                                                    <!--begin::Action-->
-                                                    <div class="overlay-layer card-rounded bg-dark bg-opacity-25">
-                                                        <i class="bi bi-eye-fill fs-3x text-white"></i>
-                                                    </div>
-                                                    <!--end::Action-->
-                                                </a>
-                                                <!--end::Item-->
-                                            </div>
-                                            <!--end::Col-->
-                                            <!--begin::Col-->
-                                            <div class="col-lg-6">
-                                                <!--begin::Item-->
-                                                <a class="d-block card-rounded overlay" data-fslightbox="lightbox-projects" href="{{ asset('public/assets/media/stock/600x600/img-21.jpg') }}">
-                                                    <!--begin::Image-->
-                                                    <div class="overlay-wrapper bgi-no-repeat bgi-position-center bgi-size-cover card-rounded h-250px" style="background-image:url('public/assets/media/stock/600x600/img-21.jpg')"></div>
-                                                    <!--end::Image-->
-                                                    <!--begin::Action-->
-                                                    <div class="overlay-layer card-rounded bg-dark bg-opacity-25">
-                                                        <i class="bi bi-eye-fill fs-3x text-white"></i>
-                                                    </div>
-                                                    <!--end::Action-->
-                                                </a>
-                                                <!--end::Item-->
-                                            </div>
-                                            <!--end::Col-->
-                                        </div>
-                                        <!--end::Row-->
-                                        <!--begin::Item-->
-                                        <a class="d-block card-rounded overlay" data-fslightbox="lightbox-projects" href="../assets/media/stock/600x400/img-20.jpg">
-                                            <!--begin::Image-->
-                                            <div class="overlay-wrapper bgi-no-repeat bgi-position-center bgi-size-cover card-rounded h-250px" style="background-image:url('public/assets/media/stock/600x600/img-20.jpg')"></div>
-                                            <!--end::Image-->
-                                            <!--begin::Action-->
-                                            <div class="overlay-layer card-rounded bg-dark bg-opacity-25">
-                                                <i class="bi bi-eye-fill fs-3x text-white"></i>
-                                            </div>
-                                            <!--end::Action-->
-                                        </a>
-                                        <!--end::Item-->
-                                    </div>
-                                    <!--end::Col-->
-                                </div>
-                                <!--end::Row-->
-                            </div>
-                            <!--end::Tab pane-->
-                            <!--begin::Tab pane-->
-                            <div class="tab-pane fade" id="kt_landing_projects_mobile_apps">
-                                <!--begin::Row-->
-                                <div class="row g-10">
-                                    <!--begin::Col-->
-                                    <div class="col-lg-6">
-                                        <!--begin::Row-->
-                                        <div class="row g-10 mb-10">
-                                            <!--begin::Col-->
-                                            <div class="col-lg-6">
-                                                <!--begin::Item-->
-                                                <a class="d-block card-rounded overlay" data-fslightbox="lightbox-projects" href="{{ asset('public/assets/media/stock/600x600/img-16.jpg') }}">
-                                                    <!--begin::Image-->
-                                                    <div class="overlay-wrapper bgi-no-repeat bgi-position-center bgi-size-cover card-rounded h-250px" style="background-image:url('public/assets/media/stock/600x600/img-16.jpg')"></div>
-                                                    <!--end::Image-->
-                                                    <!--begin::Action-->
-                                                    <div class="overlay-layer card-rounded bg-dark bg-opacity-25">
-                                                        <i class="bi bi-eye-fill fs-3x text-white"></i>
-                                                    </div>
-                                                    <!--end::Action-->
-                                                </a>
-                                                <!--end::Item-->
-                                            </div>
-                                            <!--end::Col-->
-                                            <!--begin::Col-->
-                                            <div class="col-lg-6">
-                                                <!--begin::Item-->
-                                                <a class="d-block card-rounded overlay" data-fslightbox="lightbox-projects" href="{{ asset('public/assets/media/stock/600x600/img-12.jpg') }}">
-                                                    <!--begin::Image-->
-                                                    <div class="overlay-wrapper bgi-no-repeat bgi-position-center bgi-size-cover card-rounded h-250px" style="background-image:url('public/assets/media/stock/600x600/img-12.jpg')"></div>
-                                                    <!--end::Image-->
-                                                    <!--begin::Action-->
-                                                    <div class="overlay-layer card-rounded bg-dark bg-opacity-25">
-                                                        <i class="bi bi-eye-fill fs-3x text-white"></i>
-                                                    </div>
-                                                    <!--end::Action-->
-                                                </a>
-                                                <!--end::Item-->
-                                            </div>
-                                            <!--end::Col-->
-                                        </div>
-                                        <!--end::Row-->
-                                        <!--begin::Item-->
-                                        <a class="d-block card-rounded overlay" data-fslightbox="lightbox-projects" href="{{ asset('public/assets/media/stock/600x400/img-15.jpg') }}">
-                                            <!--begin::Image-->
-                                            <div class="overlay-wrapper bgi-no-repeat bgi-position-center bgi-size-cover card-rounded h-250px" style="background-image:url('public/assets/media/stock/600x600/img-15.jpg')"></div>
-                                            <!--end::Image-->
-                                            <!--begin::Action-->
-                                            <div class="overlay-layer card-rounded bg-dark bg-opacity-25">
-                                                <i class="bi bi-eye-fill fs-3x text-white"></i>
-                                            </div>
-                                            <!--end::Action-->
-                                        </a>
-                                        <!--end::Item-->
-                                    </div>
-                                    <!--end::Col-->
-                                    <!--begin::Col-->
-                                    <div class="col-lg-6">
-                                        <!--begin::Item-->
-                                        <a class="d-block card-rounded overlay h-lg-100" data-fslightbox="lightbox-projects" href="{{ asset('public/assets/media/stock/600x600/img-23.jpg') }}">
-                                            <!--begin::Image-->
-                                            <div class="overlay-wrapper bgi-no-repeat bgi-position-center bgi-size-cover card-rounded h-lg-100 min-h-250px" style="background-image:url('public/assets/media/stock/600x600/img-23.jpg')"></div>
-                                            <!--end::Image-->
-                                            <!--begin::Action-->
-                                            <div class="overlay-layer card-rounded bg-dark bg-opacity-25">
-                                                <i class="bi bi-eye-fill fs-3x text-white"></i>
-                                            </div>
-                                            <!--end::Action-->
-                                        </a>
-                                        <!--end::Item-->
-                                    </div>
-                                    <!--end::Col-->
-                                </div>
-                                <!--end::Row-->
-                            </div>
-                            <!--end::Tab pane-->
-                            <!--begin::Tab pane-->
-                            <div class="tab-pane fade" id="kt_landing_projects_development">
-                                <!--begin::Row-->
-                                <div class="row g-10">
-                                    <!--begin::Col-->
-                                    <div class="col-lg-6">
-                                        <!--begin::Item-->
-                                        <a class="d-block card-rounded overlay h-lg-100" data-fslightbox="lightbox-projects" href="{{ asset('public/assets/media/stock/600x600/img-15.jpg') }}">
-                                            <!--begin::Image-->
-                                            <div class="overlay-wrapper bgi-no-repeat bgi-position-center bgi-size-cover card-rounded h-lg-100 min-h-250px" style="background-image:url('public/assets/media/stock/600x600/img-15.jpg')"></div>
-                                            <!--end::Image-->
-                                            <!--begin::Action-->
-                                            <div class="overlay-layer card-rounded bg-dark bg-opacity-25">
-                                                <i class="bi bi-eye-fill fs-3x text-white"></i>
-                                            </div>
-                                            <!--end::Action-->
-                                        </a>
-                                        <!--end::Item-->
-                                    </div>
-                                    <!--end::Col-->
-                                    <!--begin::Col-->
-                                    <div class="col-lg-6">
-                                        <!--begin::Row-->
-                                        <div class="row g-10 mb-10">
-                                            <!--begin::Col-->
-                                            <div class="col-lg-6">
-                                                <!--begin::Item-->
-                                                <a class="d-block card-rounded overlay" data-fslightbox="lightbox-projects" href="{{ asset('public/assets/media/stock/600x600/img-22.jpg') }}">
-                                                    <!--begin::Image-->
-                                                    <div class="overlay-wrapper bgi-no-repeat bgi-position-center bgi-size-cover card-rounded h-250px" style="background-image:url('public/assets/media/stock/600x600/img-22.jpg')"></div>
-                                                    <!--end::Image-->
-                                                    <!--begin::Action-->
-                                                    <div class="overlay-layer card-rounded bg-dark bg-opacity-25">
-                                                        <i class="bi bi-eye-fill fs-3x text-white"></i>
-                                                    </div>
-                                                    <!--end::Action-->
-                                                </a>
-                                                <!--end::Item-->
-                                            </div>
-                                            <!--end::Col-->
-                                            <!--begin::Col-->
-                                            <div class="col-lg-6">
-                                                <!--begin::Item-->
-                                                <a class="d-block card-rounded overlay" data-fslightbox="lightbox-projects" href="{{ asset('public/assets/media/stock/600x600/img-21.jpg') }}">
-                                                    <!--begin::Image-->
-                                                    <div class="overlay-wrapper bgi-no-repeat bgi-position-center bgi-size-cover card-rounded h-250px" style="background-image:url('public/assets/media/stock/600x600/img-21.jpg')"></div>
-                                                    <!--end::Image-->
-                                                    <!--begin::Action-->
-                                                    <div class="overlay-layer card-rounded bg-dark bg-opacity-25">
-                                                        <i class="bi bi-eye-fill fs-3x text-white"></i>
-                                                    </div>
-                                                    <!--end::Action-->
-                                                </a>
-                                                <!--end::Item-->
-                                            </div>
-                                            <!--end::Col-->
-                                        </div>
-                                        <!--end::Row-->
-                                        <!--begin::Item-->
-                                        <a class="d-block card-rounded overlay" data-fslightbox="lightbox-projects" href="{{ asset('public/assets/media/stock/600x400/img-14.jpg') }}">
-                                            <!--begin::Image-->
-                                            <div class="overlay-wrapper bgi-no-repeat bgi-position-center bgi-size-cover card-rounded h-250px" style="background-image:url('public/assets/media/stock/600x600/img-14.jpg')"></div>
-                                            <!--end::Image-->
-                                            <!--begin::Action-->
-                                            <div class="overlay-layer card-rounded bg-dark bg-opacity-25">
-                                                <i class="bi bi-eye-fill fs-3x text-white"></i>
-                                            </div>
-                                            <!--end::Action-->
-                                        </a>
-                                        <!--end::Item-->
-                                    </div>
-                                    <!--end::Col-->
-                                </div>
-                                <!--end::Row-->
-                            </div>
-                            <!--end::Tab pane-->
-                        </div>
-                        <!--end::Tabs content-->
+                        <!--end::Card body-->
                     </div>
-                    <!--end::Card body-->
+                    <!--end::Card-->
                 </div>
-                <!--end::Card-->
+                <!--end::Container-->
             </div>
-            <!--end::Container-->
-        </div>
-        <!--end::Projects Section-->
-        <!--end::Statistics Section-->
-        <div class="mt-20 mb-n20 position-relative z-index-2">
-            <!--begin::Container-->
-            <div class="container">
-                <!--begin::Heading-->
-                <div class="text-center mb-17">
-                    <!--begin::Title-->
-                    <h3 class="fs-2hx text-dark mb-5" id="clients" data-kt-scroll-offset="{default: 125, lg: 150}">What Our Clients Say</h3>
-                    <!--end::Title-->
-                    <!--begin::Description-->
-                    <div class="fs-5 text-muted fw-bold">Save thousands to millions of bucks by using single tool
-                        <br />for different amazing and great useful admin</div>
-                    <!--end::Description-->
-                </div>
-                <!--end::Heading-->
-                <!--begin::Row-->
-                <div class="row g-lg-10 mb-10 mb-lg-20">
-                    @foreach($reviews as $review)
-                        <!--begin::Col-->
-                        <div class="col-lg-4">
-                            <!--begin::Testimonial-->
-                            <div class="d-flex flex-column justify-content-between h-lg-100 px-10 px-lg-0 pe-lg-10 mb-15 mb-lg-0">
-                                <!--begin::Wrapper-->
-                                <div class="mb-7">
-                                    <!--begin::Rating-->
-                                    @if($review->rating == 1)
-                                        <div class="rating mb-6">
-                                            <div class="rating-label me-2 checked">
-                                                <i class="bi bi-star-fill fs-5"></i>
-                                            </div>
-                                            <div class="rating-label me-2 ">
-                                                <i class="bi bi-star-fill fs-5"></i>
-                                            </div>
-                                            <div class="rating-label me-2 ">
-                                                <i class="bi bi-star-fill fs-5"></i>
-                                            </div>
-                                            <div class="rating-label me-2 ">
-                                                <i class="bi bi-star-fill fs-5"></i>
-                                            </div>
-                                            <div class="rating-label me-2 ">
-                                                <i class="bi bi-star-fill fs-5"></i>
-                                            </div>
-                                        </div>
-                                    @elseif($review->rating == 2)
-                                        <div class="rating mb-6">
-                                            <div class="rating-label me-2 checked">
-                                                <i class="bi bi-star-fill fs-5"></i>
-                                            </div>
-                                            <div class="rating-label me-2 checked">
-                                                <i class="bi bi-star-fill fs-5"></i>
-                                            </div>
-                                            <div class="rating-label me-2 ">
-                                                <i class="bi bi-star-fill fs-5"></i>
-                                            </div>
-                                            <div class="rating-label me-2 ">
-                                                <i class="bi bi-star-fill fs-5"></i>
-                                            </div>
-                                            <div class="rating-label me-2 ">
-                                                <i class="bi bi-star-fill fs-5"></i>
-                                            </div>
-                                        </div>
-                                    @elseif($review->rating == 3)
-                                        <div class="rating mb-6">
-                                            <div class="rating-label me-2 checked">
-                                                <i class="bi bi-star-fill fs-5"></i>
-                                            </div>
-                                            <div class="rating-label me-2 checked">
-                                                <i class="bi bi-star-fill fs-5"></i>
-                                            </div>
-                                            <div class="rating-label me-2 checked ">
-                                                <i class="bi bi-star-fill fs-5"></i>
-                                            </div>
-                                            <div class="rating-label me-2 ">
-                                                <i class="bi bi-star-fill fs-5"></i>
-                                            </div>
-                                            <div class="rating-label me-2 ">
-                                                <i class="bi bi-star-fill fs-5"></i>
-                                            </div>
-                                        </div>
-                                    @elseif($review->rating == 4)
-                                        <div class="rating mb-6">
-                                            <div class="rating-label me-2 checked">
-                                                <i class="bi bi-star-fill fs-5"></i>
-                                            </div>
-                                            <div class="rating-label me-2 checked">
-                                                <i class="bi bi-star-fill fs-5"></i>
-                                            </div>
-                                            <div class="rating-label me-2 checked ">
-                                                <i class="bi bi-star-fill fs-5"></i>
-                                            </div>
-                                            <div class="rating-label me-2 checked ">
-                                                <i class="bi bi-star-fill fs-5"></i>
-                                            </div>
-                                            <div class="rating-label me-2 ">
-                                                <i class="bi bi-star-fill fs-5"></i>
-                                            </div>
-                                        </div>
-                                    @elseif($review->rating == 5)
-                                        <div class="rating mb-6">
-                                            <div class="rating-label me-2 checked">
-                                                <i class="bi bi-star-fill fs-5"></i>
-                                            </div>
-                                            <div class="rating-label me-2 checked">
-                                                <i class="bi bi-star-fill fs-5"></i>
-                                            </div>
-                                            <div class="rating-label me-2 checked ">
-                                                <i class="bi bi-star-fill fs-5"></i>
-                                            </div>
-                                            <div class="rating-label me-2 checked ">
-                                                <i class="bi bi-star-fill fs-5"></i>
-                                            </div>
-                                            <div class="rating-label me-2 checked ">
-                                                <i class="bi bi-star-fill fs-5"></i>
-                                            </div>
-                                        </div>
-                                    @endif
-                                    <!--end::Rating-->
-                                    <!--begin::Title-->
-                                    <div class="fs-2 fw-bolder text-dark mb-3">{{$review->review_title}}</div>
-                                    <!--end::Title-->
-                                    <!--begin::Feedback-->
-                                    <div class="text-gray-500 fw-bold fs-4">{{$review->review}}</div>
-                                    <!--end::Feedback-->
-                                </div>
-                                <!--end::Wrapper-->
-                                <!--begin::Author-->
-                                <div class="d-flex align-items-center">
-                                    <!--begin::Avatar-->
-                                    <div class="symbol symbol-circle symbol-50px me-5">
-                                        <img src="{{$review->user->avatar}}" class="" alt="" />
-                                    </div>
-                                    <!--end::Avatar-->
-                                    <!--begin::Name-->
-                                    <div class="flex-grow-1">
-                                        <a href="#" class="text-dark fw-bolder text-hover-primary fs-6">{{$review->user->first_name}}</a>
-                                        <span class="text-muted d-block fw-bold">{{$review->user->email}}</span>
-                                    </div>
-                                    <!--end::Name-->
-                                </div>
-                                <!--end::Author-->
-                            </div>
-                            <!--end::Testimonial-->
-                        </div>
-                        <!--end::Col-->
-                    @endforeach
-                    @if(count($reviews) > 3)
-                        <a href="{{route('review_rating')}}" class="text-primary text-center text-decoration-underline fs-5 fw-bold">View More</a>
-                    @endif
-                </div>
-                <!--end::Row-->
-                <!--begin::Highlight-->
-                <div class="d-flex flex-stack flex-wrap flex-md-nowrap card-rounded shadow p-8 p-lg-12 mb-n5 mb-lg-n13" style="background: linear-gradient(90deg, #fff200 0%, #a0b40e 100%);">
-                    <!--begin::Content-->
-                    <div class="my-2 me-5">
+            <!--end::Projects Section-->
+        @endif
+        <!--end::Statistics Section--><br><br>
+        @if(count($reviews)>0)
+            <div class="mt-20 mb-n20 position-relative z-index-2">
+                <!--begin::Container-->
+                <div class="container">
+                    <!--begin::Heading-->
+                    <div class="text-center mb-17">
                         <!--begin::Title-->
-                        <div class="fs-1 fs-lg-2qx fw-bolder text-white mb-2">Get in touch with us
-                            <!-- <span class="fw-normal">Speed Up Development!</span> -->
-                        </div>
+                        <h3 class="fs-2hx text-dark mb-5" id="clients" data-kt-scroll-offset="{default: 125, lg: 150}">What Our Clients Say</h3>
                         <!--end::Title-->
                         <!--begin::Description-->
-                        <!-- <div class="fs-6 fs-lg-5 text-white fw-bold opacity-75">Join over 100,000 Professionals Community to Stay Ahead</div> -->
+                        <div class="fs-5 text-muted fw-bold">Save thousands to millions of bucks by using single tool
+                            <br />for different amazing and great useful admin</div>
                         <!--end::Description-->
                     </div>
-                    <!--end::Content-->
-                    <!--begin::Link-->
-                    <a href="#" class="btn btn-lg btn-outline border-2 btn-outline-white flex-shrink-0 my-2">Call Us</a>
-                    <!--end::Link-->
+                    <!--end::Heading-->
+                    <!--begin::Row-->
+                    <div class="row g-lg-10 mb-10 mb-lg-20">
+                        @foreach($reviews as $review)
+                            <!--begin::Col-->
+                            <div class="col-lg-4">
+                                <!--begin::Testimonial-->
+                                <div class="d-flex flex-column justify-content-between h-lg-100 px-10 px-lg-0 pe-lg-10 mb-15 mb-lg-0">
+                                    <!--begin::Wrapper-->
+                                    <div class="mb-7">
+                                        <!--begin::Rating-->
+                                        @if($review->rating == 1)
+                                            <div class="rating mb-6">
+                                                <div class="rating-label me-2 checked">
+                                                    <i class="bi bi-star-fill fs-5"></i>
+                                                </div>
+                                                <div class="rating-label me-2 ">
+                                                    <i class="bi bi-star-fill fs-5"></i>
+                                                </div>
+                                                <div class="rating-label me-2 ">
+                                                    <i class="bi bi-star-fill fs-5"></i>
+                                                </div>
+                                                <div class="rating-label me-2 ">
+                                                    <i class="bi bi-star-fill fs-5"></i>
+                                                </div>
+                                                <div class="rating-label me-2 ">
+                                                    <i class="bi bi-star-fill fs-5"></i>
+                                                </div>
+                                            </div>
+                                        @elseif($review->rating == 2)
+                                            <div class="rating mb-6">
+                                                <div class="rating-label me-2 checked">
+                                                    <i class="bi bi-star-fill fs-5"></i>
+                                                </div>
+                                                <div class="rating-label me-2 checked">
+                                                    <i class="bi bi-star-fill fs-5"></i>
+                                                </div>
+                                                <div class="rating-label me-2 ">
+                                                    <i class="bi bi-star-fill fs-5"></i>
+                                                </div>
+                                                <div class="rating-label me-2 ">
+                                                    <i class="bi bi-star-fill fs-5"></i>
+                                                </div>
+                                                <div class="rating-label me-2 ">
+                                                    <i class="bi bi-star-fill fs-5"></i>
+                                                </div>
+                                            </div>
+                                        @elseif($review->rating == 3)
+                                            <div class="rating mb-6">
+                                                <div class="rating-label me-2 checked">
+                                                    <i class="bi bi-star-fill fs-5"></i>
+                                                </div>
+                                                <div class="rating-label me-2 checked">
+                                                    <i class="bi bi-star-fill fs-5"></i>
+                                                </div>
+                                                <div class="rating-label me-2 checked ">
+                                                    <i class="bi bi-star-fill fs-5"></i>
+                                                </div>
+                                                <div class="rating-label me-2 ">
+                                                    <i class="bi bi-star-fill fs-5"></i>
+                                                </div>
+                                                <div class="rating-label me-2 ">
+                                                    <i class="bi bi-star-fill fs-5"></i>
+                                                </div>
+                                            </div>
+                                        @elseif($review->rating == 4)
+                                            <div class="rating mb-6">
+                                                <div class="rating-label me-2 checked">
+                                                    <i class="bi bi-star-fill fs-5"></i>
+                                                </div>
+                                                <div class="rating-label me-2 checked">
+                                                    <i class="bi bi-star-fill fs-5"></i>
+                                                </div>
+                                                <div class="rating-label me-2 checked ">
+                                                    <i class="bi bi-star-fill fs-5"></i>
+                                                </div>
+                                                <div class="rating-label me-2 checked ">
+                                                    <i class="bi bi-star-fill fs-5"></i>
+                                                </div>
+                                                <div class="rating-label me-2 ">
+                                                    <i class="bi bi-star-fill fs-5"></i>
+                                                </div>
+                                            </div>
+                                        @elseif($review->rating == 5)
+                                            <div class="rating mb-6">
+                                                <div class="rating-label me-2 checked">
+                                                    <i class="bi bi-star-fill fs-5"></i>
+                                                </div>
+                                                <div class="rating-label me-2 checked">
+                                                    <i class="bi bi-star-fill fs-5"></i>
+                                                </div>
+                                                <div class="rating-label me-2 checked ">
+                                                    <i class="bi bi-star-fill fs-5"></i>
+                                                </div>
+                                                <div class="rating-label me-2 checked ">
+                                                    <i class="bi bi-star-fill fs-5"></i>
+                                                </div>
+                                                <div class="rating-label me-2 checked ">
+                                                    <i class="bi bi-star-fill fs-5"></i>
+                                                </div>
+                                            </div>
+                                        @endif
+                                        <!--end::Rating-->
+                                        <!--begin::Title-->
+                                        <div class="fs-2 fw-bolder text-dark mb-3">{{$review->review_title}}</div>
+                                        <!--end::Title-->
+                                        <!--begin::Feedback-->
+                                        <div class="text-gray-500 fw-bold fs-4">{{$review->review}}</div>
+                                        <!--end::Feedback-->
+                                    </div>
+                                    <!--end::Wrapper-->
+                                    <!--begin::Author-->
+                                    <div class="d-flex align-items-center">
+                                        <!--begin::Avatar-->
+                                        <div class="symbol symbol-circle symbol-50px me-5">
+                                            <img src="{{$review->user->avatar}}" class="" alt="" />
+                                        </div>
+                                        <!--end::Avatar-->
+                                        <!--begin::Name-->
+                                        <div class="flex-grow-1">
+                                            <a href="#" class="text-dark fw-bolder text-hover-primary fs-6">{{$review->user->first_name}}</a>
+                                            <span class="text-muted d-block fw-bold">{{$review->user->email}}</span>
+                                        </div>
+                                        <!--end::Name-->
+                                    </div>
+                                    <!--end::Author-->
+                                </div>
+                                <!--end::Testimonial-->
+                            </div>
+                            <!--end::Col-->
+                        @endforeach
+                        <a href="{{route('review_rating')}}" class="text-primary text-center text-decoration-underline fs-5 fw-bold">View More</a>
+                    </div>
+                    <!--end::Row-->
+                    <!--begin::Highlight-->
+                    <div class="d-flex flex-stack flex-wrap flex-md-nowrap card-rounded shadow p-8 p-lg-12 mb-n5 mb-lg-n13" style="background: linear-gradient(90deg, #fff200 0%, #a0b40e 100%);">
+                        <!--begin::Content-->
+                        <div class="my-2 me-5">
+                            <!--begin::Title-->
+                            <div class="fs-1 fs-lg-2qx fw-bolder text-white mb-2">Get in touch with us
+                                <!-- <span class="fw-normal">Speed Up Development!</span> -->
+                            </div>
+                            <!--end::Title-->
+                            <!--begin::Description-->
+                            <!-- <div class="fs-6 fs-lg-5 text-white fw-bold opacity-75">Join over 100,000 Professionals Community to Stay Ahead</div> -->
+                            <!--end::Description-->
+                        </div>
+                        <!--end::Content-->
+                        <!--begin::Link-->
+                        <a href="#" class="btn btn-lg btn-outline border-2 btn-outline-white flex-shrink-0 my-2">Call Us</a>
+                        <!--end::Link-->
+                    </div>
+                    <!--end::Highlight-->
                 </div>
-                <!--end::Highlight-->
+                <!--end::Container-->
             </div>
-            <!--end::Container-->
-        </div>
+        @endif
+
         <!--begin::Footer Section-->
         <div class="mb-0">
 

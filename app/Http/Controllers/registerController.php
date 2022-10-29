@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use App\Models\ReviewRating;
+use App\Models\Upload;
 use App\Models\User;
 use Image;
 
@@ -14,8 +15,9 @@ class registerController extends Controller
     public function home(){
 
         $reviews = ReviewRating::where('is_status', 1)->latest()->take(3)->get();
-        //return $reviews;
-        return view('home')->with('reviews',$reviews);
+        $banners = Upload::where('type','banner')->get();
+        $youtubes = Upload::where('type','youtube')->latest()->take(2)->get();
+        return view('home')->with('reviews',$reviews)->with('banners',$banners)->with('youtubes',$youtubes);
     }
 
     public function sign_up(){

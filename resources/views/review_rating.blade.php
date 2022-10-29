@@ -52,7 +52,7 @@
 									</button>
                                 <!--end::Mobile menu toggle-->
                                 <!--begin::Logo image-->
-                                <a href="">
+                                <a href="{{route('home')}}">
                                     <img alt="Logo" src="{{ asset('public/assets/img/full-logo.png') }}" class="logo-default h-25px h-lg-30px" />
                                     <img alt="Logo" src="{{ asset('public/assets/img/full-logo.png') }}" class="logo-sticky h-20px h-lg-25px" />
                                 </a>

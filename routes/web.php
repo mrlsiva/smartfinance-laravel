@@ -79,6 +79,7 @@ Route::get('/review_rating',[UserController::class, 'review_rating'])->name('rev
 Route::get('/uploads',[generalController::class, 'uploads'])->name('uploads');
 Route::post('/save_uploads',[generalController::class, 'save_uploads'])->name('save_uploads');
 Route::get('/delete_upload/{id}',[generalController::class, 'delete_upload'])->name('delete_upload');
+Route::get('/videos',[generalController::class, 'videos'])->name('videos');
 //General End
 
 //Smart Finance
