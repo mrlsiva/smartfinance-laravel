@@ -18,7 +18,7 @@ class CreateReviewRatingsTable extends Migration
             $table->foreignId('user_id')->constrained();
             $table->date('placed_on');
             $table->string('review_title');
-            $table->string('review');
+            $table->text('review');
             $table->string('rating');
             $table->boolean('is_status');
             $table->timestamps();

@@ -223,7 +223,7 @@ class smartfinanceController extends Controller
                     ]);
 
                 }
-                else if($finance->plan->type == 'year' && $finance->plan->name == 'Monthly Investment '){
+                else if($finance->plan->type == 'year' && $finance->plan->name == 'Monthly Investment'){
 
 
                     $year = $finance->no_of_year; 
@@ -436,7 +436,7 @@ class smartfinanceController extends Controller
                 ]);
             }
 
-            else if($finance->plan->type == 'year' && $finance->plan->name == 'Monthly Investment '){
+            else if($finance->plan->type == 'year' && $finance->plan->name == 'Monthly Investment'){
 
 
                 $year = $finance->no_of_year; 
@@ -817,7 +817,7 @@ class smartfinanceController extends Controller
             $smartfinance_payment = DB::table('smartfinances')->where('id',$smartfinance_id)->update(['no_of_year' => $year]);
 
         }
-        if($finance->plan->type == 'year' && $finance->plan->name == 'Monthly Invertment '){
+        if($finance->plan->type == 'year' && $finance->plan->name == 'Monthly Invertment'){
 
 
             $year = $request->year; 

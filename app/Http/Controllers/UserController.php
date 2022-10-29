@@ -50,6 +50,22 @@ class UserController extends Controller
                             $status = DB::table('user_amounts')->where('user_id',$user->id)->update(['is_status' => 1]);
                         } 
                     }
+                    else{
+
+                        $user_amount = UserAmount::where([['is_status',0],['user_id',$user->user_id]])->first();
+                        $now = Carbon::now()->format('Y-m-d');
+                        $date = Carbon::parse($user_amount->date)->addMonths(1);
+                        $new_date = Carbon::parse($date)->setDay(6)->format('Y-m-d');
+
+                        $timestamp = strtotime($new_date);
+                        $day = date('l', $timestamp);
+                        if($day == 'Tuesday' ||$day == 'Sunday' ||$day == 'Friday'){
+                            $date = Carbon::parse($new_date)->setDay(7)->format('Y-m-d');
+                        }
+                        if($date < $now){
+                            $status = DB::table('user_amounts')->where('user_id',$user->user_id)->update(['is_status' => 1]);
+                        }
+                    }
                 }
 
 
@@ -109,6 +125,22 @@ class UserController extends Controller
                             if($closing_date < $now){
                                 $status = DB::table('user_amounts')->where('user_id',$user->user_id)->update(['is_status' => 1]);
                             } 
+                        }
+                        else{
+
+                            $user_amount = UserAmount::where([['is_status',0],['user_id',$user->user_id]])->first();
+                            $now = Carbon::now()->format('Y-m-d');
+                            $date = Carbon::parse($user_amount->date)->addMonths(1);
+                            $new_date = Carbon::parse($date)->setDay(6)->format('Y-m-d');
+
+                            $timestamp = strtotime($new_date);
+                            $day = date('l', $timestamp);
+                            if($day == 'Tuesday' ||$day == 'Sunday' ||$day == 'Friday'){
+                                $date = Carbon::parse($new_date)->setDay(7)->format('Y-m-d');
+                            }
+                            if($date < $now){
+                                $status = DB::table('user_amounts')->where('user_id',$user->user_id)->update(['is_status' => 1]);
+                            }
                         }
                     }
                 }

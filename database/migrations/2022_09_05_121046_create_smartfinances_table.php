@@ -27,6 +27,7 @@ class CreateSmartfinancesTable extends Migration
             $table->date('accepted_date')->nullable();
             $table->string('rejected_by')->nullable();
             $table->date('next_payment_date')->nullable();
+            $table->string('pro_book')->nullable();
             $table->boolean('is_close')->nullable();
             $table->timestamps();
         });

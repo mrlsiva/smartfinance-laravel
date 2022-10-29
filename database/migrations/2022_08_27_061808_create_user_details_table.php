@@ -20,12 +20,12 @@ class CreateUserDetailsTable extends Migration
             $table->string('city');
             $table->string('pincode');
             $table->string('email')->unique()->nullable();
-            $table->string('phone')->unique();
+            $table->string('phone')->unique()->nullable();
             $table->string('aadhaar_no');
             $table->string('pan_card_no');
-            $table->string('avatar');
-            $table->string('aadhaar');
-
+            $table->string('avatar')->nullable();
+            $table->string('aadhaar')->nullable();
+            $table->string('pan')->nullable();
             $table->timestamps();
         });
     }

@@ -523,16 +523,9 @@ body{
 								<tbody>
 									@foreach($finances as $finance)
 									<tr>
-										@php
-										$plan = App\Models\Plan::where('id',$finance->plan_id)->first();
-										@endphp
-										@if($plan != Null)
-										@if($plan->type == 'month')
-										<td class="">Month</td>
-										@else
-										<td class="">Year</td>
-										@endif
-										@endif
+										
+										<td class="">{{$finance->plan->name}}</td>
+										
 										<td>
 											@if($finance->no_of_year != Null)
 											{{$finance->no_of_year}}
@@ -690,21 +683,12 @@ body{
 												@endif
 											</div>
 											<div class="d-flex justify-content-start flex-column">
-												<a href="{{route('user', ['id' => $user->id])}}" class="text-dark fw-bolder text-hover-primary fs-6">{{$finance->user->first_name}} {{$finance->user->last_name}}</a>
+												<a href="{{route('user', ['id' => $finance->user->id])}}" class="text-dark fw-bolder text-hover-primary fs-6">{{$finance->user->first_name}} {{$finance->user->last_name}}</a>
 												<span class="text-muted fw-bold text-muted d-block fs-7">#{{$smartfinance->user->id}}</span>
 											</div>
 										</div>
 									</td>
-									@php
-									$plan = App\Models\Plan::where('id',$finance->plan_id)->first();
-									@endphp
-									@if($plan != Null)
-									@if($plan->type == 'month')
-									<td class="">Month</td>
-									@else
-									<td class="">Year</td>
-									@endif
-									@endif
+									<td class="">{{$finance->plan->name}}</td>
 									<td>
 										@if($finance->no_of_year != Null)
 										{{$finance->no_of_year}}

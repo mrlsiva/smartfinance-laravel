@@ -20,7 +20,7 @@ class CreateNomineeDetailsTable extends Migration
             $table->string('relationship');
             $table->string('age');
             $table->string('aadhaar_no');
-            $table->string('aadhaar');
+            $table->string('aadhaar')->nullable();
             $table->timestamps();
         });
     }

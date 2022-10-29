@@ -604,16 +604,8 @@
                                                     </div>
                                                 </div>
                                             </td>
-                                            @php
-                                                $plan = App\Models\Plan::where('id',$smartfinance->plan_id)->first();
-                                            @endphp
-                                            @if($plan != Null)
-                                                @if($plan->type == 'month')
-                                                    <td class="">Month</td>
-                                                @else
-                                                    <td class="">Year</td>
-                                                @endif
-                                            @endif
+                                            
+                                            <td class="">{{$smartfinance->plan->name}}</td>
                                             <td>
                                                 @if($smartfinance->no_of_year != Null)
                                                     {{$smartfinance->no_of_year}}
