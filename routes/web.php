@@ -84,6 +84,7 @@ Route::get('/email_templates',[generalController::class, 'email_templates'])->na
 Route::post('/save_templates',[generalController::class, 'save_templates'])->name('save_templates');
 Route::get('/edit_template/{id}',[generalController::class, 'edit_template'])->name('edit_template');
 Route::post('/update_template',[generalController::class, 'update_template'])->name('update_template');
+Route::get('/send_mail',[generalController::class, 'send_mail'])->name('send_mail');
 //General End
 
 //Smart Finance

@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\SMTPController;
 use Illuminate\Support\Str;
 use App\Models\Upload;
 use App\Models\Template;
+use App\Models\User;
 use Image;
 use DB;
 
@@ -102,6 +104,27 @@ class generalController extends Controller
 
         return redirect()->back()->with('alert', 'Updated Successfully!!');
     }
+
+    public function send_mail(Request $request)
+    {
+        $user = User::where('id','500001')->first();
+
+        //Mail
+        $emailsetting = Template::where([['id',1],['is_active',1]])->first(); 
+        if($emailsetting != null){
+            $email_template = $emailsetting->template;
+            $date = $user->created_at->toDateString();
+            $emailContentReplace=['##NAME##'=>$user->first_name.' '.$user->last_name,'##PHONE##'=>$user->phone,'##DATE##'=>$date];
+            $txt = strtr($email_template,$emailContentReplace);
+            $emailId = "tena.visansoft@gmail.com";
+            $subject = $emailsetting->subject;
+            $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
+        }
+        //End Mail
+
+    }
+
+
 
 
 }
