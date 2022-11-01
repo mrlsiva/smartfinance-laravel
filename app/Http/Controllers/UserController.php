@@ -231,6 +231,7 @@ class UserController extends Controller
 
             }
             else{
+                $user = User::where('id',$id)->first();
                 DB::table('users')->where('id',$id)->update(['role_id' => $role_id,'is_lock' => $is_lock,'is_active' => $is_active,'is_profile_verified' => $is_profile_verified,'is_reffer' => $refferal]);
                 if($is_profile_verified == 1){
 
@@ -247,10 +248,38 @@ class UserController extends Controller
                         $user_amount = UserAmount::where('user_id',$id)->delete();
                     }
                 }
+                if($user->is_active = 0 &&  $is_active = 1){
+                    //Mail to user
+                    $emailsetting = Template::where([['id',3],['is_active',1]])->first(); 
+                    if($emailsetting != null){
+                        $email_template = $emailsetting->template;
+                        $emailContentReplace=['##NAME##'=>$user->first_name.' '.$user->last_name];
+                        $txt = strtr($email_template,$emailContentReplace);
+                        $emailId = $user->email;
+                        $subject = $emailsetting->subject;
+                        $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
+                    }
+                    //Mail to user end
+                }
+                if($user->is_active = 0 &&  $is_active = 0){
+                    //Mail to user
+                    $emailsetting = Template::where([['id',4],['is_active',1]])->first(); 
+                    if($emailsetting != null){
+                        $email_template = $emailsetting->template;
+                        $emailContentReplace=['##NAME##'=>$user->first_name.' '.$user->last_name];
+                        $txt = strtr($email_template,$emailContentReplace);
+                        $emailId = $user->email;
+                        $subject = $emailsetting->subject;
+                        $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
+                    }
+                    //Mail to user end
+                }
+
                 return redirect()->back()->with('alert', 'Successfully Updated!!');
             }
         }
         else{
+            $user = User::where('id',$id)->first();
             DB::table('users')->where('id',$id)->update(['role_id' => $role_id,'is_lock' => $is_lock,'is_active' => $is_active,'is_profile_verified' => $is_profile_verified,'is_reffer' => $refferal]);
             if($is_profile_verified == 1){
 
@@ -267,6 +296,33 @@ class UserController extends Controller
                     $user_amount = UserAmount::where('user_id',$id)->delete();
                 }
             }
+            if($user->is_active = 0 &&  $is_active = 1){
+                    //Mail to user
+                $emailsetting = Template::where([['id',3],['is_active',1]])->first(); 
+                if($emailsetting != null){
+                    $email_template = $emailsetting->template;
+                    $emailContentReplace=['##NAME##'=>$user->first_name.' '.$user->last_name];
+                    $txt = strtr($email_template,$emailContentReplace);
+                    $emailId = $user->email;
+                    $subject = $emailsetting->subject;
+                    $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
+                }
+                    //Mail to user end
+            }
+            if($user->is_active = 0 &&  $is_active = 0){
+                    //Mail to user
+                $emailsetting = Template::where([['id',4],['is_active',1]])->first(); 
+                if($emailsetting != null){
+                    $email_template = $emailsetting->template;
+                    $emailContentReplace=['##NAME##'=>$user->first_name.' '.$user->last_name];
+                    $txt = strtr($email_template,$emailContentReplace);
+                    $emailId = $user->email;
+                    $subject = $emailsetting->subject;
+                    $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
+                }
+                    //Mail to user end
+            }
+
             return redirect()->back()->with('alert', 'Successfully Updated!!');
         }
         

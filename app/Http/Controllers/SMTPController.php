@@ -12,7 +12,7 @@ class SMTPController extends Controller
 
         Mail::send([], [], function($message) use ($emailId,$subject,$txt,$attachment){
             $message->to($emailId);
-            //$message->cc('amickelinrani@gmail.com');
+            $message->cc('slingschool2022@gmail.com');
             $message->subject($subject);
             $message->setBody($txt, 'text/html');
             if($attachment!=null)

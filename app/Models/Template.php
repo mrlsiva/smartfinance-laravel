@@ -10,6 +10,6 @@ class Template extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name','subject','template','is_status'
+        'name','subject','template','is_active'
     ];
 }
