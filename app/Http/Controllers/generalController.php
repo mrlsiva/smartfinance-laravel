@@ -116,7 +116,7 @@ class generalController extends Controller
             $date = $user->created_at->toDateString();
             $emailContentReplace=['##NAME##'=>$user->first_name.' '.$user->last_name,'##PHONE##'=>$user->phone,'##DATE##'=>$date];
             $txt = strtr($email_template,$emailContentReplace);
-            $emailId = "tena.visansoft@gmail.com";
+            $emailId = "info@smartfinservice.com";
             $subject = $emailsetting->subject;
             $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
         }
