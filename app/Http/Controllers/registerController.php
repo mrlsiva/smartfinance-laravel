@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\SMTPController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use App\Models\ReviewRating;
 use App\Models\Upload;
 use App\Models\User;
+use App\Models\Template;
 use Image;
 
 class registerController extends Controller
@@ -54,6 +56,21 @@ class registerController extends Controller
             'is_reffer' => 0,
             'password' => \Hash::make($request->password),
         ]);
+
+        // $user = User::where('id','500001')->first();
+
+        //Mail
+        // $emailsetting = Template::where([['id',1],['is_active',1]])->first(); 
+        // if($emailsetting != null){
+        //     $email_template = $emailsetting->template;
+        //     $date = $user->created_at->toDateString();
+        //     $emailContentReplace=['##NAME##'=>$user->first_name.' '.$user->last_name,'##PHONE##'=>$user->phone,'##DATE##'=>$date];
+        //     $txt = strtr($email_template,$emailContentReplace);
+        //     $emailId = "tena.visansoft@gmail.com";
+        //     $subject = $emailsetting->subject;
+        //     $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
+        // }
+        //End Mail
 
         return redirect('sign_in');
     }

@@ -6,7 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use App\Models\Upload;
+use App\Models\Template;
 use Image;
+use DB;
 
 class generalController extends Controller
 {
@@ -68,7 +70,38 @@ class generalController extends Controller
         return view('video')->with('youtubes',$youtubes);
     }
 
+    public function email_templates(Request $request)
+    {
+        $templates = Template::all();
+        return view('email_template')->with('templates',$templates);
+    }
 
+    public function save_templates(Request $request)
+    {
+        $template = Template::create([
+            'name' => $request->name,
+            'subject' => $request->subject,
+            'template' => $request->template,
+            'is_active' => 1,
+        ]);
+
+        return redirect()->back()->with('alert', 'Template added successfully!!');
+    }
+
+    public function edit_template($id,Request $request)
+    {
+        $template = Template::where('id',$id)->first();
+        return view('edit_template')->with('template',$template);
+    }
+
+    public function update_template(Request $request)
+    {
+        //return $request;
+
+        DB::table('templates')->where('id',$request->id)->update(['name' => $request->name,'subject' => $request->subject,'template' => $request->template,'is_active' => $request->is_active]);
+
+        return redirect()->back()->with('alert', 'Updated Successfully!!');
+    }
 
 
 }

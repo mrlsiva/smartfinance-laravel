@@ -161,7 +161,7 @@
                         <div class="card-header border-0 pt-5">
                             <h3 class="card-title align-items-start flex-column">
                                 <span class="card-label fw-bolder text-dark">User Management</span>
-                                <span class="text-gray-400 mt-1 fw-bold fs-6">Avg. 10 customers added per day</span>
+                                <!-- <span class="text-gray-400 mt-1 fw-bold fs-6">Avg. 10 customers added per day</span> -->
                             </h3>
                             <!--begin::Actions-->
                             <div class="card-toolbar">
@@ -501,7 +501,7 @@
                             <!--begin::Title-->
                             <h3 class="card-title align-items-start flex-column">
                                 <span class="card-label fw-bolder text-dark">Recent Transactions</span>
-                                <span class="text-gray-400 mt-1 fw-bold fs-6">Avg 100 Transactions processed per day</span>
+                                <!-- <span class="text-gray-400 mt-1 fw-bold fs-6">Avg 100 Transactions processed per day</span> -->
                             </h3>
                             <!--end::Title-->
                             <!--begin::Actions-->
@@ -577,7 +577,7 @@
                                         <th class="">APPROVED DATE</th>
                                         <th class="">RATE OF INTEREST</th>
                                         <th class="">NEXT PAYMENT</th>
-                                        <th class="">EXPIREY</th>
+                                        <th class="">EXPIRY</th>
                                         <th class="">STATUS</th>
                                         <th class="">ACTION</th>               
                                     </tr>
@@ -809,7 +809,7 @@
                                                 <th class="">APPROVED DATE</th>
                                                 <th class="">RATE OF INTEREST</th>
                                                 <th class="">NEXT PAYMENT</th>
-                                                <th class="">EXPIREY</th>
+                                                <th class="">EXPIRY</th>
                                                 <th class="">STATUS</th>
                                                 <th class="">ACTION</th>               
                                             </tr>

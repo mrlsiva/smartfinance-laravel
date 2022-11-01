@@ -4,7 +4,7 @@
 
 <head>
     <base href="">
-    <title>Smart Finanace</title>
+    <title>Smart Finance</title>
     <meta charset="utf-8" />
     <meta name="description" content=" " />
     <meta name="keywords" content=" " />
@@ -42,7 +42,7 @@
                         <h1 class="fw-bolder fs-2qx pb-5 pb-md-10" style="color: #000000;">welcome to Smart Finance</h1>
                         <!--end::Title-->
                         <!--begin::Description-->
-                        <p class="fw-bold fs-2" style="color: #000;">We make sure to Select the best intrest rates from the market</p>
+                        <p class="fw-bold fs-2" style="color: #000;">We make sure to Select the best interest rates from the market</p>
                         <!--end::Description-->
                     </div>
                     <!--end::Content-->
@@ -195,11 +195,11 @@
                 <!--begin::Footer-->
                 <div class="d-flex flex-center flex-wrap fs-6 p-5 pb-0">
                     <!--begin::Links-->
-                    <div class="d-flex flex-center fw-bold fs-6">
+                    <!-- <div class="d-flex flex-center fw-bold fs-6">
                         <a href="" class="text-muted text-hover-primary px-2" target="_blank">About</a>
                         <a href="" class="text-muted text-hover-primary px-2" target="_blank">Support</a>
                         <a href="" class="text-muted text-hover-primary px-2" target="_blank">Purchase</a>
-                    </div>
+                    </div> -->
                     <!--end::Links-->
                 </div>
                 <!--end::Footer-->

@@ -4,7 +4,7 @@
 
 <head>
     <base href="">
-    <title>Smart Finanace</title>
+    <title>Smart Finance</title>
     <meta charset="utf-8" />
     <meta name="description" content=" " />
     <meta name="keywords" content=" " />

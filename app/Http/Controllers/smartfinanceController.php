@@ -736,7 +736,7 @@ class smartfinanceController extends Controller
         $smartfinance_id = $request->smartfinance_id; 
         $finance = Smartfinance::where('id',$smartfinance_id)->first();
 
-        if($finance->plan->type == 'year' && $finance->plan->name == 'One time Invertment'){
+        if($finance->plan->type == 'year' && $finance->plan->name == 'One time Investment'){
             $payment = SmartfinancePayment::where('smartfinance_id', $smartfinance_id)->orderBy('id','Desc')->first();
             $year = $request->year + $finance->no_of_year ;
             $amnt = $payment->amount;  
@@ -817,7 +817,7 @@ class smartfinanceController extends Controller
             $smartfinance_payment = DB::table('smartfinances')->where('id',$smartfinance_id)->update(['no_of_year' => $year]);
 
         }
-        if($finance->plan->type == 'year' && $finance->plan->name == 'Monthly Invertment'){
+        if($finance->plan->type == 'year' && $finance->plan->name == 'Monthly Investment'){
 
 
             $year = $request->year; 

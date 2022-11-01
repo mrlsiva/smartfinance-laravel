@@ -80,9 +80,14 @@ Route::get('/uploads',[generalController::class, 'uploads'])->name('uploads');
 Route::post('/save_uploads',[generalController::class, 'save_uploads'])->name('save_uploads');
 Route::get('/delete_upload/{id}',[generalController::class, 'delete_upload'])->name('delete_upload');
 Route::get('/videos',[generalController::class, 'videos'])->name('videos');
+Route::get('/email_templates',[generalController::class, 'email_templates'])->name('email_templates');
+Route::post('/save_templates',[generalController::class, 'save_templates'])->name('save_templates');
+Route::get('/edit_template/{id}',[generalController::class, 'edit_template'])->name('edit_template');
+Route::post('/update_template',[generalController::class, 'update_template'])->name('update_template');
 //General End
 
 //Smart Finance
+
 Route::post('/store_smart_finance',[SmartFinanceController::class, 'store_smart_finance'])->name('store_smart_finance');
 Route::get('plan_type',[SmartFinanceController::class, 'plan_type'])->name('plan_type');
 Route::get('/get_smart_finance',[SmartFinanceController::class, 'get_smart_finance'])->name('get_smart_finance');

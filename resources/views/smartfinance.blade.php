@@ -24,7 +24,7 @@ body{
 		<!--begin::Page title-->
 		<div class="page-title d-flex flex-column me-3">
 			<!--begin::Title-->
-			<h1 class="d-flex text-white fw-bolder my-1 fs-3">Smartfinance</h1>
+			<h1 class="d-flex text-white fw-bolder my-1 fs-3">Smart Finance</h1>
 			<!--end::Title-->
 			<!--begin::Breadcrumb-->
 			<ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
@@ -39,7 +39,7 @@ body{
 				</li>
 				<!--end::Item-->
 				<!--begin::Item-->
-				<li class="breadcrumb-item text-white opacity-75">Smartfinance</li>
+				<li class="breadcrumb-item text-white opacity-75">Smart Finance</li>
 				<!--end::Item-->
 			</ul>
 			<!--end::Breadcrumb-->
@@ -128,9 +128,9 @@ body{
 											<!--end::Svg Icon-->
 											@if($smartfinance->plan_id == 3)
 												
-												<div class="fs-2 fw-bolder" data-kt-countup="true" data-kt-countup-value="{{$amount}}" data-kt-countup-prefix="Rs">0</div>
+												<div class="fs-2 fw-bolder" data-kt-countup="true"  data-kt-countup-prefix="Rs">{{$smartfinance->commafun($amount)}}</div>
 											@elseif($smartfinance->is_status == 1)
-												<div class="fs-2 fw-bolder" data-kt-countup="true" data-kt-countup-value="{{$smartfinance->amount}}" data-kt-countup-prefix="Rs">0</div>
+												<div class="fs-2 fw-bolder" data-kt-countup="true" data-kt-countup-prefix="Rs">{{$smartfinance->commafun($smartfinance->amount)}}</div>
 											@else
 												<div class="fs-2 fw-bolder" data-kt-countup="true" data-kt-countup-value="0" data-kt-countup-prefix="Rs">0</div>
 
@@ -138,7 +138,7 @@ body{
 										</div>
 										<!--end::Number-->
 										<!--begin::Label-->
-										<div class="fw-bold fs-6 text-gray-400">Invesment Amount</div>
+										<div class="fw-bold fs-6 text-gray-400">Investment Amount</div>
 										<!--end::Label-->
 									</div>
 									<!--end::Stat-->
@@ -203,7 +203,7 @@ body{
 											</div>
 											<!--end::Number-->
 											<!--begin::Label-->
-											<div class="fw-bold fs-6 text-gray-400">Pro File</div>
+											<div class="fw-bold fs-6 text-gray-400">Pro Book</div>
 											<!--end::Label-->
 										</div>
 									@else
@@ -216,7 +216,7 @@ body{
 											</div>
 											<!--end::Number-->
 											<!--begin::Label-->
-											<div class="fw-bold fs-6 text-gray-400">Pro File</div>
+											<div class="fw-bold fs-6 text-gray-400">Pro Book</div>
 											<!--end::Label-->
 										</div>
 
@@ -513,7 +513,7 @@ body{
 										<th class="">APPROVED DATE</th>
 										<th class="">RATE OF INTEREST</th>
 										<th class="">NEXT PAYMENT</th>
-                 						<th class="">EXPIREY</th>
+                 						<th class="">EXPIRY</th>
 										<th class="">STATUS</th>
 										<th class="">ACTION</th>
 									</tr>
@@ -661,7 +661,7 @@ body{
 									<th class="">APPROVED DATE</th>
 									<th class="">RATE OF INTEREST</th>
 									<th class="">NEXT PAYMENT</th>
-                 					<th class="">EXPIREY</th>
+                 					<th class="">EXPIRY</th>
 									<th class="">STATUS</th>
 									<th class="">ACTION</th>               
 								</tr>

@@ -3,7 +3,7 @@
 
 <head>
     <base href="">
-    <title>Smart Finanace</title>
+    <title>Smart Finance</title>
     <meta charset="utf-8" />
     <meta name="description" content=" " />
     <meta name="keywords" content=" " />
@@ -55,7 +55,7 @@
                         <div class="header-logo me-5 me-md-10 flex-grow-1 flex-lg-grow-0">
                             <a class="logo-top" href="{{route('dashboard')}}">
                                 <img alt="Logo" src="{{ asset('public/assets/img/logo.png') }}" class="logo-default h-25px mr-10" />
-                                <img alt="Logo" src="{{ asset('public/assets/img/logo.png') }}" class="logo-sticky h-25px mr-10" /> Smart Fnance
+                                <img alt="Logo" src="{{ asset('public/assets/img/logo.png') }}" class="logo-sticky h-25px mr-10" /> Smart Finance
                             </a>
                         </div>
                         <!--end::Header Logo-->
@@ -197,6 +197,9 @@
                                             <div class="menu-item px-5">
                                                 <a href="{{route('payout_list')}}" class="menu-link px-5">Next Month Payout List</a>
                                             </div>
+                                            <!-- <div class="menu-item px-5">
+                                                <a href="{{route('email_templates')}}" class="menu-link px-5">Email Templates</a>
+                                            </div> -->
                                             <div class="menu-item px-5">
                                                 <a href="{{route('uploads')}}" class="menu-link px-5">Uploads</a>
                                             </div>
@@ -236,11 +239,11 @@
                         <!--begin::Copyright-->
                         <div class="text-dark order-2 order-md-1">
                             <span class="text-muted fw-bold me-1">2022©</span>
-                            <a href="#" target="_blank" class="text-gray-800 text-hover-primary">smart Finanace</a>
+                            <a href="#" target="_blank" class="text-gray-800 text-hover-primary">Smart Finance</a>
                         </div>
                         <!--end::Copyright-->
                         <!--begin::Menu-->
-                        <ul class="menu menu-gray-600 menu-hover-primary fw-bold order-1">
+                        <!-- <ul class="menu menu-gray-600 menu-hover-primary fw-bold order-1">
                             <li class="menu-item">
                                 <a href="#" target="_blank" class="menu-link px-2">About</a>
                             </li>
@@ -250,7 +253,7 @@
                             <li class="menu-item">
                                 <a href="#" target="_blank" class="menu-link px-2">Contact</a>
                             </li>
-                        </ul>
+                        </ul> -->
                         <!--end::Menu-->
                     </div>
                     <!--end::Container-->

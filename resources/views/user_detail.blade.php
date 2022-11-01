@@ -183,7 +183,7 @@
 										</div>
 										<!--end::Number-->
 										<!--begin::Label-->
-										<div class="fw-bold fs-6 text-gray-400">No.Inversments</div>
+										<div class="fw-bold fs-6 text-gray-400">No.Investments</div>
 										<!--end::Label-->
 									</div>
 									<!--end::Stat-->
@@ -192,11 +192,11 @@
 										<!--begin::Number-->
 										<div class="d-flex align-items-center">
 
-											<div class="fs-2 fw-bolder" data-kt-countup="true" data-kt-countup-value="{{$amount}}" data-kt-countup-prefix="Rs.">{{$amount}}</div>
+											<div class="fs-2 fw-bolder" data-kt-countup="true"  data-kt-countup-prefix="Rs.">{{$user->commafun($amount)}}</div>
 										</div>
 										<!--end::Number-->
 										<!--begin::Label-->
-										<div class="fw-bold fs-6 text-gray-400">Total Invertment</div>
+										<div class="fw-bold fs-6 text-gray-400">Total Investment</div>
 										<!--end::Label-->
 									</div>
 									<!--end::Stat-->
@@ -205,7 +205,7 @@
 										<!--begin::Number-->
 										<div class="d-flex align-items-center">
 
-											<div class="fs-2 fw-bolder" data-kt-countup="true" data-kt-countup-value="{{$earning_amount}}" data-kt-countup-prefix="Rs.">10000</div>
+											<div class="fs-2 fw-bolder" data-kt-countup="true"data-kt-countup-prefix="Rs.">{{$user->commafun($earning_amount)}}</div>
 										</div>
 										<!--end::Number-->
 										<!--begin::Label-->
@@ -216,11 +216,11 @@
 										<!--begin::Number-->
 										<div class="d-flex align-items-center">
 
-											<div class="fs-2 fw-bolder" data-kt-countup="true" data-kt-countup-value="{{$earning_percentage}}" data-kt-countup-prefix="%">5</div>
+											<div class="fs-2 fw-bolder" data-kt-countup="true" data-kt-countup-prefix="%">{{$earning_percentage}} %</div>
 										</div>
 										<!--end::Number-->
 										<!--begin::Label-->
-										<div class="fw-bold fs-6 text-gray-400">Earnings percentage</div>
+										<div class="fw-bold fs-6 text-gray-400">Earnings Percentage</div>
 										<!--end::Label-->
 									</div>
 
@@ -1068,7 +1068,7 @@
 									<th class="">APPROVED DATE</th>
 									<th class="">RATE OF INTEREST</th>
 									<th class="">NEXT PAYMENT</th>
-                 					<th class="">EXPIREY</th>
+                 					<th class="">EXPIRY</th>
 									<th class="">STATUS</th>
 									<th class="">ACTION</th>               
 								</tr>

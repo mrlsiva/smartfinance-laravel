@@ -4,7 +4,7 @@
 
 <head>
     <base href="">
-    <title>Smart Finanace</title>
+    <title>Smart Finance</title>
     <meta charset="utf-8" />
     <meta name="description" content=" " />
     <meta name="keywords" content=" " />
@@ -148,7 +148,7 @@
                                     @foreach($youtubes as $youtube)
                                         <!--begin::Col-->
                                         <div class="col-lg-6">
-                                            <iframe width="420" height="315" src="https://www.youtube.com/embed/{{$youtube->youtube_link}}" allowfullscreen></iframe>
+                                            <iframe width="100%" height="315" src="https://www.youtube.com/embed/{{$youtube->youtube_link}}" allowfullscreen></iframe>
                                         </div>
                                         <!--end::Col-->
                                     @endforeach

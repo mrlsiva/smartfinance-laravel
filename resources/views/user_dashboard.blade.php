@@ -176,7 +176,7 @@
                                                 <th class="">APPROVED DATE</th>
                                                 <th class="">RATE OF INTEREST</th>
                                                 <th class="">NEXT PAYMENT</th>
-                                                <th class="">EXPIREY</th>
+                                                <th class="">EXPIRY</th>
                                                 <th class="">STATUS</th>
                                                 <th class="">ACTION</th>
                                             </tr>
@@ -2240,7 +2240,7 @@
                 }
 
                 $( ".example" ).html('');
-                var html ='<div class="d-flex justify-content-center">Monthly Invertment(If you start investment in 25-9-2022)</div><table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4"><thead><tr class="fw-bolder text-muted"><th class="">Year</th><th class="">Monthly Investment (1,00,000)</th><th class="">Percentage(Sample)</th><th class="">Yearly Return</th><th class="">Payment date</th></tr></thead><tbody><tr><td>2</td><td>24,00,000</td><td>3%</td><td>34,00,000</td><td>6-11-2024</td></tr><tr><td>3</td><td>36,00,000</td><td>3%</td><td>62,00,000</td><td>6-11-2025</td></tr><tr><td>4</td><td>48,00,000</td><td>3%</td><td>1,00,00,000</td><td>6-11-2026</td></tr></tbody></table>';
+                var html ='<div class="d-flex justify-content-center">Monthly Investment(If you start investment in 25-9-2022)</div><table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4"><thead><tr class="fw-bolder text-muted"><th class="">Year</th><th class="">Monthly Investment (1,00,000)</th><th class="">Percentage(Sample)</th><th class="">Yearly Return</th><th class="">Payment date</th></tr></thead><tbody><tr><td>2</td><td>24,00,000</td><td>3%</td><td>34,00,000</td><td>6-11-2024</td></tr><tr><td>3</td><td>36,00,000</td><td>3%</td><td>62,00,000</td><td>6-11-2025</td></tr><tr><td>4</td><td>48,00,000</td><td>3%</td><td>1,00,00,000</td><td>6-11-2026</td></tr></tbody></table>';
                 $('.example').html(html);
 
             }
