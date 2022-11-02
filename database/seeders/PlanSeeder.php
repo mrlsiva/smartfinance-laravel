@@ -16,19 +16,19 @@ class PlanSeeder extends Seeder
     {
         DB::table('plans')->insert([
             'type' => "month",
-            'name' => "Monthly Return Plan",
+            'name' => "Monthly Returns",
             'created_at' => new \DateTime(),
             'updated_at' => new \DateTime(),
         ]);
         DB::table('plans')->insert([
             'type' => "year",
-            'name' => "One time Investment",
+            'name' => "Long Term (S)",
             'created_at' => new \DateTime(),
             'updated_at' => new \DateTime(),
         ]);
         DB::table('plans')->insert([
             'type' => "year",
-            'name' => "Monthly Investment",
+            'name' => "Long Term (M)",
             'created_at' => new \DateTime(),
             'updated_at' => new \DateTime(),
         ]);

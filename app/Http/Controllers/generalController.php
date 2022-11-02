@@ -121,6 +121,27 @@ class generalController extends Controller
             $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
         }
         //End Mail
+    }
+
+    public function settings(Request $request)
+    {
+
+        return view('setting');
+
+    }
+
+
+    public function save_setting(Request $request)
+    {
+
+        DB::table('settings')->where('key','project_name')->update(['value' => $request->project_name]);
+        DB::table('settings')->where('key','email')->update(['value' => $request->email]);
+        DB::table('settings')->where('key','phone')->update(['value' => $request->phone]);
+        DB::table('settings')->where('key','address')->update(['value' => $request->address]);
+        DB::table('settings')->where('key','admin_email')->update(['value' => $request->admin_email]);
+        DB::table('settings')->where('key','cc_email')->update(['value' => $request->cc_email]);
+
+        return redirect()->back()->with('alert', 'Updated Successfully!!');
 
     }
 

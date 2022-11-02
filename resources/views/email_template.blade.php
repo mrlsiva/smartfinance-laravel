@@ -146,11 +146,11 @@
 					<!--end::Table body-->
 				</table>
 				<!--end::Table-->
-				<div class="d-flex justify-content-center">
+				<!-- <div class="d-flex justify-content-center">
 					<a href="{{route('send_mail')}}">
 						<button type="button"  class="btn btn-success mb-5">Send Mail</button>
 					</a>
-				</div>
+				</div> -->
 			</div>
 		</div>
 		<!--end::template view card-->

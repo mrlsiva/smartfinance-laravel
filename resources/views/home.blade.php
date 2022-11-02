@@ -847,7 +847,10 @@
                         </div>
                         <!--end::Content-->
                         <!--begin::Link-->
-                        <a href="#" class="btn btn-lg btn-outline border-2 btn-outline-white flex-shrink-0 my-2">Call Us</a>
+                        @php
+                            $phone = App\Models\Setting::where('key','phone')->first();
+                        @endphp
+                        <a href="#" class="btn btn-lg btn-outline border-2 btn-outline-white flex-shrink-0 my-2">{{$phone->value}}</a>
                         <!--end::Link-->
                     </div>
                     <!--end::Highlight-->
@@ -874,7 +877,10 @@
                                 <!--end::Title-->
                                 <!--begin::Text-->
                                 <span class="fw-normal fs-4 text-gray-700">Email us to
-									<a href="#" class="text-white opacity-50 text-hover-primary">info@smartfinservice.com</a></span>
+                                    @php
+                                    $email = App\Models\Setting::where('key','email')->first();
+                                    @endphp
+									<a href="#" class="text-white opacity-50 text-hover-primary">{{$email->value}}</a></span>
                                 <!--end::Text-->
                             </div>
                             <!--end::Block-->
@@ -888,15 +894,12 @@
                                 <!--begin::Links-->
                                 <div class="d-flex fw-bold flex-column me-20">
                                     <!--begin::Subtitle-->
-                                    <h4 class="fw-bolder text-gray-400 mb-6">Short Links</h4>
+                                    <h4 class="fw-bolder text-gray-400 mb-6">Address</h4>
                                     <!--end::Subtitle-->
-                                    <!--begin::Link-->
-                                    <a href="#" class="text-white opacity-50 text-hover-primary fs-5 mb-6">Sign in</a>
-                                    <!--end::Link-->
-
-                                    <!--begin::Link-->
-                                    <a href="#" class="text-white opacity-50 text-hover-primary fs-5 mb-6">Supports</a>
-                                    <!--end::Link-->
+                                    @php
+                                    $address = App\Models\Setting::where('key','address')->first();
+                                    @endphp
+                                    <span class="fw-bolder text-white opacity-50 mb-6">{{$address->value}}</span>
                                 </div>
                                 <!--end::Links-->
                                 <!--begin::Links-->

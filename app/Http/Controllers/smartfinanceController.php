@@ -152,7 +152,7 @@ class smartfinanceController extends Controller
                     }
                 }
 
-                else if($finance->plan->type == 'year' && $finance->plan->name == 'One time Investment'){
+                else if($finance->plan->type == 'year' && $finance->plan->name == 'Long Term (S)'){
                     $year = $finance->no_of_year;
                     $amnt = $finance->amount; 
 
@@ -223,7 +223,7 @@ class smartfinanceController extends Controller
                     ]);
 
                 }
-                else if($finance->plan->type == 'year' && $finance->plan->name == 'Monthly Investment'){
+                else if($finance->plan->type == 'year' && $finance->plan->name == 'Long Term (M)'){
 
 
                     $year = $finance->no_of_year; 
@@ -363,7 +363,7 @@ class smartfinanceController extends Controller
                 }
             }
 
-            else if($finance->plan->type == 'year' && $finance->plan->name == 'One time Investment'){
+            else if($finance->plan->type == 'year' && $finance->plan->name == 'Long Term (S)'){
 
                 $year = $finance->no_of_year;
 
@@ -436,7 +436,7 @@ class smartfinanceController extends Controller
                 ]);
             }
 
-            else if($finance->plan->type == 'year' && $finance->plan->name == 'Monthly Investment'){
+            else if($finance->plan->type == 'year' && $finance->plan->name == 'Long Term (M)'){
 
 
                 $year = $finance->no_of_year; 
@@ -736,7 +736,7 @@ class smartfinanceController extends Controller
         $smartfinance_id = $request->smartfinance_id; 
         $finance = Smartfinance::where('id',$smartfinance_id)->first();
 
-        if($finance->plan->type == 'year' && $finance->plan->name == 'One time Investment'){
+        if($finance->plan->type == 'year' && $finance->plan->name == 'Long Term (S)'){
             $payment = SmartfinancePayment::where('smartfinance_id', $smartfinance_id)->orderBy('id','Desc')->first();
             $year = $request->year + $finance->no_of_year ;
             $amnt = $payment->amount;  
@@ -817,7 +817,7 @@ class smartfinanceController extends Controller
             $smartfinance_payment = DB::table('smartfinances')->where('id',$smartfinance_id)->update(['no_of_year' => $year]);
 
         }
-        if($finance->plan->type == 'year' && $finance->plan->name == 'Monthly Investment'){
+        if($finance->plan->type == 'year' && $finance->plan->name == 'Long Term (M)'){
 
 
             $year = $request->year; 

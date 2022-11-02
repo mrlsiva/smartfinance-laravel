@@ -2155,6 +2155,7 @@
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
+<!-- refferal amount -->
 <script type="application/javascript">
     jQuery(document).ready(function ()
     {
@@ -2462,7 +2463,7 @@
                 }
 
                 $( ".example" ).html('');
-                var html ='<div class="d-flex justify-content-center">Monthly Return Plan(If you start investment in '+today+')</div><table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4"><thead><tr class="fw-bolder text-muted"><th class="">Month</th><th class="">Investment Amount</th><th class="">Percentage(Sample)</th><th class="">Monthly return</th><th class="">Payment date</th></tr></thead><tbody class = "sample"></tbody></table>';
+                var html ='<div class="d-flex justify-content-center">Monthly Returns(If you start investment in '+today+')</div><table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4"><thead><tr class="fw-bolder text-muted"><th class="">Month</th><th class="">Investment Amount</th><th class="">Percentage(Sample)</th><th class="">Monthly return</th><th class="">Payment date</th></tr></thead><tbody class = "sample"></tbody></table>';
                 $('.example').html(html);
                 var output = '';
                 for(var count = 1; count <= 3; count++)
@@ -2868,7 +2869,7 @@
 
                 //year 4 end
                 $( ".example" ).html('');
-                var html ='<div class="d-flex justify-content-center">Yearly- One time investment(If you start investment in '+today+')</div><table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4"><thead><tr class="fw-bolder text-muted"><th class="">Year</th><th class="">Investment Amount</th><th class="">Percentage(Sample)</th><th class="">Yearly Return</th><th class="">Payment date</th></tr></thead><tbody><tr><td>2</td><td>'+amount+'</td><td>3%</td><td>'+Math.round(amnt)+'</td><td>'+final+'</td></tr><tr><td>3</td><td>'+amount+'</td><td>3%</td><td>'+Math.round(amnt1)+'</td><td>'+final1+'</td></tr><tr><td>4</td><td>'+amount+'</td><td>3%</td><td>'+Math.round(amnt2)+'</td><td>'+final2+'</td></tr></tbody></table>';
+                var html ='<div class="d-flex justify-content-center">Yearly- Long Term (S)(If you start investment in '+today+')</div><table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4"><thead><tr class="fw-bolder text-muted"><th class="">Year</th><th class="">Investment Amount</th><th class="">Percentage(Sample)</th><th class="">Yearly Return</th><th class="">Payment date</th></tr></thead><tbody><tr><td>2</td><td>'+amount+'</td><td>3%</td><td>'+Math.round(amnt)+'</td><td>'+final+'</td></tr><tr><td>3</td><td>'+amount+'</td><td>3%</td><td>'+Math.round(amnt1)+'</td><td>'+final1+'</td></tr><tr><td>4</td><td>'+amount+'</td><td>3%</td><td>'+Math.round(amnt2)+'</td><td>'+final2+'</td></tr></tbody></table>';
                 $('.example').html(html);
 
             }
@@ -3184,7 +3185,7 @@
 
 
                 $( ".example" ).html('');
-                var html ='<div class="d-flex justify-content-center">Yearly- One time investment(If you start investment in '+today+')</div><table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4"><thead><tr class="fw-bolder text-muted"><th class="">Year</th><th class="">Monthly Investment</th><th class="">Percentage(Sample)</th><th class="">Yearly Return</th><th class="">Payment date</th></tr></thead><tbody><tr><td>2</td><td>24,00,000</td><td>3%</td><td>1,357,000</td><td>'+final+'</td></tr><tr><td>3</td><td>36,00,000</td><td>3%</td><td>3,390,000</td><td>'+final1+'</td></tr><tr><td>4</td><td>48,00,000</td><td>3%</td><td>61,87,500</td><td>'+final2+'</td></tr></tbody></table>';
+                var html ='<div class="d-flex justify-content-center">Yearly- Long Term (M)(If you start investment in '+today+')</div><table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4"><thead><tr class="fw-bolder text-muted"><th class="">Year</th><th class="">Monthly Investment</th><th class="">Percentage(Sample)</th><th class="">Yearly Return</th><th class="">Payment date</th></tr></thead><tbody><tr><td>2</td><td>24,00,000</td><td>3%</td><td>1,357,000</td><td>'+final+'</td></tr><tr><td>3</td><td>36,00,000</td><td>3%</td><td>3,390,000</td><td>'+final1+'</td></tr><tr><td>4</td><td>48,00,000</td><td>3%</td><td>61,87,500</td><td>'+final2+'</td></tr></tbody></table>';
                 $('.example').html(html);
 
             }

@@ -204,6 +204,11 @@
                                                 <a href="{{route('uploads')}}" class="menu-link px-5">Uploads</a>
                                             </div>
                                         @endif
+                                        <!-- @if($user->role_id == 1 )
+                                            <div class="menu-item px-5">
+                                                <a href="{{route('settings')}}" class="menu-link px-5">Settings</a>
+                                            </div>
+                                        @endif -->
 
                                         <div class="menu-item px-5">
                                             <a href="{{route('logout')}}" class="menu-link px-5">Sign Out</a>

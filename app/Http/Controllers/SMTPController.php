@@ -10,9 +10,11 @@ class SMTPController extends Controller
 
     public static function sendMail($emailId,$subject,$txt=null,$attachment=null) {
 
+        $cc_email = Setting::where('key','cc_email')->first();
+
         Mail::send([], [], function($message) use ($emailId,$subject,$txt,$attachment){
             $message->to($emailId);
-            $message->cc('slingschool2022@gmail.com');
+            $message->cc($cc_email->value);
             $message->subject($subject);
             $message->setBody($txt, 'text/html');
             if($attachment!=null)

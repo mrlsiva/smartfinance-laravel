@@ -61,12 +61,13 @@ class registerController extends Controller
 
         //To admin
         $emailsetting = Template::where([['id',1],['is_active',1]])->first(); 
+        $admin_email = Setting::where('key','admin_email')->first();
         if($emailsetting != null){
             $email_template = $emailsetting->template;
             $date = $user->created_at->toDateString();
             $emailContentReplace=['##NAME##'=>$user->first_name.' '.$user->last_name,'##PHONE##'=>$user->phone,'##DATE##'=>$date];
             $txt = strtr($email_template,$emailContentReplace);
-            $emailId = "info@smartfinservice.com";
+            $emailId = $admin_email->value;
             $subject = $emailsetting->subject;
             $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
         }
