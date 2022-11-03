@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\ReviewRating;
 use App\Models\Upload;
 use App\Models\User;
+use App\Models\Setting;
 use App\Models\Template;
 use Image;
 
