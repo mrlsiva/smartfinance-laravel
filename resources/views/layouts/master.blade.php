@@ -197,18 +197,18 @@
                                             <div class="menu-item px-5">
                                                 <a href="{{route('payout_list')}}" class="menu-link px-5">Next Month Payout List</a>
                                             </div>
-                                            <!-- <div class="menu-item px-5">
+                                            <div class="menu-item px-5">
                                                 <a href="{{route('email_templates')}}" class="menu-link px-5">Email Templates</a>
-                                            </div> -->
+                                            </div>
                                             <div class="menu-item px-5">
                                                 <a href="{{route('uploads')}}" class="menu-link px-5">Uploads</a>
                                             </div>
                                         @endif
-                                        <!-- @if($user->role_id == 1 )
+                                        @if($user->role_id == 1 )
                                             <div class="menu-item px-5">
                                                 <a href="{{route('settings')}}" class="menu-link px-5">Settings</a>
                                             </div>
-                                        @endif -->
+                                        @endif
 
                                         <div class="menu-item px-5">
                                             <a href="{{route('logout')}}" class="menu-link px-5">Sign Out</a>

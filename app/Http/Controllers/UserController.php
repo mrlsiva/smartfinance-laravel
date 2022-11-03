@@ -213,7 +213,7 @@ class UserController extends Controller
         return $users;     
     }
 
-     public function change_user_status(Request $request)
+    public function change_user_status(Request $request)
     {
 
         $id = $request->user_id;
@@ -237,6 +237,21 @@ class UserController extends Controller
                 if($is_profile_verified == 1){
 
                     DB::table('users')->where('id',$id)->update(['is_profile_updated' => 0]);
+
+                    if($user->is_profile_updated == 1){
+
+                        //Mail to user
+                        $emailsetting = Template::where([['id',11],['is_active',1]])->first(); 
+                        if($emailsetting != null){
+                            $email_template = $emailsetting->template;
+                            $emailContentReplace=['##NAME##'=>$user->first_name.' '.$user->last_name];
+                            $txt = strtr($email_template,$emailContentReplace);
+                            $emailId = $user->email;
+                            $subject = $emailsetting->subject;
+                            $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
+                        }
+                        //Mail to user end
+                    }
                 }
                 if($refferal == 0){
 
@@ -275,7 +290,32 @@ class UserController extends Controller
                     }
                     //Mail to user end
                 }
-
+                if($user->is_profile_verified == 2 &&  $is_profile_verified == 1){
+                    //Mail to user
+                    $emailsetting = Template::where([['id',7],['is_active',1]])->first(); 
+                    if($emailsetting != null){
+                        $email_template = $emailsetting->template;
+                        $emailContentReplace=['##NAME##'=>$user->first_name.' '.$user->last_name];
+                        $txt = strtr($email_template,$emailContentReplace);
+                        $emailId = $user->email;
+                        $subject = $emailsetting->subject;
+                        $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
+                    }
+                    //Mail to user end
+                }
+                if($user->is_profile_verified == 2 &&  $is_profile_verified == 0){
+                    //Mail to user
+                    $emailsetting = Template::where([['id',8],['is_active',1]])->first(); 
+                    if($emailsetting != null){
+                        $email_template = $emailsetting->template;
+                        $emailContentReplace=['##NAME##'=>$user->first_name.' '.$user->last_name];
+                        $txt = strtr($email_template,$emailContentReplace);
+                        $emailId = $user->email;
+                        $subject = $emailsetting->subject;
+                        $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
+                    }
+                    //Mail to user end
+                }
                 return redirect()->back()->with('alert', 'Successfully Updated!!');
             }
         }
@@ -285,6 +325,20 @@ class UserController extends Controller
             if($is_profile_verified == 1){
 
                 DB::table('users')->where('id',$id)->update(['is_profile_updated' => 0]);
+                if($user->is_profile_updated == 1){
+
+                    //Mail to user
+                    $emailsetting = Template::where([['id',11],['is_active',1]])->first(); 
+                    if($emailsetting != null){
+                        $email_template = $emailsetting->template;
+                        $emailContentReplace=['##NAME##'=>$user->first_name.' '.$user->last_name];
+                        $txt = strtr($email_template,$emailContentReplace);
+                        $emailId = $user->email;
+                        $subject = $emailsetting->subject;
+                        $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
+                    }
+                    //Mail to user end
+                }
             }
             if($refferal == 0){
 
@@ -298,7 +352,7 @@ class UserController extends Controller
                 }
             }
             if($user->is_active == 0 &&  $is_active == 1){
-                    //Mail to user
+                //Mail to user
                 $emailsetting = Template::where([['id',3],['is_active',1]])->first(); 
                 if($emailsetting != null){
                     $email_template = $emailsetting->template;
@@ -308,10 +362,10 @@ class UserController extends Controller
                     $subject = $emailsetting->subject;
                     $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
                 }
-                    //Mail to user end
+                //Mail to user end
             }
             if($user->is_active == 0 &&  $is_active == 0){
-                    //Mail to user
+                //Mail to user
                 $emailsetting = Template::where([['id',4],['is_active',1]])->first(); 
                 if($emailsetting != null){
                     $email_template = $emailsetting->template;
@@ -321,7 +375,33 @@ class UserController extends Controller
                     $subject = $emailsetting->subject;
                     $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
                 }
-                    //Mail to user end
+                //Mail to user end
+            }
+            if($user->is_profile_verified == 2 &&  $is_profile_verified == 1){
+                //Mail to user
+                $emailsetting = Template::where([['id',7],['is_active',1]])->first(); 
+                if($emailsetting != null){
+                    $email_template = $emailsetting->template;
+                    $emailContentReplace=['##NAME##'=>$user->first_name.' '.$user->last_name];
+                    $txt = strtr($email_template,$emailContentReplace);
+                    $emailId = $user->email;
+                    $subject = $emailsetting->subject;
+                    $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
+                }
+                //Mail to user end
+            }
+            if($user->is_profile_verified == 2 &&  $is_profile_verified == 0){
+                //Mail to user
+                $emailsetting = Template::where([['id',8],['is_active',1]])->first(); 
+                if($emailsetting != null){
+                    $email_template = $emailsetting->template;
+                    $emailContentReplace=['##NAME##'=>$user->first_name.' '.$user->last_name];
+                    $txt = strtr($email_template,$emailContentReplace);
+                    $emailId = $user->email;
+                    $subject = $emailsetting->subject;
+                    $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
+                }
+                //Mail to user end
             }
 
             return redirect()->back()->with('alert', 'Successfully Updated!!');
@@ -508,6 +588,18 @@ class UserController extends Controller
 
         DB::table('users')->where('id',$id)->update(['is_active' => 1]);
 
+        //Mail
+        $emailsetting = Template::where([['id',3],['is_active',1]])->first(); 
+        if($emailsetting != null){
+            $email_template = $emailsetting->template;
+            $emailContentReplace=['##NAME##'=>$user->first_name.' '.$user->last_name];
+            $txt = strtr($email_template,$emailContentReplace);
+            $emailId = $user->email;
+            $subject = $emailsetting->subject;
+            $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
+        }
+        //End mail
+
          return redirect(route('user', ['id' => $id]));
         
     }
@@ -515,6 +607,20 @@ class UserController extends Controller
     public function approve_user_profile($id){
 
         DB::table('users')->where('id',$id)->update(['is_profile_verified' => 1,'is_profile_updated' => 0]);
+
+        //Mail
+
+        $emailsetting = Template::where([['id',7],['is_active',1]])->first(); 
+        if($emailsetting != null){
+            $email_template = $emailsetting->template;
+            $emailContentReplace=['##NAME##'=>$user->first_name.' '.$user->last_name];
+            $txt = strtr($email_template,$emailContentReplace);
+            $emailId = $user->email;
+            $subject = $emailsetting->subject;
+            $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
+        }
+
+        //End mail
 
          return redirect(route('user', ['id' => $id]));
         
@@ -593,6 +699,33 @@ class UserController extends Controller
 
         DB::table('users')->where('id',$id)->update(['is_profile_verified' => 0]);
 
+        //Mail
+        $user = User::where('id',$id)->first();
+        //admin
+        $emailsetting = Template::where([['id',5],['is_active',1]])->first(); 
+        $admin_email = Setting::where('key','admin_email')->first();
+        if($emailsetting != null){
+            $email_template = $emailsetting->template;
+            $emailContentReplace=['##NAME##'=>$user->first_name.' '.$user->last_name,'##PHONE##'=>$user->phone];
+            $txt = strtr($email_template,$emailContentReplace);
+            $emailId = $admin_email->value;
+            $subject = $emailsetting->subject;
+            $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
+        }
+        //end admin
+
+        $emailsetting = Template::where([['id',6],['is_active',1]])->first(); 
+        if($emailsetting != null){
+            $email_template = $emailsetting->template;
+            $emailContentReplace=['##NAME##'=>$user->first_name.' '.$user->last_name];
+            $txt = strtr($email_template,$emailContentReplace);
+            $emailId = $user->email;
+            $subject = $emailsetting->subject;
+            $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
+        }
+
+        //End mail
+
         return redirect('dashboard');
     }
 
@@ -602,12 +735,12 @@ class UserController extends Controller
         $user_id = $request->user_id;
         $profile_update = $request->profile_update;
 
-        if($profile_update == 'true'){
-            $role = User::where('id',$user_id)->select('role_id')->first()->role_id;
-            if($role != 1){
-                DB::table('users')->where('id',$user_id)->update(['is_profile_updated' => 1]);
-            }
-        }
+        // if($profile_update == 'true'){
+        //     $role = User::where('id',$user_id)->select('role_id')->first()->role_id;
+        //     if($role != 1){
+        //         DB::table('users')->where('id',$user_id)->update(['is_profile_updated' => 1]);
+        //     }
+        // }
 
         if($type == 'basic'){
             $validatedData = $request->validate([
@@ -621,6 +754,41 @@ class UserController extends Controller
             DB::table('users')->where('id',$user_id)->update(['first_name' => $request->first_name,'last_name' => $request->last_name,'email' => $request->email,'phone' => $request->phone]);
 
             DB::table('user_details')->where('user_id',$user_id)->update(['address' => $request->address,'city' => $request->city,'pincode' => $request->pincode]);
+
+            $user = User('id',$user_id)->first();
+            DB::table('users')->where('id',$user_id)->update(['is_profile_updated' => 1]);
+            if($user->is_profile_updated == 0 && $profile_update == 'true'){
+
+                //Mail
+                
+                //Admin
+                $emailsetting = Template::where([['id',9],['is_active',1]])->first(); 
+                $admin_email = Setting::where('key','admin_email')->first();
+                if($emailsetting != null){
+                    $email_template = $emailsetting->template;
+                    $date = $user->created_at->toDateString();
+                    $emailContentReplace=['##NAME##'=>$user->first_name.' '.$user->last_name,'##PHONE##'=>$user->phone,'##DATE##'=>$date];
+                    $txt = strtr($email_template,$emailContentReplace);
+                    $emailId = $admin_email->value;
+                    $subject = $emailsetting->subject;
+                    $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
+                }
+                //End
+
+                //User
+                $emailsetting = Template::where([['id',10],['is_active',1]])->first(); 
+                if($emailsetting != null){
+                    $email_template = $emailsetting->template;
+                    $emailContentReplace=['##NAME##'=>$user->first_name.' '.$user->last_name];
+                    $txt = strtr($email_template,$emailContentReplace);
+                    $emailId = $user->email;
+                    $subject = $emailsetting->subject;
+                    $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
+                }
+                //End
+
+                //End mail
+            }
             return redirect()->back();
         }
         if($type == 'additional'){
@@ -664,9 +832,44 @@ class UserController extends Controller
                 Storage::disk('public')->put(config('path.pan_card').$filename, $photo);
                 DB::table('user_details')->where('user_id',$user_id)->update(['pan' => $filename]);
             }
+
+            $user = User('id',$user_id)->first();
+            DB::table('users')->where('id',$user_id)->update(['is_profile_updated' => 1]);
+            if($user->is_profile_updated == 0 && $profile_update == 'true'){
+
+                //Mail
+                
+                //Admin
+                $emailsetting = Template::where([['id',9],['is_active',1]])->first(); 
+                $admin_email = Setting::where('key','admin_email')->first();
+                if($emailsetting != null){
+                    $email_template = $emailsetting->template;
+                    $date = $user->created_at->toDateString();
+                    $emailContentReplace=['##NAME##'=>$user->first_name.' '.$user->last_name,'##PHONE##'=>$user->phone,'##DATE##'=>$date];
+                    $txt = strtr($email_template,$emailContentReplace);
+                    $emailId = $admin_email->value;
+                    $subject = $emailsetting->subject;
+                    $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
+                }
+                //End
+
+                //User
+                $emailsetting = Template::where([['id',10],['is_active',1]])->first(); 
+                if($emailsetting != null){
+                    $email_template = $emailsetting->template;
+                    $emailContentReplace=['##NAME##'=>$user->first_name.' '.$user->last_name];
+                    $txt = strtr($email_template,$emailContentReplace);
+                    $emailId = $user->email;
+                    $subject = $emailsetting->subject;
+                    $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
+                }
+                //End
+
+                //End mail
+            }
             return redirect()->back();
         }
-        if($type == 'basic'){
+        if($type == 'bank'){
             $validatedData = $request->validate([
                 'holder_name' => 'required',
                 'account_no' => 'required|numeric',
@@ -676,6 +879,40 @@ class UserController extends Controller
             ]);
 
             DB::table('bank_details')->where('user_id',$user_id)->update(['name' => $request->holder_name,'number' => $request->account_no,'ifsc_code' => $request->ifsc_code,'branch' => $request->branch,'city' => $request->city]);
+            $user = User('id',$user_id)->first();
+            DB::table('users')->where('id',$user_id)->update(['is_profile_updated' => 1]);
+            if($user->is_profile_updated == 0 && $profile_update == 'true'){
+
+                //Mail
+                
+                //Admin
+                $emailsetting = Template::where([['id',9],['is_active',1]])->first(); 
+                $admin_email = Setting::where('key','admin_email')->first();
+                if($emailsetting != null){
+                    $email_template = $emailsetting->template;
+                    $date = $user->created_at->toDateString();
+                    $emailContentReplace=['##NAME##'=>$user->first_name.' '.$user->last_name,'##PHONE##'=>$user->phone,'##DATE##'=>$date];
+                    $txt = strtr($email_template,$emailContentReplace);
+                    $emailId = $admin_email->value;
+                    $subject = $emailsetting->subject;
+                    $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
+                }
+                //End
+
+                //User
+                $emailsetting = Template::where([['id',10],['is_active',1]])->first(); 
+                if($emailsetting != null){
+                    $email_template = $emailsetting->template;
+                    $emailContentReplace=['##NAME##'=>$user->first_name.' '.$user->last_name];
+                    $txt = strtr($email_template,$emailContentReplace);
+                    $emailId = $user->email;
+                    $subject = $emailsetting->subject;
+                    $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
+                }
+                //End
+
+                //End mail
+            }
             return redirect()->back();
         } 
         if($type == 'nominee'){
@@ -698,6 +935,40 @@ class UserController extends Controller
                 Storage::disk('public')->put(config('path.aadhaar_card').$filename, $photo);
                 DB::table('nominee_details')->where('user_id',$user_id)->update(['aadhaar' => $filename]);
                 
+            }
+            $user = User('id',$user_id)->first();
+            DB::table('users')->where('id',$user_id)->update(['is_profile_updated' => 1]);
+            if($user->is_profile_updated == 0 && $profile_update == 'true'){
+
+                //Mail
+                
+                //Admin
+                $emailsetting = Template::where([['id',9],['is_active',1]])->first(); 
+                $admin_email = Setting::where('key','admin_email')->first();
+                if($emailsetting != null){
+                    $email_template = $emailsetting->template;
+                    $date = $user->created_at->toDateString();
+                    $emailContentReplace=['##NAME##'=>$user->first_name.' '.$user->last_name,'##PHONE##'=>$user->phone,'##DATE##'=>$date];
+                    $txt = strtr($email_template,$emailContentReplace);
+                    $emailId = $admin_email->value;
+                    $subject = $emailsetting->subject;
+                    $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
+                }
+                //End
+
+                //User
+                $emailsetting = Template::where([['id',10],['is_active',1]])->first(); 
+                if($emailsetting != null){
+                    $email_template = $emailsetting->template;
+                    $emailContentReplace=['##NAME##'=>$user->first_name.' '.$user->last_name];
+                    $txt = strtr($email_template,$emailContentReplace);
+                    $emailId = $user->email;
+                    $subject = $emailsetting->subject;
+                    $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
+                }
+                //End
+
+                //End mail
             }
             return redirect()->back();
         }

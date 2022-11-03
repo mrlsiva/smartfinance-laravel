@@ -15,6 +15,8 @@ use App\Models\NextMonthPayout;
 use App\Models\UserAmount;
 use App\Exports\NextMonthPayoutsExport;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Models\Setting;
+use App\Models\Template;
 use Image;
 use DB;
 
@@ -61,6 +63,35 @@ class smartfinanceController extends Controller
         $smartfinance->bill = $filename;
         $smartfinance->save();
 
+        //Mail
+
+        //To Admin
+        $emailsetting = Template::where([['id',12],['is_active',1]])->first(); 
+        $admin_email = Setting::where('key','admin_email')->first();
+        if($emailsetting != null){
+            $email_template = $emailsetting->template;
+            $emailContentReplace=['##NAME##'=>$smartfinance->user->first_name.' '.$smartfinance->user->last_name,'##PHONE##'=>$smartfinance->user->phone,'##PLAN##'=>$smartfinance->plan->name,'##AMOUNT##'=>$smartfinance->amount];
+            $txt = strtr($email_template,$emailContentReplace);
+            $emailId = $admin_email->value;
+            $subject = $emailsetting->subject;
+            $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
+        }
+        //End
+
+        //To User
+        $emailsetting = Template::where([['id',13],['is_active',1]])->first(); 
+        if($emailsetting != null){
+            $email_template = $emailsetting->template;
+            $emailContentReplace=['##NAME##'=>$smartfinance->user->first_name.' '.$smartfinance->user->last_name,'##PLAN##'=>$smartfinance->plan->name,'##AMOUNT##'=>$smartfinance->amount];
+            $txt = strtr($email_template,$emailContentReplace);
+            $emailId = $smartfinance->user->email;
+            $subject = $emailsetting->subject;
+            $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
+        }
+        //End
+
+        //End Mail
+
         
 
         return redirect('dashboard');
@@ -84,6 +115,7 @@ class smartfinanceController extends Controller
         if($is_status != Null){
             if($is_status == 1){
 
+                $mail = Smartfinance::where('id',$finance_id)->first();
                 $accepted_date = $request->accepted_date;
                 $investment_date = $request->investment_date;
 
@@ -288,11 +320,40 @@ class smartfinanceController extends Controller
 
                 }
                 // End Payment table
+
+                //Mail
+
+                if($mail->is_status == 2){
+
+                    $emailsetting = Template::where([['id',14],['is_active',1]])->first(); 
+                    if($emailsetting != null){
+                        $email_template = $emailsetting->template;
+                        $emailContentReplace=['##NAME##'=>$finance->user->first_name.' '.$finance->user->last_name,'##PLAN##'=>$finance->plan->name];
+                        $txt = strtr($email_template,$emailContentReplace);
+                        $emailId = $user->email;
+                        $subject = $emailsetting->subject;
+                        $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
+                    }
+                }
+
+                //End mail
             }
             else{
                 $investment_date = $request->investment_date;
 
                 $smartfinances = DB::table('smartfinances')->where('id',$finance_id)->update(['rejected_by' => $auth->id,'is_status' => 0,'investment_date' => $investment_date]); 
+                $finance = Smartfinance::where('id',$finance_id)->first();
+                //Mail
+                $emailsetting = Template::where([['id',15],['is_active',1]])->first(); 
+                if($emailsetting != null){
+                    $email_template = $emailsetting->template;
+                    $emailContentReplace=['##NAME##'=>$finance->user->first_name.' '.$finance->user->last_name,'##PLAN##'=>$finance->plan->name];
+                    $txt = strtr($email_template,$emailContentReplace);
+                    $emailId = $user->email;
+                    $subject = $emailsetting->subject;
+                    $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
+                }
+                //End Mail
             }
         }
         else{
