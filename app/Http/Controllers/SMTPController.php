@@ -4,15 +4,15 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Mail;
+use App\Models\Setting;
 
 class SMTPController extends Controller
 {
 
     public static function sendMail($emailId,$subject,$txt=null,$attachment=null) {
 
-        $cc_email = Setting::where('key','cc_email')->first();
-
         Mail::send([], [], function($message) use ($emailId,$subject,$txt,$attachment){
+            $cc_email = Setting::where('key','cc_email')->first();
             $message->to($emailId);
             $message->cc($cc_email->value);
             $message->subject($subject);
