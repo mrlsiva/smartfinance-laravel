@@ -330,7 +330,7 @@ class smartfinanceController extends Controller
                         $email_template = $emailsetting->template;
                         $emailContentReplace=['##NAME##'=>$finance->user->first_name.' '.$finance->user->last_name,'##PLAN##'=>$finance->plan->name];
                         $txt = strtr($email_template,$emailContentReplace);
-                        $emailId = $user->email;
+                        $emailId = $finance->user->email;
                         $subject = $emailsetting->subject;
                         $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
                     }
@@ -344,12 +344,12 @@ class smartfinanceController extends Controller
                 $smartfinances = DB::table('smartfinances')->where('id',$finance_id)->update(['rejected_by' => $auth->id,'is_status' => 0,'investment_date' => $investment_date]); 
                 $finance = Smartfinance::where('id',$finance_id)->first();
                 //Mail
-                $emailsetting = Template::where([['id',15],['is_active',1]])->first(); 
+                $emailsetting = Template::where([['id',19],['is_active',1]])->first(); 
                 if($emailsetting != null){
                     $email_template = $emailsetting->template;
                     $emailContentReplace=['##NAME##'=>$finance->user->first_name.' '.$finance->user->last_name,'##PLAN##'=>$finance->plan->name];
                     $txt = strtr($email_template,$emailContentReplace);
-                    $emailId = $user->email;
+                    $emailId = $finance->user->email;
                     $subject = $emailsetting->subject;
                     $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
                 }
@@ -723,6 +723,37 @@ class smartfinanceController extends Controller
         $smartfinance->bill = $filename;
         $smartfinance->save();
 
+        //Mail
+
+        //Admin
+        $smartfinance = Smartfinance::where('id',$smartfinance_id)->first();
+        $emailsetting = Template::where([['id',15],['is_active',1]])->first(); 
+        $admin_email = Setting::where('key','admin_email')->first();
+        if($emailsetting != null){
+            $email_template = $emailsetting->template;
+            $date = $user->created_at->toDateString();
+            $emailContentReplace=['##NAME##'=>$smartfinance->user->first_name.' '.$smartfinance->user->last_name,'##PLAN##'=>$smartfinance->plan->name,'##AMOUNT##'=>$amount,'##PHONE##'=>$smartfinance->user->phone];
+            $txt = strtr($email_template,$emailContentReplace);
+            $emailId = $admin_email->value;
+            $subject = $emailsetting->subject;
+            $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
+        }
+        //End admin
+
+        //User
+        $emailsetting = Template::where([['id',16],['is_active',1]])->first(); 
+        if($emailsetting != null){
+            $email_template = $emailsetting->template;
+            $emailContentReplace=['##NAME##'=>$smartfinance->user->first_name.' '.$smartfinance->user->last_name,'##PLAN##'=>$smartfinance->plan->name,'##AMOUNT##'=>$amount];
+            $txt = strtr($email_template,$emailContentReplace);
+            $emailId = $user->email;
+            $subject = $emailsetting->subject;
+            $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
+        }
+        //End user
+
+        //End mail
+
 
         return redirect()->back();
 
@@ -949,8 +980,41 @@ class smartfinanceController extends Controller
     public function approve_smart_finance_payment(Request $request) {
         $id=$request->finance_payment_id;
         $approve = $request->is_approve;
-         $smartfinances = DB::table('smartfinance_payments')->where('id',$id)->update(['is_approve' => $approve]);
-          return redirect()->back();
+        $smartfinances = DB::table('smartfinance_payments')->where('id',$id)->update(['is_approve' => $approve]);
+
+        if($approve == 1){
+            //Mail
+            $payment = SmartfinancePayment::where('id',$id)->first();
+            $finance = Smartfinance::where('id',$payment->smartfinance_id)->first();
+            $emailsetting = Template::where([['id',17],['is_active',1]])->first(); 
+            if($emailsetting != null){
+                $email_template = $emailsetting->template;
+                $emailContentReplace=['##NAME##'=>$finance->user->first_name.' '.$finance->user->last_name,'##PLAN##'=>$finance->plan->name,'##AMOUNT##'=>$payment->investment_amount];
+                $txt = strtr($email_template,$emailContentReplace);
+                $emailId = $finance->user->email;
+                $subject = $emailsetting->subject;
+                $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
+            }
+        }
+        else{
+
+            //Mail
+            $payment = SmartfinancePayment::where('id',$id)->first();
+            $finance = Smartfinance::where('id',$payment->smartfinance_id)->first();
+            $emailsetting = Template::where([['id',18],['is_active',1]])->first(); 
+            if($emailsetting != null){
+                $email_template = $emailsetting->template;
+                $emailContentReplace=['##NAME##'=>$finance->user->first_name.' '.$finance->user->last_name,'##PLAN##'=>$finance->plan->name,'##AMOUNT##'=>$payment->investment_amount];
+                $txt = strtr($email_template,$emailContentReplace);
+                $emailId = $finance->user->email;
+                $subject = $emailsetting->subject;
+                $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
+            }
+        }
+        
+        //End mail
+
+        return redirect()->back();
     }
 
     public function pro_book_upload(Request $request) {
@@ -1062,6 +1126,22 @@ class smartfinanceController extends Controller
         $time = Carbon::now()->toTimeString();
         $date = Carbon::now()->formatLocalized('%d %b %Y');
         $now = $date.'_'.$time;
+        $name= $date.'.xlsx';
+        Excel::store(new NextMonthPayoutsExport(2018), $name,'excel');
+
+
+        //Mail
+        $attachment = url('storage/app/public/excel/'.$name);
+        $emailsetting = Template::where([['id',20],['is_active',1]])->first(); 
+        $admin_email = Setting::where('key','admin_email')->first();
+        if($emailsetting != null){
+            $txt = $emailsetting->template;
+            $emailId = $admin_email->value;
+            $subject = $emailsetting->subject;
+            $mailstatus = SMTPController::sendMail($emailId,$subject,$txt,$attachment);
+        }
+        //Mail End
+
         return Excel::download(new NextMonthPayoutsExport, 'next_month_payouts_'.$now.'.'.$slug);
     }  
 
