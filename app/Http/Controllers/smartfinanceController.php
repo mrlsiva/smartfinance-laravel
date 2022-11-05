@@ -1126,8 +1126,8 @@ class smartfinanceController extends Controller
         $time = Carbon::now()->toTimeString();
         $date = Carbon::now()->formatLocalized('%d %b %Y');
         $now = $date.'_'.$time;
-        $da = Carbon::now()->toDateString();
-        $name= $da.'.xlsx';
+        $name= $date.'.xlsx';
+        Storage::disk('public')->delete($name);
         Excel::store(new NextMonthPayoutsExport(2018), $name,'excel');
 
 
