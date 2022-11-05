@@ -1132,7 +1132,7 @@ class smartfinanceController extends Controller
 
 
         //Mail
-        $attachment = url('storage/app/public/excel/'.$name);
+        $attachment = url('storage/app/public/'.$name);
         $emailsetting = Template::where([['id',20],['is_active',1]])->first(); 
         $admin_email = Setting::where('key','admin_email')->first();
         if($emailsetting != null){
