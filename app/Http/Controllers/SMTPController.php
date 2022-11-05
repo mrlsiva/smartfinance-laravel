@@ -17,9 +17,8 @@ class SMTPController extends Controller
             $message->cc($cc_email->value);
             $message->subject($subject);
             $message->setBody($txt, 'text/html');
-            if($attachment!=null){
+            if($attachment!=null)
                 $message->attach($attachment);
-            }
         });
         // check for failures
         if (Mail::failures()) {
