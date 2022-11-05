@@ -378,7 +378,7 @@ class UserController extends Controller
                 }
                 //Mail to user end
             }
-            if($user->is_profile_verified == 2 &&  $is_profile_verified == 1){
+            if($user->is_profile_verified == 0 &&  $is_profile_verified == 1){
                 //Mail to user
                 $emailsetting = Template::where([['id',7],['is_active',1]])->first(); 
                 if($emailsetting != null){
@@ -391,7 +391,7 @@ class UserController extends Controller
                 }
                 //Mail to user end
             }
-            if($user->is_profile_verified == 2 &&  $is_profile_verified == 0){
+            if($user->is_profile_verified == 0 &&  $is_profile_verified == 3){
                 //Mail to user
                 $emailsetting = Template::where([['id',8],['is_active',1]])->first(); 
                 if($emailsetting != null){
