@@ -19,6 +19,7 @@ use App\Models\SmartfinancePayment;
 use App\Models\Refferal;
 use App\Models\UserAmount;
 use App\Models\ReviewRating;
+use App\Models\Setting;
 use App\Models\Template;
 use Image;
 use DB;
