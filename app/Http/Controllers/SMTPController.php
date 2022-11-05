@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Mail;
 use App\Models\Setting;
@@ -18,8 +17,9 @@ class SMTPController extends Controller
             $message->cc($cc_email->value);
             $message->subject($subject);
             $message->setBody($txt, 'text/html');
-            if($attachment!=null)
+            if($attachment!=null){
                 $message->attach($attachment);
+            }
         });
         // check for failures
         if (Mail::failures()) {
