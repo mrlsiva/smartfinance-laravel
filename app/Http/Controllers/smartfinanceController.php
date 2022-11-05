@@ -1127,14 +1127,14 @@ class smartfinanceController extends Controller
         $date = Carbon::now()->formatLocalized('%d %b %Y');
         $now = $date.'_'.$time;
         $name= $date.'.xlsx';
-        Storage::disk('public')->delete($name);
+        Storage::disk('public')->delete('export/'.$name);
         Excel::store(new NextMonthPayoutsExport(2018), $name,'excel');
 
 
         //Mail
-        $attachment = Storage::path('/public/'.$name);
+        $attachment = Storage::path('/public/excel/'.$name);
         //$attachment = url('storage/app/public/'.$name);
-        //return $attachment;
+        return $attachment;
         $emailsetting = Template::where([['id',20],['is_active',1]])->first(); 
         $admin_email = Setting::where('key','admin_email')->first();
         if($emailsetting != null){
