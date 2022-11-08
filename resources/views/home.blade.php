@@ -849,8 +849,11 @@
                         <!--begin::Link-->
                         @php
                             $phone = App\Models\Setting::where('key','phone')->first();
+                            $mbl_1 = Str::substr($phone->value, 0,2);
+                            $mbl_2 = Str::substr($phone->value, 2,4);
+                            $mbl_3 = Str::substr($phone->value, 6);
                         @endphp
-                        <a href="#" class="btn btn-lg btn-outline border-2 btn-outline-white flex-shrink-0 my-2">{{$phone->value}}</a>
+                        <a href="#" class="btn btn-lg btn-outline border-2 btn-outline-white flex-shrink-0 my-2">+91 {{$mbl_1}} {{$mbl_2}} {{$mbl_3}}</a>
                         <!--end::Link-->
                     </div>
                     <!--end::Highlight-->
@@ -907,19 +910,17 @@
                                     <!--begin::Subtitle-->
                                     <h4 class="fw-bolder text-gray-400 mb-6">Stay Connected</h4>
                                     <!--end::Subtitle-->
-                                    <!--begin::Link-->
-                                    <a href="#" class="mb-6">
-                                        <img src="{{ asset('public/assets/media/svg/brand-logos/facebook-4.svg') }}" class="h-20px me-2" alt="" />
-                                        <span class="text-white opacity-50 text-hover-primary fs-5 mb-6">Facebook</span>
-                                    </a>
-                                    <!--end::Link-->
-
-                                    <!--begin::Link-->
-                                    <a href="#" class="mb-6">
-                                        <img src="{{ asset('public/assets/media/svg/brand-logos/instagram-2-1.svg') }}" class="h-20px me-2" alt="" />
-                                        <span class="text-white opacity-50 text-hover-primary fs-5 mb-6">Instagram</span>
-                                    </a>
-                                    <!--end::Link-->
+                                    @php
+                                    $logos = App\Models\SocialIcon::all();
+                                    @endphp
+                                    @foreach($logos as $logo)
+                                        <!--begin::Link-->
+                                        <a href="{{$logo->link}}" class="mb-6">
+                                            <img src="{{ $logo->logo }}" class="h-20px me-2" alt="" />
+                                            <span class="text-white opacity-50 text-hover-primary fs-5 mb-6">{{$logo->name}}</span>
+                                        </a>
+                                        <!--end::Link-->
+                                    @endforeach
                                 </div>
                                 <!--end::Links-->
                             </div>

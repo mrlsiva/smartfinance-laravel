@@ -78,6 +78,9 @@ Route::get('/review_rating',[UserController::class, 'review_rating'])->name('rev
 //General
 Route::get('/uploads',[generalController::class, 'uploads'])->name('uploads');
 Route::post('/save_uploads',[generalController::class, 'save_uploads'])->name('save_uploads');
+Route::get('/get_upload',[generalController::class, 'get_upload'])->name('get_upload');
+Route::post('/update_banner',[generalController::class, 'update_banner'])->name('update_banner');
+Route::post('/update_youtube',[generalController::class, 'update_youtube'])->name('update_youtube');
 Route::get('/delete_upload/{id}',[generalController::class, 'delete_upload'])->name('delete_upload');
 Route::get('/videos',[generalController::class, 'videos'])->name('videos');
 Route::get('/email_templates',[generalController::class, 'email_templates'])->name('email_templates');
@@ -87,6 +90,10 @@ Route::post('/update_template',[generalController::class, 'update_template'])->n
 Route::get('/send_mail',[generalController::class, 'send_mail'])->name('send_mail');
 Route::get('/settings',[generalController::class, 'settings'])->name('settings');
 Route::post('/save_setting',[generalController::class, 'save_setting'])->name('save_setting');
+Route::post('/save_social_media',[generalController::class, 'save_social_media'])->name('save_social_media');
+Route::get('/delete_logo/{id}',[generalController::class, 'delete_logo'])->name('delete_logo');
+Route::get('/get_logo',[generalController::class, 'get_logo'])->name('get_logo');
+Route::get('/update_logo',[generalController::class, 'update_logo'])->name('update_logo');
 //General End
 
 //Smart Finance

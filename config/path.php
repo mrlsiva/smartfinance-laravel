@@ -8,4 +8,5 @@ return array(
     'bill'    => 'bill/',
     'pro_book'    => 'pro_book/',
     'banner'    => 'banner/',
+    'logo'    => 'logo/',
 );

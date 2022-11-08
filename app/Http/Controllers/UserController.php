@@ -278,7 +278,20 @@ class UserController extends Controller
                     }
                     //Mail to user end
                 }
-                if($user->is_active == 0 &&  $is_active == 0){
+                if($user->is_active == 3 &&  $is_active == 1){
+                    //Mail to user
+                    $emailsetting = Template::where([['id',3],['is_active',1]])->first(); 
+                    if($emailsetting != null){
+                        $email_template = $emailsetting->template;
+                        $emailContentReplace=['##NAME##'=>$user->first_name.' '.$user->last_name];
+                        $txt = strtr($email_template,$emailContentReplace);
+                        $emailId = $user->email;
+                        $subject = $emailsetting->subject;
+                        $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
+                    }
+                    //Mail to user end
+                }
+                if($user->is_active == 0 &&  $is_active == 3){
                     //Mail to user
                     $emailsetting = Template::where([['id',4],['is_active',1]])->first(); 
                     if($emailsetting != null){
@@ -292,6 +305,19 @@ class UserController extends Controller
                     //Mail to user end
                 }
                 if($user->is_profile_verified == 0 &&  $is_profile_verified == 1){
+                    //Mail to user
+                    $emailsetting = Template::where([['id',7],['is_active',1]])->first(); 
+                    if($emailsetting != null){
+                        $email_template = $emailsetting->template;
+                        $emailContentReplace=['##NAME##'=>$user->first_name.' '.$user->last_name];
+                        $txt = strtr($email_template,$emailContentReplace);
+                        $emailId = $user->email;
+                        $subject = $emailsetting->subject;
+                        $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
+                    }
+                    //Mail to user end
+                }
+                if($user->is_profile_verified == 3 &&  $is_profile_verified == 1){
                     //Mail to user
                     $emailsetting = Template::where([['id',7],['is_active',1]])->first(); 
                     if($emailsetting != null){
@@ -365,7 +391,20 @@ class UserController extends Controller
                 }
                 //Mail to user end
             }
-            if($user->is_active == 0 &&  $is_active == 0){
+            if($user->is_active == 3 &&  $is_active == 1){
+                //Mail to user
+                $emailsetting = Template::where([['id',3],['is_active',1]])->first(); 
+                if($emailsetting != null){
+                    $email_template = $emailsetting->template;
+                    $emailContentReplace=['##NAME##'=>$user->first_name.' '.$user->last_name];
+                    $txt = strtr($email_template,$emailContentReplace);
+                    $emailId = $user->email;
+                    $subject = $emailsetting->subject;
+                    $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
+                }
+                //Mail to user end
+            }
+            if($user->is_active == 0 &&  $is_active == 3){
                 //Mail to user
                 $emailsetting = Template::where([['id',4],['is_active',1]])->first(); 
                 if($emailsetting != null){
@@ -379,6 +418,19 @@ class UserController extends Controller
                 //Mail to user end
             }
             if($user->is_profile_verified == 0 &&  $is_profile_verified == 1){
+                //Mail to user
+                $emailsetting = Template::where([['id',7],['is_active',1]])->first(); 
+                if($emailsetting != null){
+                    $email_template = $emailsetting->template;
+                    $emailContentReplace=['##NAME##'=>$user->first_name.' '.$user->last_name];
+                    $txt = strtr($email_template,$emailContentReplace);
+                    $emailId = $user->email;
+                    $subject = $emailsetting->subject;
+                    $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
+                }
+                //Mail to user end
+            }
+            if($user->is_profile_verified == 3 &&  $is_profile_verified == 1){
                 //Mail to user
                 $emailsetting = Template::where([['id',7],['is_active',1]])->first(); 
                 if($emailsetting != null){

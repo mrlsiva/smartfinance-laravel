@@ -427,9 +427,11 @@
                                                 </td>
                                                 <td class="">
                                                     @if($user->is_profile_verified == 2)
-                                                        <span class="badge py-3 px-4 fs-7 badge-light-danger">Incomplete</span>
+                                                        <span class="badge py-3 px-4 fs-7 badge-light-primary">Incomplete</span>
                                                     @elseif($user->is_profile_verified == 0 || $user->is_profile_updated == 1)
                                                         <span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span>
+                                                    @elseif($user->is_profile_verified == 3)
+                                                        <span class="badge py-3 px-4 fs-7 badge-light-danger">Rejected</span>
                                                     @else
                                                         <span class="badge py-3 px-4 fs-7 badge-light-success">Verified</span>
                                                     @endif
@@ -437,6 +439,8 @@
                                                 <td class="">
                                                     @if($user->is_active == 0)
                                                         <span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span>
+                                                    @elseif($user->is_active == 3)
+                                                        <span class="badge py-3 px-4 fs-7 badge-light-danger">Rejected</span>
                                                     @else
                                                         <span class="badge py-3 px-4 fs-7 badge-light-success">Approved</span>
                                                     @endif
@@ -4368,11 +4372,19 @@
                         jQuery('select[name="progress"]').empty();
                         $('select[name="progress"]').append('<option value="'+ '1' +'" selected>'+ 'Approved' +'</option>');
                         $('select[name="progress"]').append('<option value="'+ '0' +'">'+ 'Pending' +'</option>');
+                        $('select[name="progress"]').append('<option value="'+ '3' +'">'+ 'Rejected' +'</option>');
+                    }
+                    else if(data.is_active == 3){
+                        jQuery('select[name="progress"]').empty();
+                        $('select[name="progress"]').append('<option value="'+ '3' +'" selected>'+ 'Rejected' +'</option>');
+                        $('select[name="progress"]').append('<option value="'+ '0' +'">'+ 'Pending' +'</option>');
+                        $('select[name="progress"]').append('<option value="'+ '1' +'">'+ 'Approved' +'</option>');
                     }
                     else{
                         jQuery('select[name="progress"]').empty();
                         $('select[name="progress"]').append('<option value="'+ '0' +'" selected>'+ 'Pending' +'</option>');
                         $('select[name="progress"]').append('<option value="'+ '1' +'">'+ 'Approved' +'</option>');
+                        $('select[name="progress"]').append('<option value="'+ '3' +'">'+ 'Rejected' +'</option>');
                     }
                     if(data.is_lock == 1)
                     {
@@ -4408,16 +4420,23 @@
                         jQuery('select[name="profile"]').empty();
                         $('select[name="profile"]').append('<option value="'+ '1' +'" selected>'+ 'Approved' +'</option>');
                         $('select[name="profile"]').append('<option value="'+ '0' +'">'+ 'Pending' +'</option>');
+                        $('select[name="profile"]').append('<option value="'+ '3' +'">'+ 'Rejected' +'</option>');
                     }
                     else if(data.is_profile_verified == 2){
                         jQuery('select[name="profile"]').empty();
                         $('select[name="profile"]').append('<option value="'+ '2' +'" selected>'+ 'Incomplete' +'</option>');
 
                     }
+                    else if(data.is_profile_verified == 3){
+                         $('select[name="profile"]').append('<option value="'+ '3' +'" selected>'+ 'Rejected' +'</option>');
+                        $('select[name="profile"]').append('<option value="'+ '0' +'">'+ 'Pending' +'</option>');
+                        $('select[name="profile"]').append('<option value="'+ '1' +'">'+ 'Approved' +'</option>');
+                    }
                     else{
                         jQuery('select[name="profile"]').empty();
                         $('select[name="profile"]').append('<option value="'+ '0' +'" selected>'+ 'Pending' +'</option>');
                         $('select[name="profile"]').append('<option value="'+ '1' +'">'+ 'Approved' +'</option>');
+                        $('select[name="profile"]').append('<option value="'+ '3' +'">'+ 'Rejected' +'</option>');
                     }
                     if(data.is_reffer == 1)
                     {

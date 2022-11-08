@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 use App\Models\Upload;
 use App\Models\Template;
 use App\Models\User;
+use App\Models\SocialIcon;
 use Image;
 use DB;
 
@@ -28,6 +29,8 @@ class generalController extends Controller
             $validatedData = $request->validate([
                 'banner_img' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
             ]);
+
+            //return $request;
 
             $image = $request->file('banner_img');
             $rand_name = time() . Str::random(12);
@@ -57,6 +60,44 @@ class generalController extends Controller
 
             return redirect()->back()->with('alert', 'Youtube code added successfully.');
         }
+    }
+
+    public function get_upload(Request $request)
+    {
+        $id = $request->id;
+        $data = Upload::where('id',$id)->first();
+        return $data;
+    }
+
+    public function update_banner(Request $request)
+    {
+        //return $request;
+        if($request->image_b != NULL){
+            $image = $request->file('image_b');
+            $rand_name = time() . Str::random(12);
+            $filename = $rand_name . '.jpg';
+            $photo = Image::make($image)->encode('jpg', 80);
+            Storage::disk('public')->put(config('path.banner').$filename, $photo);
+
+            $upload = DB::table('uploads')->where('id',$request->banner_id)->update(['banner' => $filename,'banner_link' => $request->b_link]);
+        }
+        else{
+
+            $upload = DB::table('uploads')->where('id',$request->banner_id)->update(['banner_link' => $request->b_link]);
+
+        }
+
+        return redirect()->back()->with('alert', 'Banner updated successfully.');
+        
+        
+    }
+
+    public function update_youtube(Request $request)
+    {
+        //return $request;
+        $upload = DB::table('uploads')->where('id',$request->youtube_id)->update(['youtube_link' => $request->code]);
+        return redirect()->back()->with('alert', 'Youtube code updated successfully.');
+        
     }
 
     public function delete_upload($id,Request $request)
@@ -125,14 +166,21 @@ class generalController extends Controller
 
     public function settings(Request $request)
     {
-
-        return view('setting');
-
+        $icons = SocialIcon::all();
+        return view('setting')->with('icons',$icons);
     }
 
 
     public function save_setting(Request $request)
     {
+        $validatedData = $request->validate([
+            'project_name' => 'required',
+            'email' => 'required|email',
+            'phone' => 'required|numeric|digits:10',
+            'address' => 'required',
+            'admin_email' => 'required|email',
+            'cc_email' => 'required|email',
+        ]);
 
         DB::table('settings')->where('key','project_name')->update(['value' => $request->project_name]);
         DB::table('settings')->where('key','email')->update(['value' => $request->email]);
@@ -144,6 +192,53 @@ class generalController extends Controller
         return redirect()->back()->with('alert', 'Updated Successfully!!');
 
     }
+
+    public function save_social_media(Request $request)
+    {
+
+
+        $validatedData = $request->validate([
+            'name' => 'required',
+            'logo' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+        ]);
+
+        //return $request;
+
+        $image = $request->file('logo');
+        $rand_name = time() . Str::random(12);
+        $filename = $rand_name . '.jpg';
+        $photo = Image::make($image)->encode('jpg', 80);
+        Storage::disk('public')->put('logo/'.$filename, $photo);
+
+        $upload = SocialIcon::create([
+            'name' => $request->name,
+            'logo' => $filename,
+            'link' => $request->link,
+        ]);
+
+        return redirect()->back()->with('alert', 'Social icon added successfully.'); 
+        
+    }
+
+    public function get_logo(Request $request)
+    {
+        $id = $request->id;
+        $data = SocialIcon::where('id',$id)->first();
+        return $data;
+    }
+
+    public function delete_logo($id,Request $request)
+    {
+
+        $logo = SocialIcon::where('id',$id)->delete();
+        return redirect()->back()->with('alert', 'Deleted successfully.');
+    }
+
+    
+
+
+
+
 
 
 

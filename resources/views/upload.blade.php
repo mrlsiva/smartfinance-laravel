@@ -142,14 +142,14 @@
 					$banners = App\Models\Upload::where('type','banner')->get();
 				@endphp
 				<br><br>
-				<div class="row g-lg-10 mb-10 mb-lg-20">
+				<div class="row g-lg-10 mb-5">
 					@foreach($banners as $banner)
 						<div class="col-lg-4">
 							<img width="70%" height="90%" src="{{$banner->banner}}" alt="banner">
 							<br><br>
 							<a href="{{route('delete_upload', ['id' => $banner->id])}}">
-							<button class="btn btn-sm btn-danger">Delete</button></a>
-							
+							<button class="btn btn-sm btn-danger mb-5">Delete</button></a>
+							<button class="btn btn-sm btn-warning mb-5" name="banner_update" data-system_id="{{$banner->id}}" >Update</button>
 						</div>
 					@endforeach
 				</div>
@@ -171,8 +171,12 @@
 				<div class="row g-lg-10 mb-10 mb-lg-20">
 					@foreach($youtubes as $youtube)
 						<a href="https://www.youtube.com/embed/{{$youtube->youtube_link}}" target="_blank" class="fw-bold fs-3 text-hover-primary">{{$youtube->youtube_link}}</a>
-						<a href="{{route('delete_upload', ['id' => $youtube->id])}}">
-						<button class="btn btn-sm btn-danger">Delete</button></a>
+						<div class="pa-inline-buttons mt-5 mb-5">
+							<a href="{{route('delete_upload', ['id' => $youtube->id])}}">
+								<button class="btn btn-sm btn-danger">Delete</button>
+							</a>
+							<button class="btn btn-sm btn-warning" name="youtube_update" data-system_id="{{$youtube->id}}" >Update</button>
+						</div>
 					@endforeach
 				</div>
 			</div>
@@ -183,6 +187,88 @@
     <!--end::Post-->
 </div>
 <!--end::Container-->
+
+
+<!-- Banner Modal -->
+<div class="modal fade" id="updateBannerModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Update Banner</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<form class="form w-100"  method="post" action="{{route('update_banner')}}" enctype="multipart/form-data">
+				@csrf
+				<div class="modal-body">
+					<input type="hidden" name="banner_id" id="banner_id">
+					<div class="fv-row mb-8">
+						<!--begin::Label-->
+						<label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+							<span class="required">Banner</span>
+							<i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Banner Image"></i>
+						</label>
+						<!--end::Label-->
+						<!--begin::Input-->
+						<input type="file" class="form-control form-control-solid custom-file-input" id="image_b" placeholder="Banner Image" value="" name="image_b" accept="image/*" />
+						<div class="d-flex justify-content-center mt-3" >
+							<img id="b_img" style="max-height: 200px;">
+						</div>
+						<!--end::Input-->
+					</div>
+					<div class="fv-row mb-8">
+						<!--begin::Label-->
+						<label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+							<span class="">Link to Redirect</span>
+						</label>
+						<!--end::Label-->
+						<!--begin::Input-->
+						<input type="text" class="form-control form-control-solid" placeholder="Link to Redirect" value="" name="b_link" id="b_link" />
+						<!--end::Input-->
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+					<button type="submit" class="btn btn-primary">Save changes</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<!-- end banner modal -->
+
+<!-- Youtube Modal -->
+<div class="modal fade" id="updateYoutubeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Update Youtube Codes</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<form class="form w-100"  method="post" action="{{route('update_youtube')}}" enctype="multipart/form-data">
+				@csrf
+				<div class="modal-body">
+					<input type="hidden" name="youtube_id" id="youtube_id">
+					
+					<div class="fv-row mb-8">
+						<!--begin::Label-->
+						<label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+							<span class="">Code</span>
+						</label>
+						<!--end::Label-->
+						<!--begin::Input-->
+						<input type="text" class="form-control form-control-solid" placeholder="Youtube Code" value="" name="code" id="code" />
+						<!--end::Input-->
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+					<button type="submit" class="btn btn-primary">Save changes</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<!-- end youtube modal -->
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <!-- SweetAlert2 -->
@@ -251,6 +337,70 @@
        });
     });
 </script>
+
+<script type="text/javascript">    
+    $(document).ready(function (e) {
+       $('#image_b').change(function(){  
+            let reader = new FileReader();
+            reader.onload = (e) => { 
+                $('#b_img').attr('src', e.target.result); 
+            }
+            reader.readAsDataURL(this.files[0]); 
+       });
+    });
+</script>
+<!-- end -->
+
+<!-- update banner -->
+<script type="text/javascript">
+	$(document).on('click', 'button[name^="banner_update"]', function(e) {
+		var system_id = $(this).data("system_id");
+        console.log(system_id);
+        if(system_id != null)
+        {
+	        jQuery.ajax({
+	        	url : 'get_upload',
+	            type: 'GET',
+	            dataType: 'json',
+	            data: { id: system_id },
+	            success:function(data)
+	            {
+	            	console.log(data);
+	        		document.getElementById("banner_id").value = system_id;
+	        		$("#b_img").attr("src", data.banner);
+	        		document.getElementById("b_link").value = data.banner_link;
+	            	jQuery('#updateBannerModal').modal('show');
+	            }
+	        });
+	    }
+	});
+</script>
+<!-- end update banner -->
+
+<!-- update youtube -->
+<script type="text/javascript">
+	$(document).on('click', 'button[name^="youtube_update"]', function(e) {
+		var system_id = $(this).data("system_id");
+        console.log(system_id);
+        if(system_id != null)
+        {
+	        jQuery.ajax({
+	        	url : 'get_upload',
+	            type: 'GET',
+	            dataType: 'json',
+	            data: { id: system_id },
+	            success:function(data)
+	            {
+	            	console.log(data);
+	            	document.getElementById("youtube_id").value = system_id;
+	        		document.getElementById("code").value = data.youtube_link;
+	            	jQuery('#updateYoutubeModal').modal('show');
+	            }
+	        });
+	    }
+	});
+</script>
+<!-- end update banner -->
 
 
 

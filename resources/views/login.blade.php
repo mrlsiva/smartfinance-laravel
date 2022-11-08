@@ -35,7 +35,7 @@
                     <!--begin::Content-->
                     <div class="d-flex flex-row-fluid flex-column text-center p-10 pt-lg-20">
                         <!--begin::Logo-->
-                        <a href="" class="py-9 mb-5">
+                        <a href="{{route('home')}}" class="py-9 mb-5">
                             <img alt="Logo" src="{{ asset('public/assets/img/logo.png') }}" class="h-60px" />
                         </a>
                         <!--end::Logo-->
