@@ -52,3 +52,8 @@ img.logo-default.h-25px.mr-10 {
     border: 1px solid !important;
     border-radius: 5px !important;
 }
+
+.menu-state-title-primary .menu-item .menu-link.active{
+    border-bottom: 1px solid #ffc700;
+    border-radius: 0;
+}

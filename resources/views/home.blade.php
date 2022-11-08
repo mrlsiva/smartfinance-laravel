@@ -42,7 +42,7 @@
                                 
                                 <!--begin::Logo image-->
                                 <a href="">
-                                    <img alt="Logo" src="{{ asset('public/assets/img/full-logo.png') }}" class="logo-default h-25px h-lg-30px" />
+                                    <img alt="Logo" src="{{ asset('public/assets/img/full-logo.png') }}" class="logo-default h-25px h-lg-50px" />
                                     <img alt="Logo" src="{{ asset('public/assets/img/full-logo.png') }}" class="logo-sticky h-20px h-lg-25px" />
                                 </a>
                                 <!--end::Logo image-->
@@ -53,7 +53,7 @@
                                 <div class="d-lg-block p-5 p-lg-0" data-kt-drawer="true" data-kt-drawer-name="landing-menu" data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true" data-kt-drawer-width="200px" data-kt-drawer-direction="start" data-kt-drawer-toggle="#kt_landing_menu_toggle"
                                     data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_body', lg: '#kt_header_nav_wrapper'}">
                                     <!--begin::Menu-->
-                                    <div class="menu menu-column flex-nowrap menu-rounded menu-lg-row menu-title-gray-500 menu-state-title-primary nav nav-flush fs-5 fw-bold" id="kt_landing_menu">
+                                    <div class="menu menu-column flex-nowrap menu-rounded menu-lg-row menu-title-gray-500 menu-state-title-primary nav nav-flush fs-4 fw-bold" id="kt_landing_menu">
                                         <!--begin::Menu item-->
                                         <div class="menu-item">
                                             <!--begin::Menu link-->
@@ -96,8 +96,8 @@
                             </div>
                             <!--end::Menu wrapper-->
                             <!--begin::Toolbar-->
-                            <div class="flex-equal text-end  ms-1">
-                                <a href="{{route('sign_in')}}" class="btn landing-dark-bg ">Sign In</a>
+                            <div class="flex-equal text-end  ms-1 fs-4">
+                                <a href="{{route('sign_in')}}" class="btn landing-dark-bg fs-4 ">Sign In</a>
                             </div>
                             <!--end::Toolbar-->
                         </div>
@@ -833,11 +833,11 @@
                     </div>
                     <!--end::Row-->
                     <!--begin::Highlight-->
-                    <div class="d-flex flex-stack flex-wrap flex-md-nowrap card-rounded shadow p-8 p-lg-12 mb-n5 mb-lg-n13" style="background: linear-gradient(90deg, #fff200 0%, #a0b40e 100%);">
+                    <div class="d-flex flex-stack flex-wrap flex-md-nowrap card-rounded shadow p-8 p-lg-12 mb-n5 mb-lg-n13" style="background: linear-gradient(90deg, #ffc700 0%, #ffc700 100%);">
                         <!--begin::Content-->
                         <div class="my-2 me-5">
                             <!--begin::Title-->
-                            <div class="fs-1 fs-lg-2qx fw-bolder text-white mb-2">Get in touch with us
+                            <div class="fs-1 fs-lg-2qx fw-bolder text-dark mb-2">Get in touch with us
                                 <!-- <span class="fw-normal">Speed Up Development!</span> -->
                             </div>
                             <!--end::Title-->
@@ -853,7 +853,7 @@
                             $mbl_2 = Str::substr($phone->value, 2,4);
                             $mbl_3 = Str::substr($phone->value, 6);
                         @endphp
-                        <a href="#" class="btn btn-lg btn-outline border-2 btn-outline-white flex-shrink-0 my-2">+91 {{$mbl_1}} {{$mbl_2}} {{$mbl_3}}</a>
+                        <a href="#" class="btn btn-lg btn-dark flex-shrink-0 my-2 text-white">+91 {{$mbl_1}} {{$mbl_2}} {{$mbl_3}}</a>
                         <!--end::Link-->
                     </div>
                     <!--end::Highlight-->
@@ -872,7 +872,7 @@
                     <!--begin::Row-->
                     <div class="row py-10 py-lg-20">
                         <!--begin::Col-->
-                        <div class="col-lg-6 pe-lg-16 mb-10 mb-lg-0">
+                        <div class="d-flex flex-column col-lg-6 pe-lg-16 mb-10 mb-lg-0">
                             <!--begin::Block-->
                             <div class="rounded landing-dark-border p-9 mb-10">
                                 <!--begin::Title-->
@@ -887,24 +887,22 @@
                                 <!--end::Text-->
                             </div>
                             <!--end::Block-->
-
+                            <div class="d-flex fw-bold flex-column me-20">
+                                <!--begin::Subtitle-->
+                                <h4 class="fw-bolder text-gray-400 mb-6">Address</h4>
+                                <!--end::Subtitle-->
+                                @php
+                                $address = App\Models\Setting::where('key','address')->first();
+                                @endphp
+                                <span class="fw-bolder text-white opacity-50 mb-6">{{$address->value}}</span>
+                            </div>
                         </div>
                         <!--end::Col-->
                         <!--begin::Col-->
                         <div class="col-lg-6 ps-lg-16">
                             <!--begin::Navs-->
                             <div class="d-flex justify-content-center">
-                                <!--begin::Links-->
-                                <div class="d-flex fw-bold flex-column me-20">
-                                    <!--begin::Subtitle-->
-                                    <h4 class="fw-bolder text-gray-400 mb-6">Address</h4>
-                                    <!--end::Subtitle-->
-                                    @php
-                                    $address = App\Models\Setting::where('key','address')->first();
-                                    @endphp
-                                    <span class="fw-bolder text-white opacity-50 mb-6">{{$address->value}}</span>
-                                </div>
-                                <!--end::Links-->
+                                
                                 <!--begin::Links-->
                                 <div class="d-flex fw-bold flex-column ms-lg-20">
                                     <!--begin::Subtitle-->
