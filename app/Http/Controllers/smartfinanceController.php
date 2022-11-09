@@ -14,6 +14,7 @@ use App\Models\SmartfinanceRenewal;
 use App\Models\NextMonthPayout;
 use App\Models\UserAmount;
 use App\Exports\NextMonthPayoutsExport;
+use App\Imports\SmartfinancePaymentsImport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Setting;
 use App\Models\Template;
@@ -257,19 +258,13 @@ class smartfinanceController extends Controller
                 }
                 else if($finance->plan->type == 'year' && $finance->plan->name == 'Long Term (M)'){
 
-
                     $year = $finance->no_of_year; 
-
                     $payment_date = Carbon::parse($accepted_date)->addYears(1);
-
                     //payment-loop
                     for ($k = 2; $k <= $year; $k++){
-
                         //next-payment
                         $payment_date = Carbon::parse($payment_date)->addYears(1);
-                        
                         //end-next-payment
-                        
                     }
                     //payment-loop-end
 
@@ -302,11 +297,9 @@ class smartfinanceController extends Controller
                         }
                     }
 
-
-
                     $smartfinance = SmartfinancePayment::create([
                         'smartfinance_id' => $finance_id,
-                        'investment_date' => $accepted_date,
+                        'invested_date' => $accepted_date,
                         'month' => 1,
                         'year' => $year,
                         'investment_amount' => $finance->amount,
@@ -684,7 +677,7 @@ class smartfinanceController extends Controller
         $now = Carbon::now()->format('Y-m-d');
         $smartfinance = Smartfinance::where('id',$smartfinance_id)->first();
         $payment = SmartfinancePayment::where('smartfinance_id', $smartfinance_id)->latest()->take(1)->first();
-        $invested_date = $payment->invested_date;
+        //$invested_date = $payment->invested_date;
         $next_payment = $payment->next_amount  + $amount;
         $intrest =  $smartfinance->percentage/100 * $payment->next_amount;
         $profit = $payment->intrest + round($intrest);
@@ -696,8 +689,8 @@ class smartfinanceController extends Controller
         if($payment->balance != null){
             $next_payment = $next_payment + $payment->balance;
         }
-
-        $diff_in_months = Carbon::parse($invested_date)->diffInMonths($now); 
+        $invested_date = SmartfinancePayment::where('smartfinance_id', $smartfinance_id)->first();
+        $diff_in_months = Carbon::parse($invested_date->invested_date)->diffInMonths($now); 
 
         $smartfinance = SmartfinancePayment::create([
             'smartfinance_id' => $smartfinance_id,
@@ -731,7 +724,6 @@ class smartfinanceController extends Controller
         $admin_email = Setting::where('key','admin_email')->first();
         if($emailsetting != null){
             $email_template = $emailsetting->template;
-            $date = $user->created_at->toDateString();
             $emailContentReplace=['##NAME##'=>$smartfinance->user->first_name.' '.$smartfinance->user->last_name,'##PLAN##'=>$smartfinance->plan->name,'##AMOUNT##'=>$amount,'##PHONE##'=>$smartfinance->user->phone];
             $txt = strtr($email_template,$emailContentReplace);
             $emailId = $admin_email->value;
@@ -1147,5 +1139,17 @@ class smartfinanceController extends Controller
 
         return Excel::download(new NextMonthPayoutsExport, 'next_month_payouts_'.$now.'.'.$slug);
     }  
+
+    public function import_excel(Request $request) 
+    {
+        $validatedData = $request->validate([
+ 
+           'excel' => 'required|file|mimes:xls,xlsx',
+ 
+        ]);
+ 
+        Excel::import(new SmartfinancePaymentsImport,$request->file('excel'));
+        return redirect()->back()->with('alert', 'Excel has been successfully uploaded!');
+    }
 
 }

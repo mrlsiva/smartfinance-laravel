@@ -388,7 +388,13 @@ body{
 							@endif
 						@endif
 						@if($user->role_id != 3 )
-							<!-- @php
+							<div class="text-end">
+								<a href="{{ asset('public/assets/excel/long_term_m_excel.xlsx') }}" download>
+									<button type="button" class="btn  btn-success mb-5" ><i class="fa fa-download"></i>Download Excel</button>
+								</a>
+								<button type="button" class="btn  btn-success mb-5" name="upload_excel" id="upload_excel" data-bs-toggle="modal" data-bs-target="#excel_upload_modal"><i class="fa fa-upload"></i>Upload Excel</button>
+							</div>
+							@php
 	                            $payment_date = App\Models\SmartfinancePayment::where('smartfinance_id',$payment->smartfinance_id)->orderBy('id','Desc')->first();
 
 	                            $new_date = Carbon\Carbon::parse($payment_date->payment_date)->subMonths(2)->format('Y-m-d');
@@ -406,7 +412,7 @@ body{
 										<option value="2">Renewal</option>
 									</select>
 								</div>
-							@endif -->
+							@endif
 						@endif
 						<!--begin::Table-->
 						<table class="table align-middle table-row-dashed fs-6 gy-3" >
@@ -811,6 +817,77 @@ body{
 	</div>
 </div>
 <!--end::Container-->
+
+<!-- begin::Modal -UploadExcel- -->
+<div class="modal fade" id="excel_upload_modal" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog mw-650px">
+        <!--begin::Modal content-->
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header pb-0 border-0 justify-content-end">
+                <!--begin::Close-->
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
+                            <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="black" />
+                        </svg>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--begin::Modal header-->
+            <!--begin::Modal body-->
+            <div class="modal-body scroll-y mx-5 mx-xl-18 pt-0 pb-15">
+                <!--begin::Heading-->
+
+                <!--end::Google Contacts Invite-->
+                <!--begin::Separator-->
+                <!--end::Separator-->
+                <!--begin::Textarea-->
+                <!--end::Textarea-->
+                <!--begin::Users-->
+                <div class="mb-10">
+                    <!--begin::Heading-->
+                    <div class="fs-4 fw-bolder mb-2">Excel Upload</div>
+                    <!--end::Heading-->
+                    <form class="form w-100" novalidate="novalidate" id="selectform" method="post" action="{{route('import_excel')}}" enctype="multipart/form-data">
+                        @csrf
+                        <br>
+                        <!--begin::Input group-->
+                        <div class="fv-row mb-8">
+                            <!--begin::Label-->
+                            <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                <span class="required">Excel</span>
+                                <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Excel"></i>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="file" class="form-control form-control-solid custom-file-input @error('excel') is-invalid @enderror" id="excel" placeholder="Excel" value="" name="excel" />
+                            @error('excel')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        
+                        <div class="d-flex justify-content-center">
+                            <button type="submit"  class="btn  btn-primary mt-5 mb-3">Submit</button> 
+                        </div>
+                    </form>
+                </div>
+                <!--end::Users-->
+                <!--begin::Notice-->
+                <!--end::Notice-->
+            </div>
+            <!--end::Modal body-->
+        </div>
+            <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+</div>
+<!-- end::Modal -UploadExcel- -->
 
 <!-- begin::Modal -investment- -->
 <div class="modal fade" id="kt_modal_new_month_investment" tabindex="-1" aria-hidden="true">

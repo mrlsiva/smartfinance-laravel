@@ -118,6 +118,8 @@ Route::post('/pro_book_upload',[SmartFinanceController::class, 'pro_book_upload'
 Route::get('get_pro_book',[SmartFinanceController::class, 'get_pro_book'])->name('get_pro_book');
 Route::get('payout_list',[SmartFinanceController::class, 'payout_list'])->name('payout_list');
 Route::get('export-excel-csv-file/{slug}', [SmartFinanceController::class, 'exportExcelCSV']);
+Route::post('/import_excel',[SmartFinanceController::class, 'import_excel'])->name('import_excel');
+
 //Smart Finance end
 
 
