@@ -389,9 +389,9 @@ body{
 						@endif
 						@if($user->role_id != 3 )
 							<div class="text-end">
-								<a href="{{ asset('public/assets/excel/long_term_m_excel.xlsx') }}" download>
+								<!-- <a href="{{ asset('public/assets/excel/long_term_m_excel.xlsx') }}" download>
 									<button type="button" class="btn  btn-success mb-5" ><i class="fa fa-download"></i>Download Excel</button>
-								</a>
+								</a> -->
 								<button type="button" class="btn  btn-success mb-5" name="upload_excel" id="upload_excel" data-bs-toggle="modal" data-bs-target="#excel_upload_modal"><i class="fa fa-upload"></i>Upload Excel</button>
 							</div>
 							@php
@@ -871,6 +871,12 @@ body{
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
+
+                        <hr>
+                        <span class="fs-5 fw-bolder text-gray-600">If you dont have excel template, Download it from here.</span><br><br>
+                        <a href="{{ asset('public/assets/excel/long_term_m_excel.xlsx') }}" download>
+                        	<button type="button" class="btn  btn-success mb-5" ><i class="fa fa-download"></i>Download Excel</button>
+                        </a>
                         
                         <div class="d-flex justify-content-center">
                             <button type="submit"  class="btn  btn-primary mt-5 mb-3">Submit</button> 

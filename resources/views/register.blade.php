@@ -42,7 +42,7 @@
                         <h1 class="fw-bolder fs-2qx pb-5 pb-md-10" style="color: #000000;">welcome to Smart Finance</h1>
                         <!--end::Title-->
                         <!--begin::Description-->
-                        <p class="fw-bold fs-2" style="color: #000;">We make sure to Select the best interest rates from the market</p>
+                        <p class="fw-bold fs-2" style="color: #000;">We make sure to select the best returns from the market</p>
                         <!--end::Description-->
                     </div>
                     <!--end::Content-->

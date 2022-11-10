@@ -53,62 +53,16 @@
                                 <!--end::Mobile menu toggle-->
                                 <!--begin::Logo image-->
                                 <a href="{{route('home')}}">
-                                    <img alt="Logo" src="{{ asset('public/assets/img/full-logo.png') }}" class="logo-default h-25px h-lg-30px" />
+                                    <img alt="Logo" src="{{ asset('public/assets/img/full-logo.png') }}" class="logo-default h-25px h-lg-50px" />
                                     <img alt="Logo" src="{{ asset('public/assets/img/full-logo.png') }}" class="logo-sticky h-20px h-lg-25px" />
                                 </a>
                                 <!--end::Logo image-->
                             </div>
                             <!--end::Logo-->
-                            <!--begin::Menu wrapper-->
-                            <div class="d-lg-block" id="kt_header_nav_wrapper">
-                                <div class="d-lg-block p-5 p-lg-0" data-kt-drawer="true" data-kt-drawer-name="landing-menu" data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true" data-kt-drawer-width="200px" data-kt-drawer-direction="start" data-kt-drawer-toggle="#kt_landing_menu_toggle"
-                                    data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_body', lg: '#kt_header_nav_wrapper'}">
-                                    <!--begin::Menu-->
-                                    <div class="menu menu-column flex-nowrap menu-rounded menu-lg-row menu-title-gray-500 menu-state-title-primary nav nav-flush fs-5 fw-bold" id="kt_landing_menu">
-                                        <!--begin::Menu item-->
-                                        <div class="menu-item">
-                                            <!--begin::Menu link-->
-                                            <a class="menu-link nav-link active py-3 px-4 px-xxl-6" href="#kt_body" data-kt-scroll-toggle="true" data-kt-drawer-dismiss="true">Home</a>
-                                            <!--end::Menu link-->
-                                        </div>
-                                        <!--end::Menu item-->
-                                        <!--begin::Menu item-->
-                                        <div class="menu-item">
-                                            <!--begin::Menu link-->
-                                            <a class="menu-link nav-link py-3 px-4 px-xxl-6" href="#our-services" data-kt-scroll-toggle="true" data-kt-drawer-dismiss="true">our Services</a>
-                                            <!--end::Menu link-->
-                                        </div>
-                                        <!--end::Menu item-->
-                                        <!--begin::Menu item-->
-                                        <div class="menu-item">
-                                            <!--begin::Menu link-->
-                                            <a class="menu-link nav-link py-3 px-4 px-xxl-6" href="#about-us" data-kt-scroll-toggle="true" data-kt-drawer-dismiss="true">About Us</a>
-                                            <!--end::Menu link-->
-                                        </div>
-                                        <!--end::Menu item-->
-                                        <!--begin::Menu item-->
-                                        <div class="menu-item">
-                                            <!--begin::Menu link-->
-                                            <a class="menu-link nav-link py-3 px-4 px-xxl-6" href="#our-Videos" data-kt-scroll-toggle="true" data-kt-drawer-dismiss="true">Our Videos</a>
-                                            <!--end::Menu link-->
-                                        </div>
-                                        <!--end::Menu item-->
-                                        <!--begin::Menu item-->
-                                        <div class="menu-item">
-                                            <!--begin::Menu link-->
-                                            <a class="menu-link nav-link py-3 px-4 px-xxl-6" href="#clients" data-kt-scroll-toggle="true" data-kt-drawer-dismiss="true">Feedbacks</a>
-                                            <!--end::Menu link-->
-                                        </div>
-                                        <!--end::Menu item-->
-
-                                    </div>
-                                    <!--end::Menu-->
-                                </div>
-                            </div>
-                            <!--end::Menu wrapper-->
+                            
                             <!--begin::Toolbar-->
-                            <div class="flex-equal text-end  ms-1">
-                                <a href="{{route('sign_in')}}" class="btn landing-dark-bg ">Sign In</a>
+                            <div class="flex-equal text-end  ms-1 fs-4">
+                                <a href="{{route('sign_in')}}" class="btn landing-dark-bg fs-4">Sign In</a>
                             </div>
                             <!--end::Toolbar-->
                         </div>
@@ -397,6 +351,7 @@
         <br><br><br>
         <!--begin::Footer Section-->
         <div class="mb-0">
+
             <!--begin::Wrapper-->
             <div class="landing-dark-bg black pt-20">
                 <!--begin::Container-->
@@ -404,7 +359,7 @@
                     <!--begin::Row-->
                     <div class="row py-10 py-lg-20">
                         <!--begin::Col-->
-                        <div class="col-lg-6 pe-lg-16 mb-10 mb-lg-0">
+                        <div class="d-flex flex-column col-lg-6 pe-lg-16 mb-10 mb-lg-0">
                             <!--begin::Block-->
                             <div class="rounded landing-dark-border p-9 mb-10">
                                 <!--begin::Title-->
@@ -412,49 +367,45 @@
                                 <!--end::Title-->
                                 <!--begin::Text-->
                                 <span class="fw-normal fs-4 text-gray-700">Email us to
-									<a href="#" class="text-white opacity-50 text-hover-primary">support@smartfin.com</a></span>
+                                    @php
+                                    $email = App\Models\Setting::where('key','email')->first();
+                                    @endphp
+                                    <a href="#" class="text-white opacity-50 text-hover-primary">{{$email->value}}</a></span>
                                 <!--end::Text-->
                             </div>
                             <!--end::Block-->
-
+                            <div class="d-flex fw-bold flex-column me-20">
+                                <!--begin::Subtitle-->
+                                <h4 class="fw-bolder text-gray-400 mb-6">Address</h4>
+                                <!--end::Subtitle-->
+                                @php
+                                $address = App\Models\Setting::where('key','address')->first();
+                                @endphp
+                                <span class="fw-bolder text-white opacity-50 mb-6">{{$address->value}}</span>
+                            </div>
                         </div>
                         <!--end::Col-->
                         <!--begin::Col-->
                         <div class="col-lg-6 ps-lg-16">
                             <!--begin::Navs-->
                             <div class="d-flex justify-content-center">
-                                <!--begin::Links-->
-                                <div class="d-flex fw-bold flex-column me-20">
-                                    <!--begin::Subtitle-->
-                                    <h4 class="fw-bolder text-gray-400 mb-6">Short Links</h4>
-                                    <!--end::Subtitle-->
-                                    <!--begin::Link-->
-                                    <a href="#" class="text-white opacity-50 text-hover-primary fs-5 mb-6">Sign in</a>
-                                    <!--end::Link-->
-
-                                    <!--begin::Link-->
-                                    <a href="#" class="text-white opacity-50 text-hover-primary fs-5 mb-6">Supports</a>
-                                    <!--end::Link-->
-                                </div>
-                                <!--end::Links-->
+                                
                                 <!--begin::Links-->
                                 <div class="d-flex fw-bold flex-column ms-lg-20">
                                     <!--begin::Subtitle-->
                                     <h4 class="fw-bolder text-gray-400 mb-6">Stay Connected</h4>
                                     <!--end::Subtitle-->
-                                    <!--begin::Link-->
-                                    <a href="#" class="mb-6">
-                                        <img src="{{ asset('public/assets/media/svg/brand-logos/facebook-4.svg') }}" class="h-20px me-2" alt="" />
-                                        <span class="text-white opacity-50 text-hover-primary fs-5 mb-6">Facebook</span>
-                                    </a>
-                                    <!--end::Link-->
-
-                                    <!--begin::Link-->
-                                    <a href="#" class="mb-6">
-                                        <img src="{{ asset('public/assets/media/svg/brand-logos/instagram-2-1.svg') }}" class="h-20px me-2" alt="" />
-                                        <span class="text-white opacity-50 text-hover-primary fs-5 mb-6">Instagram</span>
-                                    </a>
-                                    <!--end::Link-->
+                                    @php
+                                    $logos = App\Models\SocialIcon::all();
+                                    @endphp
+                                    @foreach($logos as $logo)
+                                        <!--begin::Link-->
+                                        <a href="{{$logo->link}}" class="mb-6">
+                                            <img src="{{ $logo->logo }}" class="h-20px me-2" alt="" />
+                                            <span class="text-white opacity-50 text-hover-primary fs-5 mb-6">{{$logo->name}}</span>
+                                        </a>
+                                        <!--end::Link-->
+                                    @endforeach
                                 </div>
                                 <!--end::Links-->
                             </div>
