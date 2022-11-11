@@ -750,8 +750,14 @@ class UserController extends Controller
         $nominee_detail->aadhaar = $filename;
         $nominee_detail->save();
 
-        DB::table('users')->where('id',$id)->update(['is_profile_verified' => 0]);
-
+        $role_id = Auth::user()->role_id;
+        if($role_id == 1){
+           DB::table('users')->where('id',$id)->update(['is_profile_verified' => 1]); 
+        }
+        else{
+            DB::table('users')->where('id',$id)->update(['is_profile_verified' => 0]);
+        }
+        
         //Mail
         $user = User::where('id',$id)->first();
         //admin
