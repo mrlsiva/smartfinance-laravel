@@ -47,6 +47,10 @@ Route::post('/register',[registerController::class, 'register'])->name('register
 //Login
 Route::get('/sign_in',[loginController::class, 'sign_in'])->name('sign_in');
 Route::post('/login',[loginController::class, 'login'])->name('login');
+Route::post('/forgot_password',[loginController::class, 'forgot_password'])->name('forgot_password');
+Route::get('/change_password',[loginController::class, 'change_password'])->name('change_password');
+Route::post('/save_password',[loginController::class, 'save_password'])->name('save_password');
+
 //Login End
 
 //User Management

@@ -131,7 +131,11 @@
                                             <a href="{{route('profile')}}" class="menu-link px-5">My Profile</a>
                                         </div>
                                         <!--end::Menu item-->
-
+                                        <!--begin::Menu item-->
+                                        <div class="menu-item px-5">
+                                            <a href="{{route('change_password')}}" class="menu-link px-5">Change Password</a>
+                                        </div>
+                                        <!--end::Menu item-->
                                         <!--begin::Menu item-->
                                         <div style="display: none;" class="menu-item px-5" data-kt-menu-trigger="hover" data-kt-menu-placement="left-start">
                                             <a href="#" class="menu-link px-5">

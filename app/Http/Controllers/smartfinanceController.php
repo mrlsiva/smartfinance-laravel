@@ -676,7 +676,7 @@ class smartfinanceController extends Controller
         $smartfinance_id = $request->smartfinance_id;
         $now = Carbon::now()->format('Y-m-d');
         $smartfinance = Smartfinance::where('id',$smartfinance_id)->first();
-        $payment = SmartfinancePayment::where('smartfinance_id', $smartfinance_id)->latest()->take(1)->first();
+        $payment = SmartfinancePayment::where('smartfinance_id', $smartfinance_id)->orderBy('id','Desc')->first();
         //$invested_date = $payment->invested_date;
         $next_payment = $payment->next_amount  + $amount;
         $intrest =  $smartfinance->percentage/100 * $payment->next_amount;
