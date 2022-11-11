@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Traits\Utility;
 use App\Models\User;
+use App\Models\Template;
 use Session;
 use DB;
 
