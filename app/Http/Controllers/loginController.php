@@ -52,7 +52,6 @@ class loginController extends Controller
             $password = $this->readable_random_string(10);
             $new_password = \Hash::make($password);
             DB::table('users')->where('email',$email)->update(['password' => $new_password]);
-            return $password;
 
             //Mail
             $emailsetting = Template::where([['id',21],['is_active',1]])->first(); 
