@@ -4035,14 +4035,14 @@
                 alertText = alertText+"<br>Pincode should be in format 123456";
             } 
         }
-        var email = document.getElementById("email").value;
-        if(email){
-            format = /^[a-zA-Z0-9\._-]+@[a-zA-Z0-9-]{2,}[.][a-zA-Z]{2,4}$/;
-            if(!format.test(email))
-            {
-                alertText = alertText+"<br>Email should be in format example@domain.com";
-            } 
-        }
+        // var email = document.getElementById("email").value;
+        // if(email){
+        //     format = /^[a-zA-Z0-9\._-]+@[a-zA-Z0-9-]{2,}[.][a-zA-Z]{2,4}$/;
+        //     if(!format.test(email))
+        //     {
+        //         alertText = alertText+"<br>Email should be in format example@domain.com";
+        //     } 
+        // }
         // if (!document.getElementById("transaction_id").value) {
         //     alertText = alertText+"<br>Transaction ID is required";
         // }
@@ -4172,17 +4172,17 @@
             alertText = alertText+"<br>Account Number is required";
         }
         //IFSC code
-        if (!document.getElementById("ifsc_code").value) {
-            alertText = alertText+"<br>IFSC code is required";
-        }
-        var ifsc_code = document.getElementById("ifsc_code").value;
-        if(ifsc_code){
-            format = /^[A-Z]{4}0[0-9]{6}$/;
-            if(!format.test(ifsc_code))
-            {
-                alertText = alertText+"<br>IFSC code is not valid";
-            } 
-        }
+        // if (!document.getElementById("ifsc_code").value) {
+        //     alertText = alertText+"<br>IFSC code is required";
+        // }
+        // var ifsc_code = document.getElementById("ifsc_code").value;
+        // if(ifsc_code){
+        //     format = /^[A-Z]{4}0[0-9]{6}$/;
+        //     if(!format.test(ifsc_code))
+        //     {
+        //         alertText = alertText+"<br>IFSC code is not valid";
+        //     } 
+        // }
         //Branch
         if (!document.getElementById("branch").value) {
             alertText = alertText+"<br>Branch is required";
