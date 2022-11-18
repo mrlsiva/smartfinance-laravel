@@ -1142,7 +1142,7 @@ class UserController extends Controller
         }
         elseif($type == 1){
 
-            $users = User::where([['is_delete',0],['is_profile_verified',$type],['is_profile_updated','!=',$type]])->orderBy('id','Desc')->simplePaginate(10);
+            $users = User::where([['is_delete',0],['is_profile_verified',$type]])->orWhere('is_profile_updated','!=',$type)->orderBy('id','Desc')->simplePaginate(10);
             $user_count = User::where('is_active',0)->orWhere('is_profile_verified',0)->count();
             $smartfinance_count = Smartfinance::where('is_status',2)->count();
             $payment_count = SmartfinancePayment::where('is_approve',2)->count();
@@ -1165,7 +1165,7 @@ class UserController extends Controller
         }
         elseif($type == 0){
 
-            $users = User::where([['is_delete',0],['is_profile_verified',$type],['is_profile_updated','!=',$type]])->orderBy('id','Desc')->simplePaginate(10);
+            $users = User::where([['is_delete',0],['is_profile_verified',$type]])->orWhere('is_profile_updated','!=',$type)->orderBy('id','Desc')->simplePaginate(10);
             $user_count = User::where('is_active',0)->orWhere('is_profile_verified',0)->count();
             $smartfinance_count = Smartfinance::where('is_status',2)->count();
             $payment_count = SmartfinancePayment::where('is_approve',2)->count();
