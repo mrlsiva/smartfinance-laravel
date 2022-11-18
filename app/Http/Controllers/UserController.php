@@ -192,9 +192,18 @@ class UserController extends Controller
                 $user = Auth::user();
                 $admin_finances = Smartfinance::where('user_id',$user->id)->orderBy('id','Desc')->simplePaginate(10);
                 $admin_finance_count = Smartfinance::where('user_id',$user->id)->count();
+                $flag = 'user';
+                $role = NULL;
+                $profile = NULL;
+                $progress = NULL;
+                $status = NULL;
+                $search = NULL;
+                $investment_plan = NULL;
+                $investment_status = NULL;
+                $investment_search = NULL;
                 
 
-                return view('dashboard')->with('users',$users)->with('user_count',$user_count)->with('smartfinances',$smartfinances)->with('smartfinance_count',$smartfinance_count)->with('admin_finances',$admin_finances)->with('admin_finance_count',$admin_finance_count)->with('payment_count',$payment_count);
+                return view('dashboard')->with('users',$users)->with('user_count',$user_count)->with('smartfinances',$smartfinances)->with('smartfinance_count',$smartfinance_count)->with('admin_finances',$admin_finances)->with('admin_finance_count',$admin_finance_count)->with('payment_count',$payment_count)->with('role',$role)->with('profile',$profile)->with('progress',$progress)->with('status',$status)->with('search',$search)->with('investment_plan',$investment_plan)->with('investment_status',$investment_status)->with('investment_search',$investment_search)->with('flag',$flag);
             }
         }
         
@@ -892,7 +901,7 @@ class UserController extends Controller
                 DB::table('user_details')->where('user_id',$user_id)->update(['pan' => $filename]);
             }
 
-            $user = User('id',$user_id)->first();
+            $user = User::where('id',$user_id)->first();
             DB::table('users')->where('id',$user_id)->update(['is_profile_updated' => 1]);
             if($user->is_profile_updated == 0 && $profile_update == 'true'){
 
@@ -1034,164 +1043,199 @@ class UserController extends Controller
 
     }
 
-    // public function user_search(Request $request)
-    // {
-    //     $search = $request->search;
-    //     $status = $request->status;
-    //     $progress = $request->progress;
-    //     $profile = $request->profile;
-    //     $role = $request->role;
-
-    //     if($search){
-    //         if($status != NULL){
-    //             $users = User::join('roles','users.role_id','=','roles.id')->where('users.is_lock',$status)->where('users.first_name', 'like', '%'.$search.'%')->orWhere('users.last_name', 'like', '%'.$search.'%')->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
-    //         }
-    //         elseif($progress != NULL){
-    //             $users = User::join('roles','users.role_id','=','roles.id')->where('users.is_active',$progress)->where('users.first_name', 'like', '%'.$search.'%')->orWhere('users.last_name', 'like', '%'.$search.'%')->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
-    //         }
-    //         elseif($profile != NULL){
-    //             if($profile == 1){
-    //                 $users = User::join('roles','users.role_id','=','roles.id')->where('users.is_profile_verified',$profile)->where('users.is_profile_updated','!=',$profile)->where('users.first_name', 'like', '%'.$search.'%')->orWhere('users.last_name', 'like', '%'.$search.'%')->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
-    //             }
-    //             else{
-    //                 $users = User::join('roles','users.role_id','=','roles.id')->where('users.is_profile_verified',$profile)->orWhere('users.is_profile_updated','!=',$profile)->where('users.first_name', 'like', '%'.$search.'%')->orWhere('users.last_name', 'like', '%'.$search.'%')->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
-    //             }
-    //         }
-    //         elseif($role != NULL){
-    //             $users = User::join('roles','users.role_id','=','roles.id')->where('users.role_id',$role)->where('users.first_name', 'like', '%'.$search.'%')->orWhere('users.last_name', 'like', '%'.$search.'%')->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
-    //         }
-    //         else{
-    //             $users = User::join('roles','users.role_id','=','roles.id')->where('users.first_name', 'like', '%'.$search.'%')->orWhere('users.last_name', 'like', '%'.$search.'%')->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
-    //         }
-    //     }
-    //     else{
-    //         $users = User::join('roles','users.role_id','=','roles.id')->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
-    //     }
-    //     return $users;
-    // }
-
-    public function user_search(Request $request)
+    public function user_search($type,Request $request)
     {
-        $search = $request->search;
+        $users = User::where('first_name', 'like', '%'.$type.'%')->orWhere('last_name', 'like', '%'.$type.'%')->where('is_delete',0)->orderBy('id','Desc')->simplePaginate(10);
+        $user_count = User::where('is_active',0)->orWhere('is_profile_verified',0)->count();
+        $smartfinance_count = Smartfinance::where('is_status',2)->count();
+        $payment_count = SmartfinancePayment::where('is_approve',2)->count();
 
-        if($search != NULL){
-            
-            $users = User::join('roles','users.role_id','=','roles.id')->where('users.first_name', 'like', '%'.$search.'%')->orWhere('users.last_name', 'like', '%'.$search.'%')->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
-            
-        }
-        else{
-            $users = User::join('roles','users.role_id','=','roles.id')->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
-        }
-        return $users;
+        $smartfinances = Smartfinance::orderBy('id','Desc')->get();
+        $user = Auth::user();
+        $admin_finances = Smartfinance::where('user_id',$user->id)->orderBy('id','Desc')->simplePaginate(10);
+        $admin_finance_count = Smartfinance::where('user_id',$user->id)->count();
+        $flag = 'user';
+        $role = NULL;
+        $profile = NULL;
+        $progress = NULL;
+        $status = NULL;
+        $search = $type;
+        $investment_plan = NULL;
+        $investment_status = NULL;
+        $investment_search = NULL;
+
+        return view('dashboard')->with('users',$users)->with('user_count',$user_count)->with('smartfinances',$smartfinances)->with('smartfinance_count',$smartfinance_count)->with('admin_finances',$admin_finances)->with('admin_finance_count',$admin_finance_count)->with('payment_count',$payment_count)->with('role',$role)->with('profile',$profile)->with('progress',$progress)->with('status',$status)->with('search',$search)->with('investment_plan',$investment_plan)->with('investment_status',$investment_status)->with('investment_search',$investment_search)->with('flag',$flag);
     }
 
-    public function user_status(Request $request)
+    public function user_status($type,Request $request)
     {
-        $search = $request->search;
-        $status = $request->status;
+        $users = User::where([['is_delete',0],['is_lock',$type]])->orderBy('id','Desc')->simplePaginate(10);
+        $user_count = User::where('is_active',0)->orWhere('is_profile_verified',0)->count();
+        $smartfinance_count = Smartfinance::where('is_status',2)->count();
+        $payment_count = SmartfinancePayment::where('is_approve',2)->count();
 
-        if($status != NULL){
-            if($search != NULL) {
-                $users = User::join('roles','users.role_id','=','roles.id')->where('users.is_lock',$status)->where('users.first_name', 'like', '%'.$search.'%')->orWhere('users.last_name', 'like', '%'.$search.'%')->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
-            }
-            else{
-                $users = User::join('roles','users.role_id','=','roles.id')->where('users.is_lock',$status)->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
-            }
-        }
-        elseif($search != NULL){
-            $users = User::join('roles','users.role_id','=','roles.id')->where('users.first_name', 'like', '%'.$search.'%')->orWhere('users.last_name', 'like', '%'.$search.'%')->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
-        }
-        else{
-            $users = User::join('roles','users.role_id','=','roles.id')->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
-        }
+        $smartfinances = Smartfinance::orderBy('id','Desc')->get();
+        $user = Auth::user();
+        $admin_finances = Smartfinance::where('user_id',$user->id)->orderBy('id','Desc')->simplePaginate(10);
+        $admin_finance_count = Smartfinance::where('user_id',$user->id)->count();
+        $flag = 'user';
+        $role = NULL;
+        $profile = NULL;
+        $progress = NULL;
+        $status = $type;
+        $search = NULL;
+        $investment_plan = NULL;
+        $investment_status = NULL;
+        $investment_search = NULL;
 
-        return $users;
+        return view('dashboard')->with('users',$users)->with('user_count',$user_count)->with('smartfinances',$smartfinances)->with('smartfinance_count',$smartfinance_count)->with('admin_finances',$admin_finances)->with('admin_finance_count',$admin_finance_count)->with('payment_count',$payment_count)->with('role',$role)->with('profile',$profile)->with('progress',$progress)->with('status',$status)->with('search',$search)->with('investment_plan',$investment_plan)->with('investment_status',$investment_status)->with('investment_search',$investment_search)->with('flag',$flag);
     }
 
-    public function user_progress(Request $request)
+    public function user_progress($type,Request $request)
     {
-        $search = $request->search;
-        $progress = $request->progress;
 
-        if($progress != NULL){
-            if($search != NULL) {
-                $users = User::join('roles','users.role_id','=','roles.id')->where('users.is_active',$progress)->where('users.first_name', 'like', '%'.$search.'%')->orWhere('users.last_name', 'like', '%'.$search.'%')->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
-            }
-            else{
-                $users = User::join('roles','users.role_id','=','roles.id')->where('users.is_active',$progress)->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
-            }
-        }
-        elseif($search != NULL){
-            $users = User::join('roles','users.role_id','=','roles.id')->where('users.first_name', 'like', '%'.$search.'%')->orWhere('users.last_name', 'like', '%'.$search.'%')->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
-        }
-        else{
-            $users = User::join('roles','users.role_id','=','roles.id')->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
-        }
+        $users = User::where([['is_delete',0],['is_active',$type]])->orderBy('id','Desc')->simplePaginate(10);
+        $user_count = User::where('is_active',0)->orWhere('is_profile_verified',0)->count();
+        $smartfinance_count = Smartfinance::where('is_status',2)->count();
+        $payment_count = SmartfinancePayment::where('is_approve',2)->count();
 
-        return $users;
+        $smartfinances = Smartfinance::orderBy('id','Desc')->get();
+        $user = Auth::user();
+        $admin_finances = Smartfinance::where('user_id',$user->id)->orderBy('id','Desc')->simplePaginate(10);
+        $admin_finance_count = Smartfinance::where('user_id',$user->id)->count();
+        $flag = 'user';
+        $role = NULL;
+        $profile = NULL;
+        $progress = $type;
+        $status = NULL;
+        $search = NULL;
+        $investment_plan = NULL;
+        $investment_status = NULL;
+        $investment_search = NULL;
+
+        return view('dashboard')->with('users',$users)->with('user_count',$user_count)->with('smartfinances',$smartfinances)->with('smartfinance_count',$smartfinance_count)->with('admin_finances',$admin_finances)->with('admin_finance_count',$admin_finance_count)->with('payment_count',$payment_count)->with('role',$role)->with('profile',$profile)->with('progress',$progress)->with('status',$status)->with('search',$search)->with('investment_plan',$investment_plan)->with('investment_status',$investment_status)->with('investment_search',$investment_search)->with('flag',$flag);
     }
 
-    public function user_profile(Request $request)
+    public function user_profile($type,Request $request)
     {
-        $search = $request->search;
-        $profile = $request->profile;
+        if($type == 2){
+            $users = User::where([['is_delete',0],['is_profile_verified',$type]])->orderBy('id','Desc')->simplePaginate(10);
+            $user_count = User::where('is_active',0)->orWhere('is_profile_verified',0)->count();
+            $smartfinance_count = Smartfinance::where('is_status',2)->count();
+            $payment_count = SmartfinancePayment::where('is_approve',2)->count();
 
-        if($profile != NULL){
-            if($search != NULL) {
+            $smartfinances = Smartfinance::orderBy('id','Desc')->get();
+            $user = Auth::user();
+            $admin_finances = Smartfinance::where('user_id',$user->id)->orderBy('id','Desc')->simplePaginate(10);
+            $admin_finance_count = Smartfinance::where('user_id',$user->id)->count();
+            $flag = 'user';
+            $role = NULL;
+            $profile = $type;
+            $progress = NULL;
+            $status = NULL;
+            $search = NULL;
+            $investment_plan = NULL;
+            $investment_status = NULL;
+            $investment_search = NULL;
 
-                if($profile == 2){
-                    $users = User::join('roles','users.role_id','=','roles.id')->where('users.is_profile_verified',$profile)->where('users.first_name', 'like', '%'.$search.'%')->orWhere('users.last_name', 'like', '%'.$search.'%')->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
-                }
-                if($profile == 1){
-                    $users = User::join('roles','users.role_id','=','roles.id')->where('users.is_profile_verified',$profile)->where('users.is_profile_updated','!=',$profile)->where('users.first_name', 'like', '%'.$search.'%')->orWhere('users.last_name', 'like', '%'.$search.'%')->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
-                }
-                else{
-                    $users = User::join('roles','users.role_id','=','roles.id')->where('users.is_profile_verified',$profile)->orWhere('users.is_profile_updated','!=',$profile)->where('users.first_name', 'like', '%'.$search.'%')->orWhere('users.last_name', 'like', '%'.$search.'%')->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
-                }
-            }
-            else{
-                if($profile == 2){
-                    $users = User::join('roles','users.role_id','=','roles.id')->where('users.is_profile_verified',$profile)->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
-                }
-                elseif($profile == 1){
-                    $users = User::join('roles','users.role_id','=','roles.id')->where('users.is_profile_verified',$profile)->where('users.is_profile_updated','!=',$profile)->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
-                }
-                else{
-                    $users = User::join('roles','users.role_id','=','roles.id')->where('users.is_profile_verified',$profile)->orWhere('users.is_profile_updated','!=',$profile)->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
-                }
-            }
+            return view('dashboard')->with('users',$users)->with('user_count',$user_count)->with('smartfinances',$smartfinances)->with('smartfinance_count',$smartfinance_count)->with('admin_finances',$admin_finances)->with('admin_finance_count',$admin_finance_count)->with('payment_count',$payment_count)->with('role',$role)->with('profile',$profile)->with('progress',$progress)->with('status',$status)->with('search',$search)->with('investment_plan',$investment_plan)->with('investment_status',$investment_status)->with('investment_search',$investment_search)->with('flag',$flag);
         }
-        elseif($search != NULL){
-            $users = User::join('roles','users.role_id','=','roles.id')->where('users.first_name', 'like', '%'.$search.'%')->orWhere('users.last_name', 'like', '%'.$search.'%')->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
+        elseif($type == 1){
+
+            $users = User::where([['is_delete',0],['is_profile_verified',$type],['is_profile_updated','!=',$type]])->orderBy('id','Desc')->simplePaginate(10);
+            $user_count = User::where('is_active',0)->orWhere('is_profile_verified',0)->count();
+            $smartfinance_count = Smartfinance::where('is_status',2)->count();
+            $payment_count = SmartfinancePayment::where('is_approve',2)->count();
+
+            $smartfinances = Smartfinance::orderBy('id','Desc')->get();
+            $user = Auth::user();
+            $admin_finances = Smartfinance::where('user_id',$user->id)->orderBy('id','Desc')->simplePaginate(10);
+            $admin_finance_count = Smartfinance::where('user_id',$user->id)->count();
+            $flag = 'user';
+            $role = NULL;
+            $profile = $type;
+            $progress = NULL;
+            $status = NULL;
+            $search = NULL;
+            $investment_plan = NULL;
+            $investment_status = NULL;
+            $investment_search = NULL;
+
+            return view('dashboard')->with('users',$users)->with('user_count',$user_count)->with('smartfinances',$smartfinances)->with('smartfinance_count',$smartfinance_count)->with('admin_finances',$admin_finances)->with('admin_finance_count',$admin_finance_count)->with('payment_count',$payment_count)->with('role',$role)->with('profile',$profile)->with('progress',$progress)->with('status',$status)->with('search',$search)->with('investment_plan',$investment_plan)->with('investment_status',$investment_status)->with('investment_search',$investment_search)->with('flag',$flag);
+        }
+        elseif($type == 0){
+
+            $users = User::where([['is_delete',0],['is_profile_verified',$type],['is_profile_updated','!=',$type]])->orderBy('id','Desc')->simplePaginate(10);
+            $user_count = User::where('is_active',0)->orWhere('is_profile_verified',0)->count();
+            $smartfinance_count = Smartfinance::where('is_status',2)->count();
+            $payment_count = SmartfinancePayment::where('is_approve',2)->count();
+
+            $smartfinances = Smartfinance::orderBy('id','Desc')->get();
+            $user = Auth::user();
+            $admin_finances = Smartfinance::where('user_id',$user->id)->orderBy('id','Desc')->simplePaginate(10);
+            $admin_finance_count = Smartfinance::where('user_id',$user->id)->count();
+            $flag = 'user';
+            $role = NULL;
+            $profile = $type;
+            $progress = NULL;
+            $status = NULL;
+            $search = NULL;
+            $investment_plan = NULL;
+            $investment_status = NULL;
+            $investment_search = NULL;
+
+            return view('dashboard')->with('users',$users)->with('user_count',$user_count)->with('smartfinances',$smartfinances)->with('smartfinance_count',$smartfinance_count)->with('admin_finances',$admin_finances)->with('admin_finance_count',$admin_finance_count)->with('payment_count',$payment_count)->with('role',$role)->with('profile',$profile)->with('progress',$progress)->with('status',$status)->with('search',$search)->with('investment_plan',$investment_plan)->with('investment_status',$investment_status)->with('investment_search',$investment_search)->with('flag',$flag);
         }
         else{
-            $users = User::join('roles','users.role_id','=','roles.id')->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
-        }
 
-        return $users;
+            $users = User::where([['is_delete',0],['is_profile_verified',$type]])->orderBy('id','Desc')->simplePaginate(10);
+            $user_count = User::where('is_active',0)->orWhere('is_profile_verified',0)->count();
+            $smartfinance_count = Smartfinance::where('is_status',2)->count();
+            $payment_count = SmartfinancePayment::where('is_approve',2)->count();
+
+            $smartfinances = Smartfinance::orderBy('id','Desc')->get();
+            $user = Auth::user();
+            $admin_finances = Smartfinance::where('user_id',$user->id)->orderBy('id','Desc')->simplePaginate(10);
+            $admin_finance_count = Smartfinance::where('user_id',$user->id)->count();
+            $flag = 'user';
+            $role = NULL;
+            $profile = $type;
+            $progress = NULL;
+            $status = NULL;
+            $search = NULL;
+            $investment_plan = NULL;
+            $investment_status = NULL;
+            $investment_search = NULL;
+
+            return view('dashboard')->with('users',$users)->with('user_count',$user_count)->with('smartfinances',$smartfinances)->with('smartfinance_count',$smartfinance_count)->with('admin_finances',$admin_finances)->with('admin_finance_count',$admin_finance_count)->with('payment_count',$payment_count)->with('role',$role)->with('profile',$profile)->with('progress',$progress)->with('status',$status)->with('search',$search)->with('investment_plan',$investment_plan)->with('investment_status',$investment_status)->with('investment_search',$investment_search)->with('flag',$flag);
+        }
     }
 
-    public function user_role(Request $request)
+    public function user_role($type,Request $request)
     {
-        $search = $request->search;
-        $role = $request->role;
 
-        if($role != NULL){
-            if($search != NULL) {
-                $users = User::join('roles','users.role_id','=','roles.id')->where('users.role_id',$role)->where('users.first_name', 'like', '%'.$search.'%')->orWhere('users.last_name', 'like', '%'.$search.'%')->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
-            }
-            else{
-                $users = User::join('roles','users.role_id','=','roles.id')->where('users.role_id',$role)->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
-            }
-        }
-        elseif($search != NULL){
-            $users = User::join('roles','users.role_id','=','roles.id')->where('users.first_name', 'like', '%'.$search.'%')->orWhere('users.last_name', 'like', '%'.$search.'%')->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
-        }
-        else{
-            $users = User::join('roles','users.role_id','=','roles.id')->where('is_delete',0)->select('users.*','roles.name')->orderBy('id','Desc')->get();
-        }
 
-        return $users;
+        $users = User::where([['is_delete',0],['role_id',$type]])->orderBy('id','Desc')->simplePaginate(10);
+        $user_count = User::where('is_active',0)->orWhere('is_profile_verified',0)->count();
+        $smartfinance_count = Smartfinance::where('is_status',2)->count();
+        $payment_count = SmartfinancePayment::where('is_approve',2)->count();
+
+        $smartfinances = Smartfinance::orderBy('id','Desc')->get();
+        $user = Auth::user();
+        $admin_finances = Smartfinance::where('user_id',$user->id)->orderBy('id','Desc')->simplePaginate(10);
+        $admin_finance_count = Smartfinance::where('user_id',$user->id)->count();
+        $flag = 'user';
+        $role = $type;
+        $profile = NULL;
+        $progress = NULL;
+        $status = NULL;
+        $search = NULL;
+        $investment_plan = NULL;
+        $investment_status = NULL;
+        $investment_search = NULL;
+
+        return view('dashboard')->with('users',$users)->with('user_count',$user_count)->with('smartfinances',$smartfinances)->with('smartfinance_count',$smartfinance_count)->with('admin_finances',$admin_finances)->with('admin_finance_count',$admin_finance_count)->with('payment_count',$payment_count)->with('role',$role)->with('profile',$profile)->with('progress',$progress)->with('status',$status)->with('search',$search)->with('investment_plan',$investment_plan)->with('investment_status',$investment_status)->with('investment_search',$investment_search)->with('flag',$flag);
+        
     }
 
     public function refferal(Request $request) 

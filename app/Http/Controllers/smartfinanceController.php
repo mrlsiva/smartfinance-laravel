@@ -18,6 +18,7 @@ use App\Imports\SmartfinancePaymentsImport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Setting;
 use App\Models\Template;
+use App\Models\User;
 use Image;
 use DB;
 
@@ -616,56 +617,87 @@ class smartfinanceController extends Controller
 
     }
 
-    public function investment_search(Request $request)
+
+    public function investment_search($type,Request $request)
     {
-        $search = $request->search;
 
-        if($search != NULL){
+        $users = User::where('is_delete',0)->orderBy('id','Desc')->simplePaginate(10);
+        $user_count = User::where('is_active',0)->orWhere('is_profile_verified',0)->count();
+        $smartfinance_count = Smartfinance::where('is_status',2)->count();
+        $payment_count = SmartfinancePayment::where('is_approve',2)->count();
 
-            $data = Smartfinance::join('users','smartfinances.user_id','=','users.id')->join('plans','smartfinances.plan_id','=','plans.id')->where('users.first_name', 'like', '%'.$search.'%')->orWhere('users.last_name', 'like', '%'.$search.'%')->select('smartfinances.*','users.first_name as user_firstname','users.last_name as user_lastname','users.avatar as user_avatar','users.id as user_id','plans.type as plan_type')->orderBy('id','Desc')->simplePaginate(10);
-            
-        }
-        else{
+        $smartfinances = Smartfinance::join('users','smartfinances.user_id','=','users.id')->where('users.first_name', 'like', '%'.$type.'%')->orWhere('users.last_name', 'like', '%'.$type.'%')->select('smartfinances.*')->orderBy('id','Desc')->get();
 
-            $data = Smartfinance::join('users','smartfinances.user_id','=','users.id')->join('plans','smartfinances.plan_id','=','plans.id')->select('smartfinances.*','users.first_name as user_firstname','users.last_name as user_lastname','users.avatar as user_avatar','users.id as user_id','plans.type as plan_type')->orderBy('id','Desc')->simplePaginate(10);
-           
-        }
-        return $data;
+        //$smartfinances = Smartfinance::where('plan_id',$type)->orderBy('id','Desc')->get();
+        $user = Auth::user();
+        $admin_finances = Smartfinance::where('user_id',$user->id)->orderBy('id','Desc')->simplePaginate(10);
+        $admin_finance_count = Smartfinance::where('user_id',$user->id)->count();
+        $flag = 'finance';
+        $role = NULL;
+        $profile = NULL;
+        $progress = NULL;
+        $status = NULL;
+        $search = NULL;
+        $investment_plan = NULL;
+        $investment_status = NULL;
+        $investment_search = $type;
+
+        return view('dashboard')->with('users',$users)->with('user_count',$user_count)->with('smartfinances',$smartfinances)->with('smartfinance_count',$smartfinance_count)->with('admin_finances',$admin_finances)->with('admin_finance_count',$admin_finance_count)->with('payment_count',$payment_count)->with('role',$role)->with('profile',$profile)->with('progress',$progress)->with('status',$status)->with('search',$search)->with('investment_plan',$investment_plan)->with('investment_status',$investment_status)->with('investment_search',$investment_search)->with('flag',$flag);
+        
     }
 
-    public function investment_status(Request $request)
+
+    public function investment_status($type,Request $request)
     {
-        $status = $request->status;
 
-        if($status != NULL){
+        $users = User::where('is_delete',0)->orderBy('id','Desc')->simplePaginate(10);
+        $user_count = User::where('is_active',0)->orWhere('is_profile_verified',0)->count();
+        $smartfinance_count = Smartfinance::where('is_status',2)->count();
+        $payment_count = SmartfinancePayment::where('is_approve',2)->count();
 
-            $data = Smartfinance::join('users','smartfinances.user_id','=','users.id')->join('plans','smartfinances.plan_id','=','plans.id')->where('smartfinances.is_status', 'like', '%'.$status.'%')->select('smartfinances.*','users.first_name as user_firstname','users.last_name as user_lastname','users.avatar as user_avatar','users.id as user_id','plans.type as plan_type')->orderBy('id','Desc')->simplePaginate(10);
-            
-        }
-        else{
+        $smartfinances = Smartfinance::where('is_status',$type)->orderBy('id','Desc')->get();
+        //return $smartfinances;
+        $user = Auth::user();
+        $admin_finances = Smartfinance::where('user_id',$user->id)->orderBy('id','Desc')->simplePaginate(10);
+        $admin_finance_count = Smartfinance::where('user_id',$user->id)->count();
+        $flag = 'finance';
+        $role = NULL;
+        $profile = NULL;
+        $progress = NULL;
+        $status = NULL;
+        $search = NULL;
+        $investment_plan = NULL;
+        $investment_status = $type;
+        $investment_search = NULL;
 
-            $data = Smartfinance::join('users','smartfinances.user_id','=','users.id')->join('plans','smartfinances.plan_id','=','plans.id')->select('smartfinances.*','users.first_name as user_firstname','users.last_name as user_lastname','users.avatar as user_avatar','users.id as user_id','plans.type as plan_type')->orderBy('id','Desc')->simplePaginate(10);
-           
-        }
-        return $data;
+        return view('dashboard')->with('users',$users)->with('user_count',$user_count)->with('smartfinances',$smartfinances)->with('smartfinance_count',$smartfinance_count)->with('admin_finances',$admin_finances)->with('admin_finance_count',$admin_finance_count)->with('payment_count',$payment_count)->with('role',$role)->with('profile',$profile)->with('progress',$progress)->with('status',$status)->with('search',$search)->with('investment_plan',$investment_plan)->with('investment_status',$investment_status)->with('investment_search',$investment_search)->with('flag',$flag);
+        
     }
 
-    public function investment_plan(Request $request)
+    public function investment_plan($type,Request $request)
     {
-        $plan = $request->plan;
 
-        if($plan != NULL){
+        $users = User::where('is_delete',0)->orderBy('id','Desc')->simplePaginate(10);
+        $user_count = User::where('is_active',0)->orWhere('is_profile_verified',0)->count();
+        $smartfinance_count = Smartfinance::where('is_status',2)->count();
+        $payment_count = SmartfinancePayment::where('is_approve',2)->count();
 
-            
-            $data = Smartfinance::join('users','smartfinances.user_id','=','users.id')->join('plans','smartfinances.plan_id','=','plans.id')->where('plans.type', 'like', '%'.$plan.'%')->select('smartfinances.*','users.first_name as user_firstname','users.last_name as user_lastname','users.avatar as user_avatar','users.id as user_id','plans.type as plan_type')->orderBy('id','Desc')->simplePaginate(10);
-            
-        }
-        else{
+        $smartfinances = Smartfinance::where('plan_id',$type)->orderBy('id','Desc')->get();
+        $user = Auth::user();
+        $admin_finances = Smartfinance::where('user_id',$user->id)->orderBy('id','Desc')->simplePaginate(10);
+        $admin_finance_count = Smartfinance::where('user_id',$user->id)->count();
+        $flag = 'finance';
+        $role = NULL;
+        $profile = NULL;
+        $progress = NULL;
+        $status = NULL;
+        $search = NULL;
+        $investment_plan = $type;
+        $investment_status = NULL;
+        $investment_search = NULL;
 
-            $data = Smartfinance::join('users','smartfinances.user_id','=','users.id')->join('plans','smartfinances.plan_id','=','plans.id')->select('smartfinances.*','users.first_name as user_firstname','users.last_name as user_lastname','users.avatar as user_avatar','users.id as user_id','plans.type as plan_type')->orderBy('id','Desc')->simplePaginate(10);
-           
-        }
-        return $data;
+        return view('dashboard')->with('users',$users)->with('user_count',$user_count)->with('smartfinances',$smartfinances)->with('smartfinance_count',$smartfinance_count)->with('admin_finances',$admin_finances)->with('admin_finance_count',$admin_finance_count)->with('payment_count',$payment_count)->with('role',$role)->with('profile',$profile)->with('progress',$progress)->with('status',$status)->with('search',$search)->with('investment_plan',$investment_plan)->with('investment_status',$investment_status)->with('investment_search',$investment_search)->with('flag',$flag);
+        
     }
 
     public function store_next_month_payment(Request $request)

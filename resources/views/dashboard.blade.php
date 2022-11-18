@@ -2,13 +2,16 @@
 @section('body')
 
 <style> 
-.parent-active .col {
-    filter: grayscale(100%);
-}
+    .parent-active .col {
+        filter: grayscale(100%);
+    }
 
- .col.active {
-    filter: grayscale(0%);
-} 
+     .col.active {
+        filter: grayscale(0%);
+    } 
+    body{
+        background-image: url(http://localhost/smartfinservice.com/public/assets/img/header-bg.jpg)!important;
+    }
 </style>
 
 @php
@@ -59,7 +62,7 @@
                             <!--begin::Row-->
                             
                             <div class="row g-0 parent-active">
-                                <a href="#" onclick="user()" class="text-dark fw-bold fs-6 col active border-bottom border-warning bg-light-warning p-6 rounded-2 me-7 mb-7" id="user_management">    
+                                <a href="#" onclick="user()" class=" {{('user'== $flag)?'active':''}} text-dark fw-bold fs-6 col  border-bottom border-warning bg-light-warning p-6 rounded-2 me-7 mb-7" id="user_management">    
 
                                     <div class="d-flex flex-stack flex-grow-1">
                                         <div class="d-flex flex-column me-2">
@@ -74,7 +77,7 @@
                                     </div>
                                     User Management
                                 </a>
-                                <a href="#" onclick="finance()" class="text-dark fw-bold fs-6 col border-bottom border-warning bg-light-warning p-6 rounded-2 me-7 mb-7" id="smart_finance">                                   
+                                <a href="#" onclick="finance()" class=" {{('finance'== $flag)?'active':''}} text-dark fw-bold fs-6 col border-bottom border-warning bg-light-warning p-6 rounded-2 me-7 mb-7" id="smart_finance">                                   
                                     <div class="d-flex flex-stack flex-grow-1">
                                         <div class="d-flex flex-column me-2">       
                                             <span class="svg-icon svg-icon-3x svg-icon-warning d-block my-2">
@@ -149,8 +152,9 @@
             $detail = DB::table('user_details')->where('user_id',$user->id)->first();
         @endphp
         @if($user->is_profile_verified == 1)
+            <input type="hidden" name="base_url" id="base_url" value="{{url('dashboard')}}">
             <!--begin::Row-->
-            <div class="row gy-5 g-xl-8 mt-xl-5" id="user">
+            <div class="row gy-5 g-xl-8 mt-xl-5" id="user" style="{{('user'== $flag)?'display:block':'display:none'}}">
                 <!--begin::Col-->
                 <!--end::Col-->
                 <!--begin::Col-->
@@ -174,15 +178,28 @@
                                         <!--begin::Label-->
                                         <div class="text-muted fs-7 me-2">Role</div>
                                         <!--end::Label-->
-                                        <!--begin::Select-->
-                                        <select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Select an option" data-kt-table-widget-4="filter_status" name="role_search" id="role_search" >
-                                            <option></option>
-                                            <option value=" " selected="selected">Show All</option>
-                                            <option value="1">Super Admin</option>
-                                            <option value="2">Admin</option>
-                                            <option value="3">User</option>
-                                        </select>
-                                        <!--end::Select-->
+                                        <input type="hidden" name="role_url" id="role_url" value="{{url('user_role')}}">
+                                        @if($role != NULL)
+                                            <!--begin::Select-->
+                                            <select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Select an option" data-kt-table-widget-4="filter_status" name="role_search" id="role_search" >
+                                                <option></option>
+                                                <option value="null">Show All</option>
+                                                <option value="1" {{ ("1" == $role ) ? "selected":"" }}>Super Admin</option>
+                                                <option value="2" {{ ("2" == $role ) ? "selected":"" }}>Admin</option>
+                                                <option value="3" {{ ("3" == $role ) ? "selected":"" }}>User</option>
+                                            </select>
+                                            <!--end::Select-->
+                                        @else
+                                            <!--begin::Select-->
+                                            <select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Select an option" data-kt-table-widget-4="filter_status" name="role_search" id="role_search" >
+                                                <option></option>
+                                                <option value="null" selected="selected">Show All</option>
+                                                <option value="1">Super Admin</option>
+                                                <option value="2">Admin</option>
+                                                <option value="3">User</option>
+                                            </select>
+                                            <!--end::Select-->
+                                        @endif
                                     </div>
                                     <!--end::Profile-->
                                     <!--begin::Profile-->
@@ -190,15 +207,30 @@
                                         <!--begin::Label-->
                                         <div class="text-muted fs-7 me-2">Profile</div>
                                         <!--end::Label-->
-                                        <!--begin::Select-->
-                                        <select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Select an option" data-kt-table-widget-4="filter_status" name="profile_search" id="profile_search" >
-                                            <option></option>
-                                            <option value=" " selected="selected">Show All</option>
-                                            <option value="1">Verified</option>
-                                            <option value="0">Pending</option>
-                                            <option value="2">In Complete</option>
-                                        </select>
-                                        <!--end::Select-->
+                                        <input type="hidden" name="profile_url" id="profile_url" value="{{url('user_profile')}}">
+                                        @if($profile != NULL)
+                                            <!--begin::Select-->
+                                            <select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Select an option" data-kt-table-widget-4="filter_status" name="profile_search" id="profile_search" >
+                                                <option></option>
+                                                <option value="null" selected="selected">Show All</option>
+                                                <option value="1" {{ ("1" == $profile ) ? "selected":"" }}>Verified</option>
+                                                <option value="3" {{ ("3" == $profile ) ? "selected":"" }}>Rejected</option>
+                                                <option value="0" {{ ("0" == $profile ) ? "selected":"" }}>Pending</option>
+                                                <option value="2" {{ ("2" == $profile ) ? "selected":"" }}>In Complete</option>
+                                            </select>
+                                            <!--end::Select-->
+                                        @else
+                                            <!--begin::Select-->
+                                            <select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Select an option" data-kt-table-widget-4="filter_status" name="profile_search" id="profile_search" >
+                                                <option></option>
+                                                <option value="null" selected="selected">Show All</option>
+                                                <option value="1">Verified</option>
+                                                <option value="3">Rejected</option>
+                                                <option value="0">Pending</option>
+                                                <option value="2">In Complete</option>
+                                            </select>
+                                            <!--end::Select-->
+                                        @endif
                                     </div>
                                     <!--end::Profile-->
                                     <!--begin::Progress-->
@@ -206,14 +238,28 @@
                                         <!--begin::Label-->
                                         <div class="text-muted fs-7 me-2">Progress</div>
                                         <!--end::Label-->
-                                        <!--begin::Select-->
-                                        <select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Select an option" data-kt-table-widget-4="filter_status" name="progress_search" id="progress_search" >
-                                            <option></option>
-                                            <option value=" " selected="selected">Show All</option>
-                                            <option value="1">Approved</option>
-                                            <option value="0">Pending</option>
-                                        </select>
-                                        <!--end::Select-->
+                                        <input type="hidden" name="progress_url" id="progress_url" value="{{url('user_progress')}}">
+                                        @if($progress != NULL)
+                                            <!--begin::Select-->
+                                            <select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Select an option" data-kt-table-widget-4="filter_status" name="progress_search" id="progress_search" >
+                                                <option></option>
+                                                <option value="null" selected="selected">Show All</option>
+                                                <option value="1" {{ ("1" == $progress ) ? "selected":"" }}>Approved</option>
+                                                <option value="3" {{ ("3" == $progress ) ? "selected":"" }}>Rejected</option>
+                                                <option value="0" {{ ("0" == $progress ) ? "selected":"" }}>Pending</option>
+                                            </select>
+                                            <!--end::Select-->
+                                        @else
+                                            <!--begin::Select-->
+                                            <select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Select an option" data-kt-table-widget-4="filter_status" name="progress_search" id="progress_search" >
+                                                <option></option>
+                                                <option value="null" selected="selected">Show All</option>
+                                                <option value="1">Approved</option>
+                                                <option value="3">Rejected</option>
+                                                <option value="0">Pending</option>
+                                            </select>
+                                            <!--end::Select-->
+                                        @endif
                                     </div>
                                     <!--end::Progress-->
                                     <!--begin::Status-->
@@ -221,29 +267,59 @@
                                         <!--begin::Label-->
                                         <div class="text-muted fs-7 me-2">Status</div>
                                         <!--end::Label-->
-                                        <!--begin::Select-->
-                                        <select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Select an option" data-kt-table-widget-4="filter_status" name="status_search" id="status_search" >
-                                            <option></option>
-                                            <option value=" " selected="selected">Show All</option>
-                                            <option value="0">Active</option>
-                                            <option value="1">Locked</option>
-                                        </select>
-                                        <!--end::Select-->
+                                        <input type="hidden" name="status_url" id="status_url" value="{{url('user_status')}}">
+                                        @if($status != NULL)
+                                            <!--begin::Select-->
+                                            <select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Select an option" data-kt-table-widget-4="filter_status" name="status_search" id="status_search" >
+                                                <option></option>
+                                                <option value="null" selected="selected">Show All</option>
+                                                <option value="0" {{ ("0" == $status ) ? "selected":"" }}>Active</option>
+                                                <option value="1" {{ ("1" == $status ) ? "selected":"" }}>Locked</option>
+                                            </select>
+                                            <!--end::Select-->
+                                        @else
+                                            <!--begin::Select-->
+                                            <select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Select an option" data-kt-table-widget-4="filter_status" name="status_search" id="status_search" >
+                                                <option></option>
+                                                <option value="null" selected="selected">Show All</option>
+                                                <option value="0">Active</option>
+                                                <option value="1">Locked</option>
+                                            </select>
+                                            <!--end::Select-->
+                                        @endif
                                     </div>
                                     <!--end::Status-->
-                                    <!--begin::Search-->
-                                    <div class="position-relative my-1">
-                                        <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
-                                        <span class="svg-icon svg-icon-2 position-absolute top-50 translate-middle-y ms-4">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                                <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="black" />
-                                                <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="black" />
-                                            </svg>
-                                        </span>
-                                        <!--end::Svg Icon-->
-                                        <input type="text"  class="form-control w-150px fs-7 ps-12" placeholder="Search" name="search" id="search" />
-                                    </div>
-                                    <!--end::Search-->
+                                    @if($search != NULL)
+                                        <!--begin::Search-->
+                                        <div class="position-relative my-1">
+                                            <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
+                                            <span class="svg-icon svg-icon-2 position-absolute top-50 translate-middle-y ms-4">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                    <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="black" />
+                                                    <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="black" />
+                                                </svg>
+                                            </span>
+                                            <!--end::Svg Icon-->
+                                            <input type="hidden" name="search_url" id="search_url" value="{{url('user_search')}}">
+                                            <input type="text"  class="form-control w-150px fs-7 ps-12" placeholder="Search" name="search" id="search" value="{{$search}}" />
+                                        </div>
+                                        <!--end::Search-->
+                                    @else
+                                        <!--begin::Search-->
+                                        <div class="position-relative my-1">
+                                            <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
+                                            <span class="svg-icon svg-icon-2 position-absolute top-50 translate-middle-y ms-4">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                    <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="black" />
+                                                    <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="black" />
+                                                </svg>
+                                            </span>
+                                            <!--end::Svg Icon-->
+                                            <input type="hidden" name="search_url" id="search_url" value="{{url('user_search')}}">
+                                            <input type="text"  class="form-control w-150px fs-7 ps-12" placeholder="Search" name="search" id="search" />
+                                        </div>
+                                        <!--end::Search-->
+                                    @endif
                                 </div>
                                 <!--begin::Filters-->
                             </div>
@@ -496,7 +572,7 @@
             </div>
             <!--end::Row-->
             <!--begin::Row-->
-            <div class="row gy-5 g-xl-8 mt-xl-5" id="finance" style="display:none;">
+            <div class="row gy-5 g-xl-8 mt-xl-5" id="finance" style="{{('finance'== $flag)?'display:block':'display:none'}}">
                 <div class="col-xl-12 mb-5 mb-xl-10">
                     <!--begin::Table Widget 4-->
                     <div class="card card-flush h-xl-100">
@@ -520,45 +596,87 @@
                                         <!--begin::Label-->
                                         <div class="text-muted fs-7 me-2">Plan</div>
                                         <!--end::Label-->
-                                        <!--begin::Select-->
-                                        <select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Show All" data-kt-table-widget-4="filter_status" name="investment_plan" id="investment_plan" >
-                                            <option></option>
-                                            <option value=" " selected="selected">Show All</option>
-                                            <option value="year">Year</option>
-                                            <option value="month">Month</option>
-                                            
-                                        </select>
-                                        <!--end::Select-->
+                                        <input type="hidden" name="plan_url" id="plan_url" value="{{url('investment_plan')}}">
+                                        @if($investment_plan != NULL)
+                                            <!--begin::Select-->
+                                            <select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Show All" data-kt-table-widget-4="filter_status" name="investment_plan" id="investment_plan" >
+                                                <option></option>
+                                                <option value="null" selected="selected">Show All</option>
+                                                <option value="1" {{ ("1" == $investment_plan ) ? "selected":"" }}>Monthly Returns</option>
+                                                <option value="2" {{ ("2" == $investment_plan ) ? "selected":"" }}>Long Term (S)</option>
+                                                <option value="3" {{ ("3" == $investment_plan ) ? "selected":"" }}>Long Term (M)</option>
+                                            </select>
+                                            <!--end::Select-->
+                                        @else
+                                            <!--begin::Select-->
+                                            <select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Show All" data-kt-table-widget-4="filter_status" name="investment_plan" id="investment_plan" >
+                                                <option></option>
+                                                <option value="null" selected="selected">Show All</option>
+                                                <option value="1">Monthly Returns</option>
+                                                <option value="2">Long Term (S)</option>
+                                                <option value="3">Long Term (M)</option>
+                                            </select>
+                                            <!--end::Select-->
+                                        @endif
 
                                         <!--begin::Label-->
                                         <div class="text-muted fs-7 me-2">Status</div>
                                         <!--end::Label-->
-                                        <!--begin::Select-->
-                                        <select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Show All" data-kt-table-widget-4="filter_status" name="investment_status" id="investment_status" >
-                                            <option></option>
-                                            <option value=" " selected="selected">Show All</option>
-                                            <option value="2">Pending</option>
-                                            <option value="1">Approved</option>
-                                            <option value="0">Rejected</option>
-                                        </select>
-                                        <!--end::Select-->
+                                        <input type="hidden" name="investment_status_url" id="investment_status_url" value="{{url('investment_status')}}">
+                                        @if($investment_status != NULL)
+                                            <!--begin::Select-->
+                                            <select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Show All" data-kt-table-widget-4="filter_status" name="investment_status" id="investment_status" >
+                                                <option></option>
+                                                <option value="null">Show All</option>
+                                                <option value="2" {{ ("2" == $investment_status ) ? "selected":"" }}>Pending</option>
+                                                <option value="1" {{ ("1" == $investment_status ) ? "selected":"" }}>Approved</option>
+                                                <option value="0" {{ ("0" == $investment_status ) ? "selected":"" }}>Rejected</option>
+                                            </select>
+                                            <!--end::Select-->
+                                        @else
+                                            <!--begin::Select-->
+                                            <select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Show All" data-kt-table-widget-4="filter_status" name="investment_status" id="investment_status" >
+                                                <option></option>
+                                                <option value="null" selected="selected">Show All</option>
+                                                <option value="2">Pending</option>
+                                                <option value="1">Approved</option>
+                                                <option value="0">Rejected</option>
+                                            </select>
+                                            <!--end::Select-->
+                                        @endif
                                     </div>
                                     <!--end::Status-->
+                                    <input type="hidden" name="investment_search_url" id="investment_search_url" value="{{url('investment_search')}}">
 
-
-                                    <!--begin::Search-->
-                                    <div class="position-relative my-1">
-                                        <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
-                                        <span class="svg-icon svg-icon-2 position-absolute top-50 translate-middle-y ms-4">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                                <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="black" />
-                                                <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="black" />
-                                            </svg>
-                                        </span>
-                                        <!--end::Svg Icon-->
-                                        <input type="text" data-kt-table-widget-4="search" class="form-control w-150px fs-7 ps-12" placeholder="Search" name="investment_search" />
-                                    </div>
-                                    <!--end::Search-->
+                                    @if($investment_search != NULL)
+                                        <!--begin::Search-->
+                                        <div class="position-relative my-1">
+                                            <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
+                                            <span class="svg-icon svg-icon-2 position-absolute top-50 translate-middle-y ms-4">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                    <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="black" />
+                                                    <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="black" />
+                                                </svg>
+                                            </span>
+                                            <!--end::Svg Icon-->
+                                            <input type="text" data-kt-table-widget-4="search" class="form-control w-150px fs-7 ps-12" placeholder="Search" name="investment_search" value="{{$investment_search}}" />
+                                        </div>
+                                        <!--end::Search-->
+                                    @else
+                                        <!--begin::Search-->
+                                        <div class="position-relative my-1">
+                                            <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
+                                            <span class="svg-icon svg-icon-2 position-absolute top-50 translate-middle-y ms-4">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                    <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="black" />
+                                                    <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="black" />
+                                                </svg>
+                                            </span>
+                                            <!--end::Svg Icon-->
+                                            <input type="text" data-kt-table-widget-4="search" class="form-control w-150px fs-7 ps-12" placeholder="Search" name="investment_search" />
+                                        </div>
+                                        <!--end::Search-->
+                                    @endif
                                 </div>
                                 <!--begin::Filters-->
                             </div>
@@ -3198,639 +3316,100 @@
 </script>
 <!-- end example year table -->
 
-<!-- search -->
-<!-- <script type="application/javascript">
-    jQuery(document).ready(function ()
-    {
-        jQuery('input[name="search"]').on('change',function(){
-            var search = jQuery(this).val();
-            var status = jQuery("#status_search").val();
-            var progress = jQuery("#progress_search").val();
-            var profile_search = jQuery("#profile_search").val();
-            var role_search = jQuery("#role_search").val();
-            console.log(search);
-            console.log(status);
-            console.log(progress);
-            console.log(profile_search);
-            console.log(role_search);
-            jQuery.ajax({
-                url : 'user_search',
-                type: 'GET',
-                dataType: 'json',
-                data: { "search": search,"status" : status,"progress" : progress,"profile" : profile_search,"role" : role_search},
-                success:function(data)
-                {
-                    console.log(data);
-                    var output = '';
-                    if(data.length > 0){
-                        for(var count = 0; count < data.length; count++)
-                        {
-                            var directory = 'user/'+data[count].id+'/';
-                            var image_url = 'storage/app/public/avatar/'+data[count].avatar+'/';
-                            output += '<tr>';
-                            if(data[count].avatar){
-                                output += '<td><div class="d-flex align-items-center"><div class="symbol symbol-45px me-5"><img src="'+image_url+'" alt="" /></div><div class="d-flex justify-content-start flex-column"><a href="'+directory+'" class="text-dark fw-bolder text-hover-primary fs-6">'+data[count].first_name+' '+data[count].last_name+'</a><span class="text-muted fw-bold text-muted d-block fs-7">'+data[count].id+'</span></td>';
 
-                            }
-                            else{
-
-                                output += '<td><div class="d-flex align-items-center"><div class="symbol symbol-45px me-5"><img src="{{ asset('public/assets/media/avatars/blank.png') }}" alt="" /></div><div class="d-flex justify-content-start flex-column"><a href="'+directory+'" class="text-dark fw-bolder text-hover-primary fs-6">'+data[count].first_name+' '+data[count].last_name+'</a><span class="text-muted fw-bold text-muted d-block fs-7">'+data[count].id+'</span></td>';
-
-                            }
-
-                            output += '<td>'+data[count].name+'</td>';
-                            if(data[count].is_finanace == 0){
-                                output += '<td>No</td>';
-                            }
-                            else{
-                                output += '<td>Yes</td>';
-                            }
-                            if(data[count].is_tax == 0){
-                                output += '<td>No</td>';
-                            }
-                            else{
-                                output += '<td>Yes</td>';
-                            }
-                            if(data[count].is_profile_verified == 0 || data[count].is_profile_updated == 1){
-
-                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>';
-                            }
-                            else{
-                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-success">Verified</span></td>';
-                            }
-                            if(data[count].is_active == 0){
-
-                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>';
-                            }
-                            else{
-                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-success">Approved</span></td>';
-                            }
-                            if(data[count].is_lock == 0){
-
-                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-success">Active</span></td>';
-                            }
-                            else{
-                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-danger">Locked</span></td>';
-                            }
-                            if(data[count].role_id == 1){
-
-                                output += '<td><div class=" flex-shrink-0"><button type="button"  class="btn  btn-light mb-5" onclick="super_admin()"><i class="fas fa-pencil-alt" id="fa"></i></button></div></td>';
-                            }
-                            else{
-                                output += '<td><div class=" flex-shrink-0"><button type="button" id="kt_sign_in_submit" class="btn  btn-light mb-5" data-system_id="'+data[count].id+'" name="edit"><i class="fas fa-pencil-alt" id="fa"></i></button></div></td>';
-                            }
-                            output += '</tr>';
-                        }
-                    }
-                    else
-                    {
-                        output += '<tr>';
-                        output += '<td colspan="6">No Data Found</td>';
-                        output += '</tr>';
-                    }
-                    $('tbody').html(output);
-                }
-            });  
-        });
-    });
-</script> -->
-
-<!-- search -->
+<!-- user search -->
 <script type="application/javascript">
     jQuery(document).ready(function ()
     {
         jQuery('input[name="search"]').on('change',function(){
             var search = jQuery(this).val();
-            jQuery.ajax({
-                url : 'user_search',
-                type: 'GET',
-                dataType: 'json',
-                data: { "search": search},
-                success:function(data)
-                {
-                    console.log(data);
-                    var output = '';
-                    if(data.length > 0){
-                        for(var count = 0; count < data.length; count++)
-                        {
-                            var directory = 'user/'+data[count].id+'/';
-                            var image_url = data[count].avatar;
-                            output += '<tr>';
-                            if(data[count].avatar){
-                                output += '<td><div class="d-flex align-items-center"><div class="symbol symbol-45px me-5"><img src="'+image_url+'" alt="" /></div><div class="d-flex justify-content-start flex-column"><a href="'+directory+'" class="text-dark fw-bolder text-hover-primary fs-6">'+data[count].first_name+' '+data[count].last_name+'</a><span class="text-muted fw-bold text-muted d-block fs-7">'+data[count].id+'</span></td>';
-
-                            }
-                            else{
-
-                                output += '<td><div class="d-flex align-items-center"><div class="symbol symbol-45px me-5"><img src="{{ asset('public/assets/media/avatars/blank.png') }}" alt="" /></div><div class="d-flex justify-content-start flex-column"><a href="'+directory+'" class="text-dark fw-bolder text-hover-primary fs-6">'+data[count].first_name+' '+data[count].last_name+'</a><span class="text-muted fw-bold text-muted d-block fs-7">'+data[count].id+'</span></td>';
-
-                            }
-
-                            output += '<td>'+data[count].name+'</td>';
-                            
-                            if(data[count].is_profile_verified == 2){
-                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-danger">Incomplete</span></td>';
-
-                            }
-                            else if(data[count].is_profile_verified == 0 || data[count].is_profile_updated == 1){
-
-                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>';
-                            }
-                            else{
-                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-success">Verified</span></td>';
-                            }
-                            if(data[count].is_active == 0){
-
-                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>';
-                            }
-                            else{
-                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-success">Approved</span></td>';
-                            }
-                            if(data[count].is_lock == 0){
-
-                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-success">Active</span></td>';
-                            }
-                            else{
-                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-danger">Locked</span></td>';
-                            }
-                            if(data[count].role_id == 1){
-
-                                output += '<td><div class=" flex-shrink-0"><button type="button"  class="btn  btn-light mb-5" onclick="super_admin()"><i class="fas fa-pencil-alt" id="fa"></i></button></div></td>';
-                            }
-                            else{
-                                output += '<td><div class=" flex-shrink-0"><button type="button" id="kt_sign_in_submit" class="btn  btn-light mb-5" data-system_id="'+data[count].id+'" name="edit"><i class="fas fa-pencil-alt" id="fa"></i></button></div></td>';
-                            }
-                            output += '</tr>';
-                        }
-                    }
-                    else
-                    {
-                        output += '<tr>';
-                        output += '<td colspan="6">No Data Found</td>';
-                        output += '</tr>';
-                    }
-                    $('.user_table').html(output);
-                }
-            });  
+            var search_url = jQuery("#search_url").val();
+            var url = search_url+"/"+search+'/';
+            if(search == ''){
+                url = jQuery("#base_url").val();
+            }
+            window.location = url; 
         });
     });
 </script>
 
-<!-- status -->
+<!-- user status search -->
 <script type="application/javascript">
     jQuery(document).ready(function ()
     {
         jQuery('select[name="status_search"]').on('change',function(){
             var status = jQuery(this).val();
-            var search = jQuery("#search").val();
-            jQuery.ajax({
-                url : 'user_status',
-                type: 'GET',
-                dataType: 'json',
-                data: { "search": search,"status" : status},
-                success:function(data)
-                {
-                    console.log(data);
-                    var output = '';
-                    if(data.length > 0){
-                        for(var count = 0; count < data.length; count++)
-                        {
-                            var directory = 'user/'+data[count].id+'/';
-                            var image_url = 'storage/app/public/avatar/'+data[count].avatar+'/';
-                            output += '<tr>';
-                            if(data[count].avatar){
-                                output += '<td><div class="d-flex align-items-center"><div class="symbol symbol-45px me-5"><img src="'+image_url+'" alt="" /></div><div class="d-flex justify-content-start flex-column"><a href="'+directory+'" class="text-dark fw-bolder text-hover-primary fs-6">'+data[count].first_name+' '+data[count].last_name+'</a><span class="text-muted fw-bold text-muted d-block fs-7">'+data[count].id+'</span></td>';
-
-                            }
-                            else{
-
-                                output += '<td><div class="d-flex align-items-center"><div class="symbol symbol-45px me-5"><img src="{{ asset('public/assets/media/avatars/blank.png') }}" alt="" /></div><div class="d-flex justify-content-start flex-column"><a href="'+directory+'" class="text-dark fw-bolder text-hover-primary fs-6">'+data[count].first_name+' '+data[count].last_name+'</a><span class="text-muted fw-bold text-muted d-block fs-7">'+data[count].id+'</span></td>';
-
-                            }
-
-                            output += '<td>'+data[count].name+'</td>';
-                            if(data[count].is_finanace == 0){
-                                output += '<td>No</td>';
-                            }
-                            else{
-                                output += '<td>Yes</td>';
-                            }
-                            if(data[count].is_tax == 0){
-                                output += '<td>No</td>';
-                            }
-                            else{
-                                output += '<td>Yes</td>';
-                            }
-                            if(data[count].is_profile_verified == 2){
-                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-danger">Incomplete</span></td>';
-
-                            }
-                            else if(data[count].is_profile_verified == 0 || data[count].is_profile_updated == 1){
-
-                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>';
-                            }
-                            else{
-                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-success">Verified</span></td>';
-                            }
-                            if(data[count].is_active == 0){
-
-                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>';
-                            }
-                            else{
-                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-success">Approved</span></td>';
-                            }
-                            if(data[count].is_lock == 0){
-
-                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-success">Active</span></td>';
-                            }
-                            else{
-                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-danger">Locked</span></td>';
-                            }
-                            if(data[count].role_id == 1){
-
-                                output += '<td><div class=" flex-shrink-0"><button type="button"  class="btn  btn-light mb-5" onclick="super_admin()"><i class="fas fa-pencil-alt" id="fa"></i></button></div></td>';
-                            }
-                            else{
-                                output += '<td><div class=" flex-shrink-0"><button type="button" id="kt_sign_in_submit" class="btn  btn-light mb-5" data-system_id="'+data[count].id+'" name="edit"><i class="fas fa-pencil-alt" id="fa"></i></button></div></td>';
-                            }
-                            output += '</tr>';
-                        }
-                    }
-                    else
-                    {
-                        output += '<tr>';
-                        output += '<td class= "fw-bold" colspan="6">No Data Found</td>';
-                        output += '</tr>';
-                    }
-                    $('tbody').html(output);
-                }
-            });  
+            var status_url = jQuery("#status_url").val();
+            var url = status_url+"/"+status+'/';
+            if(status == 'null'){
+                url = jQuery("#base_url").val();
+            }
+            window.location = url; 
         });
     });
 </script>
 
-<!-- progress -->
+<!-- user progress search -->
 <script type="application/javascript">
     jQuery(document).ready(function ()
     {
-        jQuery('select[name="progress_search"]').on('change',function(){ 
+        jQuery('select[name="progress_search"]').on('change',function(){
             var progress = jQuery(this).val();
-            var search = jQuery("#search").val();
-            console.log(progress);
-            console.log(search);
-            jQuery.ajax({
-                url : 'user_progress',
-                type: 'GET',
-                dataType: 'json',
-                data: { "search": search,"progress" : progress},
-                success:function(data)
-                {
-                    console.log(data);
-                    var output = '';
-                    if(data.length > 0){
-                        for(var count = 0; count < data.length; count++)
-                        {
-                            var directory = 'user/'+data[count].id+'/';
-                            var image_url = 'storage/app/public/avatar/'+data[count].avatar+'/';
-                            output += '<tr>';
-                            if(data[count].avatar){
-                                output += '<td><div class="d-flex align-items-center"><div class="symbol symbol-45px me-5"><img src="'+image_url+'" alt="" /></div><div class="d-flex justify-content-start flex-column"><a href="'+directory+'" class="text-dark fw-bolder text-hover-primary fs-6">'+data[count].first_name+' '+data[count].last_name+'</a><span class="text-muted fw-bold text-muted d-block fs-7">'+data[count].id+'</span></td>';
-
-                            }
-                            else{
-
-                                output += '<td><div class="d-flex align-items-center"><div class="symbol symbol-45px me-5"><img src="{{ asset('public/assets/media/avatars/blank.png') }}" alt="" /></div><div class="d-flex justify-content-start flex-column"><a href="'+directory+'" class="text-dark fw-bolder text-hover-primary fs-6">'+data[count].first_name+' '+data[count].last_name+'</a><span class="text-muted fw-bold text-muted d-block fs-7">'+data[count].id+'</span></td>';
-
-                            }
-
-                            output += '<td>'+data[count].name+'</td>';
-                            if(data[count].is_finanace == 0){
-                                output += '<td>No</td>';
-                            }
-                            else{
-                                output += '<td>Yes</td>';
-                            }
-                            if(data[count].is_tax == 0){
-                                output += '<td>No</td>';
-                            }
-                            else{
-                                output += '<td>Yes</td>';
-                            }
-                            if(data[count].is_profile_verified == 2){
-                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-danger">Incomplete</span></td>';
-
-                            }
-                            else if(data[count].is_profile_verified == 0 || data[count].is_profile_updated == 1){
-
-                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>';
-                            }
-                            else{
-                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-success">Verified</span></td>';
-                            }
-                            if(data[count].is_active == 0){
-
-                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>';
-                            }
-                            else{
-                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-success">Approved</span></td>';
-                            }
-                            if(data[count].is_lock == 0){
-
-                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-success">Active</span></td>';
-                            }
-                            else{
-                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-danger">Locked</span></td>';
-                            }
-                            if(data[count].role_id == 1){
-
-                                output += '<td><div class=" flex-shrink-0"><button type="button"  class="btn  btn-light mb-5" onclick="super_admin()"><i class="fas fa-pencil-alt" id="fa"></i></button></div></td>';
-                            }
-                            else{
-                                output += '<td><div class=" flex-shrink-0"><button type="button" id="kt_sign_in_submit" class="btn  btn-light mb-5" data-system_id="'+data[count].id+'" name="edit"><i class="fas fa-pencil-alt" id="fa"></i></button></div></td>';
-                            }
-                            output += '</tr>';
-                        }
-                    }
-                    else
-                    {
-                        output += '<tr>';
-                        output += '<td class= "fw-bold" colspan="6">No Data Found</td>';
-                        output += '</tr>';
-                    }
-                    $('tbody').html(output);
-                }
-            });  
+            var progress_url = jQuery("#progress_url").val();
+            var url = progress_url+"/"+progress+'/';
+            if(progress == 'null'){
+                url = jQuery("#base_url").val();
+            }
+            window.location = url; 
         });
     });
 </script>
 
-<!-- profile -->
+<!-- user profile search -->
 <script type="application/javascript">
     jQuery(document).ready(function ()
     {
         jQuery('select[name="profile_search"]').on('change',function(){
             var profile = jQuery(this).val();
-            var search = jQuery("#search").val();
-            console.log(profile);
-            console.log(search);
-            jQuery.ajax({
-                url : 'user_profile',
-                type: 'GET',
-                dataType: 'json',
-                data: { "search": search,"profile" : profile},
-                success:function(data)
-                {
-                    console.log(data);
-                    var output = '';
-                    if(data.length > 0){
-                        for(var count = 0; count < data.length; count++)
-                        {
-                            var directory = 'user/'+data[count].id+'/';
-                            var image_url = 'storage/app/public/avatar/'+data[count].avatar+'/';
-                            output += '<tr>';
-                            if(data[count].avatar){
-                                output += '<td><div class="d-flex align-items-center"><div class="symbol symbol-45px me-5"><img src="'+image_url+'" alt="" /></div><div class="d-flex justify-content-start flex-column"><a href="'+directory+'" class="text-dark fw-bolder text-hover-primary fs-6">'+data[count].first_name+' '+data[count].last_name+'</a><span class="text-muted fw-bold text-muted d-block fs-7">'+data[count].id+'</span></td>';
-
-                            }
-                            else{
-
-                                output += '<td><div class="d-flex align-items-center"><div class="symbol symbol-45px me-5"><img src="{{ asset('public/assets/media/avatars/blank.png') }}" alt="" /></div><div class="d-flex justify-content-start flex-column"><a href="'+directory+'" class="text-dark fw-bolder text-hover-primary fs-6">'+data[count].first_name+' '+data[count].last_name+'</a><span class="text-muted fw-bold text-muted d-block fs-7">'+data[count].id+'</span></td>';
-
-                            }
-
-                            output += '<td>'+data[count].name+'</td>';
-                            if(data[count].is_finanace == 0){
-                                output += '<td>No</td>';
-                            }
-                            else{
-                                output += '<td>Yes</td>';
-                            }
-                            if(data[count].is_tax == 0){
-                                output += '<td>No</td>';
-                            }
-                            else{
-                                output += '<td>Yes</td>';
-                            }
-                            if(data[count].is_profile_verified == 2){
-                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-danger">Incomplete</span></td>';
-
-                            }
-                            else if(data[count].is_profile_verified == 0 || data[count].is_profile_updated == 1){
-
-                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>';
-                            }
-                            else{
-                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-success">Verified</span></td>';
-                            }
-                            if(data[count].is_active == 0){
-
-                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>';
-                            }
-                            else{
-                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-success">Approved</span></td>';
-                            }
-                            if(data[count].is_lock == 0){
-
-                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-success">Active</span></td>';
-                            }
-                            else{
-                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-danger">Locked</span></td>';
-                            }
-                            if(data[count].role_id == 1){
-
-                                output += '<td><div class=" flex-shrink-0"><button type="button"  class="btn  btn-light mb-5" onclick="super_admin()"><i class="fas fa-pencil-alt" id="fa"></i></button></div></td>';
-                            }
-                            else{
-                                output += '<td><div class=" flex-shrink-0"><button type="button" id="kt_sign_in_submit" class="btn  btn-light mb-5" data-system_id="'+data[count].id+'" name="edit"><i class="fas fa-pencil-alt" id="fa"></i></button></div></td>';
-                            }
-                            output += '</tr>';
-                        }
-                    }
-                    else
-                    {
-                        output += '<tr>';
-                        output += '<td class= "fw-bold" colspan="6">No Data Found</td>';
-                        output += '</tr>';
-                    }
-                    $('tbody').html(output);
-                }
-            });  
+            var profile_url = jQuery("#profile_url").val();
+            var url = profile_url+"/"+profile+'/';
+            if(profile == 'null'){
+                url = jQuery("#base_url").val();
+            }
+            window.location = url; 
         });
     });
 </script>
 
-<!-- role -->
+<!-- user role search -->
 <script type="application/javascript">
     jQuery(document).ready(function ()
     {
         jQuery('select[name="role_search"]').on('change',function(){
             var role = jQuery(this).val();
-            var search = jQuery("#search").val();
-            console.log(role);
-            console.log(search);
-            jQuery.ajax({
-                url : 'user_role',
-                type: 'GET',
-                dataType: 'json',
-                data: { "search": search,"role" : role},
-                success:function(data)
-                {
-                    console.log(data);
-                    var output = '';
-                    if(data.length > 0){
-                        for(var count = 0; count < data.length; count++)
-                        {
-                            var directory = 'user/'+data[count].id+'/';
-                            var image_url = 'storage/app/public/avatar/'+data[count].avatar+'/';
-                            output += '<tr>';
-                            if(data[count].avatar){
-                                output += '<td><div class="d-flex align-items-center"><div class="symbol symbol-45px me-5"><img src="'+image_url+'" alt="" /></div><div class="d-flex justify-content-start flex-column"><a href="'+directory+'" class="text-dark fw-bolder text-hover-primary fs-6">'+data[count].first_name+' '+data[count].last_name+'</a><span class="text-muted fw-bold text-muted d-block fs-7">'+data[count].id+'</span></td>';
-
-                            }
-                            else{
-
-                                output += '<td><div class="d-flex align-items-center"><div class="symbol symbol-45px me-5"><img src="{{ asset('public/assets/media/avatars/blank.png') }}" alt="" /></div><div class="d-flex justify-content-start flex-column"><a href="'+directory+'" class="text-dark fw-bolder text-hover-primary fs-6">'+data[count].first_name+' '+data[count].last_name+'</a><span class="text-muted fw-bold text-muted d-block fs-7">'+data[count].id+'</span></td>';
-
-                            }
-
-                            output += '<td>'+data[count].name+'</td>';
-                            if(data[count].is_finanace == 0){
-                                output += '<td>No</td>';
-                            }
-                            else{
-                                output += '<td>Yes</td>';
-                            }
-                            if(data[count].is_tax == 0){
-                                output += '<td>No</td>';
-                            }
-                            else{
-                                output += '<td>Yes</td>';
-                            }
-                            if(data[count].is_profile_verified == 2){
-                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-danger">Incomplete</span></td>';
-
-                            }
-                            else if(data[count].is_profile_verified == 0 || data[count].is_profile_updated == 1){
-
-                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>';
-                            }
-                            else{
-                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-success">Verified</span></td>';
-                            }
-                            if(data[count].is_active == 0){
-
-                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>';
-                            }
-                            else{
-                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-success">Approved</span></td>';
-                            }
-                            if(data[count].is_lock == 0){
-
-                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-success">Active</span></td>';
-                            }
-                            else{
-                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-danger">Locked</span></td>';
-                            }
-                            if(data[count].role_id == 1){
-
-                                output += '<td><div class=" flex-shrink-0"><button type="button"  class="btn  btn-light mb-5" onclick="super_admin()"><i class="fas fa-pencil-alt" id="fa"></i></button></div></td>';
-                            }
-                            else{
-                                output += '<td><div class=" flex-shrink-0"><button type="button" id="kt_sign_in_submit" class="btn  btn-light mb-5" data-system_id="'+data[count].id+'" name="edit"><i class="fas fa-pencil-alt" id="fa"></i></button></div></td>';
-                            }
-                            output += '</tr>';
-                        }
-                    }
-                    else
-                    {
-                        output += '<tr>';
-                        output += '<td class= "fw-bold" colspan="6">No Data Found</td>';
-                        output += '</tr>';
-                    }
-                    $('tbody').html(output);
-                }
-            });  
+            var role_url = jQuery("#role_url").val();
+            var url = role_url+"/"+role+'/';
+            if(role == 'null'){
+                url = jQuery("#base_url").val();
+            }
+            window.location = url; 
         });
     });
 </script>
 
-<!-- investment_search -->
+
+<!-- investment search -->
 <script type="application/javascript">
     jQuery(document).ready(function ()
     {
         jQuery('input[name="investment_search"]').on('change',function(){
-            var search = jQuery(this).val();
-            jQuery.ajax({
-                url : 'investment_search',
-                type: 'GET',
-                dataType: 'json',
-                data: { "search": search},
-                success:function(data)
-                {
-                    console.log(data.data);
-                    var output = '';
-                    if(data.data.length > 0){
-                        for(var count = 0; count < data.data.length; count++)
-                        {
-                            var directory = 'user/'+data.data[count].user_id+'/';
-                            var directory1 = 'view_finance/'+data.data[count].id+'/';
-                            var image_url = 'storage/app/public/avatar/'+data.data[count].user_avatar+'/';
-                            output += '<tr>';
-                            if(data.data[count].user_avatar){
-                                output += '<td><div class="d-flex align-items-center"><div class="symbol symbol-45px me-5"><img src="'+image_url+'" alt="" /></div><div class="d-flex justify-content-start flex-column"><a href="'+directory+'" class="text-dark fw-bolder text-hover-primary fs-6">'+data.data[count].user_firstname+' '+data.data[count].user_lastname+'</a><span class="text-muted fw-bold text-muted d-block fs-7">'+data.data[count].user_id+'</span></td>';
-
-                            }
-                            else{
-
-                                output += '<td><div class="d-flex align-items-center"><div class="symbol symbol-45px me-5"><img src="{{ asset('public/assets/media/avatars/blank.png') }}" alt="" /></div><div class="d-flex justify-content-start flex-column"><a href="" class="text-dark fw-bolder text-hover-primary fs-6">'+data.data[count].user_firstname+' '+data.data[count].user_lastname+'</a><span class="text-muted fw-bold text-muted d-block fs-7">'+data.data[count].user_id+'</span></td>';
-                            }
-                            if(data.data[count].plan_type == 'month'){
-                                output += '<td>Month</td>';
-                            }
-                            else{
-                                output += '<td>Year</td>';
-                            }
-
-                            if(data.data[count].no_of_year !== null){
-                                output += '<td>'+data.data[count].no_of_year+'</td>';
-                            }
-                            else{
-                                output += '<td>-</td>';
-                            }
-                            output += '<td>'+data.data[count].amount+'</td>';
-                            output += '<td>'+data.data[count].investment_date+'</td>';
-                            if(data.data[count].accepted_date !== null){
-                                output += '<td>'+data.data[count].accepted_date+'</td>';
-                            }
-                            else{
-                                output += '<td>-</td>';
-                            }
-                            
-                            output += '<td>'+data.data[count].percentage+'</td>';
-                            if(data.data[count].is_status == 2){
-
-                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>';
-                            }
-                            else if(data.data[count].is_status == 1){
-                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-success">Approved</span></td>';
-                            }
-                            else{
-                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-danger">Rejected</span></td>';
-                            }
-
-                            output += '<td><button class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary"name="approve"  data-system_id="'+data.data[count].id+'" title="Edit"><i class="fas fa-pencil-alt" id="fa"></i></button> <a class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary" href="'+directory1+'"><span class="svg-icon svg-icon-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><rect opacity="0.5" x="18" y="13" width="13" height="2" rx="1" transform="rotate(-180 18 13)" fill="black"></rect><path d="M15.4343 12.5657L11.25 16.75C10.8358 17.1642 10.8358 17.8358 11.25 18.25C11.6642 18.6642 12.3358 18.6642 12.75 18.25L18.2929 12.7071C18.6834 12.3166 18.6834 11.6834 18.2929 11.2929L12.75 5.75C12.3358 5.33579 11.6642 5.33579 11.25 5.75C10.8358 6.16421 10.8358 6.83579 11.25 7.25L15.4343 11.4343C15.7467 11.7467 15.7467 12.2533 15.4343 12.5657Z" fill="black"></path></svg></span></a> </td>';
-                            output += '</tr>';
-                        }
-                    }
-                    else
-                    {
-                        output += '<tr>';
-                        output += '<td colspan="6">No Data Found</td>';
-                        output += '</tr>';
-                    }
-                    $('.investment_body').html(output);
-                }
-            });  
+            var investment_search = jQuery(this).val();
+            var search_url = jQuery("#investment_search_url").val();
+            var url = search_url+"/"+investment_search+'/';
+            if(investment_search == ''){
+                url = jQuery("#base_url").val();
+            }
+            window.location = url; 
         });
     });
 </script>
@@ -3918,89 +3497,37 @@
     });
 </script>
 
-<!-- investment_plan filter -->
+<!-- investment status search -->
 <script type="application/javascript">
     jQuery(document).ready(function ()
     {
-        jQuery('select[name="investment_plan"]').on('change',function(){
-            var plan = jQuery(this).val();
-            jQuery.ajax({
-                url : 'investment_plan',
-                type: 'GET',
-                dataType: 'json',
-                data: { "plan": plan},
-                success:function(data)
-                {
-
-                    console.log(data.data);
-                    var output = '';
-                    if(data.data.length > 0){
-                        for(var count = 0; count < data.data.length; count++)
-                        {
-                            var directory = 'user/'+data.data[count].user_id+'/';
-                            var directory1 = 'view_finance/'+data.data[count].id+'/';
-                            var image_url = 'storage/app/public/avatar/'+data.data[count].user_avatar+'/';
-                            output += '<tr>';
-                            if(data.data[count].user_avatar){
-                                output += '<td><div class="d-flex align-items-center"><div class="symbol symbol-45px me-5"><img src="'+image_url+'" alt="" /></div><div class="d-flex justify-content-start flex-column"><a href="'+directory+'" class="text-dark fw-bolder text-hover-primary fs-6">'+data.data[count].user_firstname+' '+data.data[count].user_lastname+'</a><span class="text-muted fw-bold text-muted d-block fs-7">'+data.data[count].user_id+'</span></td>';
-
-                            }
-                            else{
-
-                                output += '<td><div class="d-flex align-items-center"><div class="symbol symbol-45px me-5"><img src="{{ asset('public/assets/media/avatars/blank.png') }}" alt="" /></div><div class="d-flex justify-content-start flex-column"><a href="" class="text-dark fw-bolder text-hover-primary fs-6">'+data.data[count].user_firstname+' '+data.data[count].user_lastname+'</a><span class="text-muted fw-bold text-muted d-block fs-7">'+data.data[count].user_id+'</span></td>';
-                            }
-                            if(data.data[count].plan_type == 'month'){
-                                output += '<td>Month</td>';
-                            }
-                            else{
-                                output += '<td>Year</td>';
-                            }
-
-                            if(data.data[count].no_of_year !== null){
-                                output += '<td>'+data.data[count].no_of_year+'</td>';
-                            }
-                            else{
-                                output += '<td>-</td>';
-                            }
-                            output += '<td>'+data.data[count].amount+'</td>';
-                            output += '<td>'+data.data[count].investment_date+'</td>';
-                            if(data.data[count].accepted_date !== null){
-                                output += '<td>'+data.data[count].accepted_date+'</td>';
-                            }
-                            else{
-                                output += '<td>-</td>';
-                            }
-                            
-                            output += '<td>'+data.data[count].percentage+'</td>';
-                            if(data.data[count].is_status == 2){
-
-                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>';
-                            }
-                            else if(data.data[count].is_status == 1){
-                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-success">Approved</span></td>';
-                            }
-                            else{
-                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-danger">Rejected</span></td>';
-                            }
-
-                            output += '<td><button class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary"name="approve"  data-system_id="'+data.data[count].id+'" title="Edit"><i class="fas fa-pencil-alt" id="fa"></i></button> <a class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary" href="'+directory1+'"><span class="svg-icon svg-icon-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><rect opacity="0.5" x="18" y="13" width="13" height="2" rx="1" transform="rotate(-180 18 13)" fill="black"></rect><path d="M15.4343 12.5657L11.25 16.75C10.8358 17.1642 10.8358 17.8358 11.25 18.25C11.6642 18.6642 12.3358 18.6642 12.75 18.25L18.2929 12.7071C18.6834 12.3166 18.6834 11.6834 18.2929 11.2929L12.75 5.75C12.3358 5.33579 11.6642 5.33579 11.25 5.75C10.8358 6.16421 10.8358 6.83579 11.25 7.25L15.4343 11.4343C15.7467 11.7467 15.7467 12.2533 15.4343 12.5657Z" fill="black"></path></svg></span></a> </td>';
-                            output += '</tr>';
-                        }
-                    }
-                    else
-                    {
-                        output += '<tr>';
-                        output += '<td colspan="6">No Data Found</td>';
-                        output += '</tr>';
-                    }
-                    $('.investment_body').html(output); 
-                    
-                }
-            });  
+        jQuery('select[name="investment_status"]').on('change',function(){
+            var investment_status = jQuery(this).val();
+            var status_url = jQuery("#investment_status_url").val();
+            var url = status_url+"/"+investment_status+'/';
+            if(investment_status == 'null'){
+                url = jQuery("#base_url").val();
+            }
+            window.location = url; 
         });
     });
 </script>
 
+<!-- investment plan search -->
+<script type="application/javascript">
+    jQuery(document).ready(function ()
+    {
+        jQuery('select[name="investment_plan"]').on('change',function(){
+            var investment_plan = jQuery(this).val();
+            var plan_url = jQuery("#plan_url").val();
+            var url = plan_url+"/"+investment_plan+'/';
+            if(investment_plan == 'null'){
+                url = jQuery("#base_url").val();
+            }
+            window.location = url; 
+        });
+    });
+</script>
 
 
 <!-- profile page validation -->
