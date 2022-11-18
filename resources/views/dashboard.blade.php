@@ -10,7 +10,7 @@
         filter: grayscale(0%);
     } 
     body{
-        background-image: url(https://smartfinservice.com/test/public/assets/img/header-bg.jpg)!important;
+        background-image: url(https://smartfinservice.com/public/assets/img/header-bg.jpg)!important;
     }
 </style>
 
