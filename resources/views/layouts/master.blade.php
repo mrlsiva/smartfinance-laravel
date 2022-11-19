@@ -23,7 +23,7 @@
 <!--end::Head-->
 <!--begin::Body-->
 
-<body id="kt_body" style="background-image: asset(public/assets/img/header-bg.jpg)" class="header-fixed header-tablet-and-mobile-fixed toolbar-enabled">
+<body id="kt_body" style="background-image: url(public/assets/img/header-bg.jpg)" class="header-fixed header-tablet-and-mobile-fixed toolbar-enabled">
     <!--begin::Main-->
     <!--begin::Root-->
     <div class="d-flex flex-column flex-root">
