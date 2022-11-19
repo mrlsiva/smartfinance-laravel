@@ -8,7 +8,7 @@
     <meta name="description" content=" " />
     <meta name="keywords" content=" " />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="shortcut icon" href="{{ asset('public/assets/img/logo.png') }}" />
+    <link rel="shortcut icon" href="{{ asset('public/assets/img/logo.svg') }}" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
     <link href="{{ asset('public/assets/plugins/custom/datatables/datatables.bundle.css') }}" rel="stylesheet" type="text/css" />
     <!--end::Page Vendor Stylesheets-->
@@ -23,7 +23,7 @@
 <!--end::Head-->
 <!--begin::Body-->
 
-<body id="kt_body" style="background-image: url(public/assets/img/header-bg.jpg)" class="header-fixed header-tablet-and-mobile-fixed toolbar-enabled">
+<body id="kt_body" style="background-image: asset(public/assets/img/header-bg.jpg)" class="header-fixed header-tablet-and-mobile-fixed toolbar-enabled">
     <!--begin::Main-->
     <!--begin::Root-->
     <div class="d-flex flex-column flex-root">
@@ -54,8 +54,8 @@
                         <!--begin::Header Logo-->
                         <div class="header-logo me-5 me-md-10 flex-grow-1 flex-lg-grow-0">
                             <a class="logo-top" href="{{route('dashboard')}}">
-                                <img alt="Logo" src="{{ asset('public/assets/img/logo.png') }}" class="logo-default h-25px mr-10" />
-                                <img alt="Logo" src="{{ asset('public/assets/img/logo.png') }}" class="logo-sticky h-25px mr-10" /> Smart Finance
+                                <img alt="Logo" src="{{ asset('public/assets/img/logo.svg') }}" class="logo-default h-25px mr-10" />
+                                <img alt="Logo" src="{{ asset('public/assets/img/logo.svg') }}" class="logo-sticky h-25px mr-10" /> Smart Finance
                             </a>
                         </div>
                         <!--end::Header Logo-->

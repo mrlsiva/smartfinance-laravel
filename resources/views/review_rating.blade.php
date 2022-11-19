@@ -9,7 +9,7 @@
     <meta name="description" content=" " />
     <meta name="keywords" content=" " />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="shortcut icon" href="{{ asset('public/assets/img/logo.png') }}" />
+    <link rel="shortcut icon" href="{{ asset('public/assets/img/logo.svg') }}" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
     <link href="{{ asset('public/assets/css/custom.css') }}" rel="stylesheet" type="text/css" />
     
@@ -53,8 +53,8 @@
                                 <!--end::Mobile menu toggle-->
                                 <!--begin::Logo image-->
                                 <a href="{{route('home')}}">
-                                    <img alt="Logo" src="{{ asset('public/assets/img/full-logo.png') }}" class="logo-default h-25px h-lg-50px" />
-                                    <img alt="Logo" src="{{ asset('public/assets/img/full-logo.png') }}" class="logo-sticky h-20px h-lg-25px" />
+                                    <img alt="Logo" src="{{ asset('public/assets/img/full-logo.svg') }}" class="logo-default h-25px h-lg-50px" />
+                                    <img alt="Logo" src="{{ asset('public/assets/img/full-logo.svg') }}" class="logo-sticky h-20px h-lg-25px" />
                                 </a>
                                 <!--end::Logo image-->
                             </div>
@@ -305,7 +305,7 @@
                         <div class="d-flex align-items-center order-2 order-md-1">
                             <!--begin::Logo-->
                             <a href="">
-                                <img alt="Logo" src="{{ asset('public/assets/img/logo.png') }}" class="h-15px h-md-20px" />
+                                <img alt="Logo" src="{{ asset('public/assets/img/logo.svg') }}" class="h-15px h-md-20px" />
                             </a>
                             <!--end::Logo image-->
                             <!--begin::Logo image-->

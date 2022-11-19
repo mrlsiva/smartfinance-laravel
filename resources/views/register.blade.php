@@ -9,7 +9,7 @@
     <meta name="description" content=" " />
     <meta name="keywords" content=" " />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="shortcut icon" href="{{ asset('public/assets/img/logo.png') }}" />
+    <link rel="shortcut icon" href="{{ asset('public/assets/img/logo.svg') }}" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
     <link href="{{ asset('public/assets/plugins/custom/datatables/datatables.bundle.css') }}" rel="stylesheet" type="text/css" />
     <!--end::Page Vendor Stylesheets-->
@@ -35,7 +35,7 @@
                     <div class="d-flex flex-row-fluid flex-column text-center p-10 pt-lg-20">
                         <!--begin::Logo-->
                         <a href="{{route('home')}}" class="py-9 mb-5">
-                            <img alt="Logo" src="{{ asset('public/assets/img/logo.png') }}" class="h-60px" />
+                            <img alt="Logo" src="{{ asset('public/assets/img/logo.svg') }}" class="h-60px" />
                         </a>
                         <!--end::Logo-->
                         <!--begin::Title-->
