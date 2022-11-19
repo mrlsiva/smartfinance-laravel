@@ -823,7 +823,7 @@ class UserController extends Controller
 
             DB::table('user_details')->where('user_id',$user_id)->update(['address' => $request->address,'city' => $request->city,'pincode' => $request->pincode]);
 
-            $user = User('id',$user_id)->first();
+            $user = User::where('id',$user_id)->first();
             DB::table('users')->where('id',$user_id)->update(['is_profile_updated' => 1]);
             if($user->is_profile_updated == 0 && $profile_update == 'true'){
 
@@ -947,7 +947,7 @@ class UserController extends Controller
             ]);
 
             DB::table('bank_details')->where('user_id',$user_id)->update(['name' => $request->holder_name,'number' => $request->account_no,'ifsc_code' => $request->ifsc_code,'branch' => $request->branch,'city' => $request->city]);
-            $user = User('id',$user_id)->first();
+            $user = User::where('id',$user_id)->first();
             DB::table('users')->where('id',$user_id)->update(['is_profile_updated' => 1]);
             if($user->is_profile_updated == 0 && $profile_update == 'true'){
 
@@ -1004,7 +1004,7 @@ class UserController extends Controller
                 DB::table('nominee_details')->where('user_id',$user_id)->update(['aadhaar' => $filename]);
                 
             }
-            $user = User('id',$user_id)->first();
+            $user = User::where('id',$user_id)->first();
             DB::table('users')->where('id',$user_id)->update(['is_profile_updated' => 1]);
             if($user->is_profile_updated == 0 && $profile_update == 'true'){
 
