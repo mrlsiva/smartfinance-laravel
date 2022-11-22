@@ -90,7 +90,7 @@
                                     </div>
                                     Smart Finance
                                 </a>
-                                <a href="#" class="text-dark fw-bold fs-6 col border-bottom border-warning bg-light-warning p-6 rounded-2 me-7 mb-7">
+                                <a href="#" onclick="loan()" class=" {{('loan'== $flag)?'active':''}} text-dark fw-bold fs-6 col border-bottom border-warning bg-light-warning p-6 rounded-2 me-7 mb-7" id="loan_management">
                                                                     
                                     <div class="d-flex flex-stack flex-grow-1">
                                         <div class="d-flex flex-column me-2">
@@ -885,6 +885,64 @@
                     </div>
                     <!--end::Table Widget 4-->
                 </div>
+            </div>
+            <!--end::Row-->
+            <!--begin::Row-->
+            <div class="row gy-5 g-xl-8 mt-xl-5" id="loan" style="{{('loan'== $flag)?'display:block':'display:none'}}">
+                <!--begin::Col-->
+                <!--end::Col-->
+                <!--begin::Col-->
+                <div class="col-xl-12 ">
+                    <!--begin::Tables Widget 9-->
+                    <div class="card card-xl-stretch mb-5 mb-xl-8">
+                        <!--begin::Header-->
+                        <div class="card-header border-0 pt-5">
+                            <h3 class="card-title align-items-start flex-column">
+                                <span class="card-label fw-bolder text-dark">Loan Management</span>
+                                <!-- <span class="text-gray-400 mt-1 fw-bold fs-6">Avg. 10 customers added per day</span> -->
+                            </h3>
+                            <!--begin::Actions-->
+                            <div class="card-toolbar">
+                                
+                            </div>
+                            <!--end::Actions-->
+                        </div>
+                        <!--end::Header-->
+                        <!--begin::Body-->
+                        <div class="card-body py-3">
+                            <!--begin::Table container-->
+                            <div class="table-responsive">
+                                <!--begin::Table-->
+                                <table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
+                                    <!--begin::Table head-->
+                                    <thead>
+                                        <tr class="fw-bolder text-muted">
+                                            <th class="">USER</th>
+                                            <th class="">AMOUNT</th>
+                                            <th class="">INTREST</th>
+                                            <th class="">PENDING AMOUNT</th>
+                                            <th class="">STATUS</th>
+                                            <th class="">ACTIONS</th>
+                                        </tr>
+                                    </thead>
+                                    <!--end::Table head-->
+                                    <!--begin::Table body-->
+                                    <tbody class="user_table">
+                                       
+                                    </tbody>
+                                    <!--end::Table body-->
+                                </table>
+                                <!--end::Table-->
+                                
+                                
+                            </div>
+                            <!--end::Table container-->
+                        </div>
+                        <!--begin::Body-->
+                    </div>
+                    <!--end::Tables Widget 9-->
+                </div>
+                <!--end::Col-->
             </div>
             <!--end::Row-->
             <div id="admin_finance" id="admin_finance" style="display:none;">
@@ -3990,17 +4048,31 @@
     function user() {
         document.getElementById("user_management").classList.add("active");
         document.getElementById("smart_finance").classList.remove("active");
+        document.getElementById("loan_management").classList.remove("active");
         $('#user').show();
         $('#finance').hide();
         $('#admin_finance').hide();
+        $('#loan').hide();
     }
 
     function finance() {
         document.getElementById("user_management").classList.remove("active");
         document.getElementById("smart_finance").classList.add("active");
+        document.getElementById("loan_management").classList.remove("active");
         $('#user').hide();
         $('#finance').show();
         $('#admin_finance').show();
+        $('#loan').hide();
+    }
+
+    function loan() {
+        document.getElementById("user_management").classList.remove("active");
+        document.getElementById("smart_finance").classList.remove("active");
+        document.getElementById("loan_management").classList.add("active");
+        $('#user').hide();
+        $('#finance').hide();
+        $('#admin_finance').hide();
+        $('#loan').show();
     }
 
 </script>
