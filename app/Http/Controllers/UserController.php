@@ -21,6 +21,7 @@ use App\Models\UserAmount;
 use App\Models\ReviewRating;
 use App\Models\Setting;
 use App\Models\Template;
+use App\Models\Loan;
 use Image;
 use DB;
 
@@ -100,9 +101,11 @@ class UserController extends Controller
 
 
                 $smartfinances = Smartfinance::where('user_id',$user->id)->orderBy('id','Desc')->simplePaginate(10);
-                $smartfinance_count = Smartfinance::where('is_status',2)->count();
+                $smartfinance_count = Smartfinance::where([['user_id',$user->id],['is_status',2]])->count();
+                $loans = Loan::where('user_id',$user->id)->orderBy('id','Desc')->simplePaginate(10);
+                $loan_count = Loan::where([['user_id',$user->id],['is_status',2]])->count();
 
-                return view('user_dashboard')->with('smartfinances',$smartfinances)->with('smartfinance_count',$smartfinance_count);
+                return view('user_dashboard')->with('smartfinances',$smartfinances)->with('smartfinance_count',$smartfinance_count)->with('loans',$loans)->with('loan_count',$loan_count);
 
             }
             else{
@@ -192,6 +195,9 @@ class UserController extends Controller
                 $user = Auth::user();
                 $admin_finances = Smartfinance::where('user_id',$user->id)->orderBy('id','Desc')->simplePaginate(10);
                 $admin_finance_count = Smartfinance::where('user_id',$user->id)->count();
+                $loans = Loan::orderBy('id','Desc')->simplePaginate(10);
+                $loan_count = Loan::where('is_status',2)->count();
+
                 $flag = 'user';
                 $role = NULL;
                 $profile = NULL;
@@ -203,7 +209,7 @@ class UserController extends Controller
                 $investment_search = NULL;
                 
 
-                return view('dashboard')->with('users',$users)->with('user_count',$user_count)->with('smartfinances',$smartfinances)->with('smartfinance_count',$smartfinance_count)->with('admin_finances',$admin_finances)->with('admin_finance_count',$admin_finance_count)->with('payment_count',$payment_count)->with('role',$role)->with('profile',$profile)->with('progress',$progress)->with('status',$status)->with('search',$search)->with('investment_plan',$investment_plan)->with('investment_status',$investment_status)->with('investment_search',$investment_search)->with('flag',$flag);
+                return view('dashboard')->with('users',$users)->with('user_count',$user_count)->with('smartfinances',$smartfinances)->with('smartfinance_count',$smartfinance_count)->with('admin_finances',$admin_finances)->with('admin_finance_count',$admin_finance_count)->with('payment_count',$payment_count)->with('loans',$loans)->with('loan_count',$loan_count)->with('role',$role)->with('profile',$profile)->with('progress',$progress)->with('status',$status)->with('search',$search)->with('investment_plan',$investment_plan)->with('investment_status',$investment_status)->with('investment_search',$investment_search)->with('flag',$flag);
             }
         }
         

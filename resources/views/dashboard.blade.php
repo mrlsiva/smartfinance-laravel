@@ -99,7 +99,7 @@
                                             </span>         
                                         </div>
                                         <span class="symbol symbol-50px">
-                                            <span class="px-3 py-1 fs-5 fw-bolder bg-warning text-white">0</span>
+                                            <span class="px-3 py-1 fs-5 fw-bolder bg-warning text-white">{{$loan_count}}</span>
                                         </span>
                                     </div>
                                     Loan
@@ -928,13 +928,64 @@
                                     <!--end::Table head-->
                                     <!--begin::Table body-->
                                     <tbody class="user_table">
-                                       
+                                       @foreach($loans as $loan)
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="symbol symbol-45px me-5">
+                                                        @php
+                                                            $avatar = App\Models\UserDetail::where('user_id',$loan->user->id)->first();
+                                                        @endphp
+                                                        @if($avatar != NULL)
+                                                        <img src="{{ $avatar->avatar}}" alt="" />
+                                                        @endif
+                                                    </div>
+                                                    <div class="d-flex justify-content-start flex-column">
+                                                        <a href="{{route('user', ['id' => $loan->user->id])}}" class="text-dark fw-bolder text-hover-primary fs-6">{{$loan->user->first_name}} {{$loan->user->last_name}}</a>
+                                                        <span class="text-muted fw-bold text-muted d-block fs-7">#{{$loan->user->id}}</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>Rs {{$loan->commafun($loan->amount)}}</td>
+                                            <td>
+                                                @if($loan->intrest != NULL)
+                                                {{$loan->intrest}}
+                                                @else
+                                                -
+                                                @endif
+                                            </td>
+                                            <td>-</td>
+                                            @if($loan->is_close == 1)
+                                                <td><span class="badge py-3 px-4 fs-7 badge-light-secondary">Expired</span></td>
+                                            @else
+                                                @if($loan->is_status == 2)
+                                                    <td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>
+                                                @elseif($loan->is_status == 1)
+                                                    <td><span class="badge py-3 px-4 fs-7 badge-light-success">Accepted</span></td>
+                                                @elseif($loan->is_status == 0)
+                                                    <td><span class="badge py-3 px-4 fs-7 badge-light-danger">Rejected</span></td>
+                                                @endif
+                                            @endif
+                                            <td class="">
+                                                <button class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary"name="loan_edit" data-system_id="{{$loan->id}}" title="Edit"><i class="fas fa-pencil-alt" id="fa"></i></button>
+                                                
+                                                <a class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary" href="{{route('view_loan', ['id' => $loan->id])}}">
+                                                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr064.svg-->
+                                                    <span class="svg-icon svg-icon-2">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                            <rect opacity="0.5" x="18" y="13" width="13" height="2" rx="1" transform="rotate(-180 18 13)" fill="black"></rect>
+                                                            <path d="M15.4343 12.5657L11.25 16.75C10.8358 17.1642 10.8358 17.8358 11.25 18.25C11.6642 18.6642 12.3358 18.6642 12.75 18.25L18.2929 12.7071C18.6834 12.3166 18.6834 11.6834 18.2929 11.2929L12.75 5.75C12.3358 5.33579 11.6642 5.33579 11.25 5.75C10.8358 6.16421 10.8358 6.83579 11.25 7.25L15.4343 11.4343C15.7467 11.7467 15.7467 12.2533 15.4343 12.5657Z" fill="black"></path>
+                                                        </svg>
+                                                    </span>
+                                                    <!--end::Svg Icon-->
+                                                </a>
+                                            </td>
+                                        </tr>
+                                       @endforeach
                                     </tbody>
                                     <!--end::Table body-->
                                 </table>
                                 <!--end::Table-->
-                                
-                                
                             </div>
                             <!--end::Table container-->
                         </div>
@@ -1926,7 +1977,7 @@
 </div>
 <!--end::Modal - Create Project-->
 
-<!-- begin::Modal -->
+<!-- begin::user edit Modal -->
 <div class="modal fade" id="edit_modal" tabindex="-1" aria-hidden="true">
     <!--begin::Modal dialog-->
     <div class="modal-dialog mw-650px">
@@ -2250,7 +2301,7 @@
 </div>
 <!-- end::Modal -approve-investment- -->
 
-<!-- refferal_modal -->
+<!-- refferal_user_modal -->
 <div class="modal fade" id="refferal_modal" tabindex="-1" aria-hidden="true">
     <!--begin::Modal dialog-->
     <div class="modal-dialog mw-650px">
@@ -2332,8 +2383,490 @@
 </div>
 <!-- end::refferal_modal -->
 
+<!-- begin::loan edit Modal -->
+<div class="modal fade" id="edit_loan_modal" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog mw-650px">
+        <!--begin::Modal content-->
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header pb-0 border-0 justify-content-end">
+                <!--begin::Close-->
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
+                            <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="black" />
+                        </svg>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--begin::Modal header-->
+            <!--begin::Modal body-->
+            <div class="modal-body scroll-y mx-5 mx-xl-18 pt-0 pb-15">
+                <!--begin::Heading-->
+
+                <!--end::Google Contacts Invite-->
+                <!--begin::Separator-->
+                <!--end::Separator-->
+                <!--begin::Textarea-->
+                <!--end::Textarea-->
+                <!--begin::Users-->
+                <div class="mb-10">
+                    <!--begin::Heading-->
+                    <div class="fs-6 fw-bold mb-2">Loan Approval</div>
+                    <!--end::Heading-->
+                    <form class="form w-100" novalidate="novalidate" id="kt_sign_in_form" method="post" action="{{route('loan_edit')}}" enctype="multipart/form-data">
+                        @csrf
+                        <input type="hidden" name="loan_id" id="loan_id">
+
+                        <table class="text-center table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
+                            <thead>
+                                <tr class="fw-bolder text-muted">
+                                    <th class="">DOCUMENTS</th>
+                                    <th class="">ACTION</th>
+                                </tr>
+                            </thead>
+                            <tbody class="loan_body">
+                            </tbody>
+                        </table>
+                        
+                        <!--begin::List-->
+                        <div class="mh-300px scroll-y me-n7 pe-7">
+                            <div class="d-flex flex-stack py-4 border-bottom border-gray-300 border-bottom-dashed">
+                                <!--begin::Details-->
+                                <div class="d-flex align-items-center">
+                                    
+                                    <!--begin::Details-->
+                                    <div class="ms-5">
+                                        <span class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">Loan Amount</span>
+                                    </div>
+                                    <!--end::Details-->
+                                </div>
+                                <!--end::Details-->
+                                <!--begin::Access menu-->
+                                <div class="ms-2 w-150px">
+                                    <input type="text" class="form-control form-control-solid" placeholder="Loan Amount" value="" name="loan_amount" id="loan_amount" readonly="" />
+                                </div>
+                                <!--end::Access menu-->
+                            </div>
+                        </div>
+                        <!--end::List-->
+
+                        <!--begin::List-->
+                        <div class="mh-300px scroll-y me-n7 pe-7">
+                            <div class="d-flex flex-stack py-4 border-bottom border-gray-300 border-bottom-dashed">
+                                <!--begin::Details-->
+                                <div class="d-flex align-items-center">
+                                    
+                                    <!--begin::Details-->
+                                    <div class="ms-5">
+                                        <span class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">Property Type</span>
+                                    </div>
+                                    <!--end::Details-->
+                                </div>
+                                <!--end::Details-->
+                                <!--begin::Access menu-->
+                                <div class="ms-2 w-150px">
+                                    <input type="text" class="form-control form-control-solid" placeholder="Property Type" value="" name="loan_property_type" id="loan_property_type" readonly="" />
+                                </div>
+                                <!--end::Access menu-->
+                            </div>
+                        </div>
+                        <!--end::List-->
+
+                        <!--begin::List-->
+                        <div class="mh-300px scroll-y me-n7 pe-7">
+                            <div class="d-flex flex-stack py-4 border-bottom border-gray-300 border-bottom-dashed">
+                                <!--begin::Details-->
+                                <div class="d-flex align-items-center">
+                                    
+                                    <!--begin::Details-->
+                                    <div class="ms-5">
+                                        <span class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">Property Value</span>
+                                    </div>
+                                    <!--end::Details-->
+                                </div>
+                                <!--end::Details-->
+                                <!--begin::Access menu-->
+                                <div class="ms-2 w-150px">
+                                    <input type="text" class="form-control form-control-solid" placeholder="Property Value" value="" name="loan_property_value" id="loan_property_value" readonly="" />
+                                </div>
+                                <!--end::Access menu-->
+                            </div>
+                        </div>
+                        <!--end::List-->
+
+                        <!--begin::List-->
+                        <div class="mh-300px scroll-y me-n7 pe-7">
+                            <div class="d-flex flex-stack py-4 border-bottom border-gray-300 border-bottom-dashed">
+                                <!--begin::Details-->
+                                <div class="d-flex align-items-center">
+                                    
+                                    <!--begin::Details-->
+                                    <div class="ms-5">
+                                        <span class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">Property Value</span>
+                                    </div>
+                                    <!--end::Details-->
+                                </div>
+                                <!--end::Details-->
+                                <!--begin::Access menu-->
+                                <div class="ms-2 w-150px">
+                                    <input type="number" class="form-control form-control-solid" placeholder="Intrest" value="" name="loan_intrest" id="loan_intrest" required="" />
+                                </div>
+                                <!--end::Access menu-->
+                            </div>
+                        </div>
+                        <!--end::List-->
+
+                        <!--begin::List-->
+                        <div class="mh-300px scroll-y me-n7 pe-7">
+                            <div class="d-flex flex-stack py-4 border-bottom border-gray-300 border-bottom-dashed">
+                                <!--begin::Details-->
+                                <div class="d-flex align-items-center">
+                                    
+                                    <!--begin::Details-->
+                                    <div class="ms-5">
+                                        <span class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">Requested Date</span>
+                                    </div>
+                                    <!--end::Details-->
+                                </div>
+                                <!--end::Details-->
+                                <!--begin::Access menu-->
+                                <div class="ms-2 w-150px">
+                                    <input type="date" class="form-control form-control-solid " placeholder="Requested Date" value="" name="loan_requested_date" id="loan_requested_date" />
+                                </div>
+                                <!--end::Access menu-->
+                            </div>
+                        </div>
+                        <!--end::List-->
+
+                        <!--begin::List-->
+                        <div class="mh-300px scroll-y me-n7 pe-7">
+                            <div class="d-flex flex-stack py-4 border-bottom border-gray-300 border-bottom-dashed">
+                                <!--begin::Details-->
+                                <div class="d-flex align-items-center">
+                                    
+                                    <!--begin::Details-->
+                                    <div class="ms-5">
+                                        <span class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">Accepted Date</span>
+                                    </div>
+                                    <!--end::Details-->
+                                </div>
+                                <!--end::Details-->
+                                <!--begin::Access menu-->
+                                <div class="ms-2 w-150px">
+                                    <input type="date" class="form-control form-control-solid" placeholder="Accepted Date" value="" name="loan_approved_date" id="loan_approved_date" required="" />
+                                </div>
+                                <!--end::Access menu-->
+                            </div>
+                        </div>
+                        <!--end::List-->
+
+                        <!--begin::List-->
+                        <div class="mh-300px scroll-y me-n7 pe-7">
+                            <div class="d-flex flex-stack py-4 border-bottom border-gray-300 border-bottom-dashed">
+                                <!--begin::Details-->
+                                <div class="d-flex align-items-center">
+                                    
+                                    <!--begin::Details-->
+                                    <div class="ms-5">
+                                        <span class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">Status</span>
+                                    </div>
+                                    <!--end::Details-->
+                                </div>
+                                <!--end::Details-->
+                                <!--begin::Access menu-->
+                                <div class="ms-2 w-150px">
+                                    <select class="form-select form-select-solid form-select-sm" data-control="select2" data-hide-search="true" name="is_status" id="is_status">
+                                        <option value="">Select</option>
+                                    </select>
+                                </div>
+                                <!--end::Access menu-->
+                            </div>
+                        </div>
+                        <!--end::List-->
+        
+                        <div class="d-flex justify-content-center">
+                            <button type="submit"  class="btn  btn-primary mt-5 mb-3">Submit</button>
+                        </div>
+                    </form>
+                </div>
+                <!--end::Users-->
+                <!--begin::Notice-->
+                <!--end::Notice-->
+            </div>
+            <!--end::Modal body-->
+        </div>
+            <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+</div>
+<!-- end::Modal -->
+
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+<!-- active navigation -->
+<script type="text/javascript">
+    function user() {
+        document.getElementById("user_management").classList.add("active");
+        document.getElementById("smart_finance").classList.remove("active");
+        document.getElementById("loan_management").classList.remove("active");
+        $('#user').show();
+        $('#finance').hide();
+        $('#admin_finance').hide();
+        $('#loan').hide();
+    }
+
+    function finance() {
+        document.getElementById("user_management").classList.remove("active");
+        document.getElementById("smart_finance").classList.add("active");
+        document.getElementById("loan_management").classList.remove("active");
+        $('#user').hide();
+        $('#finance').show();
+        $('#admin_finance').show();
+        $('#loan').hide();
+    }
+
+    function loan() {
+        document.getElementById("user_management").classList.remove("active");
+        document.getElementById("smart_finance").classList.remove("active");
+        document.getElementById("loan_management").classList.add("active");
+        $('#user').hide();
+        $('#finance').hide();
+        $('#admin_finance').hide();
+        $('#loan').show();
+    }
+
+</script>
+
+<!-- usermanagement Edit -->
+<script type="text/javascript">
+
+    $(document).on('click', 'button[name^="edit"]', function(e) {
+        var system_id = $(this).data("system_id");
+        console.log(system_id);
+
+        if(system_id)
+        {
+            jQuery.ajax({
+                url : 'get_user',
+                type: 'GET',
+                dataType: 'json',
+                data: { id: system_id },
+                success:function(data)
+                { 
+                    jQuery('#edit_modal').modal('show');
+                    document.getElementById("user_id").value = data.id;
+                    document.getElementById("user_name").value = data.first_name+ ' '+ data.last_name;
+                    document.getElementById("user_email").value = data.email;
+                    if(data.is_active == 1)
+                    {
+                        jQuery('select[name="progress"]').empty();
+                        $('select[name="progress"]').append('<option value="'+ '1' +'" selected>'+ 'Approved' +'</option>');
+                        $('select[name="progress"]').append('<option value="'+ '0' +'">'+ 'Pending' +'</option>');
+                        $('select[name="progress"]').append('<option value="'+ '3' +'">'+ 'Rejected' +'</option>');
+                    }
+                    else if(data.is_active == 3){
+                        jQuery('select[name="progress"]').empty();
+                        $('select[name="progress"]').append('<option value="'+ '3' +'" selected>'+ 'Rejected' +'</option>');
+                        $('select[name="progress"]').append('<option value="'+ '0' +'">'+ 'Pending' +'</option>');
+                        $('select[name="progress"]').append('<option value="'+ '1' +'">'+ 'Approved' +'</option>');
+                    }
+                    else{
+                        jQuery('select[name="progress"]').empty();
+                        $('select[name="progress"]').append('<option value="'+ '0' +'" selected>'+ 'Pending' +'</option>');
+                        $('select[name="progress"]').append('<option value="'+ '1' +'">'+ 'Approved' +'</option>');
+                        $('select[name="progress"]').append('<option value="'+ '3' +'">'+ 'Rejected' +'</option>');
+                    }
+                    if(data.is_lock == 1)
+                    {
+                        jQuery('select[name="status"]').empty();
+                        $('select[name="status"]').append('<option value="'+ '1' +'" selected>'+ 'Locked' +'</option>');
+                        $('select[name="status"]').append('<option value="'+ '0' +'">'+ 'Active' +'</option>');
+                    }
+                    else{
+                        jQuery('select[name="status"]').empty();
+                        $('select[name="status"]').append('<option value="'+ '0' +'" selected>'+ 'Active' +'</option>');
+                        $('select[name="status"]').append('<option value="'+ '1' +'">'+ 'Locked' +'</option>');
+                    }
+                    if(data.role_id == 1){
+                        jQuery('select[name="role"]').empty();
+                        $('select[name="role"]').append('<option value="'+ '1' +'" selected>'+ 'Super Admin' +'</option>');
+                        $('select[name="role"]').append('<option value="'+ '2' +'">'+ 'Admin' +'</option>');
+                        $('select[name="role"]').append('<option value="'+ '3' +'">'+ 'User' +'</option>');
+                    }
+                    else if (data.role_id == 2) {
+                        jQuery('select[name="role"]').empty();
+                        $('select[name="role"]').append('<option value="'+ '1' +'" >'+ 'Super Admin' +'</option>');
+                        $('select[name="role"]').append('<option value="'+ '2' +'" selected>'+ 'Admin' +'</option>');
+                        $('select[name="role"]').append('<option value="'+ '3' +'">'+ 'User' +'</option>');
+                    }
+                    else{
+                        jQuery('select[name="role"]').empty();
+                        $('select[name="role"]').append('<option value="'+ '1' +'" >'+ 'Super Admin' +'</option>');
+                        $('select[name="role"]').append('<option value="'+ '2' +'">'+ 'Admin' +'</option>');
+                        $('select[name="role"]').append('<option value="'+ '3' +'" selected>'+ 'User' +'</option>');
+                    }
+                    if(data.is_profile_verified == 1 && data.is_profile_updated == 0)
+                    {
+                        jQuery('select[name="profile"]').empty();
+                        $('select[name="profile"]').append('<option value="'+ '1' +'" selected>'+ 'Approved' +'</option>');
+                        $('select[name="profile"]').append('<option value="'+ '0' +'">'+ 'Pending' +'</option>');
+                        $('select[name="profile"]').append('<option value="'+ '3' +'">'+ 'Rejected' +'</option>');
+                    }
+                    else if(data.is_profile_verified == 2){
+                        jQuery('select[name="profile"]').empty();
+                        $('select[name="profile"]').append('<option value="'+ '2' +'" selected>'+ 'Incomplete' +'</option>');
+
+                    }
+                    else if(data.is_profile_verified == 3){
+                         $('select[name="profile"]').append('<option value="'+ '3' +'" selected>'+ 'Rejected' +'</option>');
+                        $('select[name="profile"]').append('<option value="'+ '0' +'">'+ 'Pending' +'</option>');
+                        $('select[name="profile"]').append('<option value="'+ '1' +'">'+ 'Approved' +'</option>');
+                    }
+                    else{
+                        jQuery('select[name="profile"]').empty();
+                        $('select[name="profile"]').append('<option value="'+ '0' +'" selected>'+ 'Pending' +'</option>');
+                        $('select[name="profile"]').append('<option value="'+ '1' +'">'+ 'Approved' +'</option>');
+                        $('select[name="profile"]').append('<option value="'+ '3' +'">'+ 'Rejected' +'</option>');
+                    }
+                    if(data.is_reffer == 1)
+                    {
+                        jQuery('select[name="refferal"]').empty();
+                        $('select[name="refferal"]').append('<option value="'+ '1' +'" selected>'+ 'Yes' +'</option>');
+                        $('select[name="refferal"]').append('<option value="'+ '0' +'">'+ 'No' +'</option>');
+                    }
+                    else{
+                        jQuery('select[name="refferal"]').empty();
+                        $('select[name="refferal"]').append('<option value="'+ '0' +'" selected>'+ 'No' +'</option>');
+                        $('select[name="refferal"]').append('<option value="'+ '1' +'">'+ 'Yes' +'</option>');
+                    }
+
+                }
+            });
+        }
+        
+    });
+
+</script>
+
+<!-- user search -->
+<script type="application/javascript">
+    jQuery(document).ready(function ()
+    {
+        jQuery('input[name="search"]').on('change',function(){
+            var search = jQuery(this).val();
+            var search_url = jQuery("#search_url").val();
+            var url = search_url+"/"+search+'/';
+            if(search == ''){
+                url = jQuery("#base_url").val();
+            }
+            window.location = url; 
+        });
+    });
+</script>
+
+<!-- user status search -->
+<script type="application/javascript">
+    jQuery(document).ready(function ()
+    {
+        jQuery('select[name="status_search"]').on('change',function(){
+            var status = jQuery(this).val();
+            var status_url = jQuery("#status_url").val();
+            var url = status_url+"/"+status+'/';
+            if(status == 'null'){
+                url = jQuery("#base_url").val();
+            }
+            window.location = url; 
+        });
+    });
+</script>
+
+<!-- user progress search -->
+<script type="application/javascript">
+    jQuery(document).ready(function ()
+    {
+        jQuery('select[name="progress_search"]').on('change',function(){
+            var progress = jQuery(this).val();
+            var progress_url = jQuery("#progress_url").val();
+            var url = progress_url+"/"+progress+'/';
+            if(progress == 'null'){
+                url = jQuery("#base_url").val();
+            }
+            window.location = url; 
+        });
+    });
+</script>
+
+<!-- user profile search -->
+<script type="application/javascript">
+    jQuery(document).ready(function ()
+    {
+        jQuery('select[name="profile_search"]').on('change',function(){
+            var profile = jQuery(this).val();
+            var profile_url = jQuery("#profile_url").val();
+            var url = profile_url+"/"+profile+'/';
+            if(profile == 'null'){
+                url = jQuery("#base_url").val();
+            }
+            window.location = url; 
+        });
+    });
+</script>
+
+<!-- user role search -->
+<script type="application/javascript">
+    jQuery(document).ready(function ()
+    {
+        jQuery('select[name="role_search"]').on('change',function(){
+            var role = jQuery(this).val();
+            var role_url = jQuery("#role_url").val();
+            var url = role_url+"/"+role+'/';
+            if(role == 'null'){
+                url = jQuery("#base_url").val();
+            }
+            window.location = url; 
+        });
+    });
+</script>
+
+<!-- reffer user list -->
+<script type="text/javascript">
+
+    $(document).on('click', 'button[name^="reffer"]', function(e) {
+        var system_id = $(this).data("system_id");
+        console.log(system_id);
+
+        if(system_id)
+        {
+            jQuery.ajax({
+                url : 'get_users',
+                type: 'GET',
+                dataType: 'json',
+                data: { id: system_id },
+                success:function(data)
+                { 
+                    console.log(data);
+                    jQuery('#refferal_modal').modal('show');
+                    document.getElementById("userId").value = system_id;
+                    jQuery('select[name="user"]').empty();
+                    $('select[name="user"]').append('<option value="" selected>'+ 'Select' +'</option>');
+                    
+                    jQuery.each(data, function(key,value){
+                        $('select[name="user"]').append('<option value="'+ value.id +'">'+value.first_name+' '+value.last_name+'</option>');
+                    });
+                }
+            });
+        }
+        
+    });
+
+</script>
 
 <!-- refferal amount -->
 <script type="application/javascript">
@@ -2374,6 +2907,327 @@
     });
 </script>
 
+<!-- profile page validation -->
+<script type="text/javascript">
+
+    function additional_next() {
+        var alertText = "";
+        // if (!document.getElementById("amount").value) {
+        //     alertText = alertText+"Amount is required";
+        // }
+        // var amount = document.getElementById("amount").value;
+        // if(amount){
+        //    if(amount < 100000)
+        //     {
+        //         alertText = alertText+"<br>Minimum amount should be 1,00000";
+        //     } 
+        // }
+        if (!document.getElementById("address").value) {
+            alertText = alertText+"Address is required";
+        }
+        if (!document.getElementById("city").value) {
+            alertText = alertText+"<br>City is required";
+        }
+        if (!document.getElementById("pincode").value) {
+            alertText = alertText+"<br>Pincode is required";
+        }
+        var pincode = document.getElementById("pincode").value;
+        if(pincode){
+            format = new RegExp("^[1-9][0-9]{5}$");
+            if(!format.test(pincode))
+            {
+                alertText = alertText+"<br>Pincode should be in format 123456";
+            } 
+        }
+        // var email = document.getElementById("email").value;
+        // if(email){
+        //     format = /^[a-zA-Z0-9\._-]+@[a-zA-Z0-9-]{2,}[.][a-zA-Z]{2,4}$/;
+        //     if(!format.test(email))
+        //     {
+        //         alertText = alertText+"<br>Email should be in format example@domain.com";
+        //     } 
+        // }
+        // if (!document.getElementById("transaction_id").value) {
+        //     alertText = alertText+"<br>Transaction ID is required";
+        // }
+        // if (!document.getElementById("payment_copy").value) {
+        //     alertText = alertText+"<br>Payment Copy is required";
+        // }
+
+        if (alertText != "") {
+            var div = document.getElementById("error");
+            div.innerHTML = '';
+            div.style.display = "block";
+            $( ".error" ).html('');
+            var html ='<div class="alert alert-danger" role="alert">'+alertText+'</div>';
+             $('.error').html(html);
+        }
+        else{
+            var div = document.getElementById("error");
+            div.innerHTML = '';
+            div.style.display = "none";
+            document.getElementById("personal_details").classList.remove("current");
+            document.getElementById("additional_details").classList.add("current");
+            document.getElementById("personal").classList.remove("current");
+            document.getElementById("additional").classList.add("current");
+        }
+    }
+
+    function personal_previous() {
+        var div = document.getElementById("error");
+        div.innerHTML = '';
+        div.style.display = "none";
+        document.getElementById("personal_details").classList.add("current");
+        document.getElementById("additional_details").classList.remove("current");
+        document.getElementById("personal").classList.add("current");
+        document.getElementById("additional").classList.remove("current");
+    }
+
+    function bank_next() {
+
+        var alertText = "";
+        //Mobile
+        if (!document.getElementById("phone").value) {
+            alertText = alertText+"Mobile number is required";
+        }
+        var phone = document.getElementById("phone").value;
+        if(phone){
+            format = /^\d{10}$/;
+            if(!format.test(phone))
+            {
+                alertText = alertText+"<br>Mobile Number should be in 10 digits";
+            } 
+        }
+        //Aadhar Number
+        if (!document.getElementById("aadhaar_no").value) {
+            alertText = alertText+"<br>Aadhaar number is required";
+        }
+        var aadhaar_no = document.getElementById("aadhaar_no").value;
+        if(aadhaar_no){
+            format = /^\d{12}$/;
+            if(!format.test(aadhaar_no))
+            {
+                alertText = alertText+"<br>Aadhaar number is not valid";
+            } 
+        }
+        //Pan Number
+        if (!document.getElementById("pan_card_no").value) {
+            alertText = alertText+"<br>Pan card number is required";
+        }
+        var pan_card_no = document.getElementById("pan_card_no").value;
+        if(pan_card_no){
+            format = /([A-Z]){5}([0-9]){4}([A-Z]){1}$/;
+            if(!format.test(pan_card_no))
+            {
+                alertText = alertText+"<br>Pan card number is not valid";
+            } 
+        }
+        //Avatar
+        if (!document.getElementById("avatar").value) {
+            alertText = alertText+"<br>User photo is required";
+        }
+        //Aadhaar Card
+        if (!document.getElementById("aadhaar_card").value) {
+            alertText = alertText+"<br>Aadhaar card photo is required";
+        }
+        //Pan Card
+        if (!document.getElementById("pan_card").value) {
+            alertText = alertText+"<br>Pan card photo is required";
+        }
+
+        if (alertText != "") {
+            var div = document.getElementById("error");
+            div.innerHTML = '';
+            div.style.display = "block";
+            $( ".error" ).html('');
+            var html ='<div class="alert alert-danger" role="alert">'+alertText+'</div>';
+             $('.error').html(html);
+        }
+        else{
+            var div = document.getElementById("error");
+            div.innerHTML = '';
+            div.style.display = "none";
+            document.getElementById("bank_details").classList.add("current");
+            document.getElementById("additional_details").classList.remove("current");
+            document.getElementById("bank").classList.add("current");
+            document.getElementById("additional").classList.remove("current");
+        }
+    }
+
+    function additional_previous() {
+        var div = document.getElementById("error");
+        div.innerHTML = '';
+        div.style.display = "none";
+        document.getElementById("bank_details").classList.remove("current");
+        document.getElementById("additional_details").classList.add("current");
+        document.getElementById("bank").classList.remove("current");
+        document.getElementById("additional").classList.add("current");
+        
+    }
+
+    function nominee_next() {
+        var alertText = "";
+        //Holder Name
+        if (!document.getElementById("holder_name").value) {
+            alertText = alertText+"Account Name is required";
+        }
+        //Account Number
+        if (!document.getElementById("account_no").value) {
+            alertText = alertText+"<br>Account Number is required";
+        }
+        //IFSC code
+        // if (!document.getElementById("ifsc_code").value) {
+        //     alertText = alertText+"<br>IFSC code is required";
+        // }
+        // var ifsc_code = document.getElementById("ifsc_code").value;
+        // if(ifsc_code){
+        //     format = /^[A-Z]{4}0[0-9]{6}$/;
+        //     if(!format.test(ifsc_code))
+        //     {
+        //         alertText = alertText+"<br>IFSC code is not valid";
+        //     } 
+        // }
+        //Branch
+        if (!document.getElementById("branch").value) {
+            alertText = alertText+"<br>Branch is required";
+        }
+        //Branch
+        if (!document.getElementById("city").value) {
+            alertText = alertText+"<br>City is required";
+        }
+
+        if (alertText != "") {
+            var div = document.getElementById("error");
+            div.innerHTML = '';
+            div.style.display = "block";
+            $( ".error" ).html('');
+            var html ='<div class="alert alert-danger" role="alert">'+alertText+'</div>';
+             $('.error').html(html);
+        }
+        else{
+            var div = document.getElementById("error");
+            div.innerHTML = '';
+            div.style.display = "none";
+            document.getElementById("nominee_details").classList.add("current");
+            document.getElementById("bank_details").classList.remove("current");
+            document.getElementById("nominee").classList.add("current");
+            document.getElementById("bank").classList.remove("current");
+        }
+    }
+
+    function bank_previous() {
+        var div = document.getElementById("error");
+        div.innerHTML = '';
+        div.style.display = "none";
+        document.getElementById("nominee_details").classList.remove("current");
+        document.getElementById("bank_details").classList.add("current");
+        document.getElementById("nominee").classList.remove("current");
+        document.getElementById("bank").classList.add("current");
+        
+    }
+
+    function final() {
+        var alertText = "";
+        //Nominee Name
+        if (!document.getElementById("nominee_name").value) {
+            alertText = alertText+"Name is required";
+        }
+        //Relationship
+        if (!document.getElementById("relationship").value) {
+            alertText = alertText+"<br>Relationship is required";
+        }
+        //Age
+        if (!document.getElementById("age").value) {
+            alertText = alertText+"<br>Age is required";
+        }
+        //Aadhar Number
+        if (!document.getElementById("nominee_aadhaar_no").value) {
+            alertText = alertText+"<br>Aadhaar number is required";
+        }
+        var nominee_aadhaar_no = document.getElementById("nominee_aadhaar_no").value;
+        if(nominee_aadhaar_no){
+            format = /^\d{12}$/;
+            if(!format.test(nominee_aadhaar_no))
+            {
+                alertText = alertText+"<br>Aadhaar number is not valid";
+            } 
+        }
+        //Aadhar card
+        if (!document.getElementById("nominee_aadhar").value) {
+            alertText = alertText+"<br>Aadhaar card is required";
+        }
+
+        if (alertText != "") {
+            var div = document.getElementById("error");
+            div.innerHTML = '';
+            div.style.display = "block";
+            $( ".error" ).html('');
+            var html ='<div class="alert alert-danger" role="alert">'+alertText+'</div>';
+             $('.error').html(html);
+        }
+        else{
+
+            $('#submit').show();
+        }
+    }
+</script>
+
+<!-- avatar image -->
+<script type="text/javascript">    
+    $(document).ready(function (e) { 
+       $('#avatar').change(function(){   
+            let reader = new FileReader();
+            reader.onload = (e) => { 
+                $('#preview-image-avatar').attr('src', e.target.result); 
+            }
+            reader.readAsDataURL(this.files[0]); 
+       });
+
+    });
+</script>
+
+<!-- aadhaar card -->
+<script type="text/javascript">    
+    $(document).ready(function (e) {
+       
+       $('#aadhaar_card').change(function(){   
+            let reader = new FileReader();
+            reader.onload = (e) => { 
+                $('#preview-image-aadhaar_card').attr('src', e.target.result); 
+            }
+            reader.readAsDataURL(this.files[0]); 
+       });
+
+    });
+</script>
+
+<!-- pan card -->
+<script type="text/javascript">    
+    $(document).ready(function (e) {
+       $('#pan_card').change(function(){   
+            let reader = new FileReader();
+            reader.onload = (e) => { 
+                $('#preview-image-pan_card').attr('src', e.target.result); 
+            }
+            reader.readAsDataURL(this.files[0]); 
+       });
+    });
+</script>
+
+
+<!-- nominee_aadhar_card -->
+<script type="text/javascript">    
+    $(document).ready(function (e) {
+       $('#nominee_aadhar').change(function(){   
+            let reader = new FileReader();
+            reader.onload = (e) => { 
+                $('#preview-image-nominee_aadhar').attr('src', e.target.result); 
+            }
+            reader.readAsDataURL(this.files[0]); 
+       });
+    });
+</script>
+
 <!-- image delete -->
 <script type="text/javascript">
     function delete_bill() {
@@ -2410,6 +3264,67 @@
 </script>
 <!-- Reset button -->
 
+<!-- smartfinance edit-->
+<script type="text/javascript">
+    $(document).on('click', 'button[name^="approve"]', function(e) {
+        var system_id = $(this).data("system_id");
+        console.log(system_id);
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth()+1; //January is 0!
+        var yyyy = today.getFullYear();
+        if(dd<10) {
+          dd = '0'+dd
+        } 
+
+        if(mm<10) {
+          mm = '0'+mm
+        } 
+        today = yyyy + '-' + mm + '-' + dd;
+        console.log(today);
+        if(system_id)
+        {
+            jQuery.ajax({
+                url : 'get_smart_finance',
+                type: 'GET',
+                dataType: 'json',
+                data: { id: system_id },
+                success:function(data)
+                { 
+                    jQuery('#modal_approve_smart_finance').modal('show');
+                    document.getElementById("finance_id").value = system_id;
+                    $("#bill_bill").attr("src", data.bill);
+                    $("#receipt").prop("href", data.bill);
+                    document.getElementById("investment_date").value = data.investment_date;
+                    if(data.accepted_date !== null){
+                        document.getElementById("accepted_date").value = data.accepted_date;
+                    }
+                    else{
+                        document.getElementById("accepted_date").value = today;
+
+                    }
+                    if(data.is_status == 1){
+                        jQuery('select[name="is_status"]').empty();
+                        $('select[name="is_status"]').append('<option value="" >'+ 'Select' +'</option>');
+                        $('select[name="is_status"]').append('<option value="0">'+ 'Reject' +'</option>');
+                        $('select[name="is_status"]').append('<option value="1" selected>'+ 'Approve' +'</option>');
+                    }
+                    else if(data.is_status == 0){
+
+                        jQuery('select[name="is_status"]').empty();
+                        $('select[name="is_status"]').append('<option value="" >'+ 'Select' +'</option>');
+                        $('select[name="is_status"]').append('<option value="0" selected>'+ 'Reject' +'</option>');
+                        $('select[name="is_status"]').append('<option value="1" >'+ 'Approve' +'</option>');
+
+                    }
+
+                }
+            });
+}
+
+});
+</script>
+<!-- end-finance -->
 
 <!-- investment plan type -->
 <script type="text/javascript">
@@ -3375,87 +4290,6 @@
 <!-- end example year table -->
 
 
-<!-- user search -->
-<script type="application/javascript">
-    jQuery(document).ready(function ()
-    {
-        jQuery('input[name="search"]').on('change',function(){
-            var search = jQuery(this).val();
-            var search_url = jQuery("#search_url").val();
-            var url = search_url+"/"+search+'/';
-            if(search == ''){
-                url = jQuery("#base_url").val();
-            }
-            window.location = url; 
-        });
-    });
-</script>
-
-<!-- user status search -->
-<script type="application/javascript">
-    jQuery(document).ready(function ()
-    {
-        jQuery('select[name="status_search"]').on('change',function(){
-            var status = jQuery(this).val();
-            var status_url = jQuery("#status_url").val();
-            var url = status_url+"/"+status+'/';
-            if(status == 'null'){
-                url = jQuery("#base_url").val();
-            }
-            window.location = url; 
-        });
-    });
-</script>
-
-<!-- user progress search -->
-<script type="application/javascript">
-    jQuery(document).ready(function ()
-    {
-        jQuery('select[name="progress_search"]').on('change',function(){
-            var progress = jQuery(this).val();
-            var progress_url = jQuery("#progress_url").val();
-            var url = progress_url+"/"+progress+'/';
-            if(progress == 'null'){
-                url = jQuery("#base_url").val();
-            }
-            window.location = url; 
-        });
-    });
-</script>
-
-<!-- user profile search -->
-<script type="application/javascript">
-    jQuery(document).ready(function ()
-    {
-        jQuery('select[name="profile_search"]').on('change',function(){
-            var profile = jQuery(this).val();
-            var profile_url = jQuery("#profile_url").val();
-            var url = profile_url+"/"+profile+'/';
-            if(profile == 'null'){
-                url = jQuery("#base_url").val();
-            }
-            window.location = url; 
-        });
-    });
-</script>
-
-<!-- user role search -->
-<script type="application/javascript">
-    jQuery(document).ready(function ()
-    {
-        jQuery('select[name="role_search"]').on('change',function(){
-            var role = jQuery(this).val();
-            var role_url = jQuery("#role_url").val();
-            var url = role_url+"/"+role+'/';
-            if(role == 'null'){
-                url = jQuery("#base_url").val();
-            }
-            window.location = url; 
-        });
-    });
-</script>
-
-
 <!-- investment search -->
 <script type="application/javascript">
     jQuery(document).ready(function ()
@@ -3587,453 +4421,81 @@
     });
 </script>
 
-
-<!-- profile page validation -->
+<!-- Loan Edit -->
 <script type="text/javascript">
 
-    function additional_next() {
-        var alertText = "";
-        // if (!document.getElementById("amount").value) {
-        //     alertText = alertText+"Amount is required";
-        // }
-        // var amount = document.getElementById("amount").value;
-        // if(amount){
-        //    if(amount < 100000)
-        //     {
-        //         alertText = alertText+"<br>Minimum amount should be 1,00000";
-        //     } 
-        // }
-        if (!document.getElementById("address").value) {
-            alertText = alertText+"Address is required";
-        }
-        if (!document.getElementById("city").value) {
-            alertText = alertText+"<br>City is required";
-        }
-        if (!document.getElementById("pincode").value) {
-            alertText = alertText+"<br>Pincode is required";
-        }
-        var pincode = document.getElementById("pincode").value;
-        if(pincode){
-            format = new RegExp("^[1-9][0-9]{5}$");
-            if(!format.test(pincode))
-            {
-                alertText = alertText+"<br>Pincode should be in format 123456";
-            } 
-        }
-        // var email = document.getElementById("email").value;
-        // if(email){
-        //     format = /^[a-zA-Z0-9\._-]+@[a-zA-Z0-9-]{2,}[.][a-zA-Z]{2,4}$/;
-        //     if(!format.test(email))
-        //     {
-        //         alertText = alertText+"<br>Email should be in format example@domain.com";
-        //     } 
-        // }
-        // if (!document.getElementById("transaction_id").value) {
-        //     alertText = alertText+"<br>Transaction ID is required";
-        // }
-        // if (!document.getElementById("payment_copy").value) {
-        //     alertText = alertText+"<br>Payment Copy is required";
-        // }
-
-        if (alertText != "") {
-            var div = document.getElementById("error");
-            div.innerHTML = '';
-            div.style.display = "block";
-            $( ".error" ).html('');
-            var html ='<div class="alert alert-danger" role="alert">'+alertText+'</div>';
-             $('.error').html(html);
-        }
-        else{
-            var div = document.getElementById("error");
-            div.innerHTML = '';
-            div.style.display = "none";
-            document.getElementById("personal_details").classList.remove("current");
-            document.getElementById("additional_details").classList.add("current");
-            document.getElementById("personal").classList.remove("current");
-            document.getElementById("additional").classList.add("current");
-        }
-    }
-
-    function personal_previous() {
-        var div = document.getElementById("error");
-        div.innerHTML = '';
-        div.style.display = "none";
-        document.getElementById("personal_details").classList.add("current");
-        document.getElementById("additional_details").classList.remove("current");
-        document.getElementById("personal").classList.add("current");
-        document.getElementById("additional").classList.remove("current");
-    }
-
-    function bank_next() {
-
-        var alertText = "";
-        //Mobile
-        if (!document.getElementById("phone").value) {
-            alertText = alertText+"Mobile number is required";
-        }
-        var phone = document.getElementById("phone").value;
-        if(phone){
-            format = /^\d{10}$/;
-            if(!format.test(phone))
-            {
-                alertText = alertText+"<br>Mobile Number should be in 10 digits";
-            } 
-        }
-        //Aadhar Number
-        if (!document.getElementById("aadhaar_no").value) {
-            alertText = alertText+"<br>Aadhaar number is required";
-        }
-        var aadhaar_no = document.getElementById("aadhaar_no").value;
-        if(aadhaar_no){
-            format = /^\d{12}$/;
-            if(!format.test(aadhaar_no))
-            {
-                alertText = alertText+"<br>Aadhaar number is not valid";
-            } 
-        }
-        //Pan Number
-        if (!document.getElementById("pan_card_no").value) {
-            alertText = alertText+"<br>Pan card number is required";
-        }
-        var pan_card_no = document.getElementById("pan_card_no").value;
-        if(pan_card_no){
-            format = /([A-Z]){5}([0-9]){4}([A-Z]){1}$/;
-            if(!format.test(pan_card_no))
-            {
-                alertText = alertText+"<br>Pan card number is not valid";
-            } 
-        }
-        //Avatar
-        if (!document.getElementById("avatar").value) {
-            alertText = alertText+"<br>User photo is required";
-        }
-        //Aadhaar Card
-        if (!document.getElementById("aadhaar_card").value) {
-            alertText = alertText+"<br>Aadhaar card photo is required";
-        }
-        //Pan Card
-        if (!document.getElementById("pan_card").value) {
-            alertText = alertText+"<br>Pan card photo is required";
-        }
-
-        if (alertText != "") {
-            var div = document.getElementById("error");
-            div.innerHTML = '';
-            div.style.display = "block";
-            $( ".error" ).html('');
-            var html ='<div class="alert alert-danger" role="alert">'+alertText+'</div>';
-             $('.error').html(html);
-        }
-        else{
-            var div = document.getElementById("error");
-            div.innerHTML = '';
-            div.style.display = "none";
-            document.getElementById("bank_details").classList.add("current");
-            document.getElementById("additional_details").classList.remove("current");
-            document.getElementById("bank").classList.add("current");
-            document.getElementById("additional").classList.remove("current");
-        }
-    }
-
-    function additional_previous() {
-        var div = document.getElementById("error");
-        div.innerHTML = '';
-        div.style.display = "none";
-        document.getElementById("bank_details").classList.remove("current");
-        document.getElementById("additional_details").classList.add("current");
-        document.getElementById("bank").classList.remove("current");
-        document.getElementById("additional").classList.add("current");
-        
-    }
-
-    function nominee_next() {
-        var alertText = "";
-        //Holder Name
-        if (!document.getElementById("holder_name").value) {
-            alertText = alertText+"Account Name is required";
-        }
-        //Account Number
-        if (!document.getElementById("account_no").value) {
-            alertText = alertText+"<br>Account Number is required";
-        }
-        //IFSC code
-        // if (!document.getElementById("ifsc_code").value) {
-        //     alertText = alertText+"<br>IFSC code is required";
-        // }
-        // var ifsc_code = document.getElementById("ifsc_code").value;
-        // if(ifsc_code){
-        //     format = /^[A-Z]{4}0[0-9]{6}$/;
-        //     if(!format.test(ifsc_code))
-        //     {
-        //         alertText = alertText+"<br>IFSC code is not valid";
-        //     } 
-        // }
-        //Branch
-        if (!document.getElementById("branch").value) {
-            alertText = alertText+"<br>Branch is required";
-        }
-        //Branch
-        if (!document.getElementById("city").value) {
-            alertText = alertText+"<br>City is required";
-        }
-
-        if (alertText != "") {
-            var div = document.getElementById("error");
-            div.innerHTML = '';
-            div.style.display = "block";
-            $( ".error" ).html('');
-            var html ='<div class="alert alert-danger" role="alert">'+alertText+'</div>';
-             $('.error').html(html);
-        }
-        else{
-            var div = document.getElementById("error");
-            div.innerHTML = '';
-            div.style.display = "none";
-            document.getElementById("nominee_details").classList.add("current");
-            document.getElementById("bank_details").classList.remove("current");
-            document.getElementById("nominee").classList.add("current");
-            document.getElementById("bank").classList.remove("current");
-        }
-    }
-
-    function bank_previous() {
-        var div = document.getElementById("error");
-        div.innerHTML = '';
-        div.style.display = "none";
-        document.getElementById("nominee_details").classList.remove("current");
-        document.getElementById("bank_details").classList.add("current");
-        document.getElementById("nominee").classList.remove("current");
-        document.getElementById("bank").classList.add("current");
-        
-    }
-
-    function final() {
-        var alertText = "";
-        //Nominee Name
-        if (!document.getElementById("nominee_name").value) {
-            alertText = alertText+"Name is required";
-        }
-        //Relationship
-        if (!document.getElementById("relationship").value) {
-            alertText = alertText+"<br>Relationship is required";
-        }
-        //Age
-        if (!document.getElementById("age").value) {
-            alertText = alertText+"<br>Age is required";
-        }
-        //Aadhar Number
-        if (!document.getElementById("nominee_aadhaar_no").value) {
-            alertText = alertText+"<br>Aadhaar number is required";
-        }
-        var nominee_aadhaar_no = document.getElementById("nominee_aadhaar_no").value;
-        if(nominee_aadhaar_no){
-            format = /^\d{12}$/;
-            if(!format.test(nominee_aadhaar_no))
-            {
-                alertText = alertText+"<br>Aadhaar number is not valid";
-            } 
-        }
-        //Aadhar card
-        if (!document.getElementById("nominee_aadhar").value) {
-            alertText = alertText+"<br>Aadhaar card is required";
-        }
-
-        if (alertText != "") {
-            var div = document.getElementById("error");
-            div.innerHTML = '';
-            div.style.display = "block";
-            $( ".error" ).html('');
-            var html ='<div class="alert alert-danger" role="alert">'+alertText+'</div>';
-             $('.error').html(html);
-        }
-        else{
-
-            $('#submit').show();
-        }
-    }
-</script>
-
-<!-- <script type="text/javascript">
-    $(document).ready(function (e) {
-        $('#payment_copy').change(function(){
-            let reader = new FileReader();
-            reader.onload = (e) => { 
-                $('#preview-image-payment_copy').attr('src', e.target.result); 
-            }
-            reader.readAsDataURL(this.files[0]); 
-       });
-    });
-</script> -->
-
-<!-- avatar image -->
-<script type="text/javascript">    
-    $(document).ready(function (e) { 
-       $('#avatar').change(function(){   
-            let reader = new FileReader();
-            reader.onload = (e) => { 
-                $('#preview-image-avatar').attr('src', e.target.result); 
-            }
-            reader.readAsDataURL(this.files[0]); 
-       });
-
-    });
-</script>
-
-<!-- aadhaar card -->
-<script type="text/javascript">    
-    $(document).ready(function (e) {
-       
-       $('#aadhaar_card').change(function(){   
-            let reader = new FileReader();
-            reader.onload = (e) => { 
-                $('#preview-image-aadhaar_card').attr('src', e.target.result); 
-            }
-            reader.readAsDataURL(this.files[0]); 
-       });
-
-    });
-</script>
-
-<!-- pan card -->
-<script type="text/javascript">    
-    $(document).ready(function (e) {
-       $('#pan_card').change(function(){   
-            let reader = new FileReader();
-            reader.onload = (e) => { 
-                $('#preview-image-pan_card').attr('src', e.target.result); 
-            }
-            reader.readAsDataURL(this.files[0]); 
-       });
-    });
-</script>
-
-<!-- <script type="text/javascript">    
-    $(document).ready(function (e) {
-       $('#nominee_photo').change(function(){   
-            let reader = new FileReader();
-            reader.onload = (e) => { 
-                $('#preview-image-nominee_photo').attr('src', e.target.result); 
-            }
-            reader.readAsDataURL(this.files[0]); 
-       });
-    });
-</script> -->
-
-<!-- nominee_aadhar_card -->
-<script type="text/javascript">    
-    $(document).ready(function (e) {
-       $('#nominee_aadhar').change(function(){   
-            let reader = new FileReader();
-            reader.onload = (e) => { 
-                $('#preview-image-nominee_aadhar').attr('src', e.target.result); 
-            }
-            reader.readAsDataURL(this.files[0]); 
-       });
-    });
-</script>
-
-<!-- usermanagement -->
-<script type="text/javascript">
-
-    $(document).on('click', 'button[name^="edit"]', function(e) {
+    $(document).on('click', 'button[name^="loan_edit"]', function(e) {
         var system_id = $(this).data("system_id");
         console.log(system_id);
 
         if(system_id)
         {
             jQuery.ajax({
-                url : 'get_user',
+                url : 'get_loan',
                 type: 'GET',
                 dataType: 'json',
                 data: { id: system_id },
                 success:function(data)
                 { 
-                    jQuery('#edit_modal').modal('show');
-                    document.getElementById("user_id").value = data.id;
-                    document.getElementById("user_name").value = data.first_name+ ' '+ data.last_name;
-                    document.getElementById("user_email").value = data.email;
-                    if(data.is_active == 1)
+                    console.log(data);
+                    var today = new Date();
+                    var dd = today.getDate();
+                    var mm = today.getMonth()+1; //January is 0!
+                    var yyyy = today.getFullYear();
+                    if(dd<10) {
+                      dd = '0'+dd
+                    } 
+
+                    if(mm<10) {
+                      mm = '0'+mm
+                    } 
+                    today = yyyy + '-' + mm + '-' + dd;
+                    jQuery('#edit_loan_modal').modal('show');
+                    document.getElementById("loan_id").value = data.id;
+                    document.getElementById("loan_amount").value = data.amount;
+                    document.getElementById("loan_property_type").value = data.property_type;
+                    document.getElementById("loan_property_value").value = data.property_value;
+                    document.getElementById("loan_intrest").value = data.intrest;
+                    if(data.is_status == 1)
                     {
-                        jQuery('select[name="progress"]').empty();
-                        $('select[name="progress"]').append('<option value="'+ '1' +'" selected>'+ 'Approved' +'</option>');
-                        $('select[name="progress"]').append('<option value="'+ '0' +'">'+ 'Pending' +'</option>');
-                        $('select[name="progress"]').append('<option value="'+ '3' +'">'+ 'Rejected' +'</option>');
+                        jQuery('select[name="is_status"]').empty();
+                        $('select[name="is_status"]').append('<option value="'+ '1' +'" selected>'+ 'Approved' +'</option>');
+                        $('select[name="is_status"]').append('<option value="'+ '0' +'">'+ 'Rejected' +'</option>');
+                        $('select[name="is_status"]').append('<option value="'+ '2' +'">'+ 'Pending' +'</option>');
                     }
-                    else if(data.is_active == 3){
-                        jQuery('select[name="progress"]').empty();
-                        $('select[name="progress"]').append('<option value="'+ '3' +'" selected>'+ 'Rejected' +'</option>');
-                        $('select[name="progress"]').append('<option value="'+ '0' +'">'+ 'Pending' +'</option>');
-                        $('select[name="progress"]').append('<option value="'+ '1' +'">'+ 'Approved' +'</option>');
+                    else if(data.is_status == 0){
+
+                        jQuery('select[name="is_status"]').empty();
+                        $('select[name="is_status"]').append('<option value="'+ '1' +'">'+ 'Approved' +'</option>');
+                        $('select[name="is_status"]').append('<option value="'+ '0' +'" selected>'+ 'Rejected' +'</option>');
+                        $('select[name="is_status"]').append('<option value="'+ '2' +'">'+ 'Pending' +'</option>');
+                    }
+                    else if(data.is_status == 2){
+
+                        jQuery('select[name="is_status"]').empty();
+                        $('select[name="is_status"]').append('<option value="'+ '1' +'">'+ 'Approved' +'</option>');
+                        $('select[name="is_status"]').append('<option value="'+ '0' +'">'+ 'Rejected' +'</option>');
+                        $('select[name="is_status"]').append('<option value="'+ '2' +'" selected>'+ 'Pending' +'</option>');
+                    }
+                    document.getElementById("loan_requested_date").value = data.requested_on;
+                    if(data.approved_on !== null){
+                        document.getElementById("loan_approved_date").value = data.approved_on;
                     }
                     else{
-                        jQuery('select[name="progress"]').empty();
-                        $('select[name="progress"]').append('<option value="'+ '0' +'" selected>'+ 'Pending' +'</option>');
-                        $('select[name="progress"]').append('<option value="'+ '1' +'">'+ 'Approved' +'</option>');
-                        $('select[name="progress"]').append('<option value="'+ '3' +'">'+ 'Rejected' +'</option>');
-                    }
-                    if(data.is_lock == 1)
-                    {
-                        jQuery('select[name="status"]').empty();
-                        $('select[name="status"]').append('<option value="'+ '1' +'" selected>'+ 'Locked' +'</option>');
-                        $('select[name="status"]').append('<option value="'+ '0' +'">'+ 'Active' +'</option>');
-                    }
-                    else{
-                        jQuery('select[name="status"]').empty();
-                        $('select[name="status"]').append('<option value="'+ '0' +'" selected>'+ 'Active' +'</option>');
-                        $('select[name="status"]').append('<option value="'+ '1' +'">'+ 'Locked' +'</option>');
-                    }
-                    if(data.role_id == 1){
-                        jQuery('select[name="role"]').empty();
-                        $('select[name="role"]').append('<option value="'+ '1' +'" selected>'+ 'Super Admin' +'</option>');
-                        $('select[name="role"]').append('<option value="'+ '2' +'">'+ 'Admin' +'</option>');
-                        $('select[name="role"]').append('<option value="'+ '3' +'">'+ 'User' +'</option>');
-                    }
-                    else if (data.role_id == 2) {
-                        jQuery('select[name="role"]').empty();
-                        $('select[name="role"]').append('<option value="'+ '1' +'" >'+ 'Super Admin' +'</option>');
-                        $('select[name="role"]').append('<option value="'+ '2' +'" selected>'+ 'Admin' +'</option>');
-                        $('select[name="role"]').append('<option value="'+ '3' +'">'+ 'User' +'</option>');
-                    }
-                    else{
-                        jQuery('select[name="role"]').empty();
-                        $('select[name="role"]').append('<option value="'+ '1' +'" >'+ 'Super Admin' +'</option>');
-                        $('select[name="role"]').append('<option value="'+ '2' +'">'+ 'Admin' +'</option>');
-                        $('select[name="role"]').append('<option value="'+ '3' +'" selected>'+ 'User' +'</option>');
-                    }
-                    if(data.is_profile_verified == 1 && data.is_profile_updated == 0)
-                    {
-                        jQuery('select[name="profile"]').empty();
-                        $('select[name="profile"]').append('<option value="'+ '1' +'" selected>'+ 'Approved' +'</option>');
-                        $('select[name="profile"]').append('<option value="'+ '0' +'">'+ 'Pending' +'</option>');
-                        $('select[name="profile"]').append('<option value="'+ '3' +'">'+ 'Rejected' +'</option>');
-                    }
-                    else if(data.is_profile_verified == 2){
-                        jQuery('select[name="profile"]').empty();
-                        $('select[name="profile"]').append('<option value="'+ '2' +'" selected>'+ 'Incomplete' +'</option>');
+                        document.getElementById("loan_approved_date").value = today;
 
                     }
-                    else if(data.is_profile_verified == 3){
-                         $('select[name="profile"]').append('<option value="'+ '3' +'" selected>'+ 'Rejected' +'</option>');
-                        $('select[name="profile"]').append('<option value="'+ '0' +'">'+ 'Pending' +'</option>');
-                        $('select[name="profile"]').append('<option value="'+ '1' +'">'+ 'Approved' +'</option>');
-                    }
-                    else{
-                        jQuery('select[name="profile"]').empty();
-                        $('select[name="profile"]').append('<option value="'+ '0' +'" selected>'+ 'Pending' +'</option>');
-                        $('select[name="profile"]').append('<option value="'+ '1' +'">'+ 'Approved' +'</option>');
-                        $('select[name="profile"]').append('<option value="'+ '3' +'">'+ 'Rejected' +'</option>');
-                    }
-                    if(data.is_reffer == 1)
+                    var output = '';
+                    for(var count = 0; count < data.property_copy.length; count++)
                     {
-                        jQuery('select[name="refferal"]').empty();
-                        $('select[name="refferal"]').append('<option value="'+ '1' +'" selected>'+ 'Yes' +'</option>');
-                        $('select[name="refferal"]').append('<option value="'+ '0' +'">'+ 'No' +'</option>');
+                        var url = data.property_copy[count];
+                        var no = count+1;
+                        output += '<tr>';
+                        output += '<td>Document '+no+'</td>';
+                        output += '<td><div class="pa-inline-buttons"><a href="'+url+'" target="_blank" class=""><button type="button" class="btn btn-warning">View</button>   </a><a href="'+url+'" download class=""><button type="button" class="btn btn-success">Download</button></a></div></td>';
+                        output += '</tr>';
                     }
-                    else{
-                        jQuery('select[name="refferal"]').empty();
-                        $('select[name="refferal"]').append('<option value="'+ '0' +'" selected>'+ 'No' +'</option>');
-                        $('select[name="refferal"]').append('<option value="'+ '1' +'">'+ 'Yes' +'</option>');
-                    }
+                    $('.loan_body').html(output);
 
                 }
             });
@@ -4043,39 +4505,6 @@
 
 </script>
 
-<!-- active navigation -->
-<script type="text/javascript">
-    function user() {
-        document.getElementById("user_management").classList.add("active");
-        document.getElementById("smart_finance").classList.remove("active");
-        document.getElementById("loan_management").classList.remove("active");
-        $('#user').show();
-        $('#finance').hide();
-        $('#admin_finance').hide();
-        $('#loan').hide();
-    }
-
-    function finance() {
-        document.getElementById("user_management").classList.remove("active");
-        document.getElementById("smart_finance").classList.add("active");
-        document.getElementById("loan_management").classList.remove("active");
-        $('#user').hide();
-        $('#finance').show();
-        $('#admin_finance').show();
-        $('#loan').hide();
-    }
-
-    function loan() {
-        document.getElementById("user_management").classList.remove("active");
-        document.getElementById("smart_finance").classList.remove("active");
-        document.getElementById("loan_management").classList.add("active");
-        $('#user').hide();
-        $('#finance').hide();
-        $('#admin_finance').hide();
-        $('#loan').show();
-    }
-
-</script>
 
 <!-- SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.6/dist/sweetalert2.all.min.js"></script>
@@ -4135,171 +4564,6 @@
         });
     });
 </script> -->
-
-<!-- smartfinance -->
-<script type="text/javascript">
-    $(document).on('click', 'button[name^="approve"]', function(e) {
-        var system_id = $(this).data("system_id");
-        console.log(system_id);
-        var today = new Date();
-        var dd = today.getDate();
-        var mm = today.getMonth()+1; //January is 0!
-        var yyyy = today.getFullYear();
-        if(dd<10) {
-          dd = '0'+dd
-        } 
-
-        if(mm<10) {
-          mm = '0'+mm
-        } 
-        today = yyyy + '-' + mm + '-' + dd;
-        console.log(today);
-        if(system_id)
-        {
-            jQuery.ajax({
-                url : 'get_smart_finance',
-                type: 'GET',
-                dataType: 'json',
-                data: { id: system_id },
-                success:function(data)
-                { 
-                    jQuery('#modal_approve_smart_finance').modal('show');
-                    document.getElementById("finance_id").value = system_id;
-                    $("#bill_bill").attr("src", data.bill);
-                    $("#receipt").prop("href", data.bill);
-                    document.getElementById("investment_date").value = data.investment_date;
-                    if(data.accepted_date !== null){
-                        document.getElementById("accepted_date").value = data.accepted_date;
-                    }
-                    else{
-                        document.getElementById("accepted_date").value = today;
-
-                    }
-                    if(data.is_status == 1){
-                        jQuery('select[name="is_status"]').empty();
-                        $('select[name="is_status"]').append('<option value="" >'+ 'Select' +'</option>');
-                        $('select[name="is_status"]').append('<option value="0">'+ 'Reject' +'</option>');
-                        $('select[name="is_status"]').append('<option value="1" selected>'+ 'Approve' +'</option>');
-                    }
-                    else if(data.is_status == 0){
-
-                        jQuery('select[name="is_status"]').empty();
-                        $('select[name="is_status"]').append('<option value="" >'+ 'Select' +'</option>');
-                        $('select[name="is_status"]').append('<option value="0" selected>'+ 'Reject' +'</option>');
-                        $('select[name="is_status"]').append('<option value="1" >'+ 'Approve' +'</option>');
-
-                    }
-
-                }
-            });
-}
-
-});
-</script>
-<!-- end-finance -->
-
-<!-- approve-finance -->
-<script type="text/javascript">
-    function accept(){
-        var intrest = jQuery("#intrest").val();
-        var finance_id = jQuery("#finance_id").val();
-        if(intrest){
-            jQuery.ajax({
-                url : 'approve_smart_finance',
-                type: 'GET',
-                dataType: 'json',
-                data: { "finance_id": finance_id,"intrest" : intrest},
-                success:function(data)
-                {
-                    console.log(data);
-                    window.location.reload();
-
-                }
-            });
-        }
-        else{
-
-            $( "#intrest_error" ).html('');
-            var html ='<div class="alert alert-danger" role="alert">Intrest is required</div>';
-             $('#intrest_error').html(html);
-        }
-    }
-    
-</script>
-<!-- end-approve-finance -->
-
-<!-- reject-finance -->
-<script type="text/javascript">
-    function reject(){
-        var user_id = jQuery("#finance_user_id").val();
-        jQuery.ajax({
-            url : 'reject_smart_finance',
-            type: 'GET',
-            dataType: 'json',
-            data: { "user_id": user_id},
-            success:function(data)
-            {
-                console.log(data);
-                window.location.reload();
-
-            }
-        });
-    }
-    
-</script>
-<!-- end-reject-finance -->
-
-
-<!-- reffer -->
-<script type="text/javascript">
-
-    $(document).on('click', 'button[name^="reffer"]', function(e) {
-        var system_id = $(this).data("system_id");
-        console.log(system_id);
-
-        if(system_id)
-        {
-            jQuery.ajax({
-                url : 'get_users',
-                type: 'GET',
-                dataType: 'json',
-                data: { id: system_id },
-                success:function(data)
-                { 
-                    console.log(data);
-                    jQuery('#refferal_modal').modal('show');
-                    document.getElementById("userId").value = system_id;
-                    jQuery('select[name="user"]').empty();
-                    $('select[name="user"]').append('<option value="" selected>'+ 'Select' +'</option>');
-                    
-                    jQuery.each(data, function(key,value){
-                        $('select[name="user"]').append('<option value="'+ value.id +'">'+value.first_name+' '+value.last_name+'</option>');
-                    });
-                }
-            });
-        }
-        
-    });
-
-</script>
-
-<!-- reffer amount -->
-<script type="text/javascript">
-
-    $(document).on('click', 'button[name^="reffer_amount"]', function(e) {
-        var system_id = $(this).data("system_userid");
-        console.log(system_id);
-
-        if(system_id)
-        {
-            jQuery('#refferal_amount_modal').modal('show');
-            document.getElementById("user_Id").value = system_id;
-            
-        }
-        
-    });
-
-</script>
 
 
 @endsection

@@ -5,6 +5,7 @@ use App\Http\Controllers\loginController;
 use App\Http\Controllers\registerController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\smartfinanceController;
+use App\Http\Controllers\loanController;
 use App\Http\Controllers\generalController;
 use App\Http\Middleware\PreventBackHistory;
 
@@ -125,6 +126,15 @@ Route::get('export-excel-csv-file/{slug}', [SmartFinanceController::class, 'expo
 Route::post('/import_excel',[SmartFinanceController::class, 'import_excel'])->name('import_excel');
 
 //Smart Finance end
+
+//Loan
+
+Route::post('/save_loan',[loanController::class, 'save_loan'])->name('save_loan');
+Route::get('view_loan/{id}', [loanController::class, 'view_loan'])->name('view_loan');
+Route::get('get_loan', [loanController::class, 'get_loan'])->name('get_loan');
+Route::post('loan_edit', [loanController::class, 'loan_edit'])->name('loan_edit');
+Route::post('/loan_payment',[loanController::class, 'loan_payment'])->name('loan_payment');
+//Loan End
 
 
 //Logout

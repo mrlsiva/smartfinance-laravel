@@ -438,7 +438,42 @@
                                             <!--end::Table head-->
                                             <!--begin::Table body-->
                                             <tbody>
-                                               
+                                                @foreach($loans as $loan)
+                                                <tr>
+                                                    <td>Rs. {{$loan->commafun($loan->amount)}}</td>
+                                                    <td>
+                                                        @if($loan->intrest != NULL)
+                                                            {{$loan->intrest}}
+                                                        @else
+                                                            -
+                                                        @endif
+                                                    </td>
+                                                    <td>-</td>
+                                                    @if($loan->is_close == 1)
+                                                        <td><span class="badge py-3 px-4 fs-7 badge-light-secondary">Expired</span></td>
+                                                    @else
+                                                        @if($loan->is_status == 2)
+                                                            <td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>
+                                                        @elseif($loan->is_status == 1)
+                                                            <td><span class="badge py-3 px-4 fs-7 badge-light-success">Accepted</span></td>
+                                                        @elseif($loan->is_status == 0)
+                                                            <td><span class="badge py-3 px-4 fs-7 badge-light-danger">Rejected</span></td>
+                                                        @endif
+                                                    @endif
+                                                    <td>
+                                                        <a class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary" href="{{route('view_loan', ['id' => $loan->id])}}">
+                                                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr064.svg-->
+                                                            <span class="svg-icon svg-icon-2">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                                    <rect opacity="0.5" x="18" y="13" width="13" height="2" rx="1" transform="rotate(-180 18 13)" fill="black"></rect>
+                                                                    <path d="M15.4343 12.5657L11.25 16.75C10.8358 17.1642 10.8358 17.8358 11.25 18.25C11.6642 18.6642 12.3358 18.6642 12.75 18.25L18.2929 12.7071C18.6834 12.3166 18.6834 11.6834 18.2929 11.2929L12.75 5.75C12.3358 5.33579 11.6642 5.33579 11.25 5.75C10.8358 6.16421 10.8358 6.83579 11.25 7.25L15.4343 11.4343C15.7467 11.7467 15.7467 12.2533 15.4343 12.5657Z" fill="black"></path>
+                                                                </svg>
+                                                            </span>
+                                                            <!--end::Svg Icon-->
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                                @endforeach
                                             </tbody>
                                             <!--end::Table body-->
                                         </table>
@@ -534,8 +569,6 @@
                 </div>
             </div>
         @endif
-
-
     </div>
     <!--end::Post-->
 </div>
@@ -1237,6 +1270,126 @@
 </div>
 <!-- end::Modal -investment- -->
 
+<!-- begin::Modal -loan- -->
+<div class="modal fade" id="kt_modal_start_loan" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog mw-650px">
+        <!--begin::Modal content-->
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header pb-0 border-0 justify-content-end">
+                <!--begin::Close-->
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
+                            <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="black" />
+                        </svg>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--begin::Modal header-->
+            <!--begin::Modal body-->
+            <div class="modal-body scroll-y mx-5 mx-xl-18 pt-0 pb-15">
+                <!--begin::Heading-->
+
+                <!--end::Google Contacts Invite-->
+                <!--begin::Separator-->
+                <!--end::Separator-->
+                <!--begin::Textarea-->
+                <!--end::Textarea-->
+                <!--begin::Users-->
+                <div class="mb-10">
+                    <!--begin::Heading-->
+                    <div class="fs-4 fw-bolder mb-2">Loan</div>
+                    <!--end::Heading-->
+                    <form class="form w-100" novalidate="novalidate" id="kt_sign_in_form" method="post" action="{{route('save_loan')}}" enctype="multipart/form-data">
+                        @csrf
+
+                        <!--begin::Input group-->
+                        <div class="fv-row mb-8">
+                            <!--begin::Label-->
+                            <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                <span class="required">Loan Amount</span>
+                                <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Loan Amount"></i>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="number" class="form-control form-control-solid @error('amount') is-invalid @enderror" placeholder="Loan Amount" value="" name="amount" id="amount" />
+                            <!--end::Input-->
+                            @error('amount')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <!--end::Input group-->
+
+                        <!--begin::Input group-->
+                        <div class="fv-row mb-8">
+                            <!--begin::Label-->
+                            <label class="required fs-6 fw-bold mb-2">Property Type</label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <select class="form-select form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="Select..." name="property_type" id="property_type">
+                                <option value="">Select</option>
+                                <option value="Gold">Gold</option>
+                                <option value="Land">Land</option>
+                            </select>
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+
+                        <!--begin::Input group-->
+                        <div class="fv-row mb-8">
+                            <!--begin::Label-->
+                            <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                <span class="">Property Value</span>
+                                <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Property Value"></i>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" class="form-control form-control-solid " placeholder="Property Value" value="" name="property_value" id="property_value"/>
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+
+                        <!--begin::Input group-->
+                        <div class="fv-row mb-8">
+                            <!--begin::Label-->
+                            <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                <span class="">Property Copy</span>
+                                <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Property Copy"></i>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="file" class="form-control form-control-solid custom-file-input" id="property_copy" placeholder="Property Copy" value="" name="property_copy[]" multiple />
+                            <!--end::Input-->
+                            <!-- <div class="d-flex justify-content-center mt-3">
+                                <img id="preview-image-property" style="max-height: 200px;">
+                                <a href="#" class="text-hover-primary" onclick="delete_property()"  style="display:none;" id="property_image">X</a>
+                            </div> -->
+                        </div>
+                        <!--end::Input group-->
+                        
+                        <div class="d-flex justify-content-center">
+                            <button type="submit"  class="btn  btn-primary mt-5 mb-3">Submit</button>
+                            
+                        </div>
+                    </form>
+                </div>
+                <!--end::Users-->
+            </div>
+            <!--end::Modal body-->
+        </div>
+            <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+</div>
+<!-- end::Modal -loan- -->
+
+
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <!-- active navigation -->
 
@@ -1289,6 +1442,13 @@
         $("#preview-image-nominee_aadhar").attr("src", '');
         $('#nominee_aadhar_image').hide();
     }
+
+    function delete_property() {
+        document.getElementById('property_copy').value = null;
+        $("#preview-image-property").attr("src", '');
+        $('#property_image').hide();
+    }
+
 </script>
 <!-- image delete end -->
 
@@ -1749,6 +1909,20 @@
             let reader = new FileReader();
             reader.onload = (e) => { 
                 $('#preview-image-bill').attr('src', e.target.result); 
+            }
+            reader.readAsDataURL(this.files[0]); 
+       });
+    });
+</script>
+
+<!-- propery image -->
+<script type="text/javascript">    
+    $(document).ready(function (e) {
+       $('#property_copy').change(function(){ 
+            $('#property_image').show();  
+            let reader = new FileReader();
+            reader.onload = (e) => { 
+                $('#preview-image-property').attr('src', e.target.result); 
             }
             reader.readAsDataURL(this.files[0]); 
        });
@@ -2647,6 +2821,21 @@
     });
 </script>
 <!-- end example year table -->
+
+
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.6/dist/sweetalert2.all.min.js"></script>
+<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.min.css'>
+
+<script>
+    @if (session('alert'))
+        Swal.fire(
+            "{{ session('alert') }}",
+            ' ',
+            'success'
+        )
+    @endif
+</script>
 
 
 @endsection

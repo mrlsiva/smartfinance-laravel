@@ -17,10 +17,12 @@ class CreateLoansTable extends Migration
             $table->id();
             $table->string('user_id')->constrained();
             $table->string('amount');
+            $table->string('intrest')->nullable();
             $table->string('property_type');
             $table->string('property_value');
-            $table->string('property_copy');
-            $table->string('intrest');
+            $table->string('property_copy')->nullable();
+            $table->date('requested_on');
+            $table->date('approved_on');
             $table->boolean('is_status');
             $table->boolean('is_close');
             $table->timestamps();
