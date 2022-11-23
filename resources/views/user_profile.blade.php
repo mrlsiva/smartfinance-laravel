@@ -770,9 +770,9 @@
 								<!--begin::Table row-->
 								<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
 									<th class="">REFFERED</th>
-									<th class="">MONTHLY INVESTMENT</th>
+									<!-- <th class="">MONTHLY INVESTMENT</th>
 									<th class="">YEARLY INVESTMENT</th>
-									<th class="">YEARLY MONTHLY INVESTMENT</th>     
+									<th class="">YEARLY MONTHLY INVESTMENT</th> -->     
 								</tr>
 								<!--end::Table row-->
 							</thead>
@@ -812,10 +812,10 @@
 											}
 										@endphp
 										<tr>
-											<td>{{$refferal->reffer->first_name}} {{$refferal->reffer->last_name}}<span class="text-muted fw-bold text-muted d-block fs-7">#{{$refferal->reffer->id}}</span></td>
-											<td>Rs. {{$month_amount}}</td>
+											<td>{{$refferal->reffer->first_name}} {{$refferal->reffer->last_name}}<span class="fw-bold text-muted d-block fs-7">#{{$refferal->reffer->id}}</span></td>
+											<!-- <td>Rs. {{$month_amount}}</td>
 											<td>Rs. {{$year_amount}}</td>
-											<td>Rs. {{$yearm_amount}}</td>
+											<td>Rs. {{$yearm_amount}}</td> -->
 										</tr>
 								@endforeach
 							</tbody>
