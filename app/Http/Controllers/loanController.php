@@ -122,7 +122,9 @@ class loanController extends Controller
 
 
         //payment
-        $now = Carbon::now()->format('Y-m-d');
+        $validatedData = $request->validate([
+            'payment_copy' => 'required|image|mimes:jpg,png,jpeg,svg',
+        ]);
 
         $image = $request->file('payment_copy');
         $rand_name = time() . Str::random(12);
@@ -130,10 +132,33 @@ class loanController extends Controller
         $photo = Image::make($image)->encode('jpg', 80);
         Storage::disk('public')->put(config('path.loan_payment').$filename, $photo);
 
-        DB::table('loan_payments')->where('id',$request->loan_payment_id)->update(['is_status' => 2,'payment_bill' => $filename,'paid_on' => $now]);
+        DB::table('loan_payments')->where('id',$request->loan_payment_id)->update(['is_status' => 2,'payment_bill' => $filename,'paid_on' => $request->paid_date]);
 
         return redirect()->back()->with('alert', 'Payment done successfully!!');
         //payment end
+
+    }
+
+    public function get_loan_payment(Request $request){
+
+        $id=$request->id;  
+        $loan_payment = LoanPayment::where('id',$id)->first();
+        return $loan_payment;
+    }
+
+    public function loan_payment_approve(Request $request){
+
+        if($request->is_status == 1){
+            DB::table('loan_payments')->where('id',$request->payment_id)->update(['is_status' => 1]);
+
+            return redirect()->back()->with('alert', 'Payment approved successfully!!');
+        }
+        elseif($request->is_status == 0){
+            DB::table('loan_payments')->where('id',$request->payment_id)->update(['is_status' => 0]);
+
+            return redirect()->back()->with('alert', 'Payment rejected successfully!!');
+        }
+        
 
     }
 

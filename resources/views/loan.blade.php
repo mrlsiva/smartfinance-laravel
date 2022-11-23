@@ -245,7 +245,7 @@ $user = Auth::guard('web')->user();
 									</td>
 								@elseif($loan_payment->is_status == 2)
 									<td>
-										<span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span>
+										<span class="badge py-3 px-4 fs-7 badge-light-warning">Progress</span>
 									</td>
 								@elseif($loan_payment->is_status == 1)
 									<td>
@@ -258,13 +258,13 @@ $user = Auth::guard('web')->user();
 								@endif
 								@if($user->role_id == 1 || $user->role_id == 2)
 									<td>
-										<button type="button" class="btn  btn-light mb-5" data-system_id="{{$loan_payment->id}}" name="payment-approve"><i class="fas fa-pencil-alt" id="fa"></i></button> 
-										<button type="button" class="btn  btn-light mb-5" data-system_id="{{$loan_payment->id}}" name="payment"><i class="fa fa-rupee" id="fa" style="font-size:16px"></i></button> 
+										<button type="button" class="btn  btn-light mb-5 text-hover-primary" data-system_id="{{$loan_payment->id}}" name="loan-payment-approve"><i class="fas fa-pencil-alt" id="fa"></i></button> 
+										<button type="button" class="btn  btn-light mb-5 text-hover-primary" data-system_id="{{$loan_payment->id}}" name="loan_payment"><i class="fa fa-rupee" id="fa" style="font-size:16px"></i></button> 
 									</td>
 								@endif
 								@if($user->role_id == 3)
 									<td>
-										<button type="button" class="btn  btn-light mb-5" data-system_id="{{$loan_payment->id}}" name="loan_payment"><i class="fa fa-rupee" id="fa" style="font-size:16px"></i></button> 
+										<button type="button" class="btn  btn-light mb-5" data-system_id="{{$loan_payment->id}} text-hover-primary" name="loan_payment"><i class="fa fa-rupee" id="fa" style="font-size:16px"></i></button> 
 									</td>
 								@endif
 							</tr>
@@ -319,6 +319,7 @@ $user = Auth::guard('web')->user();
                         <br>
                         <input type="hidden" name="loan_payment_id" id="loan_payment_id">
                         <input type="hidden" name="loan_id" id="loan_id" value="{{$loan->id}}">
+
                         <!--begin::Input group-->
                         <div class="fv-row mb-8">
                             <!--begin::Label-->
@@ -328,7 +329,7 @@ $user = Auth::guard('web')->user();
                             </label>
                             <!--end::Label-->
                             <!--begin::Input-->
-                            <input type="file" class="form-control form-control-solid custom-file-input " id="payment_copy" placeholder="Payment Copy" value="" name="payment_copy" accept="image/*" />
+                            <input type="file" class="form-control form-control-solid custom-file-input " id="payment_copy" placeholder="Payment Copy" value="" name="payment_copy" accept="image/*" required="" />
                             <!--end::Input-->
                             <div class="d-flex justify-content-center mt-3" >
                                 <img id="preview-image-payment_copy" style="max-height: 200px;">
@@ -337,8 +338,32 @@ $user = Auth::guard('web')->user();
                         </div>
                         <!--end::Input group-->
 
-                        
-                        
+                        @if($user->role_id == 1 || $user->role_id == 2)
+                        	@if($user->id != $loan->user_id)
+		                        <!--begin::Input group-->
+		                        <div class="fv-row mb-8">
+		                            <!--begin::Label-->
+		                            <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+		                                <span class="required">Paid Date</span>
+		                                <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Paid Date"></i>
+		                            </label>
+		                            <!--end::Label-->
+		                            <!--begin::Input-->
+		                        	<input type="date" class="form-control form-control-solid " placeholder="Paid Date" value="" name="paid_date" id="paid_date" />
+		                        	<!--end::Input-->
+		                        </div>
+		                        <!--end::Input group-->
+		                    @else
+		                   		<div style="display:none;">
+		                    		<input type="date" class="form-control form-control-solid " placeholder="Paid Date" value="" name="paid_date" id="paid_date" />
+		                    	</div>
+		                    @endif
+	                    @else
+	                    	<div style="display:none;">
+		                    	<input type="date" class="form-control form-control-solid " placeholder="Paid Date" value="" name="paid_date" id="paid_date" />
+		                    </div>
+	                   	@endif
+
                         <div class="d-flex justify-content-center">
                             <button type="submit"  class="btn  btn-primary mt-5 mb-3">Submit</button> 
                         </div>
@@ -356,16 +381,114 @@ $user = Auth::guard('web')->user();
 </div>
 <!-- end::Modal -loan_payment- -->
 
+<!-- begin::Modal-loan_payment approval- -->
+<div class="modal fade" id="loan_payment_approve_modal" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog mw-650px">
+        <!--begin::Modal content-->
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header pb-0 border-0 justify-content-end">
+                <!--begin::Close-->
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
+                            <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="black" />
+                        </svg>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--begin::Modal header-->
+            <!--begin::Modal body-->
+            <div class="modal-body scroll-y mx-5 mx-xl-18 pt-0 pb-15">
+                <!--begin::Heading-->
+
+                <!--end::Google Contacts Invite-->
+                <!--begin::Separator-->
+                <!--end::Separator-->
+                <!--begin::Textarea-->
+                <!--end::Textarea-->
+                <!--begin::Users-->
+                <div class="mb-10">
+                    <!--begin::Heading-->
+                    <div class="fs-4 fw-bolder mb-2">Loan Payment Approve</div>
+                    <!--end::Heading-->
+                    <form class="form w-100" novalidate="novalidate" id="selectform" method="post" action="{{route('loan_payment_approve')}}" enctype="multipart/form-data">
+                        @csrf
+                        <br>
+                        <input type="hidden" name="payment_id" id="payment_id">
+                        <!--begin::Input group-->
+                        <div class="fv-row mb-8">
+                            <!--begin::Label-->
+                            <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                <a href="" id="bill_link" class="text-hover-primary" download=""> Payment Copy </a>
+                            </label>
+                            <!--end::Label-->
+                            <img id="payment_bill" style="max-height: 200px; max-width: 300px;">
+                        </div>
+                        <!--end::Input group-->
+
+                        <!--begin::Input group-->
+                        <div class="fv-row mb-8">
+                            <!--begin::Label-->
+                            <label class="required fs-6 fw-bold mb-2">Status</label>
+                            <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Status"></i>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <select class="form-select form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="Select..." name="is_status" id="is_status">
+                                <option value="">Select</option>
+                                <option value="0">Reject</option>
+                                <option value="1">Approve</option>
+                            </select>
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+                        
+                        <div class="d-flex justify-content-center">
+                            <button type="submit"  class="btn  btn-primary mt-5 mb-3">Submit</button> 
+                        </div>
+                    </form>
+                </div>
+                <!--end::Users-->
+                <!--begin::Notice-->
+                <!--end::Notice-->
+            </div>
+            <!--end::Modal body-->
+        </div>
+            <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+</div>
+<!-- end::Modal -loan_payment_approval- -->
+
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
-<!-- loan payemnt -->
+<!-- loan payement -->
 <script type="text/javascript">
     $(document).on('click', 'button[name^="loan_payment"]', function(e) {
         var system_id = $(this).data("system_id");
         console.log(system_id);
         if(system_id)
         {
+        	var today = new Date();
+        	var dd = today.getDate();
+	        var mm = today.getMonth()+1; //January is 0!
+	        var yyyy = today.getFullYear();
+	        if(dd<10) {
+	        	dd = '0'+dd
+	        } 
+
+	        if(mm<10) {
+	        	mm = '0'+mm
+	        } 
+	        today = yyyy + '-' + mm + '-' + dd;
+
         	jQuery('#loan_payment_modal').modal('show');
+        	document.getElementById("paid_date").value = today;
         	document.getElementById("loan_payment_id").value = system_id;
         }
     });
@@ -390,6 +513,55 @@ $user = Auth::guard('web')->user();
         $("#preview-image-payment_copy").attr("src", '');
         $('#payment_copy_image').hide();
     }
+</script>
+
+<!-- loan-payment-approve -->
+<script type="text/javascript">
+
+    $(document).on('click', 'button[name^="loan-payment-approve"]', function(e) {
+        var system_id = $(this).data("system_id");
+        console.log(system_id);
+
+        if(system_id)
+        {
+            jQuery.ajax({
+                url : '../get_loan_payment',
+                type: 'GET',
+                dataType: 'json',
+                data: { id: system_id },
+                success:function(data)
+                { 
+                    console.log(data);
+                    jQuery('#loan_payment_approve_modal').modal('show');
+                    document.getElementById("payment_id").value = system_id;
+                    $("#bill_link").prop("href", data.payment_bill);
+                    $("#payment_bill").attr("src", data.payment_bill);
+                    if(data.is_status == 0)
+                    {
+                        jQuery('select[name="is_status"]').empty();
+                        $('select[name="is_status"]').append('<option value="'+ '1' +'">'+ 'Approved' +'</option>');
+                        $('select[name="is_status"]').append('<option value="'+ '0' +'" selected>'+ 'Rejected' +'</option>');
+                    }
+                    else if(data.is_status == 1){
+
+                        jQuery('select[name="is_status"]').empty();
+                        $('select[name="is_status"]').append('<option value="'+ '1' +'" selected>'+ 'Approved' +'</option>');
+                        $('select[name="is_status"]').append('<option value="'+ '0' +'">'+ 'Rejected' +'</option>');
+                    }
+                    else{
+
+                    	jQuery('select[name="is_status"]').empty();
+                    	 $('select[name="is_status"]').append('<option value="'+ '' +'">'+ 'Select' +'</option>');
+                        $('select[name="is_status"]').append('<option value="'+ '1' +'">'+ 'Approved' +'</option>');
+                        $('select[name="is_status"]').append('<option value="'+ '0' +'">'+ 'Rejected' +'</option>');
+                    }
+                    
+                }
+            });
+        }
+        
+    });
+
 </script>
 
 <!-- SweetAlert2 -->

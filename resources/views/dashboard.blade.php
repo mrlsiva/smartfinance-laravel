@@ -920,7 +920,6 @@
                                             <th class="">USER</th>
                                             <th class="">AMOUNT</th>
                                             <th class="">INTREST</th>
-                                            <th class="">PENDING AMOUNT</th>
                                             <th class="">STATUS</th>
                                             <th class="">ACTIONS</th>
                                         </tr>
@@ -954,7 +953,6 @@
                                                 -
                                                 @endif
                                             </td>
-                                            <td>-</td>
                                             @if($loan->is_close == 1)
                                                 <td><span class="badge py-3 px-4 fs-7 badge-light-secondary">Expired</span></td>
                                             @else
