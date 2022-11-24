@@ -136,6 +136,8 @@ Route::post('loan_edit', [loanController::class, 'loan_edit'])->name('loan_edit'
 Route::post('/loan_payment',[loanController::class, 'loan_payment'])->name('loan_payment');
 Route::get('get_loan_payment', [loanController::class, 'get_loan_payment'])->name('get_loan_payment');
 Route::post('/loan_payment_approve',[loanController::class, 'loan_payment_approve'])->name('loan_payment_approve');
+Route::get('/loan_search/{type}',[loanController::class, 'loan_search'])->name('loan_search');
+Route::get('/loan_status/{type}',[loanController::class, 'loan_status'])->name('loan_status');
 //Loan End
 
 

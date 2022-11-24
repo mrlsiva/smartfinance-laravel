@@ -1316,7 +1316,7 @@
                             </label>
                             <!--end::Label-->
                             <!--begin::Input-->
-                            <input type="number" class="form-control form-control-solid @error('amount') is-invalid @enderror" placeholder="Loan Amount" value="" name="amount" id="amount" />
+                            <input type="number" class="form-control form-control-solid @error('amount') is-invalid @enderror" placeholder="Loan Amount" value="{{old('amount')}}" name="amount" id="amount" required="true" />
                             <!--end::Input-->
                             @error('amount')
                                 <div class="text-danger">{{ $message }}</div>
@@ -1330,11 +1330,11 @@
                             <label class="required fs-6 fw-bold mb-2">Property Type</label>
                             <!--end::Label-->
                             <!--begin::Input-->
-                            <select class="form-select form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="Select..." name="property_type" id="property_type">
-                                <option value="">Select</option>
-                                <option value="Gold">Gold</option>
-                                <option value="Land">Land</option>
-                            </select>
+                            <input type="text" class="form-control form-control-solid @error('property_type') is-invalid @enderror" placeholder="Land/Gold/Etc.." value="{{old('property_type')}}" name="property_type" id="property_type" required="true" />
+                            <!--end::Input-->
+                            @error('property_type')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
                             <!--end::Input-->
                         </div>
                         <!--end::Input group-->
@@ -1348,7 +1348,10 @@
                             </label>
                             <!--end::Label-->
                             <!--begin::Input-->
-                            <input type="text" class="form-control form-control-solid " placeholder="Property Value" value="" name="property_value" id="property_value"/>
+                            <input type="text" class="form-control form-control-solid @error('property_value') is-invalid @enderror" placeholder="Property Value" value="{{old('property_value')}}" name="property_value" id="property_value" required="true"/>
+                            @error('property_value')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
                             <!--end::Input-->
                         </div>
                         <!--end::Input group-->
@@ -1362,7 +1365,10 @@
                             </label>
                             <!--end::Label-->
                             <!--begin::Input-->
-                            <input type="file" class="form-control form-control-solid custom-file-input" id="property_copy" placeholder="Property Copy" value="" name="property_copy[]" multiple />
+                            <input type="file" class="form-control form-control-solid custom-file-input @error('property_copy') is-invalid @enderror" id="property_copy" placeholder="Property Copy" value="" name="property_copy[]" required="true" multiple />
+                            @error('property_copy')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
                             <!--end::Input-->
                             <!-- <div class="d-flex justify-content-center mt-3">
                                 <img id="preview-image-property" style="max-height: 200px;">
@@ -1374,17 +1380,19 @@
                         <!--begin::Input group-->
                         <div class="fv-row mb-10">
                             <label class="form-check form-check-custom form-check-solid form-check-inline">
-                                <input class="form-check-input" type="checkbox" name="terms_and_conditions" id="terms_and_conditions"/>
+                                <input class="form-check-input @error('terms_and_conditions') is-invalid @enderror" type="checkbox" name="terms_and_conditions" id="terms_and_conditions" required="true" />
                                 <span class="form-check-label fw-bold text-gray-700 fs-6">I Agree
                                     <a href="#" class="ms-1 text-hover-primary">Terms and conditions</a>.
                                 </span>
                             </label>
-                            <span class="text-danger">*Please check the box after reading the terms and condition.</span>
+                            @error('terms_and_conditions')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
                         </div>
                         <!--end::Input group-->
                         
                         <div class="d-flex justify-content-center" >
-                            <button type="submit"  class="btn  btn-primary mt-5 mb-3" id="loan_final" style="display: none;">Submit</button> 
+                            <button type="submit" class="btn  btn-primary mt-5 mb-3">Submit</button> 
                         </div>
                     </form>
                 </div>
@@ -1401,21 +1409,7 @@
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
-<script type="text/javascript">
-
-    $('#terms_and_conditions').change(function () {
-        if (this.checked) {
-            document.getElementById('loan_final').style.display = 'block';
-        }
-        else{
-            document.getElementById('loan_final').style.display = 'none';
-        }
-    });
-</script>
-
-
 <!-- active navigation -->
-
 <script type="text/javascript">
 
     function finance() {
@@ -2844,6 +2838,20 @@
     });
 </script>
 <!-- end example year table -->
+
+<!-- loan terms and condition check -->
+<script type="text/javascript">
+
+    $('#terms_and_conditions').change(function () {
+        if (this.checked) {
+            document.getElementById('loan_final').style.display = 'block';
+        }
+        else{
+            document.getElementById('loan_final').style.display = 'none';
+        }
+    });
+</script>
+<!-- loan terms and condition check end -->
 
 
 <!-- SweetAlert2 -->

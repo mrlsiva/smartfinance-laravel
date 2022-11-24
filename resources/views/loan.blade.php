@@ -258,13 +258,13 @@ $user = Auth::guard('web')->user();
 								@endif
 								@if($user->role_id == 1 || $user->role_id == 2)
 									<td>
-										<button type="button" class="btn  btn-light mb-5 text-hover-primary" data-system_id="{{$loan_payment->id}}" name="loan-payment-approve"><i class="fas fa-pencil-alt" id="fa"></i></button> 
-										<button type="button" class="btn  btn-light mb-5 text-hover-primary" data-system_id="{{$loan_payment->id}}" name="loan_payment"><i class="fa fa-rupee" id="fa" style="font-size:16px"></i></button> 
+										<button type="button" class="btn  btn-primary mb-5 " data-system_id="{{$loan_payment->id}}" name="loan-payment-approve">Approve</button> 
+										<button type="button" class="btn  btn-primary mb-5" data-system_id="{{$loan_payment->id}}" name="loan_payment">Pay</button> 
 									</td>
 								@endif
 								@if($user->role_id == 3)
 									<td>
-										<button type="button" class="btn  btn-light mb-5" data-system_id="{{$loan_payment->id}} text-hover-primary" name="loan_payment"><i class="fa fa-rupee" id="fa" style="font-size:16px"></i></button> 
+										<button type="button" class="btn  btn-primary mb-5" data-system_id="{{$loan_payment->id}}" name="loan_payment">Pay</button> 
 									</td>
 								@endif
 							</tr>

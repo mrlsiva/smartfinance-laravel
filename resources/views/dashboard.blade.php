@@ -903,7 +903,73 @@
                             </h3>
                             <!--begin::Actions-->
                             <div class="card-toolbar">
-                                
+                                <!--begin::Filters-->
+                                <div class="d-flex flex-stack flex-wrap gap-4">
+                                    <!--begin::Destination-->
+                                    <!--end::Destination-->
+                                    <!--begin::Status-->
+                                    <div class="d-flex align-items-center fw-bolder">
+
+                                        <!--begin::Label-->
+                                        <input type="hidden" name="loan_status_url" id="loan_status_url" value="{{url('loan_status')}}">
+                                        <div class="text-muted fs-7 me-2">Status</div>
+                                        <!--end::Label-->
+                                        @if($loan_status != NULL)
+                                            <!--begin::Select-->
+                                            <select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Show All" data-kt-table-widget-4="filter_status" name="loan_status" id="loan_status" >
+                                                <option></option>
+                                                <option value="null" selected="selected">Show All</option>
+                                                <option value="2" {{ ("2" == $loan_status ) ? "selected":"" }}>Pending</option>
+                                                <option value="1" {{ ("1" == $loan_status ) ? "selected":"" }}>Approved</option>
+                                                <option value="0" {{ ("0" == $loan_status ) ? "selected":"" }}>Rejected</option>
+                                            </select>
+                                            <!--end::Select-->
+                                        @else
+                                            <!--begin::Select-->
+                                            <select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Show All" data-kt-table-widget-4="filter_status" name="loan_status" id="loan_status" >
+                                                <option></option>
+                                                <option value="null" selected="selected">Show All</option>
+                                                <option value="1">Approved</option>
+                                                <option value="0">Rejected</option>
+                                                <option value="2">Pending</option>
+                                            </select>
+                                            <!--end::Select-->
+                                        @endif
+                                    </div>
+                                    <!--end::Status-->
+                                    <input type="hidden" name="loan_search_url" id="loan_search_url" value="{{url('loan_search')}}">
+
+                                    @if($loan_search != NULL)
+                                        <!--begin::Search-->
+                                        <div class="position-relative my-1">
+                                            <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
+                                            <span class="svg-icon svg-icon-2 position-absolute top-50 translate-middle-y ms-4">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                    <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="black" />
+                                                    <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="black" />
+                                                </svg>
+                                            </span>
+                                            <!--end::Svg Icon-->
+                                            <input type="text" data-kt-table-widget-4="search" class="form-control w-150px fs-7 ps-12" placeholder="Search" name="loan_search" value="{{$loan_search}}" />
+                                        </div>
+                                        <!--end::Search-->
+                                    @else
+                                        <!--begin::Search-->
+                                        <div class="position-relative my-1">
+                                            <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
+                                            <span class="svg-icon svg-icon-2 position-absolute top-50 translate-middle-y ms-4">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                    <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="black" />
+                                                    <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="black" />
+                                                </svg>
+                                            </span>
+                                            <!--end::Svg Icon-->
+                                            <input type="text" data-kt-table-widget-4="search" class="form-control w-150px fs-7 ps-12" placeholder="Search" name="loan_search" />
+                                        </div>
+                                        <!--end::Search-->
+                                    @endif
+                                </div>
+                                <!--begin::Filters-->
                             </div>
                             <!--end::Actions-->
                         </div>
@@ -994,6 +1060,7 @@
                 <!--end::Col-->
             </div>
             <!--end::Row-->
+            <!--begin::Row-->
             <div id="admin_finance" id="admin_finance" style="display:none;">
                 @if($admin_finance_count != 0)
                     <div class="row gy-5 g-xl-8 mt-xl-5" >
@@ -1227,6 +1294,159 @@
                     <!--end::Row-->
                 @endif
             </div>
+            <!--end::Row-->
+            <!--begin::Row-->
+            <div id="admin_loan" id="admin_loan" style="display:none;">
+                @if($admin_loan_count != 0)
+                    <div class="row gy-5 g-xl-8 mt-xl-5" >
+                        <div class="col-xl-12 mb-5 mb-xl-10">
+                            <!--begin::Table Widget 4-->
+                            <div class="card card-flush h-xl-100">
+                                <!--begin::Card header-->
+                                <div class="card-header pt-7">
+                                    <!--begin::Title-->
+                                    <h3 class="card-title align-items-start flex-column">
+                                        <span class="card-label fw-bolder text-dark">My Loans</span>
+
+                                    </h3>
+                                    <!--end::Title-->
+                                    <div class="card-toolbar" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover" title="Next Loan">
+                                        <a class="btn btn-sm btn-light btn-active-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_start_loan" >
+                                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
+                                            <span class="svg-icon svg-icon-3">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                    <rect opacity="0.5" x="11.364" y="20.364" width="16" height="2" rx="1" transform="rotate(-90 11.364 20.364)" fill="black" />
+                                                    <rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="black" />
+                                                </svg>
+                                            </span>
+                                            <!--end::Svg Icon-->Next Loan 
+                                        </a>
+                                    </div>
+                                </div>
+                                <!--end::Card header-->
+                                <!--begin::Card body-->
+                                <div class="card-body">
+                                    <!--begin::Table container-->
+                                    <div class="table-responsive">
+                                        <!--begin::Table-->
+                                        <table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
+                                            <!--begin::Table head-->
+                                            <thead>
+                                                <tr class="fw-bolder text-muted">
+                                                    <th class="">USER</th>
+                                                    <th class="">AMOUNT</th>
+                                                    <th class="">INTREST</th>
+                                                    <th class="">STATUS</th>
+                                                    <th class="">ACTIONS</th>
+                                                </tr>
+                                            </thead>
+                                            <!--end::Table head-->
+                                            <!--begin::Table body-->
+                                            <tbody class="user_table">
+                                               @foreach($admin_loans as $admin_loan)
+                                                <tr>
+                                                    <td>
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="symbol symbol-45px me-5">
+                                                                @php
+                                                                    $avatar = App\Models\UserDetail::where('user_id',$admin_loan->user->id)->first();
+                                                                @endphp
+                                                                @if($avatar != NULL)
+                                                                <img src="{{ $avatar->avatar}}" alt="" />
+                                                                @endif
+                                                            </div>
+                                                            <div class="d-flex justify-content-start flex-column">
+                                                                <a href="{{route('user', ['id' => $admin_loan->user->id])}}" class="text-dark fw-bolder text-hover-primary fs-6">{{$admin_loan->user->first_name}} {{$admin_loan->user->last_name}}</a>
+                                                                <span class="text-muted fw-bold text-muted d-block fs-7">#{{$admin_loan->user->id}}</span>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td>Rs {{$admin_loan->commafun($admin_loan->amount)}}</td>
+                                                    <td>
+                                                        @if($admin_loan->intrest != NULL)
+                                                        {{$admin_loan->intrest}}
+                                                        @else
+                                                        -
+                                                        @endif
+                                                    </td>
+                                                    @if($admin_loan->is_close == 1)
+                                                        <td><span class="badge py-3 px-4 fs-7 badge-light-secondary">Expired</span></td>
+                                                    @else
+                                                        @if($admin_loan->is_status == 2)
+                                                            <td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>
+                                                        @elseif($admin_loan->is_status == 1)
+                                                            <td><span class="badge py-3 px-4 fs-7 badge-light-success">Accepted</span></td>
+                                                        @elseif($admin_loan->is_status == 0)
+                                                            <td><span class="badge py-3 px-4 fs-7 badge-light-danger">Rejected</span></td>
+                                                        @endif
+                                                    @endif
+                                                    <td class="">
+                                                        <button class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary"name="loan_edit" data-system_id="{{$admin_loan->id}}" title="Edit"><i class="fas fa-pencil-alt" id="fa"></i></button>
+                                                        
+                                                        <a class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary" href="{{route('view_loan', ['id' => $admin_loan->id])}}">
+                                                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr064.svg-->
+                                                            <span class="svg-icon svg-icon-2">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                                    <rect opacity="0.5" x="18" y="13" width="13" height="2" rx="1" transform="rotate(-180 18 13)" fill="black"></rect>
+                                                                    <path d="M15.4343 12.5657L11.25 16.75C10.8358 17.1642 10.8358 17.8358 11.25 18.25C11.6642 18.6642 12.3358 18.6642 12.75 18.25L18.2929 12.7071C18.6834 12.3166 18.6834 11.6834 18.2929 11.2929L12.75 5.75C12.3358 5.33579 11.6642 5.33579 11.25 5.75C10.8358 6.16421 10.8358 6.83579 11.25 7.25L15.4343 11.4343C15.7467 11.7467 15.7467 12.2533 15.4343 12.5657Z" fill="black"></path>
+                                                                </svg>
+                                                            </span>
+                                                            <!--end::Svg Icon-->
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                               @endforeach
+                                            </tbody>
+                                            <!--end::Table body-->
+                                        </table>
+                                        <!--end::Table-->
+                                    </div>
+                                    <!--end::Table container-->
+                                    <div class="d-flex justify-content-end mb-3">
+                                        {{ $admin_loans->links() }}
+                                    </div>
+                                </div>
+                                <!--end::Card body-->
+                            </div>
+                            <!--end::Table Widget 4-->
+                        </div>
+                    </div>
+                @else
+                    <!--begin::Row-->
+                    <div class="row gy-5 g-xl-8 mt-xl-5" >
+                        <div class="col-xl-12 mb-5 mb-xl-10">
+                            <!--begin::Table Widget 4-->
+                            <div class="card card-flush h-xl-100">
+                                <!--begin::Card body-->
+                                <div class="card-body">
+                                    <!--begin::Heading-->
+                                    <div class="card-px text-center pt-15 pb-15">
+                                        <!--begin::Title-->
+                                        <h2 class="fs-2x fw-bolder mb-0">Get Your Loan Here </h2>
+                                        <!--end::Title-->
+                                        <!--begin::Description-->
+                                        <p class="text-gray-400 fs-4 fw-bold py-7">Click on the below button to get your loan </p>
+                                        <!--end::Description-->
+                                        <!--begin::Action-->
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_start_loan" style="color: white;">Start Loan</button>
+                                        <!--end::Action-->
+                                    </div>
+                                    <!--end::Heading-->
+                                    <!--begin::Illustration-->
+                                    <div class="text-center pb-15 px-5">
+                                        <img src="{{ asset('public/assets/media/illustrations/sigma-1/11.png') }}" alt="" class="mw-100 h-200px h-sm-325px" />
+                                    </div>
+                                    <!--end::Illustration-->
+                                </div>
+                                <!--end::Card body-->
+                            </div>
+                            <!--end::Table Widget 4-->
+                        </div>
+                    </div>
+                    <!--end::Row-->
+                @endif
+            </div>
+            <!--end::Row-->
         @elseif($detail)
             <div class="row">
                 <div class="card">
@@ -2506,14 +2726,17 @@
                                     
                                     <!--begin::Details-->
                                     <div class="ms-5">
-                                        <span class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">Property Value</span>
+                                        <span class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">Intrest</span>
                                     </div>
                                     <!--end::Details-->
                                 </div>
                                 <!--end::Details-->
                                 <!--begin::Access menu-->
                                 <div class="ms-2 w-150px">
-                                    <input type="number" class="form-control form-control-solid" placeholder="Intrest" value="" name="loan_intrest" id="loan_intrest" required="" />
+                                    <input type="number" class="form-control form-control-solid @error('loan_intrest') is-invalid @enderror" placeholder="Intrest" value="" name="loan_intrest" id="loan_intrest" required="" />
+                                    @error('loan_intrest')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
                                 </div>
                                 <!--end::Access menu-->
                             </div>
@@ -2605,6 +2828,144 @@
 </div>
 <!-- end::Modal -->
 
+<!-- begin::Modal -loan- -->
+<div class="modal fade" id="kt_modal_start_loan" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog mw-650px">
+        <!--begin::Modal content-->
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header pb-0 border-0 justify-content-end">
+                <!--begin::Close-->
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
+                            <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="black" />
+                        </svg>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--begin::Modal header-->
+            <!--begin::Modal body-->
+            <div class="modal-body scroll-y mx-5 mx-xl-18 pt-0 pb-15">
+                <!--begin::Heading-->
+
+                <!--end::Google Contacts Invite-->
+                <!--begin::Separator-->
+                <!--end::Separator-->
+                <!--begin::Textarea-->
+                <!--end::Textarea-->
+                <!--begin::Users-->
+                <div class="mb-10">
+                    <!--begin::Heading-->
+                    <div class="fs-4 fw-bolder mb-2">Loan</div>
+                    <!--end::Heading-->
+                    <form class="form w-100" novalidate="novalidate" id="kt_sign_in_form" method="post" action="{{route('save_loan')}}" enctype="multipart/form-data">
+                        @csrf
+
+                        <!--begin::Input group-->
+                        <div class="fv-row mb-8">
+                            <!--begin::Label-->
+                            <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                <span class="required">Loan Amount</span>
+                                <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Loan Amount"></i>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="number" class="form-control form-control-solid @error('amount') is-invalid @enderror" placeholder="Loan Amount" value="{{old('amount')}}" name="amount" id="amount" required="true" />
+                            <!--end::Input-->
+                            @error('amount')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <!--end::Input group-->
+
+                        <!--begin::Input group-->
+                        <div class="fv-row mb-8">
+                            <!--begin::Label-->
+                            <label class="required fs-6 fw-bold mb-2">Property Type</label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" class="form-control form-control-solid @error('property_type') is-invalid @enderror" placeholder="Land/Gold/Etc.." value="{{old('property_type')}}" name="property_type" id="property_type" required="true" />
+                            <!--end::Input-->
+                            @error('property_type')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+
+                        <!--begin::Input group-->
+                        <div class="fv-row mb-8">
+                            <!--begin::Label-->
+                            <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                <span class="">Property Value</span>
+                                <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Property Value"></i>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" class="form-control form-control-solid @error('property_value') is-invalid @enderror" placeholder="Property Value" value="{{old('property_value')}}" name="property_value" id="property_value" required="true"/>
+                            @error('property_value')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+
+                        <!--begin::Input group-->
+                        <div class="fv-row mb-8">
+                            <!--begin::Label-->
+                            <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                <span class="">Property Copy</span>
+                                <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Property Copy"></i>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="file" class="form-control form-control-solid custom-file-input @error('property_copy') is-invalid @enderror" id="property_copy" placeholder="Property Copy" value="" name="property_copy[]" required="true" multiple />
+                            @error('property_copy')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                            <!--end::Input-->
+                            <!-- <div class="d-flex justify-content-center mt-3">
+                                <img id="preview-image-property" style="max-height: 200px;">
+                                <a href="#" class="text-hover-primary" onclick="delete_property()"  style="display:none;" id="property_image">X</a>
+                            </div> -->
+                        </div>
+                        <!--end::Input group-->
+
+                        <!--begin::Input group-->
+                        <div class="fv-row mb-10">
+                            <label class="form-check form-check-custom form-check-solid form-check-inline">
+                                <input class="form-check-input @error('terms_and_conditions') is-invalid @enderror" type="checkbox" name="terms_and_conditions" id="terms_and_conditions" required="true" />
+                                <span class="form-check-label fw-bold text-gray-700 fs-6">I Agree
+                                    <a href="#" class="ms-1 text-hover-primary">Terms and conditions</a>.
+                                </span>
+                            </label>
+                            @error('terms_and_conditions')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <!--end::Input group-->
+                        
+                        <div class="d-flex justify-content-center" >
+                            <button type="submit" class="btn  btn-primary mt-5 mb-3">Submit</button> 
+                        </div>
+                    </form>
+                </div>
+                <!--end::Users-->
+            </div>
+            <!--end::Modal body-->
+        </div>
+            <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+</div>
+<!-- end::Modal -loan- -->
+
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
@@ -2618,6 +2979,7 @@
         $('#finance').hide();
         $('#admin_finance').hide();
         $('#loan').hide();
+        $('#admin_loan').hide();
     }
 
     function finance() {
@@ -2628,6 +2990,7 @@
         $('#finance').show();
         $('#admin_finance').show();
         $('#loan').hide();
+        $('#admin_loan').hide();
     }
 
     function loan() {
@@ -2638,6 +3001,7 @@
         $('#finance').hide();
         $('#admin_finance').hide();
         $('#loan').show();
+        $('#admin_loan').show();
     }
 
 </script>
@@ -4304,89 +4668,6 @@
     });
 </script>
 
-<!-- investment_status -->
-<script type="application/javascript">
-    jQuery(document).ready(function ()
-    {
-        jQuery('select[name="investment_status"]').on('change',function(){
-            var status = jQuery(this).val();
-            jQuery.ajax({
-                url : 'investment_status',
-                type: 'GET',
-                dataType: 'json',
-                data: { "status": status},
-                success:function(data)
-                {
-
-                    console.log(data.data);
-                    var output = '';
-                    if(data.data.length > 0){
-                        for(var count = 0; count < data.data.length; count++)
-                        {
-                            var directory = 'user/'+data.data[count].user_id+'/';
-                            var directory1 = 'view_finance/'+data.data[count].id+'/';
-                            var image_url = 'storage/app/public/avatar/'+data.data[count].user_avatar+'/';
-                            output += '<tr>';
-                            if(data.data[count].user_avatar){
-                                output += '<td><div class="d-flex align-items-center"><div class="symbol symbol-45px me-5"><img src="'+image_url+'" alt="" /></div><div class="d-flex justify-content-start flex-column"><a href="'+directory+'" class="text-dark fw-bolder text-hover-primary fs-6">'+data.data[count].user_firstname+' '+data.data[count].user_lastname+'</a><span class="text-muted fw-bold text-muted d-block fs-7">'+data.data[count].user_id+'</span></td>';
-
-                            }
-                            else{
-
-                                output += '<td><div class="d-flex align-items-center"><div class="symbol symbol-45px me-5"><img src="{{ asset('public/assets/media/avatars/blank.png') }}" alt="" /></div><div class="d-flex justify-content-start flex-column"><a href="" class="text-dark fw-bolder text-hover-primary fs-6">'+data.data[count].user_firstname+' '+data.data[count].user_lastname+'</a><span class="text-muted fw-bold text-muted d-block fs-7">'+data.data[count].user_id+'</span></td>';
-                            }
-                            if(data.data[count].plan_type == 'month'){
-                                output += '<td>Month</td>';
-                            }
-                            else{
-                                output += '<td>Year</td>';
-                            }
-
-                            if(data.data[count].no_of_year !== null){
-                                output += '<td>'+data.data[count].no_of_year+'</td>';
-                            }
-                            else{
-                                output += '<td>-</td>';
-                            }
-                            output += '<td>'+data.data[count].amount+'</td>';
-                            output += '<td>'+data.data[count].investment_date+'</td>';
-                            if(data.data[count].accepted_date !== null){
-                                output += '<td>'+data.data[count].accepted_date+'</td>';
-                            }
-                            else{
-                                output += '<td>-</td>';
-                            }
-                            
-                            output += '<td>'+data.data[count].percentage+'</td>';
-                            if(data.data[count].is_status == 2){
-
-                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>';
-                            }
-                            else if(data.data[count].is_status == 1){
-                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-success">Approved</span></td>';
-                            }
-                            else{
-                                output += '<td><span class="badge py-3 px-4 fs-7 badge-light-danger">Rejected</span></td>';
-                            }
-
-                            output += '<td><button class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary"name="approve"  data-system_id="'+data.data[count].id+'" title="Edit"><i class="fas fa-pencil-alt" id="fa"></i></button> <a class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary" href="'+directory1+'"><span class="svg-icon svg-icon-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><rect opacity="0.5" x="18" y="13" width="13" height="2" rx="1" transform="rotate(-180 18 13)" fill="black"></rect><path d="M15.4343 12.5657L11.25 16.75C10.8358 17.1642 10.8358 17.8358 11.25 18.25C11.6642 18.6642 12.3358 18.6642 12.75 18.25L18.2929 12.7071C18.6834 12.3166 18.6834 11.6834 18.2929 11.2929L12.75 5.75C12.3358 5.33579 11.6642 5.33579 11.25 5.75C10.8358 6.16421 10.8358 6.83579 11.25 7.25L15.4343 11.4343C15.7467 11.7467 15.7467 12.2533 15.4343 12.5657Z" fill="black"></path></svg></span></a> </td>';
-                            output += '</tr>';
-                        }
-                    }
-                    else
-                    {
-                        output += '<tr>';
-                        output += '<td colspan="6">No Data Found</td>';
-                        output += '</tr>';
-                    }
-                    $('.investment_body').html(output); 
-                    
-                }
-            });  
-        });
-    });
-</script>
-
 <!-- investment status search -->
 <script type="application/javascript">
     jQuery(document).ready(function ()
@@ -4502,6 +4783,54 @@
     });
 
 </script>
+
+<!-- loan status search -->
+<script type="application/javascript">
+    jQuery(document).ready(function ()
+    {
+        jQuery('select[name="loan_status"]').on('change',function(){
+            var loan_status = jQuery(this).val();
+            var status_url = jQuery("#loan_status_url").val();
+            var url = status_url+"/"+loan_status+'/';
+            if(loan_status == 'null'){
+                url = jQuery("#base_url").val();
+            }
+            window.location = url; 
+        });
+    });
+</script>
+
+<!-- loan search -->
+<script type="application/javascript">
+    jQuery(document).ready(function ()
+    {
+        jQuery('input[name="loan_search"]').on('change',function(){
+            var loan_search = jQuery(this).val();
+            var search_url = jQuery("#loan_search_url").val();
+            var url = search_url+"/"+loan_search+'/';
+            if(loan_search == ''){
+                url = jQuery("#base_url").val();
+            }
+            window.location = url; 
+        });
+    });
+</script>
+
+
+
+<!-- loan terms and condition check -->
+<script type="text/javascript">
+
+    $('#terms_and_conditions').change(function () {
+        if (this.checked) {
+            document.getElementById('loan_final').style.display = 'block';
+        }
+        else{
+            document.getElementById('loan_final').style.display = 'none';
+        }
+    });
+</script>
+<!-- loan terms and condition check end -->
 
 
 <!-- SweetAlert2 -->

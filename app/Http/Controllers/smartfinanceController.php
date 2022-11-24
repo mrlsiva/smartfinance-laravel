@@ -19,6 +19,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Setting;
 use App\Models\Template;
 use App\Models\User;
+use App\Models\Loan;
 use Image;
 use DB;
 
@@ -634,6 +635,8 @@ class smartfinanceController extends Controller
         $admin_finance_count = Smartfinance::where('user_id',$user->id)->count();
         $loans = Loan::orderBy('id','Desc')->simplePaginate(10);
         $loan_count = Loan::where('is_status',2)->count();
+        $admin_loans = Loan::where('user_id',$user->id)->orderBy('id','Desc')->simplePaginate(10);
+        $admin_loan_count = Loan::where('user_id',$user->id)->count();
 
         $flag = 'finance';
         $role = NULL;
@@ -644,8 +647,10 @@ class smartfinanceController extends Controller
         $investment_plan = NULL;
         $investment_status = NULL;
         $investment_search = $type;
+        $loan_status = NULL;
+        $loan_search = NULL;
 
-        return view('dashboard')->with('users',$users)->with('user_count',$user_count)->with('smartfinances',$smartfinances)->with('smartfinance_count',$smartfinance_count)->with('admin_finances',$admin_finances)->with('admin_finance_count',$admin_finance_count)->with('payment_count',$payment_count)->with('loans',$loans)->with('loan_count',$loan_count)->with('role',$role)->with('profile',$profile)->with('progress',$progress)->with('status',$status)->with('search',$search)->with('investment_plan',$investment_plan)->with('investment_status',$investment_status)->with('investment_search',$investment_search)->with('flag',$flag);
+        return view('dashboard')->with('users',$users)->with('user_count',$user_count)->with('smartfinances',$smartfinances)->with('smartfinance_count',$smartfinance_count)->with('admin_finances',$admin_finances)->with('admin_finance_count',$admin_finance_count)->with('payment_count',$payment_count)->with('loans',$loans)->with('loan_count',$loan_count)->with('admin_loans',$admin_loans)->with('admin_loan_count',$admin_loan_count)->with('role',$role)->with('profile',$profile)->with('progress',$progress)->with('status',$status)->with('search',$search)->with('investment_plan',$investment_plan)->with('investment_status',$investment_status)->with('investment_search',$investment_search)->with('loan_search',$loan_search)->with('loan_status',$loan_status)->with('flag',$flag);
         
     }
 
@@ -665,6 +670,8 @@ class smartfinanceController extends Controller
         $admin_finance_count = Smartfinance::where('user_id',$user->id)->count();
         $loans = Loan::orderBy('id','Desc')->simplePaginate(10);
         $loan_count = Loan::where('is_status',2)->count();
+        $admin_loans = Loan::where('user_id',$user->id)->orderBy('id','Desc')->simplePaginate(10);
+        $admin_loan_count = Loan::where('user_id',$user->id)->count();
 
         $flag = 'finance';
         $role = NULL;
@@ -675,8 +682,10 @@ class smartfinanceController extends Controller
         $investment_plan = NULL;
         $investment_status = $type;
         $investment_search = NULL;
+        $loan_status = NULL;
+        $loan_search = NULL;
 
-        return view('dashboard')->with('users',$users)->with('user_count',$user_count)->with('smartfinances',$smartfinances)->with('smartfinance_count',$smartfinance_count)->with('admin_finances',$admin_finances)->with('admin_finance_count',$admin_finance_count)->with('payment_count',$payment_count)->with('loans',$loans)->with('loan_count',$loan_count)->with('role',$role)->with('profile',$profile)->with('progress',$progress)->with('status',$status)->with('search',$search)->with('investment_plan',$investment_plan)->with('investment_status',$investment_status)->with('investment_search',$investment_search)->with('flag',$flag);
+        return view('dashboard')->with('users',$users)->with('user_count',$user_count)->with('smartfinances',$smartfinances)->with('smartfinance_count',$smartfinance_count)->with('admin_finances',$admin_finances)->with('admin_finance_count',$admin_finance_count)->with('payment_count',$payment_count)->with('loans',$loans)->with('loan_count',$loan_count)->with('admin_loans',$admin_loans)->with('admin_loan_count',$admin_loan_count)->with('role',$role)->with('profile',$profile)->with('progress',$progress)->with('status',$status)->with('search',$search)->with('investment_plan',$investment_plan)->with('investment_status',$investment_status)->with('investment_search',$investment_search)->with('loan_search',$loan_search)->with('loan_status',$loan_status)->with('flag',$flag);
         
     }
 
@@ -694,6 +703,8 @@ class smartfinanceController extends Controller
         $admin_finance_count = Smartfinance::where('user_id',$user->id)->count();
         $loans = Loan::orderBy('id','Desc')->simplePaginate(10);
         $loan_count = Loan::where('is_status',2)->count();
+        $admin_loans = Loan::where('user_id',$user->id)->orderBy('id','Desc')->simplePaginate(10);
+        $admin_loan_count = Loan::where('user_id',$user->id)->count();
         
         $flag = 'finance';
         $role = NULL;
@@ -704,8 +715,10 @@ class smartfinanceController extends Controller
         $investment_plan = $type;
         $investment_status = NULL;
         $investment_search = NULL;
+        $loan_status = NULL;
+        $loan_search = NULL;
 
-        return view('dashboard')->with('users',$users)->with('user_count',$user_count)->with('smartfinances',$smartfinances)->with('smartfinance_count',$smartfinance_count)->with('admin_finances',$admin_finances)->with('admin_finance_count',$admin_finance_count)->with('payment_count',$payment_count)->with('loans',$loans)->with('loan_count',$loan_count)->with('role',$role)->with('profile',$profile)->with('progress',$progress)->with('status',$status)->with('search',$search)->with('investment_plan',$investment_plan)->with('investment_status',$investment_status)->with('investment_search',$investment_search)->with('flag',$flag);
+        return view('dashboard')->with('users',$users)->with('user_count',$user_count)->with('smartfinances',$smartfinances)->with('smartfinance_count',$smartfinance_count)->with('admin_finances',$admin_finances)->with('admin_finance_count',$admin_finance_count)->with('payment_count',$payment_count)->with('loans',$loans)->with('loan_count',$loan_count)->with('admin_loans',$admin_loans)->with('admin_loan_count',$admin_loan_count)->with('role',$role)->with('profile',$profile)->with('progress',$progress)->with('status',$status)->with('search',$search)->with('investment_plan',$investment_plan)->with('investment_status',$investment_status)->with('investment_search',$investment_search)->with('loan_search',$loan_search)->with('loan_status',$loan_status)->with('flag',$flag);
         
     }
 
