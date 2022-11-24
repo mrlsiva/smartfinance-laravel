@@ -115,6 +115,27 @@ class loanController extends Controller
         return view('loan')->with('loan',$loan)->with('loan_payments',$loan_payments);
     }
 
+    public function check_loan_payment(Request $request){
+
+        $loan_payment_id = $request->id;
+        $loan_id = $request->loan_id;
+        $payment_check = LoanPayment::where([['loan_id',$loan_id],['id','<',$loan_payment_id]])->orderBy('id','desc')->first();
+        if($payment_check != NULL){
+            if($payment_check->is_status != 1){
+
+                return "1";
+            }
+            else{
+
+                return "0";
+            }
+        }
+        else{
+
+            return "0";
+        }
+    }
+
     public function loan_payment(Request $request){
 
         //check for previous payment

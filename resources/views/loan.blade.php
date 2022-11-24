@@ -259,11 +259,13 @@ $user = Auth::guard('web')->user();
 								@if($user->role_id == 1 || $user->role_id == 2)
 									<td>
 										<button type="button" class="btn  btn-primary mb-5 " data-system_id="{{$loan_payment->id}}" name="loan-payment-approve">Approve</button> 
+										<input type="hidden" name="loan_id" id="loan_id" value="{{$loan->id}}">
 										<button type="button" class="btn  btn-primary mb-5" data-system_id="{{$loan_payment->id}}" name="loan_payment">Pay</button> 
 									</td>
 								@endif
 								@if($user->role_id == 3)
 									<td>
+										<input type="hidden" name="loan_id" id="loan_id" value="{{$loan->id}}">
 										<button type="button" class="btn  btn-primary mb-5" data-system_id="{{$loan_payment->id}}" name="loan_payment">Pay</button> 
 									</td>
 								@endif
@@ -471,9 +473,10 @@ $user = Auth::guard('web')->user();
 <script type="text/javascript">
     $(document).on('click', 'button[name^="loan_payment"]', function(e) {
         var system_id = $(this).data("system_id");
+        var loan_id = jQuery("#loan_id").val();
         console.log(system_id);
-        if(system_id)
-        {
+        console.log(loan_id);
+        if(system_id){
         	var today = new Date();
         	var dd = today.getDate();
 	        var mm = today.getMonth()+1; //January is 0!
@@ -487,9 +490,29 @@ $user = Auth::guard('web')->user();
 	        } 
 	        today = yyyy + '-' + mm + '-' + dd;
 
-        	jQuery('#loan_payment_modal').modal('show');
-        	document.getElementById("paid_date").value = today;
-        	document.getElementById("loan_payment_id").value = system_id;
+	        jQuery.ajax({
+                url : '../check_loan_payment',
+                type: 'GET',
+                dataType: 'json',
+                data: { "id": system_id,"loan_id" : loan_id},
+                success:function(data)
+                { 
+                    console.log(data);
+                    if(data == 1){
+                    	Swal.fire(
+                    		'Please complete the previous payments.',
+                    		' ',
+                    		'error'
+                    		)
+                    }
+                    else if(data == 0){
+                    	jQuery('#loan_payment_modal').modal('show');
+        				document.getElementById("paid_date").value = today;
+        				document.getElementById("loan_payment_id").value = system_id;
+                    }
+   
+                }
+            });
         }
     });
 </script>
