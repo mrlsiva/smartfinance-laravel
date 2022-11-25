@@ -207,6 +207,17 @@ $user = Auth::guard('web')->user();
 		</div>
 		<div class="card mb-5 mb-xl-10">
 			<div class="card-body pt-9 pb-0">
+				<div class="text-end">
+					@if($user->role_id != 3)
+						@if($loan_payments->count() != 0)
+							@if($loan->is_close == 0)
+								<a href="{{route('renewal_loan',['id' => $loan->id])}}">
+									<button type="button" class="btn btn-warning mb-5" name="renewal_loan" id="renewal_loan">Renewal Loan</button>
+								</a>
+							@endif
+						@endif
+					@endif
+				</div>
 				<table class="table align-middle table-row-dashed fs-6 gy-3" >
 					<!--begin::Table head-->
 					<thead>
@@ -251,6 +262,10 @@ $user = Auth::guard('web')->user();
 									<td>
 										<span class="badge py-3 px-4 fs-7 badge-light-success">Paid</span>
 									</td>
+								@elseif($loan_payment->is_status == 4)
+									<td>
+										<span class="badge py-3 px-4 fs-7 badge-secondary">Closed</span>
+									</td>
 								@else
 									<td>
 										<span class="badge py-3 px-4 fs-7 badge-light-danger">Rejected</span>
@@ -258,15 +273,31 @@ $user = Auth::guard('web')->user();
 								@endif
 								@if($user->role_id == 1 || $user->role_id == 2)
 									<td>
-										<button type="button" class="btn  btn-primary mb-5 " data-system_id="{{$loan_payment->id}}" name="loan-payment-approve">Approve</button> 
+										@if($loan_payment->is_status == 2)
+											<button type="button" class="btn  btn-primary mb-5 " data-system_id="{{$loan_payment->id}}" name="loan-payment-approve">Approve</button> 
+										@endif
+
 										<input type="hidden" name="loan_id" id="loan_id" value="{{$loan->id}}">
-										<button type="button" class="btn  btn-primary mb-5" data-system_id="{{$loan_payment->id}}" name="loan_payment">Pay</button> 
+										@if($loan_payment->is_status == 3)
+											<button type="button" class="btn  btn-primary mb-5" data-system_id="{{$loan_payment->id}}" name="loan_payment">Pay</button>
+										@endif
+										@if($user->role_id != 3)
+											@if($close_loan_id != NULL)
+												@if($loan_payment->id == $close_loan_id->id)
+													<a href="{{route('close_loan',['id' => $loan_payment->id])}}">
+														<button type="button" class="btn btn-success mb-5" name="close_loan" id="close_loan">Close Loan</button>
+													</a>
+												@endif
+											@endif
+										@endif
 									</td>
 								@endif
 								@if($user->role_id == 3)
 									<td>
 										<input type="hidden" name="loan_id" id="loan_id" value="{{$loan->id}}">
-										<button type="button" class="btn  btn-primary mb-5" data-system_id="{{$loan_payment->id}}" name="loan_payment">Pay</button> 
+										@if($loan_payment->is_status == 3)
+											<button type="button" class="btn  btn-primary mb-5" data-system_id="{{$loan_payment->id}}" name="loan_payment">Pay</button> 
+										@endif
 									</td>
 								@endif
 							</tr>

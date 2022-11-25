@@ -15,7 +15,7 @@ class CreateNextMonthPayoutsTable extends Migration
     {
         Schema::create('next_month_payouts', function (Blueprint $table) {
             $table->id();
-            $table->string('user_id')->constrained();
+            $table->foreignId('user_id')->constrained();
             $table->string('name');
             $table->date('date');
             $table->string('plan')->nullable();

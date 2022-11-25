@@ -13,6 +13,7 @@ use App\Models\LoanPayment;
 use App\Models\User;
 use App\Models\Smartfinance;
 use App\Models\SmartfinancePayment;
+use App\Models\LoanRenewal;
 Use \Carbon\Carbon;
 use Image;
 use DB;
@@ -112,7 +113,8 @@ class loanController extends Controller
 
         $loan = Loan::where('id',$id)->first();
         $loan_payments = LoanPayment::where('loan_id',$id)->get();
-        return view('loan')->with('loan',$loan)->with('loan_payments',$loan_payments);
+        $close_loan_id = LoanPayment::where([['loan_id',$id],['is_status',3]])->first();
+        return view('loan')->with('loan',$loan)->with('loan_payments',$loan_payments)->with('close_loan_id',$close_loan_id);
     }
 
     public function check_loan_payment(Request $request){
@@ -251,6 +253,53 @@ class loanController extends Controller
         $loan_search = NULL;
 
         return view('dashboard')->with('users',$users)->with('user_count',$user_count)->with('smartfinances',$smartfinances)->with('smartfinance_count',$smartfinance_count)->with('admin_finances',$admin_finances)->with('admin_finance_count',$admin_finance_count)->with('payment_count',$payment_count)->with('loans',$loans)->with('loan_count',$loan_count)->with('admin_loans',$admin_loans)->with('admin_loan_count',$admin_loan_count)->with('role',$role)->with('profile',$profile)->with('progress',$progress)->with('status',$status)->with('search',$search)->with('investment_plan',$investment_plan)->with('investment_status',$investment_status)->with('investment_search',$investment_search)->with('loan_search',$loan_search)->with('loan_status',$loan_status)->with('flag',$flag);
+    }
+
+    public function close_loan($id,Request $request)
+    {
+        $payment_id = $request->id;
+        $now = Carbon::now()->format('Y-m-d');
+        $loan_payment = LoanPayment::where('id',$payment_id)->first();
+
+        $status = DB::table('loan_payments')->where('id',$payment_id)->update(['is_status' => 1,'paid_on' => $now]);
+        $close = DB::table('loan_payments')->where([['id','>',$payment_id],['loan_id',$loan_payment->loan_id]])->update(['is_status' => 4]);
+        $loan = DB::table('loans')->where('id',$loan_payment->loan_id)->update(['is_close' => 1]);
+
+        return redirect()->back()->with('alert', 'Loan closed successfully!!');
+
+    }
+
+    public function renewal_loan($id,Request $request)
+    {
+
+        $id = $request->id;
+        $loan = Loan::where('id',$id)->first();
+        $loan_payment = LoanPayment::where('loan_id',$id)->orderBy('id','Desc')->first();
+
+        $payment_date = Carbon::parse($loan_payment->payment_date)->addMonths(1);
+
+        for ($i = 1; $i <= 12; $i++){
+
+            $loan_payment = LoanPayment::create([
+                'loan_id' => $id,
+                'payment_date' => $payment_date,
+                'amount' => $loan_payment->amount,
+                'is_status' => 3,
+            ]);
+
+            $payment_date = Carbon::parse($payment_date)->addMonths(1);
+        }
+
+        $now = Carbon::now()->format('Y-m-d');
+        $user = Auth::user();
+        $loan_renewal = LoanRenewal::create([
+            'loan_id' => $id,
+            'date' => $now,
+            'renewaled_by' => $user->id, 
+        ]);
+
+        return redirect()->back()->with('alert', 'Loan renewaled successfully!!');
+
     }
 
 

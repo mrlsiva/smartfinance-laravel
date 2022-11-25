@@ -18,7 +18,7 @@ class CreateLoanPaymentsTable extends Migration
             $table->foreignId('loan_id')->constrained();
             $table->date('payment_date');
             $table->string('amount');
-            $table->date('payment_bill')->nullable();
+            $table->string('payment_bill')->nullable();
             $table->date('paid_on')->nullable();
             $table->boolean('is_status');
             $table->timestamps();

@@ -448,7 +448,7 @@
                                                         @endif
                                                     </td>
                                                     @if($loan->is_close == 1)
-                                                        <td><span class="badge py-3 px-4 fs-7 badge-light-secondary">Expired</span></td>
+                                                        <td><span class="badge py-3 px-4 fs-7 badge-secondary">Closed</span></td>
                                                     @else
                                                         @if($loan->is_status == 2)
                                                             <td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>
@@ -1382,7 +1382,7 @@
                             <label class="form-check form-check-custom form-check-solid form-check-inline">
                                 <input class="form-check-input @error('terms_and_conditions') is-invalid @enderror" type="checkbox" name="terms_and_conditions" id="terms_and_conditions" required="true" />
                                 <span class="form-check-label fw-bold text-gray-700 fs-6">I Agree
-                                    <a href="#" class="ms-1 text-hover-primary">Terms and conditions</a>.
+                                    <a href="{{route('loan_terms_and_condition')}}" target="_blank" class="ms-1 text-hover-primary">Terms and conditions</a>.
                                 </span>
                             </label>
                             @error('terms_and_conditions')

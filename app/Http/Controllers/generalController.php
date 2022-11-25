@@ -10,6 +10,7 @@ use App\Models\Upload;
 use App\Models\Template;
 use App\Models\User;
 use App\Models\SocialIcon;
+use App\Models\HtmlPage;
 use Image;
 use DB;
 
@@ -170,7 +171,6 @@ class generalController extends Controller
         return view('setting')->with('icons',$icons);
     }
 
-
     public function save_setting(Request $request)
     {
         $validatedData = $request->validate([
@@ -234,13 +234,23 @@ class generalController extends Controller
         return redirect()->back()->with('alert', 'Deleted successfully.');
     }
 
-    
+    public function save_html_pages(Request $request)
+    {
 
+        $validatedData = $request->validate([
+            'loan_terms_and_condition' => 'required',
+        ]);
 
+        DB::table('html_pages')->where('name','loan_terms_and_condition')->update(['content' => $request->loan_terms_and_condition]);
+        return redirect()->back()->with('alert', 'Updated Successfully!!');
 
+    }
 
-
-
+    public function loan_terms_and_condition(Request $request)
+    {
+        $loan_terms_and_condition = HtmlPage::where('name','loan_terms_and_condition')->first();
+        return view('loan_terms_and_condition')->with('loan_terms_and_condition',$loan_terms_and_condition);
+    }
 
 
 }

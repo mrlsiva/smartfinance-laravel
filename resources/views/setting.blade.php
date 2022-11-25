@@ -150,6 +150,47 @@
 			</div>
 		</div>
 		<!--end::general add card-->
+		<!--begin::html page add card-->
+		<div class="card mb-5 mb-xl-10">
+			<div class="card-body pt-9 pb-0">
+				<!--begin::Card header-->
+				<div class="card-header cursor-pointer">
+					<!--begin::Card title-->
+					<div class="card-title m-0">
+						<h3 class="fw-bolder m-0">HTML Pages Settings</h3>
+					</div>
+					<!--end::Card title-->
+				</div>
+				<!--end::Card header-->
+				<br><br>
+				<form id="profile" method="POST" action="{{route('save_html_pages')}}" enctype="multipart/form-data">
+                	@csrf
+
+                	@php
+                		$loan_terms_and_condition = App\Models\HtmlPage::where('name','loan_terms_and_condition')->first();
+                	@endphp
+					<!--begin::Input group-->
+					<div class="row mb-8">
+						<div class="col-md-6">
+							<!--begin::Label-->
+							<label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+								<span class="required">Loan Terms and Condition</span>
+								<i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Loan Terms and Condition"></i>
+							</label>
+							<!--end::Label-->
+							<!--begin::Input-->
+							<textarea type="text" class="form-control form-control-solid ckeditor" placeholder="Loan Terms and Condition" name="loan_terms_and_condition" required>{!! $loan_terms_and_condition->content !!}</textarea>
+							<!--end::Input-->
+						</div>
+					</div>
+					<!--end::Input group-->
+					<div class="d-flex justify-content-center">
+						<button type="submit"  class="btn btn-primary mb-5">Submit</button>
+					</div>
+				</form>
+			</div>
+		</div>
+		<!--end::html page add card-->
 		<!--begin::social add card-->
 		<div class="card mb-5 mb-xl-10">
 			<div class="card-body pt-9 pb-0">

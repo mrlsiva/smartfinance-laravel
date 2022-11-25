@@ -99,6 +99,8 @@ Route::post('/save_social_media',[generalController::class, 'save_social_media']
 Route::get('/delete_logo/{id}',[generalController::class, 'delete_logo'])->name('delete_logo');
 Route::get('/get_logo',[generalController::class, 'get_logo'])->name('get_logo');
 Route::get('/update_logo',[generalController::class, 'update_logo'])->name('update_logo');
+Route::post('/save_html_pages',[generalController::class, 'save_html_pages'])->name('save_html_pages');
+Route::get('/loan_terms_and_condition',[generalController::class, 'loan_terms_and_condition'])->name('loan_terms_and_condition');
 //General End
 
 //Smart Finance
@@ -139,6 +141,8 @@ Route::get('get_loan_payment', [loanController::class, 'get_loan_payment'])->nam
 Route::post('/loan_payment_approve',[loanController::class, 'loan_payment_approve'])->name('loan_payment_approve');
 Route::get('/loan_search/{type}',[loanController::class, 'loan_search'])->name('loan_search');
 Route::get('/loan_status/{type}',[loanController::class, 'loan_status'])->name('loan_status');
+Route::get('/close_loan/{id}',[loanController::class, 'close_loan'])->name('close_loan');
+Route::get('/renewal_loan/{id}',[loanController::class, 'renewal_loan'])->name('renewal_loan');
 //Loan End
 
 
