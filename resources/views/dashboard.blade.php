@@ -985,7 +985,7 @@
                                         <tr class="fw-bolder text-muted">
                                             <th class="">USER</th>
                                             <th class="">AMOUNT</th>
-                                            <th class="">INTREST</th>
+                                            <!-- <th class="">INTREST</th> -->
                                             <th class="">STATUS</th>
                                             <th class="">ACTIONS</th>
                                         </tr>
@@ -1012,13 +1012,13 @@
                                                 </div>
                                             </td>
                                             <td>Rs {{$loan->commafun($loan->amount)}}</td>
-                                            <td>
+                                            <!-- <td>
                                                 @if($loan->intrest != NULL)
                                                 {{$loan->intrest}}
                                                 @else
                                                 -
                                                 @endif
-                                            </td>
+                                            </td> -->
                                             @if($loan->is_close == 1)
                                                 <td><span class="badge py-3 px-4 fs-7 badge-secondary">Closed</span></td>
                                             @else
@@ -2719,28 +2719,21 @@
                         <!--end::List-->
 
                         <!--begin::List-->
-                        <div class="mh-300px scroll-y me-n7 pe-7">
+                        <!-- <div class="mh-300px scroll-y me-n7 pe-7">
                             <div class="d-flex flex-stack py-4 border-bottom border-gray-300 border-bottom-dashed">
-                                <!--begin::Details-->
                                 <div class="d-flex align-items-center">
-                                    
-                                    <!--begin::Details-->
                                     <div class="ms-5">
                                         <span class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">Intrest</span>
                                     </div>
-                                    <!--end::Details-->
                                 </div>
-                                <!--end::Details-->
-                                <!--begin::Access menu-->
                                 <div class="ms-2 w-150px">
                                     <input type="number" class="form-control form-control-solid @error('loan_intrest') is-invalid @enderror" placeholder="Intrest" value="" name="loan_intrest" id="loan_intrest" required="" />
                                     @error('loan_intrest')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <!--end::Access menu-->
                             </div>
-                        </div>
+                        </div> -->
                         <!--end::List-->
 
                         <!--begin::List-->
@@ -2810,6 +2803,18 @@
                             </div>
                         </div>
                         <!--end::List-->
+
+                        <!--begin::Input group-->
+                        <div class="fv-row mt-5 mb-8">
+                            <!--begin::Label-->
+                            <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                <span class="">Payment Copy(*You can choose and upload multiple documents at a same time)</span>
+                                <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Property Copy"></i>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="file" class="form-control form-control-solid custom-file-input" id="approve_payment_copy" placeholder="Payment Copy" value="" name="approve_payment_copy[]" required="true" multiple />
+                            <!--end::Input-->
         
                         <div class="d-flex justify-content-center">
                             <button type="submit"  class="btn  btn-primary mt-5 mb-3">Submit</button>
@@ -2920,7 +2925,7 @@
                         <div class="fv-row mb-8">
                             <!--begin::Label-->
                             <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
-                                <span class="">Property Copy</span>
+                                <span class="">Property Copy(*You can choose and upload multiple documents at a same time)</span>
                                 <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Property Copy"></i>
                             </label>
                             <!--end::Label-->
@@ -4734,7 +4739,6 @@
                     document.getElementById("loan_amount").value = data.amount;
                     document.getElementById("loan_property_type").value = data.property_type;
                     document.getElementById("loan_property_value").value = data.property_value;
-                    document.getElementById("loan_intrest").value = data.intrest;
                     if(data.is_status == 1)
                     {
                         jQuery('select[name="is_status"]').empty();

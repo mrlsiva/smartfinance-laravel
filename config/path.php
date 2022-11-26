@@ -11,4 +11,5 @@ return array(
     'logo'    => 'logo/',
     'property'    => 'public/property/',
     'loan_payment' => 'loan_payment/',
+    'approve_payment_copy' => 'public/approve_payment_copy/',
 );

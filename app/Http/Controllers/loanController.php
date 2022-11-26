@@ -68,16 +68,12 @@ class loanController extends Controller
 
         if($request->is_status == 1){
 
-            $validatedData = $request->validate([
-                'loan_intrest' => 'required',
-            ]);
-
             $loan_payment = LoanPayment::where('loan_id',$request->loan_id)->first();
             if($loan_payment != NULL){
                 $loan_payment = LoanPayment::where('loan_id',$request->loan_id)->delete();
             }
 
-            DB::table('loans')->where('id',$request->loan_id)->update(['is_status' => 1,'requested_on' => $request->loan_requested_date,'approved_on' => $request->loan_approved_date,'intrest' => $request->loan_intrest]);
+            DB::table('loans')->where('id',$request->loan_id)->update(['is_status' => 1,'requested_on' => $request->loan_requested_date,'approved_on' => $request->loan_approved_date]);
             $approved_on = $request->loan_approved_date;
             $payment_date = Carbon::parse($approved_on)->addMonths(1);
 
@@ -86,11 +82,26 @@ class loanController extends Controller
                 $loan_payment = LoanPayment::create([
                     'loan_id' => $request->loan_id,
                     'payment_date' => $payment_date,
-                    'amount' => $request->loan_intrest/100 * $request->loan_amount,
                     'is_status' => 3,
                 ]);
 
                 $payment_date = Carbon::parse($payment_date)->addMonths(1);
+            }
+
+            if($request->approve_payment_copy != NULL){
+                $filenames = "";
+                $files = $request->file('approve_payment_copy');
+                foreach($files as $file){   
+
+                    $filename = $file->getClientOriginalName(); 
+                    $filename = time().$filename;
+                    $path = $file->storeAs(config('path.approve_payment_copy'), $filename);
+                    $filenames .= $filename.",";
+
+                }
+                $file_name = trim($filenames,",");
+
+                DB::table('loans')->where('id',$request->loan_id)->update(['approve_payment_copy' => $file_name]);
             }
 
             return redirect()->back()->with('alert', 'Loan approved successfully!!');
@@ -113,8 +124,19 @@ class loanController extends Controller
 
         $loan = Loan::where('id',$id)->first();
         $loan_payments = LoanPayment::where('loan_id',$id)->get();
-        $close_loan_id = LoanPayment::where([['loan_id',$id],['is_status',3]])->first();
-        return view('loan')->with('loan',$loan)->with('loan_payments',$loan_payments)->with('close_loan_id',$close_loan_id);
+        $close_loan_id = LoanPayment::where([['loan_id',$id],['is_status',1]])->orderBy('id','Desc')->first();
+
+        $payments = LoanPayment::where([['loan_id',$id],['is_status',1]])->get();
+        $total_amount = 0;
+        $intrest = 0;
+        if($payments->count() != 0){
+            foreach($payments as $payment){
+                $total_amount = $total_amount + $payment->amount;
+                $total_intrest = $intrest + $payment->intrest;
+                $intrest = $total_intrest/$payments->count();
+            }
+        }
+        return view('loan')->with('loan',$loan)->with('loan_payments',$loan_payments)->with('close_loan_id',$close_loan_id)->with('total_amount',$total_amount)->with('intrest',$intrest);
     }
 
     public function check_loan_payment(Request $request){
@@ -162,7 +184,12 @@ class loanController extends Controller
         $photo = Image::make($image)->encode('jpg', 80);
         Storage::disk('public')->put(config('path.loan_payment').$filename, $photo);
 
-        DB::table('loan_payments')->where('id',$request->loan_payment_id)->update(['is_status' => 2,'payment_bill' => $filename,'paid_on' => $request->paid_date]);
+        $loan = Loan::where('id',$request->loan_id)->first();
+        $percentage = $request->amount/$loan->amount*100;
+        $intrest = number_format((float)$percentage, 3, '.', '');
+        //return $intrest;
+
+        DB::table('loan_payments')->where('id',$request->loan_payment_id)->update(['is_status' => 2,'payment_bill' => $filename,'paid_on' => $request->paid_date,'amount' => $request->amount,'intrest' => $intrest]);
 
         return redirect()->back()->with('alert', 'Payment done successfully!!');
         //payment end
@@ -261,7 +288,7 @@ class loanController extends Controller
         $now = Carbon::now()->format('Y-m-d');
         $loan_payment = LoanPayment::where('id',$payment_id)->first();
 
-        $status = DB::table('loan_payments')->where('id',$payment_id)->update(['is_status' => 1,'paid_on' => $now]);
+        // $status = DB::table('loan_payments')->where('id',$payment_id)->update(['is_status' => 1,'paid_on' => $now]);
         $close = DB::table('loan_payments')->where([['id','>',$payment_id],['loan_id',$loan_payment->loan_id]])->update(['is_status' => 4]);
         $loan = DB::table('loans')->where('id',$loan_payment->loan_id)->update(['is_close' => 1]);
 

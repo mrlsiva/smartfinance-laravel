@@ -28,6 +28,15 @@ class Loan extends Model
         return $property_copy;
     }
 
+    public function getApprovePaymentCopyAttribute($value)
+    {
+        $approve_payment_copy = new Collection();
+        foreach(explode(",",$value) as $copy){
+            $approve_payment_copy->push(url("storage/app/".config('path.approve_payment_copy')."{$copy}"));
+        }
+        return $approve_payment_copy;
+    }
+
     public function commafun($num){
 
         $explrestunits = "" ;

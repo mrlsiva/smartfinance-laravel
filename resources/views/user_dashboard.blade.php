@@ -429,7 +429,7 @@
                                             <thead>
                                                 <tr class="fw-bolder text-muted">
                                                     <th class="">AMOUNT</th>
-                                                    <th class="">INTEREST</th>
+                                                    <!-- <th class="">INTEREST</th> -->
                                                     <th class="">STATUS</th>
                                                     <th class="">ACTION</th>
                                                 </tr>
@@ -440,13 +440,13 @@
                                                 @foreach($loans as $loan)
                                                 <tr>
                                                     <td>Rs. {{$loan->commafun($loan->amount)}}</td>
-                                                    <td>
+                                                    <!-- <td>
                                                         @if($loan->intrest != NULL)
                                                             {{$loan->intrest}}
                                                         @else
                                                             -
                                                         @endif
-                                                    </td>
+                                                    </td> -->
                                                     @if($loan->is_close == 1)
                                                         <td><span class="badge py-3 px-4 fs-7 badge-secondary">Closed</span></td>
                                                     @else
@@ -1360,7 +1360,7 @@
                         <div class="fv-row mb-8">
                             <!--begin::Label-->
                             <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
-                                <span class="">Property Copy</span>
+                                <span class="">Property Copy(*You can choose and upload multiple documents at a same time)</span>
                                 <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Property Copy"></i>
                             </label>
                             <!--end::Label-->

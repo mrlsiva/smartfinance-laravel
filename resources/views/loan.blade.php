@@ -129,7 +129,7 @@ $user = Auth::guard('web')->user();
 											<!--begin::Svg Icon | path: icons/duotune/arrows/arr066.svg-->
 
 											<!--end::Svg Icon-->
-											<div class="fs-2 fw-bolder" data-kt-countup="true" data-kt-countup-prefix="Rs">{{$loan->commafun($loan->amount)}}</div>
+											<div class="fs-2 fw-bolder" data-kt-countup="true" data-kt-countup-prefix="Rs">Rs {{$loan->commafun($loan->amount)}}</div>
 											
 										</div>
 										<!--end::Number-->
@@ -175,17 +175,39 @@ $user = Auth::guard('web')->user();
 									<div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
 										<!--begin::Number-->
 										<div class="d-flex align-items-center">
-											@if($loan->intrest == Null)
-												<div class="fs-2 fw-bolder" data-kt-countup="true"  data-kt-countup-prefix="%">0 %</div>
-											@else
-												<div class="fs-2 fw-bolder" data-kt-countup="true"  data-kt-countup-prefix="%">{{$loan->intrest}} %</div>
-											@endif
+											<div class="fs-2 fw-bolder" data-kt-countup="true"  data-kt-countup-prefix="%">{{$intrest}} %</div>
 										</div>
 										<!--end::Number-->
 										<!--begin::Label-->
 										<div class="fw-bold fs-6 text-gray-400">Percentage</div>
 										<!--end::Label-->
 									</div>
+									<div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
+										<!--begin::Number-->
+										<div class="d-flex align-items-center">
+											<div class="fs-2 fw-bolder" data-kt-countup="true"  data-kt-countup-prefix="Rs">Rs {{$loan->commafun($total_amount)}}</div>
+										</div>
+										<!--end::Number-->
+										<!--begin::Label-->
+										<div class="fw-bold fs-6 text-gray-400">Total Amount</div>
+										<!--end::Label-->
+									</div>
+									@if($user->role_id == 3)
+										@if($loan->approve_payment_copy != NULL)
+										<div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
+											<!--begin::Number-->
+											<div class="d-flex align-items-center">
+												<button type="button" class="text-hover-primary btn  btn-light" data-system_id="{{$loan->id}}" name="pro_book" >
+													<i class="fa fa-upload" style="font-size:24px;color:black;"></i>
+												</button>
+											</div>
+											<!--end::Number-->
+											<!--begin::Label-->
+											<div class="fw-bold fs-6 text-gray-400">Pro Book</div>
+											<!--end::Label-->
+										</div>
+										@endif
+									@endif
 									@php
 										$user = Auth::guard('web')->user();
 									@endphp
@@ -226,6 +248,7 @@ $user = Auth::guard('web')->user();
 
 							<th class="">PAYEMNT MONTH</th>
 							<th class="">AMOUNT</th>
+							<th class="">INTREST</th>
 							<th class="">PAID ON</th>
 							<th class="">STATUS</th>
 							<th class="">ACTION</th>       
@@ -241,7 +264,20 @@ $user = Auth::guard('web')->user();
 								 $year = Carbon\Carbon::parse($loan_payment->payment_date)->format('Y');
 								@endphp
 								<td>{{$month}}-{{$year}}</td>
-								<td>{{$loan_payment->amount}}</td>
+								<td>
+									@if($loan_payment->amount != NULL)
+										Rs {{$loan->commafun($loan_payment->amount)}}
+									@else
+										-
+									@endif
+								</td>
+								<td>
+									@if($loan_payment->intrest != NULL)
+										{{$loan_payment->intrest}} %
+									@else
+										-
+									@endif
+								</td>
 								@if($loan_payment->paid_on != NULL)
 									@php
 										$date = Carbon\Carbon::parse($loan_payment->paid_on)->formatLocalized('%d %b %Y');
@@ -274,7 +310,11 @@ $user = Auth::guard('web')->user();
 								@if($user->role_id == 1 || $user->role_id == 2)
 									<td>
 										@if($loan_payment->is_status == 2)
-											<button type="button" class="btn  btn-primary mb-5 " data-system_id="{{$loan_payment->id}}" name="loan-payment-approve">Approve</button> 
+											<button type="button" class="btn  btn-warning mb-5 " data-system_id="{{$loan_payment->id}}" name="loan-payment-approve">Approve</button> 
+										@endif
+
+										@if($loan_payment->is_status == 1)
+											<button type="button" class="btn  btn-success mb-5 " data-system_id="{{$loan_payment->id}}" name="loan-payment-approve">Approved</button> 
 										@endif
 
 										<input type="hidden" name="loan_id" id="loan_id" value="{{$loan->id}}">
@@ -285,7 +325,7 @@ $user = Auth::guard('web')->user();
 											@if($close_loan_id != NULL)
 												@if($loan_payment->id == $close_loan_id->id)
 													<a href="{{route('close_loan',['id' => $loan_payment->id])}}">
-														<button type="button" class="btn btn-success mb-5" name="close_loan" id="close_loan">Close Loan</button>
+														<button type="button" class="btn btn-danger mb-5" name="close_loan" id="close_loan">Close Loan</button>
 													</a>
 												@endif
 											@endif
@@ -297,6 +337,12 @@ $user = Auth::guard('web')->user();
 										<input type="hidden" name="loan_id" id="loan_id" value="{{$loan->id}}">
 										@if($loan_payment->is_status == 3)
 											<button type="button" class="btn  btn-primary mb-5" data-system_id="{{$loan_payment->id}}" name="loan_payment">Pay</button> 
+										@endif
+										@if($loan_payment->is_status == 2)
+											<button type="button" class="btn  btn-warning mb-5">Process</button>
+										@endif
+										@if($loan_payment->is_status == 1)
+											<button type="button" class="btn btn-success mb-5">Paid</button>
 										@endif
 									</td>
 								@endif
@@ -352,6 +398,19 @@ $user = Auth::guard('web')->user();
                         <br>
                         <input type="hidden" name="loan_payment_id" id="loan_payment_id">
                         <input type="hidden" name="loan_id" id="loan_id" value="{{$loan->id}}">
+                        <!--begin::Input group-->
+                        <div class="fv-row mb-8">
+                        	<!--begin::Label-->
+                        	<label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                        		<span class="required">Amount</span>
+                        		<i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Amount"></i>
+                        	</label>
+                        	<!--end::Label-->
+                        	<!--begin::Input-->
+                        	<input type="number" class="form-control form-control-solid" placeholder="Amount" value="" name="amount" id="Amount" />
+                        	<!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
 
                         <!--begin::Input group-->
                         <div class="fv-row mb-8">
@@ -465,6 +524,30 @@ $user = Auth::guard('web')->user();
                         </div>
                         <!--end::Input group-->
 
+                        <div class="fv-row mb-8">
+                        	<!--begin::Label-->
+                        	<label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                        		<span class="required">Amount</span>
+                        		<i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Amount"></i>
+                        	</label>
+                        	<!--end::Label-->
+                        	<!--begin::Input-->
+                        	<input type="text" class="form-control form-control-solid" placeholder="Amount" value="" name="approve_amount" id="approve_amount" readonly="" />
+                        	<!--end::Input-->
+                        </div>
+
+                        <div class="fv-row mb-8">
+                        	<!--begin::Label-->
+                        	<label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                        		<span class="required">Intrest</span>
+                        		<i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Intrest"></i>
+                        	</label>
+                        	<!--end::Label-->
+                        	<!--begin::Input-->
+                        	<input type="text" class="form-control form-control-solid" placeholder="Intrest" value="" name="approve_intrest" id="approve_intrest" readonly="" />
+                        	<!--end::Input-->
+                        </div>
+
                         <!--begin::Input group-->
                         <div class="fv-row mb-8">
                             <!--begin::Label-->
@@ -497,6 +580,65 @@ $user = Auth::guard('web')->user();
     <!--end::Modal dialog-->
 </div>
 <!-- end::Modal -loan_payment_approval- -->
+
+<!-- begin::Pro book Modal -->
+<div class="modal fade" id="pro_book_modal" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog mw-650px">
+        <!--begin::Modal content-->
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header pb-0 border-0 justify-content-end">
+                <!--begin::Close-->
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
+                            <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="black" />
+                        </svg>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--begin::Modal header-->
+            <!--begin::Modal body-->
+            <div class="modal-body scroll-y mx-5 mx-xl-18 pt-0 pb-15">
+                <!--begin::Heading-->
+
+                <!--end::Google Contacts Invite-->
+                <!--begin::Separator-->
+                <!--end::Separator-->
+                <!--begin::Textarea-->
+                <!--end::Textarea-->
+                <!--begin::Users-->
+                <div class="mb-10">
+                    <!--begin::Heading-->
+                    <div class="fs-6 fw-bold mb-2">Pro Book Download</div>
+                    <!--end::Heading-->
+                    <table class="text-center table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
+                    	<thead>
+                    		<tr class="fw-bolder text-muted">
+                    			<th class="">DOCUMENTS</th>
+                    			<th class="">ACTION</th>
+                    		</tr>
+                    	</thead>
+                    	<tbody class="pro_book">
+                    	</tbody>
+                    </table>
+                </div>
+                <!--end::Users-->
+                <!--begin::Notice-->
+                <!--end::Notice-->
+            </div>
+            <!--end::Modal body-->
+        </div>
+            <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+</div>
+<!-- end::Modal -->
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
@@ -588,6 +730,8 @@ $user = Auth::guard('web')->user();
                     console.log(data);
                     jQuery('#loan_payment_approve_modal').modal('show');
                     document.getElementById("payment_id").value = system_id;
+                    document.getElementById("approve_amount").value = data.amount;
+                    document.getElementById("approve_intrest").value = data.intrest;
                     $("#bill_link").prop("href", data.payment_bill);
                     $("#payment_bill").attr("src", data.payment_bill);
                     if(data.is_status == 0)
@@ -610,6 +754,45 @@ $user = Auth::guard('web')->user();
                         $('select[name="is_status"]').append('<option value="'+ '0' +'">'+ 'Rejected' +'</option>');
                     }
                     
+                }
+            });
+        }
+        
+    });
+
+</script>
+
+<!-- loan-probook download-->
+<script type="text/javascript">
+
+    $(document).on('click', 'button[name^="pro_book"]', function(e) {
+        var system_id = $(this).data("system_id");
+        console.log(system_id);
+
+        if(system_id)
+        {
+            jQuery.ajax({
+                url : '../get_loan',
+                type: 'GET',
+                dataType: 'json',
+                data: { id: system_id },
+                success:function(data)
+                { 
+                    console.log(data);
+                    
+                    jQuery('#pro_book_modal').modal('show');
+                    var output = '';
+                    for(var count = 0; count < data.approve_payment_copy.length; count++)
+                    {
+                        var url = data.approve_payment_copy[count];
+                        var no = count+1;
+                        output += '<tr>';
+                        output += '<td>Document '+no+'</td>';
+                        output += '<td><div class="pa-inline-buttons"><a href="'+url+'" target="_blank" class=""><button type="button" class="btn btn-warning">View</button>   </a><a href="'+url+'" download class=""><button type="button" class="btn btn-success">Download</button></a></div></td>';
+                        output += '</tr>';
+                    }
+                    $('.pro_book').html(output);
+
                 }
             });
         }
