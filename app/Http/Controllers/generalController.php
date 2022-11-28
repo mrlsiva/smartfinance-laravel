@@ -116,7 +116,7 @@ class generalController extends Controller
 
     public function email_templates(Request $request)
     {
-        $templates = Template::all();
+        $templates = Template::paginate(10);
         return view('email_template')->with('templates',$templates);
     }
 

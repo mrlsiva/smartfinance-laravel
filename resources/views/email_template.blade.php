@@ -145,6 +145,9 @@
 					</tbody>
 					<!--end::Table body-->
 				</table>
+				<div class="d-flex justify-content-end mb-5">
+					{{$templates->links()}}
+				</div>
 				<!--end::Table-->
 				<!-- <div class="d-flex justify-content-center">
 					<a href="{{route('send_mail')}}">

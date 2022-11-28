@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Http\Controllers\SMTPController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -14,6 +15,8 @@ use App\Models\User;
 use App\Models\Smartfinance;
 use App\Models\SmartfinancePayment;
 use App\Models\LoanRenewal;
+use App\Models\Setting;
+use App\Models\Template;
 Use \Carbon\Carbon;
 use Image;
 use DB;
@@ -54,6 +57,36 @@ class loanController extends Controller
         $loan->property_copy = trim($filenames,",");
         $loan->save();
 
+        //Mail
+        $user = User::where('id', Auth::user()->id)->first();
+        //To admin
+        $emailsetting = Template::where([['id',24],['is_active',1]])->first(); 
+        $admin_email = Setting::where('key','admin_email')->first();
+        if($emailsetting != null){
+
+            $email_template = $emailsetting->template;
+            $emailContentReplace=['##NAME##'=>$user->first_name.' '.$user->last_name,'##PHONE##'=>$user->phone,'##AMOUNT##' => $request->amount];
+            $txt = strtr($email_template,$emailContentReplace);
+            $emailId = $admin_email->value;
+            $subject = $emailsetting->subject;
+            $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
+        }
+        //To admin end
+
+        //To user
+        $emailsetting = Template::where([['id',23,['is_active',1]])->first(); 
+        if($emailsetting != null){
+            $email_template = $emailsetting->template;
+            $emailContentReplace=['##NAME##'=>$user->first_name.' '.$user->last_name,'##AMOUNT##' => $request->amount];
+            $txt = strtr($email_template,$emailContentReplace);
+            $emailId = $user->email;
+            $subject = $emailsetting->subject;
+            $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
+        }
+        //To user end
+
+        //End Mail
+
         return redirect()->back()->with('alert', 'Loan added successfully!!');
     }
 
@@ -75,7 +108,7 @@ class loanController extends Controller
 
             DB::table('loans')->where('id',$request->loan_id)->update(['is_status' => 1,'requested_on' => $request->loan_requested_date,'approved_on' => $request->loan_approved_date]);
             $approved_on = $request->loan_approved_date;
-            $payment_date = Carbon::parse($approved_on)->addMonths(1);
+            $payment_date = Carbon::parse($approved_on)->addMonths(2);
 
             for ($i = 1; $i <= 12; $i++){
 
@@ -104,6 +137,19 @@ class loanController extends Controller
                 DB::table('loans')->where('id',$request->loan_id)->update(['approve_payment_copy' => $file_name]);
             }
 
+            //To user
+            $loan = Loan::where('id',$request->loan_id)->first();
+            $emailsetting = Template::where([['id',25,['is_active',1]])->first(); 
+            if($emailsetting != null){
+                $email_template = $emailsetting->template;
+                $emailContentReplace=['##NAME##'=>$loan->user->first_name.' '.$loan->user->last_name,'##AMOUNT##' => $loan->amount];
+                $txt = strtr($email_template,$emailContentReplace);
+                $emailId = $loan->user->email;
+                $subject = $emailsetting->subject;
+                $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
+            }
+            //To user end
+
             return redirect()->back()->with('alert', 'Loan approved successfully!!');
         }
         elseif($request->is_status == 0){
@@ -113,6 +159,20 @@ class loanController extends Controller
                 $loan_payment = LoanPayment::where('loan_id',$request->loan_id)->delete();
             }
             DB::table('loans')->where('id',$request->loan_id)->update(['is_status' => 0]);
+
+            //To user
+            $loan = Loan::where('id',$request->loan_id)->first();
+            $emailsetting = Template::where([['id',31,['is_active',1]])->first(); 
+            if($emailsetting != null){
+                $email_template = $emailsetting->template;
+                $emailContentReplace=['##NAME##'=>$loan->user->first_name.' '.$loan->user->last_name,'##AMOUNT##' => $loan->amount];
+                $txt = strtr($email_template,$emailContentReplace);
+                $emailId = $loan->user->email;
+                $subject = $emailsetting->subject;
+                $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
+            }
+            //To user end
+
             return redirect()->back()->with('alert', 'Loan rejected successfully!!');
         }
         else{
@@ -191,6 +251,37 @@ class loanController extends Controller
 
         DB::table('loan_payments')->where('id',$request->loan_payment_id)->update(['is_status' => 2,'payment_bill' => $filename,'paid_on' => $request->paid_date,'amount' => $request->amount,'intrest' => $intrest]);
 
+
+        //Mail
+
+        //To admin
+        $emailsetting = Template::where([['id',27],['is_active',1]])->first(); 
+        $admin_email = Setting::where('key','admin_email')->first();
+        if($emailsetting != null){
+
+            $email_template = $emailsetting->template;
+            $emailContentReplace=['##NAME##'=>$loan->user->first_name.' '.$loan->user->last_name,'##AMOUNT##' => $request->amount];
+            $txt = strtr($email_template,$emailContentReplace);
+            $emailId = $admin_email->value;
+            $subject = $emailsetting->subject;
+            $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
+        }
+        //To admin end
+
+        //To user
+        $emailsetting = Template::where([['id',26,['is_active',1]])->first(); 
+        if($emailsetting != null){
+            $email_template = $emailsetting->template;
+            $emailContentReplace=['##NAME##'=>$loan->user->first_name.' '.$loan->user->last_name,'##AMOUNT##' => $request->amount];
+            $txt = strtr($email_template,$emailContentReplace);
+            $emailId = $loan->user->email;
+            $subject = $emailsetting->subject;
+            $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
+        }
+        //To user end
+
+        //End Mail
+
         return redirect()->back()->with('alert', 'Payment done successfully!!');
         //payment end
 
@@ -208,15 +299,39 @@ class loanController extends Controller
         if($request->is_status == 1){
             DB::table('loan_payments')->where('id',$request->payment_id)->update(['is_status' => 1]);
 
+            //To user
+            $loan_payment = LoanPayment::where('id',$request->payment_id)->first();
+            $emailsetting = Template::where([['id',28,['is_active',1]])->first(); 
+            if($emailsetting != null){
+                $email_template = $emailsetting->template;
+                $emailContentReplace=['##NAME##'=>$loan_payment->loan->user->first_name.' '.$loan_payment->loan->user->last_name,'##AMOUNT##' => $loan_payment->amount];
+                $txt = strtr($email_template,$emailContentReplace);
+                $emailId = $loan_payment->loan->user->email;
+                $subject = $emailsetting->subject;
+                $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
+            }
+            //To user end
+
             return redirect()->back()->with('alert', 'Payment approved successfully!!');
         }
         elseif($request->is_status == 0){
             DB::table('loan_payments')->where('id',$request->payment_id)->update(['is_status' => 0]);
 
+            //To user
+            $loan_payment = LoanPayment::where('id',$request->payment_id)->first();
+            $emailsetting = Template::where([['id',32,['is_active',1]])->first(); 
+            if($emailsetting != null){
+                $email_template = $emailsetting->template;
+                $emailContentReplace=['##NAME##'=>$loan_payment->loan->user->first_name.' '.$loan_payment->loan->user->last_name,'##AMOUNT##' => $loan_payment->amount];
+                $txt = strtr($email_template,$emailContentReplace);
+                $emailId = $loan_payment->loan->user->email;
+                $subject = $emailsetting->subject;
+                $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
+            }
+            //To user end
+
             return redirect()->back()->with('alert', 'Payment rejected successfully!!');
         }
-        
-
     }
 
     public function loan_search($type,Request $request)
@@ -292,6 +407,19 @@ class loanController extends Controller
         $close = DB::table('loan_payments')->where([['id','>',$payment_id],['loan_id',$loan_payment->loan_id]])->update(['is_status' => 4]);
         $loan = DB::table('loans')->where('id',$loan_payment->loan_id)->update(['is_close' => 1]);
 
+        //To user
+        $loan = Loan::where('id',$loan_payment->loan_id)->first();
+        $emailsetting = Template::where([['id',29,['is_active',1]])->first(); 
+        if($emailsetting != null){
+            $email_template = $emailsetting->template;
+            $emailContentReplace=['##NAME##'=>$loan->user->first_name.' '.$loan->user->last_name,'##AMOUNT##' => $loan->amount];
+            $txt = strtr($email_template,$emailContentReplace);
+            $emailId = $loan->user->email;
+            $subject = $emailsetting->subject;
+            $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
+        }
+        //To user end
+
         return redirect()->back()->with('alert', 'Loan closed successfully!!');
 
     }
@@ -325,13 +453,20 @@ class loanController extends Controller
             'renewaled_by' => $user->id, 
         ]);
 
+        //To user
+        $emailsetting = Template::where([['id',30,['is_active',1]])->first(); 
+        if($emailsetting != null){
+            $email_template = $emailsetting->template;
+            $emailContentReplace=['##NAME##'=>$loan->user->first_name.' '.$loan->user->last_name,'##AMOUNT##' => $loan->amount];
+            $txt = strtr($email_template,$emailContentReplace);
+            $emailId = $loan->user->email;
+            $subject = $emailsetting->subject;
+            $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
+        }
+        //To user end
+
         return redirect()->back()->with('alert', 'Loan renewaled successfully!!');
 
     }
-
-
-
-
-
 
 }
