@@ -1124,7 +1124,7 @@
 									<td>-</td>
 									@endif
 									@if($smartfinance->percentage != NULL)
-									<td>{{$smartfinance->percentage}}</td>
+									<td>{{$smartfinance->percentage}} %</td>
 									@else
 									<td>-</td>
 									@endif

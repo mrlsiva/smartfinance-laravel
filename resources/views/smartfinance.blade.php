@@ -569,7 +569,7 @@ body{
 										<td>-</td>
 										@endif
 										@if($finance->percentage != NULL)
-										<td>{{$finance->percentage}}</td>
+										<td>{{$finance->percentage}} %</td>
 										@else
 										<td>-</td>
 										@endif
@@ -731,7 +731,7 @@ body{
 									<td>-</td>
 									@endif
 									@if($finance->percentage != NULL)
-									<td>{{$finance->percentage}}</td>
+									<td>{{$finance->percentage}} %</td>
 									@else
 									<td>-</td>
 									@endif

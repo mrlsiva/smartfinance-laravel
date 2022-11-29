@@ -6,6 +6,7 @@ use App\Http\Controllers\registerController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\smartfinanceController;
 use App\Http\Controllers\loanController;
+use App\Http\Controllers\taxController;
 use App\Http\Controllers\generalController;
 use App\Http\Middleware\PreventBackHistory;
 
@@ -144,6 +145,12 @@ Route::get('/loan_status/{type}',[loanController::class, 'loan_status'])->name('
 Route::get('/close_loan/{id}',[loanController::class, 'close_loan'])->name('close_loan');
 Route::get('/renewal_loan/{id}',[loanController::class, 'renewal_loan'])->name('renewal_loan');
 //Loan End
+
+//Tax
+Route::post('/save_tax',[taxController::class, 'save_tax'])->name('save_tax');
+Route::get('/view_tax/{id}',[taxController::class, 'view_tax'])->name('view_tax');
+Route::post('/update_password',[taxController::class, 'update_password'])->name('update_password');
+//Tax End
 
 
 //Logout
