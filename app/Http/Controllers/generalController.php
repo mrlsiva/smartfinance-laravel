@@ -180,6 +180,10 @@ class generalController extends Controller
             'address' => 'required',
             'admin_email' => 'required|email',
             'cc_email' => 'required|email',
+            'auditor_email' => 'required|email',
+            'mutual_fund_name' => 'required',
+            'mutual_fund_phone' => 'required',
+            'mutual_fund_email' => 'required|email',
         ]);
 
         DB::table('settings')->where('key','project_name')->update(['value' => $request->project_name]);
@@ -188,6 +192,10 @@ class generalController extends Controller
         DB::table('settings')->where('key','address')->update(['value' => $request->address]);
         DB::table('settings')->where('key','admin_email')->update(['value' => $request->admin_email]);
         DB::table('settings')->where('key','cc_email')->update(['value' => $request->cc_email]);
+        DB::table('settings')->where('key','auditor_email')->update(['value' => $request->auditor_email]);
+        DB::table('settings')->where('key','mutual_fund_name')->update(['value' => $request->mutual_fund_name]);
+        DB::table('settings')->where('key','mutual_fund_phone')->update(['value' => $request->mutual_fund_phone]);
+        DB::table('settings')->where('key','mutual_fund_email')->update(['value' => $request->mutual_fund_email]);
 
         return redirect()->back()->with('alert', 'Updated Successfully!!');
 

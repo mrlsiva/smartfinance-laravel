@@ -61,6 +61,10 @@
                 		$address = App\Models\Setting::where('key','address')->first();
                 		$admin_email = App\Models\Setting::where('key','admin_email')->first();
                 		$cc_email = App\Models\Setting::where('key','cc_email')->first();
+                		$auditor_email = App\Models\Setting::where('key','auditor_email')->first();
+                		$mutual_fund_name = App\Models\Setting::where('key','mutual_fund_name')->first();
+                		$mutual_fund_phone = App\Models\Setting::where('key','mutual_fund_phone')->first();
+                		$mutual_fund_email = App\Models\Setting::where('key','mutual_fund_email')->first();
                 	@endphp
 					<!--begin::Input group-->
 					<div class="row mb-8">
@@ -139,6 +143,58 @@
 							<!--end::Label-->
 							<!--begin::Input-->
 							<input type="email" class="form-control form-control-solid" placeholder="CC Email" value="{{$cc_email->value}}" name="cc_email" id="cc_email" required />
+							<!--end::Input-->
+						</div>
+					</div>
+					<!--end::Input group-->
+					<!--begin::Input group-->
+					<div class="row mb-8">
+						<div class="col-md-6">
+							<!--begin::Label-->
+							<label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+								<span class="required">Auditor Email</span>
+								<i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Auditor Email"></i>
+							</label>
+							<!--end::Label-->
+							<!--begin::Input-->
+							<input type="email" class="form-control form-control-solid" placeholder="Auditor Email" value="{{$auditor_email->value}}" name="auditor_email" id="auditor_email" required />
+							<!--end::Input-->
+						</div>
+						<div class="col-md-6">
+							<!--begin::Label-->
+							<label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+								<span class="required">Mutual Fund Name</span>
+								<i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Mutual Fund Name"></i>
+							</label>
+							<!--end::Label-->
+							<!--begin::Input-->
+							<input type="text" class="form-control form-control-solid" placeholder="Mutual Fund Name" value="{{$mutual_fund_name->value}}" name="mutual_fund_name" id="mutual_fund_name" required />
+							<!--end::Input-->
+						</div>
+					</div>
+					<!--end::Input group-->
+					<!--begin::Input group-->
+					<div class="row mb-8">
+						<div class="col-md-6">
+							<!--begin::Label-->
+							<label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+								<span class="required">Mutual Fund Phone</span>
+								<i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Mutual Fund Phone"></i>
+							</label>
+							<!--end::Label-->
+							<!--begin::Input-->
+							<input type="number" class="form-control form-control-solid" placeholder="Mutual Fund Phone" value="{{$mutual_fund_phone->value}}" name="mutual_fund_phone" id="mutual_fund_phone" required />
+							<!--end::Input-->
+						</div>
+						<div class="col-md-6">
+							<!--begin::Label-->
+							<label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+								<span class="required">Mutual Fund Email</span>
+								<i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Mutual Fund Email"></i>
+							</label>
+							<!--end::Label-->
+							<!--begin::Input-->
+							<input type="text" class="form-control form-control-solid" placeholder="Mutual Fund Email" value="{{$mutual_fund_email->value}}" name="mutual_fund_email" id="mutual_fund_email" required />
 							<!--end::Input-->
 						</div>
 					</div>

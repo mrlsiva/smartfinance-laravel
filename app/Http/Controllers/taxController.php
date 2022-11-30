@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\SMTPController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Tax;
 use App\Models\TaxDetail;
+use App\Models\Setting;
+use App\Models\Template;
 use DB;
 
 
@@ -58,6 +61,38 @@ class taxController extends Controller
         }
         $tax_detail->document = trim($filenames,",");
         $tax_detail->save();
+
+        //Mail
+
+        //To auditor
+        $tax_detail = TaxDetail::where('id',$tax_detail->id)->first();
+        $emailsetting = Template::where([['id',33],['is_active',1]])->first(); 
+        $auditor_email = Setting::where('key','auditor_email')->first();
+        if($emailsetting != null){
+            $email_template = $emailsetting->template;
+            $emailContentReplace=['##NAME##'=>$user->first_name.' '.$user->last_name];
+            $txt = strtr($email_template,$emailContentReplace);
+            $emailId = $auditor_email->value;
+            $subject = $emailsetting->subject;
+            $attachment = $tax_detail->document;
+            $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
+        }
+        //End
+
+        //To admin
+        $tax_detail = TaxDetail::where('id',$tax_detail->id)->first();
+        $emailsetting = Template::where([['id',33],['is_active',1]])->first(); 
+        $admin_email = Setting::where('key','admin_email')->first();
+        if($emailsetting != null){
+            $email_template = $emailsetting->template;
+            $emailContentReplace=['##NAME##'=>$user->first_name.' '.$user->last_name];
+            $txt = strtr($email_template,$emailContentReplace);
+            $emailId = $admin_email->value;
+            $subject = $emailsetting->subject;
+            $attachment = $tax_detail->document;
+            $mailstatus = SMTPController::sendMail($emailId,$subject,$txt,$attachment);
+        }
+        //End
 
         return redirect()->back()->with('alert', 'Tax stored successfully!!');
     }

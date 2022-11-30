@@ -118,7 +118,7 @@
                                     </div>
                                     Taxation
                                 </a>
-                                <a href="#" class="text-dark fw-bold fs-6 col border-bottom border-warning bg-light-warning p-6 rounded-2 me-7 mb-7">
+                                <a href="#" onclick="mutual_fund()" class=" {{('mutual_fund'== $flag)?'active':''}} text-dark fw-bold fs-6 col border-bottom border-warning bg-light-warning p-6 rounded-2 me-7 mb-7" id="mutual_fund_management">
                                                                    
                                     <div class="d-flex flex-stack flex-grow-1">
                                         <div class="d-flex flex-column me-2">
@@ -127,7 +127,7 @@
                                             </span>         
                                         </div>
                                         <span class="symbol symbol-50px">
-                                            <span class="px-3 py-1 fs-5 fw-bolder bg-warning text-white">0</span>
+                                            <span class="px-3 py-1 fs-5 fw-bolder bg-warning text-white">{{$mutual_fund_count}}</span>
                                         </span>
                                     </div>
                                     Mutual Fund
@@ -893,7 +893,9 @@
                                 <!--end::Table body-->
                             </table>
                             <!--end::Table-->
-                            
+                            <div class="d-flex justify-content-end mb-3">
+                                {{ $smartfinances->links() }}
+                            </div>
                         </div>
                         <!--end::Card body-->
                     </div>
@@ -1064,6 +1066,175 @@
                                     <!--end::Table body-->
                                 </table>
                                 <!--end::Table-->
+                                <div class="d-flex justify-content-end mb-3">
+                                    {{ $loans->links() }}
+                                </div>
+                            </div>
+                            <!--end::Table container-->
+                        </div>
+                        <!--begin::Body-->
+                    </div>
+                    <!--end::Tables Widget 9-->
+                </div>
+                <!--end::Col-->
+            </div>
+            <!--end::Row-->
+            <!--begin::Row-->
+            <div class="row gy-5 g-xl-8 mt-xl-5" id="tax" style="{{('tax'== $flag)?'display:block':'display:none'}}">
+                <!--begin::Col-->
+                <!--end::Col-->
+                <!--begin::Col-->
+                <div class="col-xl-12 ">
+                    <!--begin::Tables Widget 9-->
+                    <div class="card card-xl-stretch mb-5 mb-xl-8">
+                        <!--begin::Header-->
+                        <div class="card-header border-0 pt-5">
+                            <h3 class="card-title align-items-start flex-column">
+                                <span class="card-label fw-bolder text-dark">Tax Management</span>
+                                <!-- <span class="text-gray-400 mt-1 fw-bold fs-6">Avg. 10 customers added per day</span> -->
+                            </h3>
+                            <!--begin::Actions-->
+                            <div class="card-toolbar">
+                                
+                            </div>
+                            <!--end::Actions-->
+                        </div>
+                        <!--end::Header-->
+                        <!--begin::Body-->
+                        <div class="card-body py-3">
+                            <!--begin::Table container-->
+                            <div class="table-responsive">
+                                <!--begin::Table-->
+                                <table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
+                                    <!--begin::Table head-->
+                                    <thead>
+                                        <tr class="fw-bolder text-muted">
+                                            <th class="">USER</th>
+                                            <th class="">YEAR</th>
+                                            <th class="">ACTIONS</th>
+                                        </tr>
+                                    </thead>
+                                    <!--end::Table head-->
+                                    <!--begin::Table body-->
+                                    <tbody class="user_table">
+                                       @foreach($tax_details as $tax_detail)
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="symbol symbol-45px me-5">
+                                                        @php
+                                                            $avatar = App\Models\UserDetail::where('user_id',$tax_detail->tax->user->id)->first();
+                                                        @endphp
+                                                        @if($avatar != NULL)
+                                                        <img src="{{ $avatar->avatar}}" alt="" />
+                                                        @endif
+                                                    </div>
+                                                    <div class="d-flex justify-content-start flex-column">
+                                                        <a href="{{route('user', ['id' => $tax_detail->tax->user->id])}}" class="text-dark fw-bolder text-hover-primary fs-6">{{$tax_detail->tax->user->first_name}} {{$tax_detail->tax->user->last_name}}</a>
+                                                        <span class="text-muted fw-bold text-muted d-block fs-7">#{{$tax_detail->tax->user->id}}</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>{{$tax_detail->start_year}} - {{$tax_detail->end_year}}</td>
+                                            <td>
+                                                <a class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary" href="{{route('view_tax', ['id' => $tax_detail->id])}}">
+                                                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr064.svg-->
+                                                    <span class="svg-icon svg-icon-2">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                            <rect opacity="0.5" x="18" y="13" width="13" height="2" rx="1" transform="rotate(-180 18 13)" fill="black"></rect>
+                                                            <path d="M15.4343 12.5657L11.25 16.75C10.8358 17.1642 10.8358 17.8358 11.25 18.25C11.6642 18.6642 12.3358 18.6642 12.75 18.25L18.2929 12.7071C18.6834 12.3166 18.6834 11.6834 18.2929 11.2929L12.75 5.75C12.3358 5.33579 11.6642 5.33579 11.25 5.75C10.8358 6.16421 10.8358 6.83579 11.25 7.25L15.4343 11.4343C15.7467 11.7467 15.7467 12.2533 15.4343 12.5657Z" fill="black"></path>
+                                                        </svg>
+                                                    </span>
+                                                    <!--end::Svg Icon-->
+                                                </a>
+                                            </td>
+                                        </tr>
+                                       @endforeach
+                                    </tbody>
+                                    <!--end::Table body-->
+                                </table>
+                                <!--end::Table-->
+                                <div class="d-flex justify-content-end mb-3">
+                                    {{ $tax_details->links() }}
+                                </div>
+                            </div>
+                            <!--end::Table container-->
+                        </div>
+                        <!--begin::Body-->
+                    </div>
+                    <!--end::Tables Widget 9-->
+                </div>
+                <!--end::Col-->
+            </div>
+            <!--end::Row-->
+            <!--begin::Row-->
+            <div class="row gy-5 g-xl-8 mt-xl-5" id="mutual_fund" style="{{('mutual_fund'== $flag)?'display:block':'display:none'}}">
+                <!--begin::Col-->
+                <!--end::Col-->
+                <!--begin::Col-->
+                <div class="col-xl-12 ">
+                    <!--begin::Tables Widget 9-->
+                    <div class="card card-xl-stretch mb-5 mb-xl-8">
+                        <!--begin::Header-->
+                        <div class="card-header border-0 pt-5">
+                            <h3 class="card-title align-items-start flex-column">
+                                <span class="card-label fw-bolder text-dark">Mutual Fund Enquiry</span>
+                                <!-- <span class="text-gray-400 mt-1 fw-bold fs-6">Avg. 10 customers added per day</span> -->
+                            </h3>
+                            <!--begin::Actions-->
+                            <div class="card-toolbar">
+                                
+                            </div>
+                            <!--end::Actions-->
+                        </div>
+                        <!--end::Header-->
+                        <!--begin::Body-->
+                        <div class="card-body py-3">
+                            <!--begin::Table container-->
+                            <div class="table-responsive">
+                                <!--begin::Table-->
+                                <table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
+                                    <!--begin::Table head-->
+                                    <thead>
+                                        <tr class="fw-bolder text-muted">
+                                            <th class="">USER</th>
+                                            <th class="">ENQUIRED ON</th>
+                                        </tr>
+                                    </thead>
+                                    <!--end::Table head-->
+                                    <!--begin::Table body-->
+                                    <tbody class="user_table">
+                                       @foreach($mutual_funds as $mutual_fund)
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="symbol symbol-45px me-5">
+                                                        @php
+                                                            $avatar = App\Models\UserDetail::where('user_id',$mutual_fund->user->id)->first();
+                                                        @endphp
+                                                        @if($avatar != NULL)
+                                                        <img src="{{ $avatar->avatar}}" alt="" />
+                                                        @endif
+                                                    </div>
+                                                    <div class="d-flex justify-content-start flex-column">
+                                                        <a href="{{route('user', ['id' => $mutual_fund->user->id])}}" class="text-dark fw-bolder text-hover-primary fs-6">{{$mutual_fund->user->first_name}} {{$mutual_fund->user->last_name}}</a>
+                                                        <span class="text-muted fw-bold text-muted d-block fs-7">#{{$mutual_fund->user->id}}</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            @php
+                                                $date = Carbon\Carbon::parse($mutual_fund->enquired_on)->formatLocalized('%d %b %Y');
+                                            @endphp
+                                            <td>{{$date}}</td>
+                                        </tr>
+                                       @endforeach
+                                    </tbody>
+                                    <!--end::Table body-->
+                                </table>
+                                <!--end::Table-->
+                                <div class="d-flex justify-content-end mb-3">
+                                    {{ $mutual_funds->links() }}
+                                </div>
                             </div>
                             <!--end::Table container-->
                         </div>
@@ -1462,90 +1633,198 @@
             </div>
             <!--end::Row-->
             <!--begin::Row-->
-            <div class="row gy-5 g-xl-8 mt-xl-5" id="tax" style="{{('tax'== $flag)?'display:block':'display:none'}}">
-                <!--begin::Col-->
-                <!--end::Col-->
-                <!--begin::Col-->
-                <div class="col-xl-12 ">
-                    <!--begin::Tables Widget 9-->
-                    <div class="card card-xl-stretch mb-5 mb-xl-8">
-                        <!--begin::Header-->
-                        <div class="card-header border-0 pt-5">
-                            <h3 class="card-title align-items-start flex-column">
-                                <span class="card-label fw-bolder text-dark">Tax Management</span>
-                                <!-- <span class="text-gray-400 mt-1 fw-bold fs-6">Avg. 10 customers added per day</span> -->
-                            </h3>
-                            <!--begin::Actions-->
-                            <div class="card-toolbar">
-                                
+            <div id="admin_tax" id="admin_tax" style="display:none;">
+                @if($admin_tax_count != 0)
+                    <div class="row gy-5 g-xl-8 mt-xl-5" >
+                        <div class="col-xl-12 mb-5 mb-xl-10">
+                            <!--begin::Table Widget 4-->
+                            <div class="card card-flush h-xl-100">
+                                <!--begin::Card header-->
+                                <div class="card-header pt-7">
+                                    <!--begin::Title-->
+                                    <h3 class="card-title align-items-start flex-column">
+                                        <span class="card-label fw-bolder text-dark">My Taxes</span>
+
+                                    </h3>
+                                    <!--end::Title-->
+                                    <div class="card-toolbar" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover" title="Next Loan">
+                                        <a class="btn btn-sm btn-light btn-active-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_new_tax" >
+                                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
+                                            <span class="svg-icon svg-icon-3">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                    <rect opacity="0.5" x="11.364" y="20.364" width="16" height="2" rx="1" transform="rotate(-90 11.364 20.364)" fill="black" />
+                                                    <rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="black" />
+                                                </svg>
+                                            </span>
+                                            <!--end::Svg Icon-->Next Tax 
+                                        </a>
+                                    </div>
+                                </div>
+                                <!--end::Card header-->
+                                <!--begin::Card body-->
+                                <div class="card-body">
+                                    <!--begin::Table container-->
+                                    <div class="table-responsive">
+                                        <!--begin::Table-->
+                                        <table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
+                                            <!--begin::Table head-->
+                                            <thead>
+                                                <tr class="fw-bolder text-muted">
+                                                    <th class="">USER</th>
+                                                    <th class="">YEAR</th>
+                                                    <th class="">ACTION</th>
+                                                </tr>
+                                            </thead>
+                                            <!--end::Table head-->
+                                            <!--begin::Table body-->
+                                            <tbody class="user_table">
+                                               @foreach($admin_tax_details as $admin_tax_detail)
+                                                <tr>
+                                                    <td>
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="symbol symbol-45px me-5">
+                                                                @php
+                                                                $avatar = App\Models\UserDetail::where('user_id',$admin_tax_detail->tax->user->id)->first();
+                                                                @endphp
+                                                                @if($avatar != NULL)
+                                                                <img src="{{ $avatar->avatar}}" alt="" />
+                                                                @endif
+                                                            </div>
+                                                            <div class="d-flex justify-content-start flex-column">
+                                                                <a href="{{route('user', ['id' => $admin_tax_detail->tax->user->id])}}" class="text-dark fw-bolder text-hover-primary fs-6">{{$admin_tax_detail->tax->user->first_name}} {{$admin_tax_detail->tax->user->last_name}}</a>
+                                                                <span class="text-muted fw-bold text-muted d-block fs-7">#{{$admin_tax_detail->tax->user->id}}</span>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td>{{$admin_tax_detail->start_year}}-{{$admin_tax_detail->end_year}}</td>
+                                                    <td>
+                                                        <a class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary" href="{{route('view_tax', ['id' => $admin_tax_detail->id])}}">
+                                                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr064.svg-->
+                                                            <span class="svg-icon svg-icon-2">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                                    <rect opacity="0.5" x="18" y="13" width="13" height="2" rx="1" transform="rotate(-180 18 13)" fill="black"></rect>
+                                                                    <path d="M15.4343 12.5657L11.25 16.75C10.8358 17.1642 10.8358 17.8358 11.25 18.25C11.6642 18.6642 12.3358 18.6642 12.75 18.25L18.2929 12.7071C18.6834 12.3166 18.6834 11.6834 18.2929 11.2929L12.75 5.75C12.3358 5.33579 11.6642 5.33579 11.25 5.75C10.8358 6.16421 10.8358 6.83579 11.25 7.25L15.4343 11.4343C15.7467 11.7467 15.7467 12.2533 15.4343 12.5657Z" fill="black"></path>
+                                                                </svg>
+                                                            </span>
+                                                            <!--end::Svg Icon-->
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                               @endforeach
+                                            </tbody>
+                                            <!--end::Table body-->
+                                        </table>
+                                        <!--end::Table-->
+                                    </div>
+                                    <!--end::Table container-->
+                                    <div class="d-flex justify-content-end mb-3">
+                                        {{ $admin_tax_details->links() }}
+                                    </div>
+                                </div>
+                                <!--end::Card body-->
                             </div>
-                            <!--end::Actions-->
+                            <!--end::Table Widget 4-->
                         </div>
-                        <!--end::Header-->
-                        <!--begin::Body-->
-                        <div class="card-body py-3">
-                            <!--begin::Table container-->
-                            <div class="table-responsive">
-                                <!--begin::Table-->
-                                <table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
-                                    <!--begin::Table head-->
-                                    <thead>
-                                        <tr class="fw-bolder text-muted">
-                                            <th class="">USER</th>
-                                            <th class="">YEAR</th>
-                                            <th class="">ACTIONS</th>
-                                        </tr>
-                                    </thead>
-                                    <!--end::Table head-->
-                                    <!--begin::Table body-->
-                                    <tbody class="user_table">
-                                       @foreach($tax_details as $tax_detail)
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="symbol symbol-45px me-5">
-                                                        @php
-                                                            $avatar = App\Models\UserDetail::where('user_id',$tax_detail->tax->user->id)->first();
-                                                        @endphp
-                                                        @if($avatar != NULL)
-                                                        <img src="{{ $avatar->avatar}}" alt="" />
-                                                        @endif
-                                                    </div>
-                                                    <div class="d-flex justify-content-start flex-column">
-                                                        <a href="{{route('user', ['id' => $tax_detail->tax->user->id])}}" class="text-dark fw-bolder text-hover-primary fs-6">{{$tax_detail->tax->user->first_name}} {{$tax_detail->tax->user->last_name}}</a>
-                                                        <span class="text-muted fw-bold text-muted d-block fs-7">#{{$tax_detail->tax->user->id}}</span>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>{{$tax_detail->start_year}} - {{$tax_detail->end_year}}</td>
-                                            <td>
-                                                <a class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary" href="{{route('view_tax', ['id' => $tax_detail->id])}}">
-                                                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr064.svg-->
-                                                    <span class="svg-icon svg-icon-2">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                                            <rect opacity="0.5" x="18" y="13" width="13" height="2" rx="1" transform="rotate(-180 18 13)" fill="black"></rect>
-                                                            <path d="M15.4343 12.5657L11.25 16.75C10.8358 17.1642 10.8358 17.8358 11.25 18.25C11.6642 18.6642 12.3358 18.6642 12.75 18.25L18.2929 12.7071C18.6834 12.3166 18.6834 11.6834 18.2929 11.2929L12.75 5.75C12.3358 5.33579 11.6642 5.33579 11.25 5.75C10.8358 6.16421 10.8358 6.83579 11.25 7.25L15.4343 11.4343C15.7467 11.7467 15.7467 12.2533 15.4343 12.5657Z" fill="black"></path>
-                                                        </svg>
-                                                    </span>
-                                                    <!--end::Svg Icon-->
-                                                </a>
-                                            </td>
-                                        </tr>
-                                       @endforeach
-                                    </tbody>
-                                    <!--end::Table body-->
-                                </table>
-                                <!--end::Table-->
-                            </div>
-                            <!--end::Table container-->
-                        </div>
-                        <!--begin::Body-->
                     </div>
-                    <!--end::Tables Widget 9-->
-                </div>
-                <!--end::Col-->
+                @else
+                    <!--begin::Row-->
+                    <div class="row">
+                        <div class="card">
+                            <!--begin::Card body-->
+                            <div class="card-body">
+                                <!--begin::Heading-->
+                                <div class="card-px text-center pt-15 pb-15">
+                                    <!--begin::Title-->
+                                    <h2 class="fs-2x fw-bolder mb-0">Store Your Tax Details Here </h2>
+                                    <!--end::Title-->
+                                    <!--begin::Description-->
+                                    <p class="text-gray-400 fs-4 fw-bold py-7">Click on the below button to start storing the details </p>
+                                    <!--end::Description-->
+                                    <!--begin::Action-->
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_new_tax" style="color: white;">Start Tax</button>
+                                    <!--end::Action-->
+                                </div>
+                                <!--end::Heading-->
+                                <!--begin::Illustration-->
+                                <div class="text-center pb-15 px-5">
+                                    <img src="{{ asset('public/assets/media/illustrations/sigma-1/4.png') }}" alt="" class="mw-100 h-200px h-sm-325px" />
+                                </div>
+                                <!--end::Illustration-->
+                            </div>
+                            <!--end::Card body-->
+                        </div>
+                    </div>
+                    <!--end::Row-->
+                @endif
             </div>
             <!--end::Row-->
+            <!--begin::Row-->
+            <div id="admin_mutual_fund" style="display:none;">
+                <div class="row gy-5 g-xl-8 mt-xl-5" >
+                    <div class="col-xl-12 mb-5 mb-xl-10">
+                        <!--begin::Table Widget 4-->
+                        <div class="card card-flush h-xl-100">
+                            <!--begin::Card header-->
+                            <div class="card-header pt-7">
+                                <!--begin::Title-->
+                                <h3 class="card-title align-items-start flex-column">
+                                    <span class="card-label fw-bolder text-dark">Mutual Fund Enquiry</span>
+                                </h3>
+                                <!--end::Title-->  
+                            </div>
+                            <!--end::Card header-->
+                            <!--begin::Card body-->
+                            <div class="card-body">
+                                <div class="fv-row mb-8">
+                                    <!--begin::Label-->
+                                    <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                        <span class="required">Name</span>
+                                        <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Name"></i>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text" class="form-control form-control-solid" placeholder="Name" value="{{$user->first_name}} {{$user->last_name}}" name="name" id="name" readonly="true" />
+                                    <!--end::Input-->
+                                </div>
+                                <div class="fv-row mb-8">
+                                    <!--begin::Label-->
+                                    <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                        <span class="required">Phone</span>
+                                        <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Phone"></i>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="number" class="form-control form-control-solid" placeholder="Phone" value="{{$user->phone}}" name="phone" id="phone" readonly="true" />
+                                    <!--end::Input-->
+                                </div>
+                                <div class="fv-row mb-8">
+                                    <!--begin::Label-->
+                                    <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                        <span class="required">Email</span>
+                                        <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Email"></i>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="email" class="form-control form-control-solid" placeholder="Email" value="{{$user->email}}" name="email" id="email" readonly="true" />
+                                    <!--end::Input-->
+                                </div>
+                                <form id="profile" method="POST" action="{{route('send_enquiry')}}" enctype="multipart/form-data">
+                                    @csrf
+                                    <span class="text-warning fw-bold">*Clicking on submit, you will receive an email with the details about mutual fund. </span>
+                                    <div class="d-flex justify-content-center">
+                                        <button type="submit" class="btn btn-success" >Submit</button> 
+                                    </div>
+                                </form>    
+                            </div>
+                            <!--end::Card body-->
+                        </div>
+                        <!--end::Table Widget 4-->
+                    </div>
+                </div>
+            </div>
+            <!--end::Row-->
+
+            
         @elseif($detail)
             <div class="row">
                 <div class="card">
@@ -1607,6 +1886,169 @@
 @php
     $user = Auth::guard('web')->user();
 @endphp
+
+<!-- begin::Modal -tax- -->
+<div class="modal fade" id="kt_modal_new_tax" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog mw-650px">
+        <!--begin::Modal content-->
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header pb-0 border-0 justify-content-end">
+                <!--begin::Close-->
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
+                            <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="black" />
+                        </svg>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--begin::Modal header-->
+            <!--begin::Modal body-->
+            <div class="modal-body scroll-y mx-5 mx-xl-18 pt-0 pb-15">
+                <!--begin::Heading-->
+
+                <!--end::Google Contacts Invite-->
+                <!--begin::Separator-->
+                <!--end::Separator-->
+                <!--begin::Textarea-->
+                <!--end::Textarea-->
+                <!--begin::Users-->
+                <div class="mb-10">
+                    <!--begin::Heading-->
+                    <div class="fs-4 fw-bolder mb-2">Store your tax</div>
+                    <!--end::Heading-->
+                    <form class="form w-100" novalidate="novalidate" id="kt_sign_in_form" method="post" action="{{route('save_tax')}}" enctype="multipart/form-data">
+                        @csrf
+
+                        @php
+                            $tax = App\Models\Tax::where('user_id',$user->id)->first();
+                        @endphp
+
+                        @if($tax != NULL)
+                            <!--begin::Input group-->
+                            <div class="fv-row mb-8">
+                                <!--begin::Label-->
+                                <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                    <span class="required">Pan Card Number</span>
+                                    <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Pan Card Number"></i>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" class="form-control form-control-solid" placeholder="Pan Card Number" value="{{$tax->pan_card}}" name="pan_card" id="pan_card" required="true" />
+                                <!--end::Input-->
+                            </div>
+                            <!--end::Input group-->
+
+                            <!--begin::Input group-->
+                            <div class="fv-row mb-8">
+                                <!--begin::Label-->
+                                <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                    <span class="required">Password</span>
+                                    <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Password"></i>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" class="form-control form-control-solid" placeholder="Password" value="{{$tax->password}}" name="password" id="password" required="true" />
+                                <!--end::Input-->
+                            </div>
+                            <!--end::Input group-->
+                            <hr>
+                        @else
+                            <!--begin::Input group-->
+                            <div class="fv-row mb-8">
+                                <!--begin::Label-->
+                                <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                    <span class="required">Pan Card Number</span>
+                                    <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Pan Card Number"></i>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" class="form-control form-control-solid" placeholder="Pan Card Number" value="" name="pan_card" id="pan_card" required="true" />
+                                <!--end::Input-->
+                            </div>
+                            <!--end::Input group-->
+
+                            <!--begin::Input group-->
+                            <div class="fv-row mb-8">
+                                <!--begin::Label-->
+                                <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                    <span class="required">Password</span>
+                                    <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Password"></i>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" class="form-control form-control-solid" placeholder="Password" value="" name="password" id="password" required="true" />
+                                <!--end::Input-->
+                            </div>
+                            <!--end::Input group-->
+                            <hr>
+                        @endif
+
+                        <!--begin::Input group-->
+                        <div class="fv-row mb-8">
+                            <!--begin::Label-->
+                            <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                <span class="required">Start Year</span>
+                                <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Start Year"></i>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" class="form-control form-control-solid" placeholder="Eg: 2021" value="" name="start_year" id="start_year" required="true" />
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+
+                        <!--begin::Input group-->
+                        <div class="fv-row mb-8">
+                            <!--begin::Label-->
+                            <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                <span class="required">End Year</span>
+                                <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="End Year"></i>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" class="form-control form-control-solid" placeholder="Eg: 2022" value="" name="end_year" id="end_year" required="true" />
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+
+                        <div class="fv-row mb-8">
+                            <!--begin::Label-->
+                            <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                <span class="">Tax Document (*You can choose and upload multiple documents at a same time)</span>
+                                <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Tax Document"></i>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="file" class="form-control form-control-solid custom-file-input @error('tax_document') is-invalid @enderror" id="tax_document" placeholder="Tax Document" value="" name="tax_document[]" required="true" multiple />
+                            @error('tax_document')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+                        
+                        <div class="d-flex justify-content-center" >
+                            <button type="submit" class="btn  btn-primary mt-5 mb-3">Submit</button> 
+                        </div>
+                    </form>
+                </div>
+                <!--end::Users-->
+            </div>
+            <!--end::Modal body-->
+        </div>
+            <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+</div>
+<!-- end::Modal -tax- -->
+
 
 <!-- begin::Modal -investment- -->
 <div class="modal fade" id="kt_modal_start_investment" tabindex="-1" aria-hidden="true">
@@ -3080,12 +3522,16 @@
         document.getElementById("smart_finance").classList.remove("active");
         document.getElementById("loan_management").classList.remove("active");
         document.getElementById("tax_management").classList.remove("active");
+        document.getElementById("mutual_fund_management").classList.remove("active");
         $('#user').show();
         $('#finance').hide();
         $('#admin_finance').hide();
         $('#loan').hide();
         $('#admin_loan').hide();
         $('#tax').hide();
+        $('#admin_tax').hide();
+        $('#mutual_fund').hide();
+        $('#admin_mutual_fund').hide();
     }
 
     function finance() {
@@ -3093,12 +3539,16 @@
         document.getElementById("smart_finance").classList.add("active");
         document.getElementById("loan_management").classList.remove("active");
         document.getElementById("tax_management").classList.remove("active");
+        document.getElementById("mutual_fund_management").classList.remove("active");
         $('#user').hide();
         $('#finance').show();
         $('#admin_finance').show();
         $('#loan').hide();
         $('#admin_loan').hide();
         $('#tax').hide();
+        $('#admin_tax').hide();
+        $('#mutual_fund').hide();
+        $('#admin_mutual_fund').hide();
     }
 
     function loan() {
@@ -3106,12 +3556,16 @@
         document.getElementById("smart_finance").classList.remove("active");
         document.getElementById("loan_management").classList.add("active");
         document.getElementById("tax_management").classList.remove("active");
+        document.getElementById("mutual_fund_management").classList.remove("active");
         $('#user').hide();
         $('#finance').hide();
         $('#admin_finance').hide();
         $('#loan').show();
         $('#admin_loan').show();
         $('#tax').hide();
+        $('#admin_tax').hide();
+        $('#mutual_fund').hide();
+        $('#admin_mutual_fund').hide();
     }
 
     function tax() {
@@ -3119,12 +3573,33 @@
         document.getElementById("smart_finance").classList.remove("active");
         document.getElementById("loan_management").classList.remove("active");
         document.getElementById("tax_management").classList.add("active");
+        document.getElementById("mutual_fund_management").classList.remove("active");
         $('#user').hide();
         $('#finance').hide();
         $('#admin_finance').hide();
         $('#loan').hide();
         $('#admin_loan').hide();
         $('#tax').show();
+        $('#admin_tax').show();
+        $('#mutual_fund').hide();
+        $('#admin_mutual_fund').hide();
+    }
+
+    function mutual_fund() {
+        document.getElementById("user_management").classList.remove("active");
+        document.getElementById("smart_finance").classList.remove("active");
+        document.getElementById("loan_management").classList.remove("active");
+        document.getElementById("tax_management").classList.remove("active");
+        document.getElementById("mutual_fund_management").classList.add("active");
+        $('#user').hide();
+        $('#finance').hide();
+        $('#admin_finance').hide();
+        $('#loan').hide();
+        $('#admin_loan').hide();
+        $('#tax').hide();
+        $('#admin_tax').hide();
+        $('#mutual_fund').show();
+        $('#admin_mutual_fund').show();
     }
 
 </script>

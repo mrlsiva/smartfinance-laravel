@@ -100,15 +100,15 @@
                                     </div>
                                     Taxation
                                 </a>
-                                <a href="#" class="text-dark fw-bold fs-6 col bg-light-danger p-6 rounded-2 me-7 mb-7">                                    
+                                <a href="#" onclick="mutal_fund()" class="text-dark fw-bold fs-6 col bg-light-warning p-6 rounded-2 me-7 mb-7" id="mutal_fund_management">                                    
                                     <div class="d-flex flex-stack flex-grow-1">
                                         <div class="d-flex flex-column me-2">
-                                            <span class="svg-icon svg-icon-3x svg-icon-danger d-block my-2">
+                                            <span class="svg-icon svg-icon-3x svg-icon-warning d-block my-2">
                                                 <svg xmlns="http://www.w3.org/2000/svg" style="vertical-align: -0.125em;" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path fill="currentColor" d="m4.406 14.523l3.402-3.402l2.828 2.829l3.157-3.157L12 9h5v5l-1.793-1.793l-4.571 4.571l-2.828-2.828l-2.475 2.474a8 8 0 1 0-.927-1.9zm-1.538 1.558l-.01-.01l.004-.004A9.965 9.965 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10s-4.477 10-10 10c-4.07 0-7.57-2.43-9.132-5.919z"></path></svg>
                                             </span>         
                                         </div>
                                         <span class="symbol symbol-50px">
-                                            <span class="px-3 py-1 fs-5 fw-bolder bg-danger text-white">0</span>
+                                            <span class="px-3 py-1 fs-5 fw-bolder bg-warning text-white">0</span>
                                         </span>
                                     </div>
                                     Mutual Fund
@@ -495,6 +495,9 @@
                                             <!--end::Table body-->
                                         </table>
                                         <!--end::Table-->
+                                        <div class="d-flex justify-content-end mb-3">
+                                            {{ $loans->links() }}
+                                        </div>
                                     </div>
                                     <!--end::Table container-->
                                 </div>
@@ -601,6 +604,9 @@
                                             <!--end::Table body-->
                                         </table>
                                         <!--end::Table-->
+                                        <div class="d-flex justify-content-end mb-3">
+                                            {{ $tax_details->links() }}
+                                        </div>
                                     </div>
                                     <!--end::Table container-->
                                 </div>
@@ -640,6 +646,74 @@
                     </div>
                 @endif
             </div>
+            <div class="" id="mutal_fund" style="display:none;">
+                <!--begin::Row-->
+                <div class="row gy-5 g-xl-8 mt-xl-5" id="tax" >
+                    <!--begin::Col-->
+                    <!--end::Col-->
+                    <!--begin::Col-->
+                    <div class="col-xl-12 ">
+                        <!--begin::Tables Widget 9-->
+                        <div class="card card-xl-stretch mb-5 mb-xl-8">
+                            <!--begin::Header-->
+                            <div class="card-header border-0 pt-5">
+                                <h3 class="card-title align-items-start flex-column">
+                                    <span class="card-label fw-bolder text-dark">Mutual Fund Enquiry</span>
+                                </h3>
+                            </div>
+                            <!--end::Header-->
+                            <!--begin::Body-->
+                            <div class="card-body py-3">
+                                <div class="fv-row mb-8">
+                                    <!--begin::Label-->
+                                    <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                        <span class="required">Name</span>
+                                        <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Name"></i>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text" class="form-control form-control-solid" placeholder="Name" value="{{$user->first_name}} {{$user->last_name}}" name="name" id="name" readonly="true" />
+                                    <!--end::Input-->
+                                </div>
+                                <div class="fv-row mb-8">
+                                    <!--begin::Label-->
+                                    <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                        <span class="required">Phone</span>
+                                        <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Phone"></i>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="number" class="form-control form-control-solid" placeholder="Phone" value="{{$user->phone}}" name="phone" id="phone" readonly="true" />
+                                    <!--end::Input-->
+                                </div>
+                                <div class="fv-row mb-8">
+                                    <!--begin::Label-->
+                                    <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                        <span class="required">Email</span>
+                                        <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Email"></i>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="email" class="form-control form-control-solid" placeholder="Email" value="{{$user->email}}" name="email" id="email" readonly="true" />
+                                    <!--end::Input-->
+                                </div>
+                                <form id="profile" method="POST" action="{{route('send_enquiry')}}" enctype="multipart/form-data">
+                                    @csrf
+                                    <span class="text-warning fw-bold">*Clicking on submit, you will receive an email with the details about mutual fund. </span>
+                                    <div class="d-flex justify-content-center">
+                                        <button type="submit" class="btn btn-success" >Submit</button> 
+                                    </div>
+                                </form>
+                            </div>
+                            <!--begin::Body-->
+                        </div>
+                        <!--end::Tables Widget 9-->
+                    </div>
+                    <!--end::Col-->
+                </div>
+                <!--end::Row-->
+            </div>
+            
         @elseif($detail != NULL && $user->is_profile_verified == 0 )
             <div class="row">
                 <div class="card">
@@ -1691,7 +1765,7 @@
     </div>
     <!--end::Modal dialog-->
 </div>
-<!-- end::Modal -loan- -->
+<!-- end::Modal -tax- -->
 
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -1703,27 +1777,44 @@
         document.getElementById("smart_finance").classList.add("active");
         document.getElementById("loan_management").classList.remove("active");
         document.getElementById("tax_management").classList.remove("active");
+        document.getElementById("mutal_fund_management").classList.remove("active");
         $('#finance').show();
         $('#loan').hide();
         $('#tax').hide();
+        $('#mutal_fund').hide();
     }
 
     function loan() {
         document.getElementById("smart_finance").classList.remove("active");
         document.getElementById("loan_management").classList.add("active");
         document.getElementById("tax_management").classList.remove("active");
+        document.getElementById("mutal_fund_management").classList.remove("active");
         $('#finance').hide();
         $('#loan').show();
         $('#tax').hide();
+        $('#mutal_fund').hide();
     }
 
     function tax() {
         document.getElementById("smart_finance").classList.remove("active");
         document.getElementById("loan_management").classList.remove("active");
         document.getElementById("tax_management").classList.add("active");
+        document.getElementById("mutal_fund_management").classList.remove("active");
         $('#finance').hide();
         $('#loan').hide();
         $('#tax').show();
+        $('#mutal_fund').hide();
+    }
+
+    function mutal_fund() {
+        document.getElementById("smart_finance").classList.remove("active");
+        document.getElementById("loan_management").classList.remove("active");
+        document.getElementById("tax_management").classList.remove("active");
+        document.getElementById("mutal_fund_management").classList.add("active");
+        $('#finance').hide();
+        $('#loan').hide();
+        $('#tax').hide();
+        $('#mutal_fund').show();
     }
 </script>
 <!-- active end -->
