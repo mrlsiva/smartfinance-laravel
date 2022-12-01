@@ -30,7 +30,7 @@ body{
 			<ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
 				<!--begin::Item-->
 				<li class="breadcrumb-item text-white opacity-75">
-					<a href="{{route('dashboard')}}" class="text-white text-hover-primary">Dashboard</a>
+					<a href="{{route('finance')}}" class="text-white text-hover-primary">Smart Finance</a>
 				</li>
 				<!--end::Item-->
 				<!--begin::Item-->
@@ -39,7 +39,7 @@ body{
 				</li>
 				<!--end::Item-->
 				<!--begin::Item-->
-				<li class="breadcrumb-item text-white opacity-75">Smart Finance</li>
+				<li class="breadcrumb-item text-white opacity-75">Details</li>
 				<!--end::Item-->
 			</ul>
 			<!--end::Breadcrumb-->

@@ -57,6 +57,9 @@ Route::post('/save_password',[loginController::class, 'save_password'])->name('s
 //Login End
 
 //User Management
+Route::get('/user_management',[UserController::class, 'user_management'])->name('user_management');
+Route::get('/finance',[UserController::class, 'finance'])->name('finance');
+
 Route::get('/dashboard',[UserController::class, 'dashboard'])->name('dashboard');
 Route::get('/get_user',[UserController::class, 'get_user'])->name('get_user');
 Route::post('/change_user_status',[UserController::class, 'change_user_status'])->name('change_user_status');

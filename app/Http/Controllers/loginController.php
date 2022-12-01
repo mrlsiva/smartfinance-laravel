@@ -35,7 +35,7 @@ class loginController extends Controller
 
                 return redirect('sign_in')->with('error_status', 'Your account has been locked by the  admin');
             }
-            return redirect('dashboard');  
+            return redirect('user_management');  
         }
         else{
             // if failed login
