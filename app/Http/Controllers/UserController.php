@@ -22,6 +22,7 @@ use App\Models\ReviewRating;
 use App\Models\Setting;
 use App\Models\Template;
 use App\Models\Loan;
+use App\Models\LoanPayment;
 use App\Models\Tax;
 use App\Models\TaxDetail;
 use App\Models\MutualFund;
@@ -108,8 +109,16 @@ class UserController extends Controller
                 $loans = Loan::where('user_id',$user->id)->orderBy('id','Desc')->paginate(10);
                 $loan_count = Loan::where([['user_id',$user->id],['is_status',2]])->count();
                 $tax = Tax::where('user_id',$user->id)->first();
-                $tax_details = TaxDetail::where('tax_id',$tax->id)->paginate(10);
-                $tax_count = TaxDetail::where('tax_id',$tax->id)->count();
+                if($tax != NULL){
+                    $tax_details = TaxDetail::where('tax_id',$tax->id)->paginate(10);
+                    $tax_count = TaxDetail::where('tax_id',$tax->id)->count();
+                }
+                else{
+                   $tax_details =[];
+                   $tax_count = 0; 
+                }
+                
+                
 
                 return view('user_dashboard')->with('smartfinances',$smartfinances)->with('smartfinance_count',$smartfinance_count)->with('loans',$loans)->with('loan_count',$loan_count)->with('tax',$tax)->with('tax_details',$tax_details)->with('tax_count',$tax_count);
 
@@ -200,6 +209,7 @@ class UserController extends Controller
                 $smartfinances = Smartfinance::orderBy('id','Desc')->paginate(10);
                 $loans = Loan::orderBy('id','Desc')->paginate(10);
                 $loan_count = Loan::where('is_status',2)->count();
+                $loan_payment_count = LoanPayment::where('is_status',2)->count();
                 $tax_details = TaxDetail::paginate(10);
                 $tax_count = Tax::count();
                 $mutual_funds = MutualFund::paginate(10);
@@ -235,7 +245,7 @@ class UserController extends Controller
                 $loan_search = NULL;
                 
 
-                return view('dashboard')->with('users',$users)->with('user_count',$user_count)->with('smartfinances',$smartfinances)->with('smartfinance_count',$smartfinance_count)->with('admin_finances',$admin_finances)->with('admin_finance_count',$admin_finance_count)->with('payment_count',$payment_count)->with('loans',$loans)->with('loan_count',$loan_count)->with('admin_loans',$admin_loans)->with('admin_loan_count',$admin_loan_count)->with('admin_tax_details',$admin_tax_details)->with('admin_tax_count',$admin_tax_count)->with('mutual_funds',$mutual_funds)->with('mutual_fund_count',$mutual_fund_count)->with('role',$role)->with('profile',$profile)->with('progress',$progress)->with('status',$status)->with('search',$search)->with('investment_plan',$investment_plan)->with('investment_status',$investment_status)->with('investment_search',$investment_search)->with('loan_search',$loan_search)->with('loan_status',$loan_status)->with('flag',$flag)->with('tax_details',$tax_details)->with('tax_count',$tax_count);
+                return view('dashboard')->with('users',$users)->with('user_count',$user_count)->with('smartfinances',$smartfinances)->with('smartfinance_count',$smartfinance_count)->with('admin_finances',$admin_finances)->with('admin_finance_count',$admin_finance_count)->with('payment_count',$payment_count)->with('loans',$loans)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('admin_loans',$admin_loans)->with('admin_loan_count',$admin_loan_count)->with('admin_tax_details',$admin_tax_details)->with('admin_tax_count',$admin_tax_count)->with('mutual_funds',$mutual_funds)->with('mutual_fund_count',$mutual_fund_count)->with('role',$role)->with('profile',$profile)->with('progress',$progress)->with('status',$status)->with('search',$search)->with('investment_plan',$investment_plan)->with('investment_status',$investment_status)->with('investment_search',$investment_search)->with('loan_search',$loan_search)->with('loan_status',$loan_status)->with('flag',$flag)->with('tax_details',$tax_details)->with('tax_count',$tax_count);
             }
         }
         
@@ -1084,6 +1094,7 @@ class UserController extends Controller
         $smartfinances = Smartfinance::orderBy('id','Desc')->paginate(10);
         $loans = Loan::orderBy('id','Desc')->paginate(10);
         $loan_count = Loan::where('is_status',2)->count();
+        $loan_payment_count = LoanPayment::where('is_status',2)->count();
         $tax_details = TaxDetail::paginate(10);
         $tax_count = Tax::count();
         $mutual_funds = MutualFund::paginate(10);
@@ -1118,7 +1129,7 @@ class UserController extends Controller
         $loan_status = NULL;
         $loan_search = NULL;
 
-        return view('dashboard')->with('users',$users)->with('user_count',$user_count)->with('smartfinances',$smartfinances)->with('smartfinance_count',$smartfinance_count)->with('admin_finances',$admin_finances)->with('admin_finance_count',$admin_finance_count)->with('payment_count',$payment_count)->with('loans',$loans)->with('loan_count',$loan_count)->with('admin_loans',$admin_loans)->with('admin_loan_count',$admin_loan_count)->with('admin_tax_details',$admin_tax_details)->with('admin_tax_count',$admin_tax_count)->with('mutual_funds',$mutual_funds)->with('mutual_fund_count',$mutual_fund_count)->with('role',$role)->with('profile',$profile)->with('progress',$progress)->with('status',$status)->with('search',$search)->with('investment_plan',$investment_plan)->with('investment_status',$investment_status)->with('investment_search',$investment_search)->with('loan_search',$loan_search)->with('loan_status',$loan_status)->with('flag',$flag)->with('tax_details',$tax_details)->with('tax_count',$tax_count);
+        return view('dashboard')->with('users',$users)->with('user_count',$user_count)->with('smartfinances',$smartfinances)->with('smartfinance_count',$smartfinance_count)->with('admin_finances',$admin_finances)->with('admin_finance_count',$admin_finance_count)->with('payment_count',$payment_count)->with('loans',$loans)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('admin_loans',$admin_loans)->with('admin_loan_count',$admin_loan_count)->with('admin_tax_details',$admin_tax_details)->with('admin_tax_count',$admin_tax_count)->with('mutual_funds',$mutual_funds)->with('mutual_fund_count',$mutual_fund_count)->with('role',$role)->with('profile',$profile)->with('progress',$progress)->with('status',$status)->with('search',$search)->with('investment_plan',$investment_plan)->with('investment_status',$investment_status)->with('investment_search',$investment_search)->with('loan_search',$loan_search)->with('loan_status',$loan_status)->with('flag',$flag)->with('tax_details',$tax_details)->with('tax_count',$tax_count);
     }
 
     public function user_status($type,Request $request)
@@ -1127,15 +1138,30 @@ class UserController extends Controller
         $user_count = User::where('is_active',0)->orWhere('is_profile_verified',0)->count();
         $smartfinance_count = Smartfinance::where('is_status',2)->count();
         $payment_count = SmartfinancePayment::where('is_approve',2)->count();
-
         $smartfinances = Smartfinance::orderBy('id','Desc')->paginate(10);
+        $loans = Loan::orderBy('id','Desc')->paginate(10);
+        $loan_count = Loan::where('is_status',2)->count();
+        $loan_payment_count = LoanPayment::where('is_status',2)->count();
+        $tax_details = TaxDetail::paginate(10);
+        $tax_count = Tax::count();
+        $mutual_funds = MutualFund::paginate(10);
+        $mutual_fund_count = MutualFund::count();
+
+
+
         $user = Auth::user();
         $admin_finances = Smartfinance::where('user_id',$user->id)->orderBy('id','Desc')->paginate(10);
         $admin_finance_count = Smartfinance::where('user_id',$user->id)->count();
-        $loans = Loan::orderBy('id','Desc')->paginate(10);
-        $loan_count = Loan::where('is_status',2)->count();
         $admin_loans = Loan::where('user_id',$user->id)->orderBy('id','Desc')->paginate(10);
         $admin_loan_count = Loan::where('user_id',$user->id)->count();
+        $admin_tax = Tax::where('user_id',$user->id)->first();
+        if($admin_tax != NULL){
+            $admin_tax_details = TaxDetail::where('tax_id',$admin_tax->id)->orderBy('id','Desc')->paginate(10);
+        }
+        else{
+            $admin_tax_details = [];
+        }
+        $admin_tax_count = Tax::where('user_id',$user->id)->count();
 
         $flag = 'user';
         $role = NULL;
@@ -1149,7 +1175,7 @@ class UserController extends Controller
         $loan_status = NULL;
         $loan_search = NULL;
 
-        return view('dashboard')->with('users',$users)->with('user_count',$user_count)->with('smartfinances',$smartfinances)->with('smartfinance_count',$smartfinance_count)->with('admin_finances',$admin_finances)->with('admin_finance_count',$admin_finance_count)->with('payment_count',$payment_count)->with('loans',$loans)->with('loan_count',$loan_count)->with('admin_loans',$admin_loans)->with('admin_loan_count',$admin_loan_count)->with('role',$role)->with('profile',$profile)->with('progress',$progress)->with('status',$status)->with('search',$search)->with('investment_plan',$investment_plan)->with('investment_status',$investment_status)->with('investment_search',$investment_search)->with('loan_search',$loan_search)->with('loan_status',$loan_status)->with('flag',$flag);
+        return view('dashboard')->with('users',$users)->with('user_count',$user_count)->with('smartfinances',$smartfinances)->with('smartfinance_count',$smartfinance_count)->with('admin_finances',$admin_finances)->with('admin_finance_count',$admin_finance_count)->with('payment_count',$payment_count)->with('loans',$loans)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('admin_loans',$admin_loans)->with('admin_loan_count',$admin_loan_count)->with('admin_tax_details',$admin_tax_details)->with('admin_tax_count',$admin_tax_count)->with('mutual_funds',$mutual_funds)->with('mutual_fund_count',$mutual_fund_count)->with('role',$role)->with('profile',$profile)->with('progress',$progress)->with('status',$status)->with('search',$search)->with('investment_plan',$investment_plan)->with('investment_status',$investment_status)->with('investment_search',$investment_search)->with('loan_search',$loan_search)->with('loan_status',$loan_status)->with('flag',$flag)->with('tax_details',$tax_details)->with('tax_count',$tax_count);
     }
 
     public function user_progress($type,Request $request)
@@ -1162,6 +1188,7 @@ class UserController extends Controller
         $smartfinances = Smartfinance::orderBy('id','Desc')->paginate(10);
         $loans = Loan::orderBy('id','Desc')->paginate(10);
         $loan_count = Loan::where('is_status',2)->count();
+        $loan_payment_count = LoanPayment::where('is_status',2)->count();
         $tax_details = TaxDetail::paginate(10);
         $tax_count = Tax::count();
         $mutual_funds = MutualFund::paginate(10);
@@ -1195,7 +1222,7 @@ class UserController extends Controller
         $loan_status = NULL;
         $loan_search = NULL;
 
-        return view('dashboard')->with('users',$users)->with('user_count',$user_count)->with('smartfinances',$smartfinances)->with('smartfinance_count',$smartfinance_count)->with('admin_finances',$admin_finances)->with('admin_finance_count',$admin_finance_count)->with('payment_count',$payment_count)->with('loans',$loans)->with('loan_count',$loan_count)->with('admin_loans',$admin_loans)->with('admin_loan_count',$admin_loan_count)->with('admin_tax_details',$admin_tax_details)->with('admin_tax_count',$admin_tax_count)->with('mutual_funds',$mutual_funds)->with('mutual_fund_count',$mutual_fund_count)->with('role',$role)->with('profile',$profile)->with('progress',$progress)->with('status',$status)->with('search',$search)->with('investment_plan',$investment_plan)->with('investment_status',$investment_status)->with('investment_search',$investment_search)->with('loan_search',$loan_search)->with('loan_status',$loan_status)->with('flag',$flag)->with('tax_details',$tax_details)->with('tax_count',$tax_count);
+        return view('dashboard')->with('users',$users)->with('user_count',$user_count)->with('smartfinances',$smartfinances)->with('smartfinance_count',$smartfinance_count)->with('admin_finances',$admin_finances)->with('admin_finance_count',$admin_finance_count)->with('payment_count',$payment_count)->with('loans',$loans)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('admin_loans',$admin_loans)->with('admin_loan_count',$admin_loan_count)->with('admin_tax_details',$admin_tax_details)->with('admin_tax_count',$admin_tax_count)->with('mutual_funds',$mutual_funds)->with('mutual_fund_count',$mutual_fund_count)->with('role',$role)->with('profile',$profile)->with('progress',$progress)->with('status',$status)->with('search',$search)->with('investment_plan',$investment_plan)->with('investment_status',$investment_status)->with('investment_search',$investment_search)->with('loan_search',$loan_search)->with('loan_status',$loan_status)->with('flag',$flag)->with('tax_details',$tax_details)->with('tax_count',$tax_count);
     }
 
     public function user_profile($type,Request $request)
@@ -1208,6 +1235,7 @@ class UserController extends Controller
             $smartfinances = Smartfinance::orderBy('id','Desc')->paginate(10);
             $loans = Loan::orderBy('id','Desc')->paginate(10);
             $loan_count = Loan::where('is_status',2)->count();
+            $loan_payment_count = LoanPayment::where('is_status',2)->count();
             $tax_details = TaxDetail::paginate(10);
             $tax_count = Tax::count();
             $mutual_funds = MutualFund::paginate(10);
@@ -1240,17 +1268,18 @@ class UserController extends Controller
             $loan_status = NULL;
             $loan_search = NULL;
 
-            return view('dashboard')->with('users',$users)->with('user_count',$user_count)->with('smartfinances',$smartfinances)->with('smartfinance_count',$smartfinance_count)->with('admin_finances',$admin_finances)->with('admin_finance_count',$admin_finance_count)->with('payment_count',$payment_count)->with('loans',$loans)->with('loan_count',$loan_count)->with('admin_loans',$admin_loans)->with('admin_loan_count',$admin_loan_count)->with('admin_tax_details',$admin_tax_details)->with('admin_tax_count',$admin_tax_count)->with('mutual_funds',$mutual_funds)->with('mutual_fund_count',$mutual_fund_count)->with('role',$role)->with('profile',$profile)->with('progress',$progress)->with('status',$status)->with('search',$search)->with('investment_plan',$investment_plan)->with('investment_status',$investment_status)->with('investment_search',$investment_search)->with('loan_search',$loan_search)->with('loan_status',$loan_status)->with('flag',$flag)->with('tax_details',$tax_details)->with('tax_count',$tax_count);
+            return view('dashboard')->with('users',$users)->with('user_count',$user_count)->with('smartfinances',$smartfinances)->with('smartfinance_count',$smartfinance_count)->with('admin_finances',$admin_finances)->with('admin_finance_count',$admin_finance_count)->with('payment_count',$payment_count)->with('loans',$loans)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('admin_loans',$admin_loans)->with('admin_loan_count',$admin_loan_count)->with('admin_tax_details',$admin_tax_details)->with('admin_tax_count',$admin_tax_count)->with('mutual_funds',$mutual_funds)->with('mutual_fund_count',$mutual_fund_count)->with('role',$role)->with('profile',$profile)->with('progress',$progress)->with('status',$status)->with('search',$search)->with('investment_plan',$investment_plan)->with('investment_status',$investment_status)->with('investment_search',$investment_search)->with('loan_search',$loan_search)->with('loan_status',$loan_status)->with('flag',$flag)->with('tax_details',$tax_details)->with('tax_count',$tax_count);
         }
         elseif($type == 1){
 
-            $users = User::where([['is_delete',0],['is_profile_verified',$type]])->orWhere('is_profile_updated','!=',$type)->orderBy('id','Desc')->simplePaginate(10);
+            $users = User::where([['is_delete',0],['is_profile_verified',$type]])->orWhere('is_profile_updated','!=',$type)->orderBy('id','Desc')->paginate(10);
             $user_count = User::where('is_active',0)->orWhere('is_profile_verified',0)->count();
             $smartfinance_count = Smartfinance::where('is_status',2)->count();
             $payment_count = SmartfinancePayment::where('is_approve',2)->count();
-            $smartfinances = Smartfinance::orderBy('id','Desc')->get();
-            $loans = Loan::orderBy('id','Desc')->simplePaginate(10);
+            $smartfinances = Smartfinance::orderBy('id','Desc')->paginate(10);
+            $loans = Loan::orderBy('id','Desc')->paginate(10);
             $loan_count = Loan::where('is_status',2)->count();
+            $loan_payment_count = LoanPayment::where('is_status',2)->count();
             $tax_details = TaxDetail::paginate(10);
             $tax_count = Tax::count();
             $mutual_funds = MutualFund::paginate(10);
@@ -1258,9 +1287,9 @@ class UserController extends Controller
 
 
             $user = Auth::user();
-            $admin_finances = Smartfinance::where('user_id',$user->id)->orderBy('id','Desc')->simplePaginate(10);
+            $admin_finances = Smartfinance::where('user_id',$user->id)->orderBy('id','Desc')->paginate(10);
             $admin_finance_count = Smartfinance::where('user_id',$user->id)->count();  
-            $admin_loans = Loan::where('user_id',$user->id)->orderBy('id','Desc')->simplePaginate(10);
+            $admin_loans = Loan::where('user_id',$user->id)->orderBy('id','Desc')->paginate(10);
             $admin_loan_count = Loan::where('user_id',$user->id)->count();
             $admin_tax = Tax::where('user_id',$user->id)->first();
             if($admin_tax != NULL){
@@ -1283,7 +1312,7 @@ class UserController extends Controller
             $loan_status = NULL;
             $loan_search = NULL;
 
-            return view('dashboard')->with('users',$users)->with('user_count',$user_count)->with('smartfinances',$smartfinances)->with('smartfinance_count',$smartfinance_count)->with('admin_finances',$admin_finances)->with('admin_finance_count',$admin_finance_count)->with('payment_count',$payment_count)->with('loans',$loans)->with('loan_count',$loan_count)->with('admin_loans',$admin_loans)->with('admin_loan_count',$admin_loan_count)->with('admin_tax_details',$admin_tax_details)->with('admin_tax_count',$admin_tax_count)->with('mutual_funds',$mutual_funds)->with('mutual_fund_count',$mutual_fund_count)->with('role',$role)->with('profile',$profile)->with('progress',$progress)->with('status',$status)->with('search',$search)->with('investment_plan',$investment_plan)->with('investment_status',$investment_status)->with('investment_search',$investment_search)->with('loan_search',$loan_search)->with('loan_status',$loan_status)->with('flag',$flag)->with('tax_details',$tax_details)->with('tax_count',$tax_count);
+            return view('dashboard')->with('users',$users)->with('user_count',$user_count)->with('smartfinances',$smartfinances)->with('smartfinance_count',$smartfinance_count)->with('admin_finances',$admin_finances)->with('admin_finance_count',$admin_finance_count)->with('payment_count',$payment_count)->with('loans',$loans)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('admin_loans',$admin_loans)->with('admin_loan_count',$admin_loan_count)->with('admin_tax_details',$admin_tax_details)->with('admin_tax_count',$admin_tax_count)->with('mutual_funds',$mutual_funds)->with('mutual_fund_count',$mutual_fund_count)->with('role',$role)->with('profile',$profile)->with('progress',$progress)->with('status',$status)->with('search',$search)->with('investment_plan',$investment_plan)->with('investment_status',$investment_status)->with('investment_search',$investment_search)->with('loan_search',$loan_search)->with('loan_status',$loan_status)->with('flag',$flag)->with('tax_details',$tax_details)->with('tax_count',$tax_count);
         }
         elseif($type == 0){
 
@@ -1294,6 +1323,7 @@ class UserController extends Controller
             $smartfinances = Smartfinance::orderBy('id','Desc')->paginate(10);
             $loans = Loan::orderBy('id','Desc')->paginate(10);
             $loan_count = Loan::where('is_status',2)->count();
+            $loan_payment_count = LoanPayment::where('is_status',2)->count();
             $tax_details = TaxDetail::paginate(10);
             $tax_count = Tax::count();
             $mutual_funds = MutualFund::paginate(10);
@@ -1327,7 +1357,7 @@ class UserController extends Controller
             $loan_status = NULL;
             $loan_search = NULL;
 
-            return view('dashboard')->with('users',$users)->with('user_count',$user_count)->with('smartfinances',$smartfinances)->with('smartfinance_count',$smartfinance_count)->with('admin_finances',$admin_finances)->with('admin_finance_count',$admin_finance_count)->with('payment_count',$payment_count)->with('loans',$loans)->with('loan_count',$loan_count)->with('admin_loans',$admin_loans)->with('admin_loan_count',$admin_loan_count)->with('admin_tax_details',$admin_tax_details)->with('admin_tax_count',$admin_tax_count)->with('mutual_funds',$mutual_funds)->with('mutual_fund_count',$mutual_fund_count)->with('role',$role)->with('profile',$profile)->with('progress',$progress)->with('status',$status)->with('search',$search)->with('investment_plan',$investment_plan)->with('investment_status',$investment_status)->with('investment_search',$investment_search)->with('loan_search',$loan_search)->with('loan_status',$loan_status)->with('flag',$flag)->with('tax_details',$tax_details)->with('tax_count',$tax_count);
+            return view('dashboard')->with('users',$users)->with('user_count',$user_count)->with('smartfinances',$smartfinances)->with('smartfinance_count',$smartfinance_count)->with('admin_finances',$admin_finances)->with('admin_finance_count',$admin_finance_count)->with('payment_count',$payment_count)->with('loans',$loans)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('admin_loans',$admin_loans)->with('admin_loan_count',$admin_loan_count)->with('admin_tax_details',$admin_tax_details)->with('admin_tax_count',$admin_tax_count)->with('mutual_funds',$mutual_funds)->with('mutual_fund_count',$mutual_fund_count)->with('role',$role)->with('profile',$profile)->with('progress',$progress)->with('status',$status)->with('search',$search)->with('investment_plan',$investment_plan)->with('investment_status',$investment_status)->with('investment_search',$investment_search)->with('loan_search',$loan_search)->with('loan_status',$loan_status)->with('flag',$flag)->with('tax_details',$tax_details)->with('tax_count',$tax_count);
         }
         else{
 
@@ -1338,6 +1368,7 @@ class UserController extends Controller
             $smartfinances = Smartfinance::orderBy('id','Desc')->paginate(10);
             $loans = Loan::orderBy('id','Desc')->paginate(10);
             $loan_count = Loan::where('is_status',2)->count();
+            $loan_payment_count = LoanPayment::where('is_status',2)->count();
             $tax_details = TaxDetail::paginate(10);
             $tax_count = Tax::count();
             $mutual_funds = MutualFund::paginate(10);
@@ -1371,7 +1402,7 @@ class UserController extends Controller
             $loan_status = NULL;
             $loan_search = NULL;
 
-            return view('dashboard')->with('users',$users)->with('user_count',$user_count)->with('smartfinances',$smartfinances)->with('smartfinance_count',$smartfinance_count)->with('admin_finances',$admin_finances)->with('admin_finance_count',$admin_finance_count)->with('payment_count',$payment_count)->with('loans',$loans)->with('loan_count',$loan_count)->with('admin_loans',$admin_loans)->with('admin_loan_count',$admin_loan_count)->with('admin_tax_details',$admin_tax_details)->with('admin_tax_count',$admin_tax_count)->with('mutual_funds',$mutual_funds)->with('mutual_fund_count',$mutual_fund_count)->with('role',$role)->with('profile',$profile)->with('progress',$progress)->with('status',$status)->with('search',$search)->with('investment_plan',$investment_plan)->with('investment_status',$investment_status)->with('investment_search',$investment_search)->with('loan_search',$loan_search)->with('loan_status',$loan_status)->with('flag',$flag)->with('tax_details',$tax_details)->with('tax_count',$tax_count);
+            return view('dashboard')->with('users',$users)->with('user_count',$user_count)->with('smartfinances',$smartfinances)->with('smartfinance_count',$smartfinance_count)->with('admin_finances',$admin_finances)->with('admin_finance_count',$admin_finance_count)->with('payment_count',$payment_count)->with('loans',$loans)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('admin_loans',$admin_loans)->with('admin_loan_count',$admin_loan_count)->with('admin_tax_details',$admin_tax_details)->with('admin_tax_count',$admin_tax_count)->with('mutual_funds',$mutual_funds)->with('mutual_fund_count',$mutual_fund_count)->with('role',$role)->with('profile',$profile)->with('progress',$progress)->with('status',$status)->with('search',$search)->with('investment_plan',$investment_plan)->with('investment_status',$investment_status)->with('investment_search',$investment_search)->with('loan_search',$loan_search)->with('loan_status',$loan_status)->with('flag',$flag)->with('tax_details',$tax_details)->with('tax_count',$tax_count);
         }
     }
 
@@ -1379,13 +1410,14 @@ class UserController extends Controller
     {
 
 
-        $users = User::where([['is_delete',0],['role_id',$type]])->orderBy('id','Desc')->simplePaginate(10);
+        $users = User::where([['is_delete',0],['role_id',$type]])->orderBy('id','Desc')->paginate(10);
         $user_count = User::where('is_active',0)->orWhere('is_profile_verified',0)->count();
         $smartfinance_count = Smartfinance::where('is_status',2)->count();
         $payment_count = SmartfinancePayment::where('is_approve',2)->count();
-        $smartfinances = Smartfinance::orderBy('id','Desc')->get();
-        $loans = Loan::orderBy('id','Desc')->simplePaginate(10);
+        $smartfinances = Smartfinance::orderBy('id','Desc')->paginate(10);
+        $loans = Loan::orderBy('id','Desc')->paginate(10);
         $loan_count = Loan::where('is_status',2)->count();
+        $loan_payment_count = LoanPayment::where('is_status',2)->count();
         $tax_details = TaxDetail::paginate(10);
         $tax_count = Tax::count();
         $mutual_funds = MutualFund::paginate(10);
@@ -1393,10 +1425,10 @@ class UserController extends Controller
 
 
         $user = Auth::user();
-        $admin_finances = Smartfinance::where('user_id',$user->id)->orderBy('id','Desc')->simplePaginate(10);
+        $admin_finances = Smartfinance::where('user_id',$user->id)->orderBy('id','Desc')->paginate(10);
         $admin_finance_count = Smartfinance::where('user_id',$user->id)->count();
         
-        $admin_loans = Loan::where('user_id',$user->id)->orderBy('id','Desc')->simplePaginate(10);
+        $admin_loans = Loan::where('user_id',$user->id)->orderBy('id','Desc')->paginate(10);
         $admin_loan_count = Loan::where('user_id',$user->id)->count();
         $admin_tax = Tax::where('user_id',$user->id)->first();
         if($admin_tax != NULL){
@@ -1419,7 +1451,7 @@ class UserController extends Controller
         $loan_status = NULL;
         $loan_search = NULL;
 
-        return view('dashboard')->with('users',$users)->with('user_count',$user_count)->with('smartfinances',$smartfinances)->with('smartfinance_count',$smartfinance_count)->with('admin_finances',$admin_finances)->with('admin_finance_count',$admin_finance_count)->with('payment_count',$payment_count)->with('loans',$loans)->with('loan_count',$loan_count)->with('admin_loans',$admin_loans)->with('admin_loan_count',$admin_loan_count)->with('admin_tax_details',$admin_tax_details)->with('admin_tax_count',$admin_tax_count)->with('mutual_funds',$mutual_funds)->with('mutual_fund_count',$mutual_fund_count)->with('role',$role)->with('profile',$profile)->with('progress',$progress)->with('status',$status)->with('search',$search)->with('investment_plan',$investment_plan)->with('investment_status',$investment_status)->with('investment_search',$investment_search)->with('loan_search',$loan_search)->with('loan_status',$loan_status)->with('flag',$flag)->with('tax_details',$tax_details)->with('tax_count',$tax_count);
+        return view('dashboard')->with('users',$users)->with('user_count',$user_count)->with('smartfinances',$smartfinances)->with('smartfinance_count',$smartfinance_count)->with('admin_finances',$admin_finances)->with('admin_finance_count',$admin_finance_count)->with('payment_count',$payment_count)->with('loans',$loans)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('admin_loans',$admin_loans)->with('admin_loan_count',$admin_loan_count)->with('admin_tax_details',$admin_tax_details)->with('admin_tax_count',$admin_tax_count)->with('mutual_funds',$mutual_funds)->with('mutual_fund_count',$mutual_fund_count)->with('role',$role)->with('profile',$profile)->with('progress',$progress)->with('status',$status)->with('search',$search)->with('investment_plan',$investment_plan)->with('investment_status',$investment_status)->with('investment_search',$investment_search)->with('loan_search',$loan_search)->with('loan_status',$loan_status)->with('flag',$flag)->with('tax_details',$tax_details)->with('tax_count',$tax_count);
         
     }
 

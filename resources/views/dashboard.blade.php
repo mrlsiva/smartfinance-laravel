@@ -99,7 +99,7 @@
                                             </span>         
                                         </div>
                                         <span class="symbol symbol-50px">
-                                            <span class="px-3 py-1 fs-5 fw-bolder bg-warning text-white">{{$loan_count}}</span>
+                                            <span class="px-3 py-1 fs-5 fw-bolder bg-warning text-white">{{$loan_count+$loan_payment_count}}</span>
                                         </span>
                                     </div>
                                     Loan
