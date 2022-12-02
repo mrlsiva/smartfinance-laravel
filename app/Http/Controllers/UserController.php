@@ -293,6 +293,72 @@ class UserController extends Controller
         return view('finance')->with('smartfinances',$smartfinances)->with('admin_finances',$admin_finances)->with('admin_finance_count',$admin_finance_count)->with('user_count',$user_count)->with('smartfinance_count',$smartfinance_count)->with('payment_count',$payment_count)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count)->with('mutual_fund_count',$mutual_fund_count)->with('investment_plan',$investment_plan)->with('investment_status',$investment_status)->with('investment_search',$investment_search);
     }
 
+    public function loan(Request $request) 
+    {
+        
+        $user_count = User::where('is_active',0)->orWhere('is_profile_verified',0)->count();
+        $smartfinance_count = Smartfinance::where('is_status',2)->count();
+        $payment_count = SmartfinancePayment::where('is_approve',2)->count();
+        $loans = Loan::orderBy('id','Desc')->paginate(10);
+        $loan_count = Loan::where('is_status',2)->count();
+        $loan_payment_count = LoanPayment::where('is_status',2)->count();
+        $tax_count = Tax::count();
+        $mutual_fund_count = MutualFund::count();
+
+        $user = Auth::user();
+        $admin_loans = Loan::where('user_id',$user->id)->orderBy('id','Desc')->paginate(10);
+        $admin_loan_count = Loan::where('user_id',$user->id)->count();
+        
+
+        $loan_status = NULL;
+        $loan_search = NULL;
+
+        return view('loan')->with('loans',$loans)->with('admin_loans',$admin_loans)->with('admin_loan_count',$admin_loan_count)->with('user_count',$user_count)->with('smartfinance_count',$smartfinance_count)->with('payment_count',$payment_count)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count)->with('mutual_fund_count',$mutual_fund_count)->with('loan_search',$loan_search)->with('loan_status',$loan_status);
+    }
+
+    public function tax(Request $request) 
+    {
+        
+        $user_count = User::where('is_active',0)->orWhere('is_profile_verified',0)->count();
+        $smartfinance_count = Smartfinance::where('is_status',2)->count();
+        $payment_count = SmartfinancePayment::where('is_approve',2)->count();
+        $loan_count = Loan::where('is_status',2)->count();
+        $loan_payment_count = LoanPayment::where('is_status',2)->count();
+        $tax_details = TaxDetail::paginate(10);
+        $tax_count = Tax::count();
+        $mutual_fund_count = MutualFund::count();
+
+        $user = Auth::user();
+        $admin_tax = Tax::where('user_id',$user->id)->first();
+        if($admin_tax != NULL){
+            $admin_tax_details = TaxDetail::where('tax_id',$admin_tax->id)->orderBy('id','Desc')->paginate(10);
+        }
+        else{
+            $admin_tax_details = [];
+        }
+        $admin_tax_count = Tax::where('user_id',$user->id)->count();
+        
+
+        return view('tax')->with('tax_details',$tax_details)->with('user_count',$user_count)->with('smartfinance_count',$smartfinance_count)->with('payment_count',$payment_count)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count)->with('mutual_fund_count',$mutual_fund_count)->with('admin_tax_details',$admin_tax_details)->with('admin_tax_count',$admin_tax_count);
+    }
+
+    public function mutual_fund(Request $request) 
+    {
+        
+        $user_count = User::where('is_active',0)->orWhere('is_profile_verified',0)->count();
+        $smartfinance_count = Smartfinance::where('is_status',2)->count();
+        $payment_count = SmartfinancePayment::where('is_approve',2)->count();
+        $loan_count = Loan::where('is_status',2)->count();
+        $loan_payment_count = LoanPayment::where('is_status',2)->count();
+        $tax_count = Tax::count();
+        $mutual_funds = MutualFund::paginate(10);
+        $mutual_fund_count = MutualFund::count();
+        
+        
+
+        return view('mutual_fund')->with('mutual_funds',$mutual_funds)->with('user_count',$user_count)->with('smartfinance_count',$smartfinance_count)->with('payment_count',$payment_count)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count)->with('mutual_fund_count',$mutual_fund_count);
+    }
+
     public function get_user(Request $request) 
     { 
         $id=$request->id;  

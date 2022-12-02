@@ -59,6 +59,9 @@ Route::post('/save_password',[loginController::class, 'save_password'])->name('s
 //User Management
 Route::get('/user_management',[UserController::class, 'user_management'])->name('user_management');
 Route::get('/finance',[UserController::class, 'finance'])->name('finance');
+Route::get('/loan',[UserController::class, 'loan'])->name('loan');
+Route::get('/tax',[UserController::class, 'tax'])->name('tax');
+Route::get('/mutual_fund',[UserController::class, 'mutual_fund'])->name('mutual_fund');
 
 Route::get('/dashboard',[UserController::class, 'dashboard'])->name('dashboard');
 Route::get('/get_user',[UserController::class, 'get_user'])->name('get_user');

@@ -59,8 +59,8 @@
                     <div class="card-body p-0">
                         <!--begin::Stats-->
                         <div class="card-p mt-n20 position-relative">
+                        
                             <!--begin::Row-->
-                            
                             <div class="row g-0 parent-active">
                                 <a href="{{route('user_management')}}"  class="text-dark fw-bold fs-6 col  border-bottom border-warning bg-light-warning p-6 rounded-2 me-7 mb-7">
                                     <div class="d-flex flex-stack flex-grow-1">
@@ -76,7 +76,7 @@
                                     </div>
                                     User Management
                                 </a>
-                                <a href="{{route('finance')}}" class=" text-dark fw-bold fs-6 col border-bottom border-warning bg-light-warning p-6 rounded-2 me-7 mb-7">                                   
+                                <a href="{{route('finance')}}" class="text-dark fw-bold fs-6 col border-bottom border-warning bg-light-warning p-6 rounded-2 me-7 mb-7">                                   
                                     <div class="d-flex flex-stack flex-grow-1">
                                         <div class="d-flex flex-column me-2">       
                                             <span class="svg-icon svg-icon-3x svg-icon-warning d-block my-2">
@@ -89,7 +89,7 @@
                                     </div>
                                     Smart Finance
                                 </a>
-                                <a href="{{route('loan')}}" class="active text-dark fw-bold fs-6 col border-bottom border-warning bg-light-warning p-6 rounded-2 me-7 mb-7">
+                                <a href="{{route('loan')}}" class="text-dark fw-bold fs-6 col border-bottom border-warning bg-light-warning p-6 rounded-2 me-7 mb-7">
                                                                     
                                     <div class="d-flex flex-stack flex-grow-1">
                                         <div class="d-flex flex-column me-2">
@@ -103,7 +103,7 @@
                                     </div>
                                     Loan
                                 </a>
-                                <a href="{{route('tax')}}"class="text-dark fw-bold fs-6 col border-bottom border-warning bg-light-warning p-6 rounded-2 me-7 mb-7">
+                                <a href="{{route('tax')}}"class=" text-dark fw-bold fs-6 col border-bottom border-warning bg-light-warning p-6 rounded-2 me-7 mb-7">
                                                                     
                                     <div class="d-flex flex-stack flex-grow-1">
                                         <div class="d-flex flex-column me-2">
@@ -117,7 +117,7 @@
                                     </div>
                                     Taxation
                                 </a>
-                                <a href="{{route('mutual_fund')}}" class="text-dark fw-bold fs-6 col border-bottom border-warning bg-light-warning p-6 rounded-2 me-7 mb-7">
+                                <a href="{{route('mutual_fund')}}" class="active text-dark fw-bold fs-6 col border-bottom border-warning bg-light-warning p-6 rounded-2 me-7 mb-7">
                                                                    
                                     <div class="d-flex flex-stack flex-grow-1">
                                         <div class="d-flex flex-column me-2">
@@ -146,10 +146,6 @@
                                 </a>
                             </div>
                             <!--end::Row-->
-                            <!--begin::Row-->
-                            <div class="row g-0">
-                            </div>
-                            <!--end::Row-->
                         </div>
                         <!--end::Stats-->
                     </div>
@@ -165,7 +161,7 @@
             $detail = DB::table('user_details')->where('user_id',$user->id)->first();
         @endphp
         @if($user->is_profile_verified == 1)
-            <input type="hidden" name="base_url" id="base_url" value="{{url('loan')}}">
+            <input type="hidden" name="base_url" id="base_url" value="{{url('mutual_fund')}}">
             <!--begin::Row-->
             <div class="row gy-5 g-xl-8 mt-xl-5">
                 <!--begin::Col-->
@@ -177,78 +173,12 @@
                         <!--begin::Header-->
                         <div class="card-header border-0 pt-5">
                             <h3 class="card-title align-items-start flex-column">
-                                <span class="card-label fw-bolder text-dark">Loan Management</span>
+                                <span class="card-label fw-bolder text-dark">Mutual Fund Enquiry</span>
                                 <!-- <span class="text-gray-400 mt-1 fw-bold fs-6">Avg. 10 customers added per day</span> -->
                             </h3>
                             <!--begin::Actions-->
                             <div class="card-toolbar">
-                                <!--begin::Filters-->
-                                <div class="d-flex flex-stack flex-wrap gap-4">
-                                    <!--begin::Destination-->
-                                    <!--end::Destination-->
-                                    <!--begin::Status-->
-                                    <div class="d-flex align-items-center fw-bolder">
-
-                                        <!--begin::Label-->
-                                        <input type="hidden" name="loan_status_url" id="loan_status_url" value="{{url('loan_status')}}">
-                                        <div class="text-muted fs-7 me-2">Status</div>
-                                        <!--end::Label-->
-                                        @if($loan_status != NULL)
-                                            <!--begin::Select-->
-                                            <select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Show All" data-kt-table-widget-4="filter_status" name="loan_status" id="loan_status" >
-                                                <option></option>
-                                                <option value="null" selected="selected">Show All</option>
-                                                <option value="2" {{ ("2" == $loan_status ) ? "selected":"" }}>Pending</option>
-                                                <option value="1" {{ ("1" == $loan_status ) ? "selected":"" }}>Approved</option>
-                                                <option value="0" {{ ("0" == $loan_status ) ? "selected":"" }}>Rejected</option>
-                                            </select>
-                                            <!--end::Select-->
-                                        @else
-                                            <!--begin::Select-->
-                                            <select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Show All" data-kt-table-widget-4="filter_status" name="loan_status" id="loan_status" >
-                                                <option></option>
-                                                <option value="null" selected="selected">Show All</option>
-                                                <option value="1">Approved</option>
-                                                <option value="0">Rejected</option>
-                                                <option value="2">Pending</option>
-                                            </select>
-                                            <!--end::Select-->
-                                        @endif
-                                    </div>
-                                    <!--end::Status-->
-                                    <input type="hidden" name="loan_search_url" id="loan_search_url" value="{{url('loan_search')}}">
-
-                                    @if($loan_search != NULL)
-                                        <!--begin::Search-->
-                                        <div class="position-relative my-1">
-                                            <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
-                                            <span class="svg-icon svg-icon-2 position-absolute top-50 translate-middle-y ms-4">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                                    <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="black" />
-                                                    <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="black" />
-                                                </svg>
-                                            </span>
-                                            <!--end::Svg Icon-->
-                                            <input type="text" data-kt-table-widget-4="search" class="form-control w-150px fs-7 ps-12" placeholder="Search" name="loan_search" value="{{$loan_search}}" />
-                                        </div>
-                                        <!--end::Search-->
-                                    @else
-                                        <!--begin::Search-->
-                                        <div class="position-relative my-1">
-                                            <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
-                                            <span class="svg-icon svg-icon-2 position-absolute top-50 translate-middle-y ms-4">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                                    <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="black" />
-                                                    <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="black" />
-                                                </svg>
-                                            </span>
-                                            <!--end::Svg Icon-->
-                                            <input type="text" data-kt-table-widget-4="search" class="form-control w-150px fs-7 ps-12" placeholder="Search" name="loan_search" />
-                                        </div>
-                                        <!--end::Search-->
-                                    @endif
-                                </div>
-                                <!--begin::Filters-->
+                                
                             </div>
                             <!--end::Actions-->
                         </div>
@@ -263,69 +193,34 @@
                                     <thead>
                                         <tr class="fw-bolder text-muted">
                                             <th class="">USER</th>
-                                            <th class="">AMOUNT</th>
-                                            <!-- <th class="">INTREST</th> -->
-                                            <th class="">STATUS</th>
-                                            <th class="">ACTIONS</th>
+                                            <th class="">ENQUIRED ON</th>
                                         </tr>
                                     </thead>
                                     <!--end::Table head-->
                                     <!--begin::Table body-->
                                     <tbody class="user_table">
-                                       @foreach($loans as $loan)
+                                       @foreach($mutual_funds as $mutual_fund)
                                         <tr>
                                             <td>
                                                 <div class="d-flex align-items-center">
                                                     <div class="symbol symbol-45px me-5">
                                                         @php
-                                                            $avatar = App\Models\UserDetail::where('user_id',$loan->user->id)->first();
+                                                            $avatar = App\Models\UserDetail::where('user_id',$mutual_fund->user->id)->first();
                                                         @endphp
                                                         @if($avatar != NULL)
                                                         <img src="{{ $avatar->avatar}}" alt="" />
                                                         @endif
                                                     </div>
                                                     <div class="d-flex justify-content-start flex-column">
-                                                        <a href="{{route('user', ['id' => $loan->user->id])}}" class="text-dark fw-bolder text-hover-primary fs-6">{{$loan->user->first_name}} {{$loan->user->last_name}}</a>
-                                                        <span class="text-muted fw-bold text-muted d-block fs-7">#{{$loan->user->id}}</span>
+                                                        <a href="{{route('user', ['id' => $mutual_fund->user->id])}}" class="text-dark fw-bolder text-hover-primary fs-6">{{$mutual_fund->user->first_name}} {{$mutual_fund->user->last_name}}</a>
+                                                        <span class="text-muted fw-bold text-muted d-block fs-7">#{{$mutual_fund->user->id}}</span>
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td>Rs {{$loan->commafun($loan->amount)}}</td>
-                                            <!-- <td>
-                                                @if($loan->intrest != NULL)
-                                                {{$loan->intrest}}
-                                                @else
-                                                -
-                                                @endif
-                                            </td> -->
-                                            @if($loan->is_close == 1)
-                                                <td><span class="badge py-3 px-4 fs-7 badge-secondary">Closed</span></td>
-                                            @else
-                                                @php
-                                                    $payment = App\Models\LoanPayment::where([['loan_id',$loan->id],['is_status',2]])->first();
-                                                @endphp
-                                                @if($loan->is_status == 2 || $payment->is_status == 2)
-                                                    <td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>
-                                                @elseif($loan->is_status == 1)
-                                                    <td><span class="badge py-3 px-4 fs-7 badge-light-success">Accepted</span></td>
-                                                @elseif($loan->is_status == 0)
-                                                    <td><span class="badge py-3 px-4 fs-7 badge-light-danger">Rejected</span></td>
-                                                @endif
-                                            @endif
-                                            <td class="">
-                                                <button class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary"name="loan_edit" data-system_id="{{$loan->id}}" title="Edit"><i class="fas fa-pencil-alt" id="fa"></i></button>
-                                                
-                                                <a class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary" href="{{route('view_loan', ['id' => $loan->id])}}">
-                                                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr064.svg-->
-                                                    <span class="svg-icon svg-icon-2">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                                            <rect opacity="0.5" x="18" y="13" width="13" height="2" rx="1" transform="rotate(-180 18 13)" fill="black"></rect>
-                                                            <path d="M15.4343 12.5657L11.25 16.75C10.8358 17.1642 10.8358 17.8358 11.25 18.25C11.6642 18.6642 12.3358 18.6642 12.75 18.25L18.2929 12.7071C18.6834 12.3166 18.6834 11.6834 18.2929 11.2929L12.75 5.75C12.3358 5.33579 11.6642 5.33579 11.25 5.75C10.8358 6.16421 10.8358 6.83579 11.25 7.25L15.4343 11.4343C15.7467 11.7467 15.7467 12.2533 15.4343 12.5657Z" fill="black"></path>
-                                                        </svg>
-                                                    </span>
-                                                    <!--end::Svg Icon-->
-                                                </a>
-                                            </td>
+                                            @php
+                                                $date = Carbon\Carbon::parse($mutual_fund->enquired_on)->formatLocalized('%d %b %Y');
+                                            @endphp
+                                            <td>{{$date}}</td>
                                         </tr>
                                        @endforeach
                                     </tbody>
@@ -333,7 +228,7 @@
                                 </table>
                                 <!--end::Table-->
                                 <div class="d-flex justify-content-end mb-3">
-                                    {{ $loans->links() }}
+                                    {{ $mutual_funds->links() }}
                                 </div>
                             </div>
                             <!--end::Table container-->
@@ -345,157 +240,69 @@
                 <!--end::Col-->
             </div>
             <!--end::Row-->
-            
             <!--begin::Row-->
-            <div id="admin_loan" id="admin_loan">
-                @if($admin_loan_count != 0)
-                    <div class="row gy-5 g-xl-8 mt-xl-5" >
-                        <div class="col-xl-12 mb-5 mb-xl-10">
-                            <!--begin::Table Widget 4-->
-                            <div class="card card-flush h-xl-100">
-                                <!--begin::Card header-->
-                                <div class="card-header pt-7">
-                                    <!--begin::Title-->
-                                    <h3 class="card-title align-items-start flex-column">
-                                        <span class="card-label fw-bolder text-dark">My Loans</span>
-
-                                    </h3>
-                                    <!--end::Title-->
-                                    <div class="card-toolbar" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover" title="Next Loan">
-                                        <a class="btn btn-sm btn-light btn-active-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_start_loan" >
-                                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
-                                            <span class="svg-icon svg-icon-3">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                                    <rect opacity="0.5" x="11.364" y="20.364" width="16" height="2" rx="1" transform="rotate(-90 11.364 20.364)" fill="black" />
-                                                    <rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="black" />
-                                                </svg>
-                                            </span>
-                                            <!--end::Svg Icon-->Next Loan 
-                                        </a>
-                                    </div>
-                                </div>
-                                <!--end::Card header-->
-                                <!--begin::Card body-->
-                                <div class="card-body">
-                                    <!--begin::Table container-->
-                                    <div class="table-responsive">
-                                        <!--begin::Table-->
-                                        <table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
-                                            <!--begin::Table head-->
-                                            <thead>
-                                                <tr class="fw-bolder text-muted">
-                                                    <th class="">USER</th>
-                                                    <th class="">AMOUNT</th>
-                                                    <th class="">INTREST</th>
-                                                    <th class="">STATUS</th>
-                                                    <th class="">ACTIONS</th>
-                                                </tr>
-                                            </thead>
-                                            <!--end::Table head-->
-                                            <!--begin::Table body-->
-                                            <tbody class="user_table">
-                                               @foreach($admin_loans as $admin_loan)
-                                                <tr>
-                                                    <td>
-                                                        <div class="d-flex align-items-center">
-                                                            <div class="symbol symbol-45px me-5">
-                                                                @php
-                                                                    $avatar = App\Models\UserDetail::where('user_id',$admin_loan->user->id)->first();
-                                                                @endphp
-                                                                @if($avatar != NULL)
-                                                                <img src="{{ $avatar->avatar}}" alt="" />
-                                                                @endif
-                                                            </div>
-                                                            <div class="d-flex justify-content-start flex-column">
-                                                                <a href="{{route('user', ['id' => $admin_loan->user->id])}}" class="text-dark fw-bolder text-hover-primary fs-6">{{$admin_loan->user->first_name}} {{$admin_loan->user->last_name}}</a>
-                                                                <span class="text-muted fw-bold text-muted d-block fs-7">#{{$admin_loan->user->id}}</span>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                    <td>Rs {{$admin_loan->commafun($admin_loan->amount)}}</td>
-                                                    <td>
-                                                        @if($admin_loan->intrest != NULL)
-                                                        {{$admin_loan->intrest}}
-                                                        @else
-                                                        -
-                                                        @endif
-                                                    </td>
-                                                    @if($admin_loan->is_close == 1)
-                                                        <td><span class="badge py-3 px-4 fs-7 badge-light-secondary">Expired</span></td>
-                                                    @else
-                                                        @if($admin_loan->is_status == 2)
-                                                            <td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>
-                                                        @elseif($admin_loan->is_status == 1)
-                                                            <td><span class="badge py-3 px-4 fs-7 badge-light-success">Accepted</span></td>
-                                                        @elseif($admin_loan->is_status == 0)
-                                                            <td><span class="badge py-3 px-4 fs-7 badge-light-danger">Rejected</span></td>
-                                                        @endif
-                                                    @endif
-                                                    <td class="">
-                                                        <button class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary"name="loan_edit" data-system_id="{{$admin_loan->id}}" title="Edit"><i class="fas fa-pencil-alt" id="fa"></i></button>
-                                                        
-                                                        <a class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary" href="{{route('view_loan', ['id' => $admin_loan->id])}}">
-                                                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr064.svg-->
-                                                            <span class="svg-icon svg-icon-2">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                                                    <rect opacity="0.5" x="18" y="13" width="13" height="2" rx="1" transform="rotate(-180 18 13)" fill="black"></rect>
-                                                                    <path d="M15.4343 12.5657L11.25 16.75C10.8358 17.1642 10.8358 17.8358 11.25 18.25C11.6642 18.6642 12.3358 18.6642 12.75 18.25L18.2929 12.7071C18.6834 12.3166 18.6834 11.6834 18.2929 11.2929L12.75 5.75C12.3358 5.33579 11.6642 5.33579 11.25 5.75C10.8358 6.16421 10.8358 6.83579 11.25 7.25L15.4343 11.4343C15.7467 11.7467 15.7467 12.2533 15.4343 12.5657Z" fill="black"></path>
-                                                                </svg>
-                                                            </span>
-                                                            <!--end::Svg Icon-->
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                               @endforeach
-                                            </tbody>
-                                            <!--end::Table body-->
-                                        </table>
-                                        <!--end::Table-->
-                                    </div>
-                                    <!--end::Table container-->
-                                    <div class="d-flex justify-content-end mb-3">
-                                        {{ $admin_loans->links() }}
-                                    </div>
-                                </div>
-                                <!--end::Card body-->
+            <div id="admin_mutual_fund">
+                <div class="row gy-5 g-xl-8 mt-xl-5" >
+                    <div class="col-xl-12 mb-5 mb-xl-10">
+                        <!--begin::Table Widget 4-->
+                        <div class="card card-flush h-xl-100">
+                            <!--begin::Card header-->
+                            <div class="card-header pt-7">
+                                <!--begin::Title-->
+                                <h3 class="card-title align-items-start flex-column">
+                                    <span class="card-label fw-bolder text-dark">Mutual Fund Enquiry</span>
+                                </h3>
+                                <!--end::Title-->  
                             </div>
-                            <!--end::Table Widget 4-->
-                        </div>
-                    </div>
-                @else
-                    <!--begin::Row-->
-                    <div class="row gy-5 g-xl-8 mt-xl-5" >
-                        <div class="col-xl-12 mb-5 mb-xl-10">
-                            <!--begin::Table Widget 4-->
-                            <div class="card card-flush h-xl-100">
-                                <!--begin::Card body-->
-                                <div class="card-body">
-                                    <!--begin::Heading-->
-                                    <div class="card-px text-center pt-15 pb-15">
-                                        <!--begin::Title-->
-                                        <h2 class="fs-2x fw-bolder mb-0">Get Your Loan Here </h2>
-                                        <!--end::Title-->
-                                        <!--begin::Description-->
-                                        <p class="text-gray-400 fs-4 fw-bold py-7">Click on the below button to get your loan </p>
-                                        <!--end::Description-->
-                                        <!--begin::Action-->
-                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_start_loan" style="color: white;">Start Loan</button>
-                                        <!--end::Action-->
-                                    </div>
-                                    <!--end::Heading-->
-                                    <!--begin::Illustration-->
-                                    <div class="text-center pb-15 px-5">
-                                        <img src="{{ asset('public/assets/media/illustrations/sigma-1/11.png') }}" alt="" class="mw-100 h-200px h-sm-325px" />
-                                    </div>
-                                    <!--end::Illustration-->
+                            <!--end::Card header-->
+                            <!--begin::Card body-->
+                            <div class="card-body">
+                                <div class="fv-row mb-8">
+                                    <!--begin::Label-->
+                                    <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                        <span class="required">Name</span>
+                                        <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Name"></i>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text" class="form-control form-control-solid" placeholder="Name" value="{{$user->first_name}} {{$user->last_name}}" name="name" id="name" readonly="true" />
+                                    <!--end::Input-->
                                 </div>
-                                <!--end::Card body-->
+                                <div class="fv-row mb-8">
+                                    <!--begin::Label-->
+                                    <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                        <span class="required">Phone</span>
+                                        <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Phone"></i>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="number" class="form-control form-control-solid" placeholder="Phone" value="{{$user->phone}}" name="phone" id="phone" readonly="true" />
+                                    <!--end::Input-->
+                                </div>
+                                <div class="fv-row mb-8">
+                                    <!--begin::Label-->
+                                    <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                        <span class="required">Email</span>
+                                        <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Email"></i>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="email" class="form-control form-control-solid" placeholder="Email" value="{{$user->email}}" name="email" id="email" readonly="true" />
+                                    <!--end::Input-->
+                                </div>
+                                <form id="profile" method="POST" action="{{route('send_enquiry')}}" enctype="multipart/form-data">
+                                    @csrf
+                                    <span class="text-warning fw-bold">*Clicking on submit, you will receive an email with the details about mutual fund. </span>
+                                    <div class="d-flex justify-content-center">
+                                        <button type="submit" class="btn btn-success" >Submit</button> 
+                                    </div>
+                                </form>    
                             </div>
-                            <!--end::Table Widget 4-->
+                            <!--end::Card body-->
                         </div>
+                        <!--end::Table Widget 4-->
                     </div>
-                    <!--end::Row-->
-                @endif
+                </div>
             </div>
             <!--end::Row-->
         @elseif($detail)
@@ -559,144 +366,6 @@
 @php
     $user = Auth::guard('web')->user();
 @endphp
-
-<!-- begin::Modal -loan- -->
-<div class="modal fade" id="kt_modal_start_loan" tabindex="-1" aria-hidden="true">
-    <!--begin::Modal dialog-->
-    <div class="modal-dialog mw-650px">
-        <!--begin::Modal content-->
-        <div class="modal-content">
-            <!--begin::Modal header-->
-            <div class="modal-header pb-0 border-0 justify-content-end">
-                <!--begin::Close-->
-                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                    <span class="svg-icon svg-icon-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
-                            <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="black" />
-                        </svg>
-                    </span>
-                    <!--end::Svg Icon-->
-                </div>
-                <!--end::Close-->
-            </div>
-            <!--begin::Modal header-->
-            <!--begin::Modal body-->
-            <div class="modal-body scroll-y mx-5 mx-xl-18 pt-0 pb-15">
-                <!--begin::Heading-->
-
-                <!--end::Google Contacts Invite-->
-                <!--begin::Separator-->
-                <!--end::Separator-->
-                <!--begin::Textarea-->
-                <!--end::Textarea-->
-                <!--begin::Users-->
-                <div class="mb-10">
-                    <!--begin::Heading-->
-                    <div class="fs-4 fw-bolder mb-2">Loan</div>
-                    <!--end::Heading-->
-                    <form class="form w-100" novalidate="novalidate" id="kt_sign_in_form" method="post" action="{{route('save_loan')}}" enctype="multipart/form-data">
-                        @csrf
-
-                        <!--begin::Input group-->
-                        <div class="fv-row mb-8">
-                            <!--begin::Label-->
-                            <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
-                                <span class="required">Loan Amount</span>
-                                <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Loan Amount"></i>
-                            </label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <input type="number" class="form-control form-control-solid @error('amount') is-invalid @enderror" placeholder="Loan Amount" value="{{old('amount')}}" name="amount" id="amount" required="true" />
-                            <!--end::Input-->
-                            @error('amount')
-                                <div class="text-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <!--end::Input group-->
-
-                        <!--begin::Input group-->
-                        <div class="fv-row mb-8">
-                            <!--begin::Label-->
-                            <label class="required fs-6 fw-bold mb-2">Property Type</label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <input type="text" class="form-control form-control-solid @error('property_type') is-invalid @enderror" placeholder="Land/Gold/Etc.." value="{{old('property_type')}}" name="property_type" id="property_type" required="true" />
-                            <!--end::Input-->
-                            @error('property_type')
-                                <div class="text-danger">{{ $message }}</div>
-                            @enderror
-                            <!--end::Input-->
-                        </div>
-                        <!--end::Input group-->
-
-                        <!--begin::Input group-->
-                        <div class="fv-row mb-8">
-                            <!--begin::Label-->
-                            <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
-                                <span class="">Property Value</span>
-                                <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Property Value"></i>
-                            </label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <input type="text" class="form-control form-control-solid @error('property_value') is-invalid @enderror" placeholder="Property Value" value="{{old('property_value')}}" name="property_value" id="property_value" required="true"/>
-                            @error('property_value')
-                                <div class="text-danger">{{ $message }}</div>
-                            @enderror
-                            <!--end::Input-->
-                        </div>
-                        <!--end::Input group-->
-
-                        <!--begin::Input group-->
-                        <div class="fv-row mb-8">
-                            <!--begin::Label-->
-                            <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
-                                <span class="">Property Copy(*You can choose and upload multiple documents at a same time)</span>
-                                <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Property Copy"></i>
-                            </label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <input type="file" class="form-control form-control-solid custom-file-input @error('property_copy') is-invalid @enderror" id="property_copy" placeholder="Property Copy" value="" name="property_copy[]" required="true" multiple />
-                            @error('property_copy')
-                                <div class="text-danger">{{ $message }}</div>
-                            @enderror
-                            <!--end::Input-->
-                            <!-- <div class="d-flex justify-content-center mt-3">
-                                <img id="preview-image-property" style="max-height: 200px;">
-                                <a href="#" class="text-hover-primary" onclick="delete_property()"  style="display:none;" id="property_image">X</a>
-                            </div> -->
-                        </div>
-                        <!--end::Input group-->
-
-                        <!--begin::Input group-->
-                        <div class="fv-row mb-10">
-                            <label class="form-check form-check-custom form-check-solid form-check-inline">
-                                <input class="form-check-input @error('terms_and_conditions') is-invalid @enderror" type="checkbox" name="terms_and_conditions" id="terms_and_conditions" required="true" />
-                                <span class="form-check-label fw-bold text-gray-700 fs-6">I Agree
-                                    <a href="{{route('loan_terms_and_condition')}}" target="_blank" class="ms-1 text-hover-primary">Terms and conditions</a>.
-                                </span>
-                            </label>
-                            @error('terms_and_conditions')
-                                <div class="text-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <!--end::Input group-->
-                        
-                        <div class="d-flex justify-content-center" >
-                            <button type="submit" class="btn  btn-primary mt-5 mb-3">Submit</button> 
-                        </div>
-                    </form>
-                </div>
-                <!--end::Users-->
-            </div>
-            <!--end::Modal body-->
-        </div>
-            <!--end::Modal content-->
-    </div>
-    <!--end::Modal dialog-->
-</div>
-<!-- end::Modal -loan- -->
 
 <!--begin::Modal - Create Profile-->
 <div class="modal fade" id="kt_modal_create_project" tabindex="-1" aria-hidden="true">
@@ -1224,243 +893,9 @@
 </div>
 <!--end::Modal - Create Profile-->
 
-
-<!-- begin::loan edit Modal -->
-<div class="modal fade" id="edit_loan_modal" tabindex="-1" aria-hidden="true">
-    <!--begin::Modal dialog-->
-    <div class="modal-dialog mw-650px">
-        <!--begin::Modal content-->
-        <div class="modal-content">
-            <!--begin::Modal header-->
-            <div class="modal-header pb-0 border-0 justify-content-end">
-                <!--begin::Close-->
-                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                    <span class="svg-icon svg-icon-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
-                            <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="black" />
-                        </svg>
-                    </span>
-                    <!--end::Svg Icon-->
-                </div>
-                <!--end::Close-->
-            </div>
-            <!--begin::Modal header-->
-            <!--begin::Modal body-->
-            <div class="modal-body scroll-y mx-5 mx-xl-18 pt-0 pb-15">
-                <!--begin::Heading-->
-
-                <!--end::Google Contacts Invite-->
-                <!--begin::Separator-->
-                <!--end::Separator-->
-                <!--begin::Textarea-->
-                <!--end::Textarea-->
-                <!--begin::Users-->
-                <div class="mb-10">
-                    <!--begin::Heading-->
-                    <div class="fs-6 fw-bold mb-2">Loan Approval</div>
-                    <!--end::Heading-->
-                    <form class="form w-100" novalidate="novalidate" id="kt_sign_in_form" method="post" action="{{route('loan_edit')}}" enctype="multipart/form-data">
-                        @csrf
-                        <input type="hidden" name="loan_id" id="loan_id">
-
-                        <table class="text-center table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
-                            <thead>
-                                <tr class="fw-bolder text-muted">
-                                    <th class="">DOCUMENTS</th>
-                                    <th class="">ACTION</th>
-                                </tr>
-                            </thead>
-                            <tbody class="loan_body">
-                            </tbody>
-                        </table>
-                        
-                        <!--begin::List-->
-                        <div class="mh-300px scroll-y me-n7 pe-7">
-                            <div class="d-flex flex-stack py-4 border-bottom border-gray-300 border-bottom-dashed">
-                                <!--begin::Details-->
-                                <div class="d-flex align-items-center">
-                                    
-                                    <!--begin::Details-->
-                                    <div class="ms-5">
-                                        <span class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">Loan Amount</span>
-                                    </div>
-                                    <!--end::Details-->
-                                </div>
-                                <!--end::Details-->
-                                <!--begin::Access menu-->
-                                <div class="ms-2 w-150px">
-                                    <input type="text" class="form-control form-control-solid" placeholder="Loan Amount" value="" name="loan_amount" id="loan_amount" readonly="" />
-                                </div>
-                                <!--end::Access menu-->
-                            </div>
-                        </div>
-                        <!--end::List-->
-
-                        <!--begin::List-->
-                        <div class="mh-300px scroll-y me-n7 pe-7">
-                            <div class="d-flex flex-stack py-4 border-bottom border-gray-300 border-bottom-dashed">
-                                <!--begin::Details-->
-                                <div class="d-flex align-items-center">
-                                    
-                                    <!--begin::Details-->
-                                    <div class="ms-5">
-                                        <span class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">Property Type</span>
-                                    </div>
-                                    <!--end::Details-->
-                                </div>
-                                <!--end::Details-->
-                                <!--begin::Access menu-->
-                                <div class="ms-2 w-150px">
-                                    <input type="text" class="form-control form-control-solid" placeholder="Property Type" value="" name="loan_property_type" id="loan_property_type" readonly="" />
-                                </div>
-                                <!--end::Access menu-->
-                            </div>
-                        </div>
-                        <!--end::List-->
-
-                        <!--begin::List-->
-                        <div class="mh-300px scroll-y me-n7 pe-7">
-                            <div class="d-flex flex-stack py-4 border-bottom border-gray-300 border-bottom-dashed">
-                                <!--begin::Details-->
-                                <div class="d-flex align-items-center">
-                                    
-                                    <!--begin::Details-->
-                                    <div class="ms-5">
-                                        <span class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">Property Value</span>
-                                    </div>
-                                    <!--end::Details-->
-                                </div>
-                                <!--end::Details-->
-                                <!--begin::Access menu-->
-                                <div class="ms-2 w-150px">
-                                    <input type="text" class="form-control form-control-solid" placeholder="Property Value" value="" name="loan_property_value" id="loan_property_value" readonly="" />
-                                </div>
-                                <!--end::Access menu-->
-                            </div>
-                        </div>
-                        <!--end::List-->
-
-                        <!--begin::List-->
-                        <!-- <div class="mh-300px scroll-y me-n7 pe-7">
-                            <div class="d-flex flex-stack py-4 border-bottom border-gray-300 border-bottom-dashed">
-                                <div class="d-flex align-items-center">
-                                    <div class="ms-5">
-                                        <span class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">Intrest</span>
-                                    </div>
-                                </div>
-                                <div class="ms-2 w-150px">
-                                    <input type="number" class="form-control form-control-solid @error('loan_intrest') is-invalid @enderror" placeholder="Intrest" value="" name="loan_intrest" id="loan_intrest" required="" />
-                                    @error('loan_intrest')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-                        </div> -->
-                        <!--end::List-->
-
-                        <!--begin::List-->
-                        <div class="mh-300px scroll-y me-n7 pe-7">
-                            <div class="d-flex flex-stack py-4 border-bottom border-gray-300 border-bottom-dashed">
-                                <!--begin::Details-->
-                                <div class="d-flex align-items-center">
-                                    
-                                    <!--begin::Details-->
-                                    <div class="ms-5">
-                                        <span class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">Requested Date</span>
-                                    </div>
-                                    <!--end::Details-->
-                                </div>
-                                <!--end::Details-->
-                                <!--begin::Access menu-->
-                                <div class="ms-2 w-150px">
-                                    <input type="date" class="form-control form-control-solid " placeholder="Requested Date" value="" name="loan_requested_date" id="loan_requested_date" />
-                                </div>
-                                <!--end::Access menu-->
-                            </div>
-                        </div>
-                        <!--end::List-->
-
-                        <!--begin::List-->
-                        <div class="mh-300px scroll-y me-n7 pe-7">
-                            <div class="d-flex flex-stack py-4 border-bottom border-gray-300 border-bottom-dashed">
-                                <!--begin::Details-->
-                                <div class="d-flex align-items-center">
-                                    
-                                    <!--begin::Details-->
-                                    <div class="ms-5">
-                                        <span class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">Accepted Date</span>
-                                    </div>
-                                    <!--end::Details-->
-                                </div>
-                                <!--end::Details-->
-                                <!--begin::Access menu-->
-                                <div class="ms-2 w-150px">
-                                    <input type="date" class="form-control form-control-solid" placeholder="Accepted Date" value="" name="loan_approved_date" id="loan_approved_date" required="" />
-                                </div>
-                                <!--end::Access menu-->
-                            </div>
-                        </div>
-                        <!--end::List-->
-
-                        <!--begin::List-->
-                        <div class="mh-300px scroll-y me-n7 pe-7">
-                            <div class="d-flex flex-stack py-4 border-bottom border-gray-300 border-bottom-dashed">
-                                <!--begin::Details-->
-                                <div class="d-flex align-items-center">
-                                    
-                                    <!--begin::Details-->
-                                    <div class="ms-5">
-                                        <span class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">Status</span>
-                                    </div>
-                                    <!--end::Details-->
-                                </div>
-                                <!--end::Details-->
-                                <!--begin::Access menu-->
-                                <div class="ms-2 w-150px">
-                                    <select class="form-select form-select-solid form-select-sm" data-control="select2" data-hide-search="true" name="is_status" id="is_status">
-                                        <option value="">Select</option>
-                                    </select>
-                                </div>
-                                <!--end::Access menu-->
-                            </div>
-                        </div>
-                        <!--end::List-->
-
-                        <!--begin::Input group-->
-                        <div class="fv-row mt-5 mb-8">
-                            <!--begin::Label-->
-                            <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
-                                <span class="">Payment Copy(*You can choose and upload multiple documents at a same time)</span>
-                                <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Property Copy"></i>
-                            </label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <input type="file" class="form-control form-control-solid custom-file-input" id="approve_payment_copy" placeholder="Payment Copy" value="" name="approve_payment_copy[]" required="true" multiple />
-                            <!--end::Input-->
-        
-                        <div class="d-flex justify-content-center">
-                            <button type="submit"  class="btn  btn-primary mt-5 mb-3">Submit</button>
-                        </div>
-                    </form>
-                </div>
-                <!--end::Users-->
-                <!--begin::Notice-->
-                <!--end::Notice-->
-            </div>
-            <!--end::Modal body-->
-        </div>
-            <!--end::Modal content-->
-    </div>
-    <!--end::Modal dialog-->
-</div>
-<!-- end::Modal -->
-
-
-
-
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+
 
 <!-- profile page validation -->
 <script type="text/javascript">
@@ -1783,135 +1218,6 @@
     });
 </script>
 
-<!-- Loan Edit -->
-<script type="text/javascript">
-
-    $(document).on('click', 'button[name^="loan_edit"]', function(e) {
-        var system_id = $(this).data("system_id");
-        console.log(system_id);
-
-        if(system_id)
-        {
-            jQuery.ajax({
-                url : 'get_loan',
-                type: 'GET',
-                dataType: 'json',
-                data: { id: system_id },
-                success:function(data)
-                { 
-                    console.log(data);
-                    var today = new Date();
-                    var dd = today.getDate();
-                    var mm = today.getMonth()+1; //January is 0!
-                    var yyyy = today.getFullYear();
-                    if(dd<10) {
-                      dd = '0'+dd
-                    } 
-
-                    if(mm<10) {
-                      mm = '0'+mm
-                    } 
-                    today = yyyy + '-' + mm + '-' + dd;
-                    jQuery('#edit_loan_modal').modal('show');
-                    document.getElementById("loan_id").value = data.id;
-                    document.getElementById("loan_amount").value = data.amount;
-                    document.getElementById("loan_property_type").value = data.property_type;
-                    document.getElementById("loan_property_value").value = data.property_value;
-                    if(data.is_status == 1)
-                    {
-                        jQuery('select[name="is_status"]').empty();
-                        $('select[name="is_status"]').append('<option value="'+ '1' +'" selected>'+ 'Approved' +'</option>');
-                        $('select[name="is_status"]').append('<option value="'+ '0' +'">'+ 'Rejected' +'</option>');
-                        $('select[name="is_status"]').append('<option value="'+ '2' +'">'+ 'Pending' +'</option>');
-                    }
-                    else if(data.is_status == 0){
-
-                        jQuery('select[name="is_status"]').empty();
-                        $('select[name="is_status"]').append('<option value="'+ '1' +'">'+ 'Approved' +'</option>');
-                        $('select[name="is_status"]').append('<option value="'+ '0' +'" selected>'+ 'Rejected' +'</option>');
-                        $('select[name="is_status"]').append('<option value="'+ '2' +'">'+ 'Pending' +'</option>');
-                    }
-                    else if(data.is_status == 2){
-
-                        jQuery('select[name="is_status"]').empty();
-                        $('select[name="is_status"]').append('<option value="'+ '1' +'">'+ 'Approved' +'</option>');
-                        $('select[name="is_status"]').append('<option value="'+ '0' +'">'+ 'Rejected' +'</option>');
-                        $('select[name="is_status"]').append('<option value="'+ '2' +'" selected>'+ 'Pending' +'</option>');
-                    }
-                    document.getElementById("loan_requested_date").value = data.requested_on;
-                    if(data.approved_on !== null){
-                        document.getElementById("loan_approved_date").value = data.approved_on;
-                    }
-                    else{
-                        document.getElementById("loan_approved_date").value = today;
-
-                    }
-                    var output = '';
-                    for(var count = 0; count < data.property_copy.length; count++)
-                    {
-                        var url = data.property_copy[count];
-                        var no = count+1;
-                        output += '<tr>';
-                        output += '<td>Document '+no+'</td>';
-                        output += '<td><div class="pa-inline-buttons"><a href="'+url+'" target="_blank" class=""><button type="button" class="btn btn-warning">View</button>   </a><a href="'+url+'" download class=""><button type="button" class="btn btn-success">Download</button></a></div></td>';
-                        output += '</tr>';
-                    }
-                    $('.loan_body').html(output);
-
-                }
-            });
-        }
-        
-    });
-
-</script>
-
-<!-- loan status search -->
-<script type="application/javascript">
-    jQuery(document).ready(function ()
-    {
-        jQuery('select[name="loan_status"]').on('change',function(){
-            var loan_status = jQuery(this).val();
-            var status_url = jQuery("#loan_status_url").val();
-            var url = status_url+"/"+loan_status+'/';
-            if(loan_status == 'null'){
-                url = jQuery("#base_url").val();
-            }
-            window.location = url; 
-        });
-    });
-</script>
-
-<!-- loan search -->
-<script type="application/javascript">
-    jQuery(document).ready(function ()
-    {
-        jQuery('input[name="loan_search"]').on('change',function(){
-            var loan_search = jQuery(this).val();
-            var search_url = jQuery("#loan_search_url").val();
-            var url = search_url+"/"+loan_search+'/';
-            if(loan_search == ''){
-                url = jQuery("#base_url").val();
-            }
-            window.location = url; 
-        });
-    });
-</script>
-
-<!-- loan terms and condition check -->
-<script type="text/javascript">
-
-    $('#terms_and_conditions').change(function () {
-        if (this.checked) {
-            document.getElementById('loan_final').style.display = 'block';
-        }
-        else{
-            document.getElementById('loan_final').style.display = 'none';
-        }
-    });
-</script>
-<!-- loan terms and condition check end -->
-
 
 <!-- SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.6/dist/sweetalert2.all.min.js"></script>
@@ -1936,7 +1242,6 @@
         )
     }
 </script>
-
 @endsection
 
 @section('scripts')

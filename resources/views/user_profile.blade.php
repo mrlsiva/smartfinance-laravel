@@ -58,7 +58,7 @@
 			<ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
 				<!--begin::Item-->
 				<li class="breadcrumb-item text-white opacity-75">
-					<a href="{{route('dashboard')}}" class="text-white text-hover-primary">Dashboard</a>
+					<a href="{{route('user_management')}}" class="text-white text-hover-primary">Dashboard</a>
 				</li>
 				<!--end::Item-->
 				<!--begin::Item-->

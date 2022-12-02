@@ -100,7 +100,7 @@ class taxController extends Controller
     public function view_tax($id,Request $request){
 
         $tax_detail = TaxDetail::where('id',$id)->first();
-        return view('tax')->with('tax_detail',$tax_detail);
+        return view('view_tax')->with('tax_detail',$tax_detail);
     }
 
     public function update_password(Request $request){
