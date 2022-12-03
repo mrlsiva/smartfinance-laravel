@@ -57,17 +57,22 @@ Route::post('/save_password',[loginController::class, 'save_password'])->name('s
 //Login End
 
 //User Management
+
+//Dashboard for admin
 Route::get('/user_management',[UserController::class, 'user_management'])->name('user_management');
 Route::get('/finance',[UserController::class, 'finance'])->name('finance');
 Route::get('/loan',[UserController::class, 'loan'])->name('loan');
 Route::get('/tax',[UserController::class, 'tax'])->name('tax');
 Route::get('/mutual_fund',[UserController::class, 'mutual_fund'])->name('mutual_fund');
 
+//Dashboard for user
+//Route::get('/smartfinance',[UserController::class, 'smartfinance'])->name('smartfinance');
+
 Route::get('/dashboard',[UserController::class, 'dashboard'])->name('dashboard');
 Route::get('/get_user',[UserController::class, 'get_user'])->name('get_user');
 Route::post('/change_user_status',[UserController::class, 'change_user_status'])->name('change_user_status');
 Route::get('/profile',[UserController::class, 'profile'])->name('profile');
-Route::get('/user/{id}/',[UserController::class, 'user'])->name('user');
+Route::get('/user/{id}/{flag}/',[UserController::class, 'user'])->name('user');
 Route::get('/approve_user/{id}/',[UserController::class, 'approve_user'])->name('approve_user');
 Route::get('/approve_user_profile/{id}/',[UserController::class, 'approve_user_profile'])->name('approve_user_profile');
 

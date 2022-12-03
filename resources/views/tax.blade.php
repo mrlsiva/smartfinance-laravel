@@ -213,7 +213,7 @@
                                                         @endif
                                                     </div>
                                                     <div class="d-flex justify-content-start flex-column">
-                                                        <a href="{{route('user', ['id' => $tax_detail->tax->user->id])}}" class="text-dark fw-bolder text-hover-primary fs-6">{{$tax_detail->tax->user->first_name}} {{$tax_detail->tax->user->last_name}}</a>
+                                                        <a href="{{route('user', ['id' => $tax_detail->tax->user->id,'flag' => 'tax'])}}" class="text-dark fw-bolder text-hover-primary fs-6">{{$tax_detail->tax->user->first_name}} {{$tax_detail->tax->user->last_name}}</a>
                                                         <span class="text-muted fw-bold text-muted d-block fs-7">#{{$tax_detail->tax->user->id}}</span>
                                                     </div>
                                                 </div>
@@ -310,7 +310,7 @@
                                                                 @endif
                                                             </div>
                                                             <div class="d-flex justify-content-start flex-column">
-                                                                <a href="{{route('user', ['id' => $admin_tax_detail->tax->user->id])}}" class="text-dark fw-bolder text-hover-primary fs-6">{{$admin_tax_detail->tax->user->first_name}} {{$admin_tax_detail->tax->user->last_name}}</a>
+                                                                <a href="{{route('user', ['id' => $admin_tax_detail->tax->user->id,'flag' => 'tax'])}}" class="text-dark fw-bolder text-hover-primary fs-6">{{$admin_tax_detail->tax->user->first_name}} {{$admin_tax_detail->tax->user->last_name}}</a>
                                                                 <span class="text-muted fw-bold text-muted d-block fs-7">#{{$admin_tax_detail->tax->user->id}}</span>
                                                             </div>
                                                         </div>

@@ -32,7 +32,7 @@ use DB;
 
 class UserController extends Controller
 {
-    public function dashboard(){
+    public function old_dashboard(){
 
         $user = Auth::user();
         if($user == NULL){
@@ -250,8 +250,101 @@ class UserController extends Controller
         
     }
 
+    public function dashboard(){
+        $user = Auth::user();
+        if($user == NULL){
+            return redirect('sign_in');
+        }
+        else{
+            if($user->role_id == '3'){
+
+                return redirect('finance');
+            }
+            else{
+                return redirect('user_management');
+            }
+        }
+    }
+
+    //Admin dashboard
     public function user_management(Request $request) 
     {
+        $user = Auth::user();
+        if($user == NULL){
+            return redirect('sign_in');
+
+        }
+        //function on page load
+        $finance = [];
+        $users = UserAmount::where('is_status',0)->get();
+        if($users != Null){
+            foreach($users as $user){
+                $smartfinance_ids = Smartfinance::where([['user_id',$user->user_id],['is_status',1],['is_close',0]])->get();
+                        //return $smartfinance_ids; 
+                if(count($smartfinance_ids) != 0){
+                    foreach($smartfinance_ids as $smartfinance_id){
+                        $finance[] = $smartfinance_id->id;
+                    }
+                    $payment_date = SmartfinancePayment::whereIn('smartfinance_id',$finance)->where('is_status',0)->orderBy('payment_date', 'asc')->first();
+                    $closing_date = $payment_date->payment_date;
+                    $now = Carbon::now()->format('Y-m-d');
+                    if($closing_date < $now){
+                        $status = DB::table('user_amounts')->where('user_id',$user->user_id)->update(['is_status' => 1]);
+                    } 
+                }
+                else{
+
+                    $user_amount = UserAmount::where([['is_status',0],['user_id',$user->user_id]])->first();
+                    $now = Carbon::now()->format('Y-m-d');
+                    $date = Carbon::parse($user_amount->date)->addMonths(1);
+                    $new_date = Carbon::parse($date)->setDay(6)->format('Y-m-d');
+
+                    $timestamp = strtotime($new_date);
+                    $day = date('l', $timestamp);
+                    if($day == 'Tuesday' ||$day == 'Sunday' ||$day == 'Friday'){
+                        $date = Carbon::parse($new_date)->setDay(7)->format('Y-m-d');
+                    }
+                    if($date < $now){
+                        $status = DB::table('user_amounts')->where('user_id',$user->user_id)->update(['is_status' => 1]);
+                    }
+                }
+            }
+        }
+
+        $today = Carbon::now()->format('Y-m-d');
+        $users = User::where('is_delete',0)->get();
+        foreach($users as $user){
+            $smartfinances = Smartfinance::where([['user_id',$user->id],['is_close',0],['is_status',1]])->get();
+            if($smartfinances != NULL){
+                foreach($smartfinances as $smartfinance){
+                    $smartfinance_payments = SmartfinancePayment::where([['smartfinance_id',$smartfinance->id],['payment_date','<',$today],['is_status',0]])->get();
+                    foreach($smartfinance_payments as $smartfinance_payment){
+                        $smartfinance_payment_status = DB::table('smartfinance_payments')->where('id',$smartfinance_payment->id)->update(['is_status' => 1]);
+                    }
+                }
+            }
+        }
+
+        $smartfinances = Smartfinance::where([['is_close',0],['is_status',1]])->get();
+        if($smartfinances != NULL){
+            foreach($smartfinances as $smartfinance){
+
+                $count = SmartfinancePayment::where('smartfinance_id',$smartfinance->id)->count();
+
+                $count1 = SmartfinancePayment::where([['smartfinance_id',$smartfinance->id],['is_status',1]])->count();
+                $smartfinance_payment = SmartfinancePayment::where([['smartfinance_id',$smartfinance->id],['is_status',1]])->first();
+                if($smartfinance_payment != NULL){
+
+                    if($count == $count1){
+
+                        DB::table('smartfinances')->where('id',$smartfinance_payment->smartfinance_id)->update(['is_close' => 1]);
+                    }
+                }
+
+            }
+        }
+        //End
+
         $users = User::where('is_delete',0)->orderBy('id','Desc')->paginate(10);
         $user_count = User::where('is_active',0)->orWhere('is_profile_verified',0)->count();
         $smartfinance_count = Smartfinance::where('is_status',2)->count();
@@ -272,92 +365,322 @@ class UserController extends Controller
 
     public function finance(Request $request) 
     {
-        
-        $user_count = User::where('is_active',0)->orWhere('is_profile_verified',0)->count();
-        $smartfinances = Smartfinance::orderBy('id','Desc')->paginate(10);
-        $smartfinance_count = Smartfinance::where('is_status',2)->count();
-        $payment_count = SmartfinancePayment::where('is_approve',2)->count();
-        $loan_count = Loan::where('is_status',2)->count();
-        $loan_payment_count = LoanPayment::where('is_status',2)->count();
-        $tax_count = Tax::count();
-        $mutual_fund_count = MutualFund::count();
-
         $user = Auth::user();
-        $admin_finances = Smartfinance::where('user_id',$user->id)->orderBy('id','Desc')->paginate(10);
-        $admin_finance_count = Smartfinance::where('user_id',$user->id)->count();
+        if($user == NULL){
+            return redirect('sign_in');
 
-        $investment_plan = NULL;
-        $investment_status = NULL;
-        $investment_search = NULL;
+        }
 
-        return view('finance')->with('smartfinances',$smartfinances)->with('admin_finances',$admin_finances)->with('admin_finance_count',$admin_finance_count)->with('user_count',$user_count)->with('smartfinance_count',$smartfinance_count)->with('payment_count',$payment_count)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count)->with('mutual_fund_count',$mutual_fund_count)->with('investment_plan',$investment_plan)->with('investment_status',$investment_status)->with('investment_search',$investment_search);
+        if($user->role_id != '3'){
+            //function on page load
+            $finance = [];
+            $users = UserAmount::where('is_status',0)->get();
+            if($users != Null){
+                foreach($users as $user){
+                    $smartfinance_ids = Smartfinance::where([['user_id',$user->user_id],['is_status',1],['is_close',0]])->get();
+                            //return $smartfinance_ids; 
+                    if(count($smartfinance_ids) != 0){
+                        foreach($smartfinance_ids as $smartfinance_id){
+                            $finance[] = $smartfinance_id->id;
+                        }
+                        $payment_date = SmartfinancePayment::whereIn('smartfinance_id',$finance)->where('is_status',0)->orderBy('payment_date', 'asc')->first();
+                        $closing_date = $payment_date->payment_date;
+                        $now = Carbon::now()->format('Y-m-d');
+                        if($closing_date < $now){
+                            $status = DB::table('user_amounts')->where('user_id',$user->user_id)->update(['is_status' => 1]);
+                        } 
+                    }
+                    else{
+
+                        $user_amount = UserAmount::where([['is_status',0],['user_id',$user->user_id]])->first();
+                        $now = Carbon::now()->format('Y-m-d');
+                        $date = Carbon::parse($user_amount->date)->addMonths(1);
+                        $new_date = Carbon::parse($date)->setDay(6)->format('Y-m-d');
+
+                        $timestamp = strtotime($new_date);
+                        $day = date('l', $timestamp);
+                        if($day == 'Tuesday' ||$day == 'Sunday' ||$day == 'Friday'){
+                            $date = Carbon::parse($new_date)->setDay(7)->format('Y-m-d');
+                        }
+                        if($date < $now){
+                            $status = DB::table('user_amounts')->where('user_id',$user->user_id)->update(['is_status' => 1]);
+                        }
+                    }
+                }
+            }
+
+            $today = Carbon::now()->format('Y-m-d');
+            $users = User::where('is_delete',0)->get();
+            foreach($users as $user){
+                $smartfinances = Smartfinance::where([['user_id',$user->id],['is_close',0],['is_status',1]])->get();
+                if($smartfinances != NULL){
+                    foreach($smartfinances as $smartfinance){
+                        $smartfinance_payments = SmartfinancePayment::where([['smartfinance_id',$smartfinance->id],['payment_date','<',$today],['is_status',0]])->get();
+                        foreach($smartfinance_payments as $smartfinance_payment){
+                            $smartfinance_payment_status = DB::table('smartfinance_payments')->where('id',$smartfinance_payment->id)->update(['is_status' => 1]);
+                        }
+                    }
+                }
+            }
+
+            $smartfinances = Smartfinance::where([['is_close',0],['is_status',1]])->get();
+            if($smartfinances != NULL){
+                foreach($smartfinances as $smartfinance){
+
+                    $count = SmartfinancePayment::where('smartfinance_id',$smartfinance->id)->count();
+
+                    $count1 = SmartfinancePayment::where([['smartfinance_id',$smartfinance->id],['is_status',1]])->count();
+                    $smartfinance_payment = SmartfinancePayment::where([['smartfinance_id',$smartfinance->id],['is_status',1]])->first();
+                    if($smartfinance_payment != NULL){
+
+                        if($count == $count1){
+
+                            DB::table('smartfinances')->where('id',$smartfinance_payment->smartfinance_id)->update(['is_close' => 1]);
+                        }
+                    }
+
+                }
+            }
+            //End
+
+            $user_count = User::where('is_active',0)->orWhere('is_profile_verified',0)->count();
+            $smartfinances = Smartfinance::orderBy('id','Desc')->paginate(10);
+            $smartfinance_count = Smartfinance::where('is_status',2)->count();
+            $payment_count = SmartfinancePayment::where('is_approve',2)->count();
+            $loan_count = Loan::where('is_status',2)->count();
+            $loan_payment_count = LoanPayment::where('is_status',2)->count();
+            $tax_count = Tax::count();
+            $mutual_fund_count = MutualFund::count();
+
+            $user = Auth::user();
+            $admin_finances = Smartfinance::where('user_id',$user->id)->orderBy('id','Desc')->paginate(10);
+            $admin_finance_count = Smartfinance::where('user_id',$user->id)->count();
+
+            $investment_plan = NULL;
+            $investment_status = NULL;
+            $investment_search = NULL;
+
+            return view('finance')->with('smartfinances',$smartfinances)->with('admin_finances',$admin_finances)->with('admin_finance_count',$admin_finance_count)->with('user_count',$user_count)->with('smartfinance_count',$smartfinance_count)->with('payment_count',$payment_count)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count)->with('mutual_fund_count',$mutual_fund_count)->with('investment_plan',$investment_plan)->with('investment_status',$investment_status)->with('investment_search',$investment_search);
+        }
+        else{
+
+            $finance = [];
+            $user_amount = UserAmount::where([['user_id',$user->id],['is_status',0]])->first();
+            if($user_amount != Null){
+                $smartfinance_ids = Smartfinance::where([['user_id',$user->id],['is_status',1],['is_close',0]])->get();
+                if(count($smartfinance_ids) != 0){
+                    foreach($smartfinance_ids as $smartfinance_id){
+                        $finance[] = $smartfinance_id->id;
+                    }
+                    $payment_date = SmartfinancePayment::whereIn('smartfinance_id',$finance)->where('is_status',0)->orderBy('payment_date', 'asc')->first();
+                    $closing_date = $payment_date->payment_date;
+                    $now = Carbon::now()->format('Y-m-d');
+                    if($closing_date < $now){
+                        $status = DB::table('user_amounts')->where('user_id',$user->id)->update(['is_status' => 1]);
+                    } 
+                }
+                else{
+
+                    $user_amount = UserAmount::where([['is_status',0],['user_id',$user->id]])->first();
+                    $now = Carbon::now()->format('Y-m-d');
+                    $date = Carbon::parse($user_amount->date)->addMonths(1);
+                    $new_date = Carbon::parse($date)->setDay(6)->format('Y-m-d');
+
+                    $timestamp = strtotime($new_date);
+                    $day = date('l', $timestamp);
+                    if($day == 'Tuesday' ||$day == 'Sunday' ||$day == 'Friday'){
+                        $date = Carbon::parse($new_date)->setDay(7)->format('Y-m-d');
+                    }
+                    if($date < $now){
+                        $status = DB::table('user_amounts')->where('user_id',$user->id)->update(['is_status' => 1]);
+                    }
+                }
+            }
+
+            $today = Carbon::now()->format('Y-m-d');
+            $smartfinances = Smartfinance::where([['user_id',$user->id],['is_close',0],['is_status',1]])->get();
+            if($smartfinances != NULL){
+                foreach($smartfinances as $smartfinance){
+                    $smartfinance_payments = SmartfinancePayment::where([['smartfinance_id',$smartfinance->id],['payment_date','<',$today],['is_status',0]])->get();
+                    foreach($smartfinance_payments as $smartfinance_payment){
+                        $smartfinance_payment_status = DB::table('smartfinance_payments')->where('id',$smartfinance_payment->id)->update(['is_status' => 1]);
+                    }
+                }
+            }
+
+            $smartfinances = Smartfinance::where([['user_id',$user->id],['is_close',0],['is_status',1]])->get();
+            if($smartfinances != NULL){
+                foreach($smartfinances as $smartfinance){
+
+                    $count = SmartfinancePayment::where('smartfinance_id',$smartfinance->id)->count();
+                    $count1 = SmartfinancePayment::where([['smartfinance_id',$smartfinance->id],['is_status',1]])->count();
+                    $smartfinance_payment = SmartfinancePayment::where([['smartfinance_id',$smartfinance->id],['is_status',1]])->first();
+
+                    if($count == $count1){
+
+                        DB::table('smartfinances')->where('id',$smartfinance_payment->smartfinance_id)->update(['is_close' => 1]);
+                    }
+                }
+            }
+
+            $smartfinances = Smartfinance::where('user_id',$user->id)->orderBy('id','Desc')->paginate(10);
+            $smartfinance_count = Smartfinance::where([['user_id',$user->id],['is_status',2]])->count();
+
+            $payment_count = SmartfinancePayment::join('smartfinances','smartfinance_payments.smartfinance_id','=','smartfinances.id')->where('smartfinances.user_id',$user->id)->where('smartfinance_payments.is_approve',2)->count();
+            $loan_count = Loan::where([['user_id',$user->id],['is_status',2]])->count();
+            $loan_payment_count = LoanPayment::join('loans','loan_payments.loan_id','=','loans.id')->where('loans.user_id',$user->id)->where('loan_payments.is_status',2)->count();
+            $tax = Tax::where('user_id',$user->id)->first();
+            if($tax != NULL){            
+                $tax_count = TaxDetail::where('tax_id',$tax->id)->count();
+            }
+            else{
+               $tax_count = 0; 
+
+           }
+
+           return view('smart_finance')->with('smartfinances',$smartfinances)->with('smartfinance_count',$smartfinance_count)->with('loan_count',$loan_count)->with('payment_count',$payment_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count);
+
+        }
     }
 
     public function loan(Request $request) 
     {
-        
-        $user_count = User::where('is_active',0)->orWhere('is_profile_verified',0)->count();
-        $smartfinance_count = Smartfinance::where('is_status',2)->count();
-        $payment_count = SmartfinancePayment::where('is_approve',2)->count();
-        $loans = Loan::orderBy('id','Desc')->paginate(10);
-        $loan_count = Loan::where('is_status',2)->count();
-        $loan_payment_count = LoanPayment::where('is_status',2)->count();
-        $tax_count = Tax::count();
-        $mutual_fund_count = MutualFund::count();
-
         $user = Auth::user();
-        $admin_loans = Loan::where('user_id',$user->id)->orderBy('id','Desc')->paginate(10);
-        $admin_loan_count = Loan::where('user_id',$user->id)->count();
+        if($user == NULL){
+            return redirect('sign_in');
+
+        }
         
+        if($user->role_id != '3'){
+            $user_count = User::where('is_active',0)->orWhere('is_profile_verified',0)->count();
+            $smartfinance_count = Smartfinance::where('is_status',2)->count();
+            $payment_count = SmartfinancePayment::where('is_approve',2)->count();
+            $loans = Loan::orderBy('id','Desc')->paginate(10);
+            $loan_count = Loan::where('is_status',2)->count();
+            $loan_payment_count = LoanPayment::where('is_status',2)->count();
+            $tax_count = Tax::count();
+            $mutual_fund_count = MutualFund::count();
 
-        $loan_status = NULL;
-        $loan_search = NULL;
+            $user = Auth::user();
+            $admin_loans = Loan::where('user_id',$user->id)->orderBy('id','Desc')->paginate(10);
+            $admin_loan_count = Loan::where('user_id',$user->id)->count();
+            
 
-        return view('loan')->with('loans',$loans)->with('admin_loans',$admin_loans)->with('admin_loan_count',$admin_loan_count)->with('user_count',$user_count)->with('smartfinance_count',$smartfinance_count)->with('payment_count',$payment_count)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count)->with('mutual_fund_count',$mutual_fund_count)->with('loan_search',$loan_search)->with('loan_status',$loan_status);
+            $loan_status = NULL;
+            $loan_search = NULL;
+
+            return view('loan')->with('loans',$loans)->with('admin_loans',$admin_loans)->with('admin_loan_count',$admin_loan_count)->with('user_count',$user_count)->with('smartfinance_count',$smartfinance_count)->with('payment_count',$payment_count)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count)->with('mutual_fund_count',$mutual_fund_count)->with('loan_search',$loan_search)->with('loan_status',$loan_status);
+        }
+        else
+        {
+            $loans = Loan::where('user_id',$user->id)->orderBy('id','Desc')->paginate(10);
+            $smartfinance_count = Smartfinance::where([['user_id',$user->id],['is_status',2]])->count();
+            $payment_count = SmartfinancePayment::join('smartfinances','smartfinance_payments.smartfinance_id','=','smartfinances.id')->where('smartfinances.user_id',$user->id)->where('smartfinance_payments.is_approve',2)->count();
+            $loan_count = Loan::where([['user_id',$user->id],['is_status',2]])->count();
+            $loan_payment_count = LoanPayment::join('loans','loan_payments.loan_id','=','loans.id')->where('loans.user_id',$user->id)->where('loan_payments.is_status',2)->count();
+            $tax = Tax::where('user_id',$user->id)->first();
+            if($tax != NULL){            
+                $tax_count = TaxDetail::where('tax_id',$tax->id)->count();
+            }
+            else{
+               $tax_count = 0; 
+
+           }
+
+           return view('user_loan')->with('loans',$loans)->with('smartfinance_count',$smartfinance_count)->with('loan_count',$loan_count)->with('payment_count',$payment_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count);
+        }
+
     }
 
     public function tax(Request $request) 
     {
-        
-        $user_count = User::where('is_active',0)->orWhere('is_profile_verified',0)->count();
-        $smartfinance_count = Smartfinance::where('is_status',2)->count();
-        $payment_count = SmartfinancePayment::where('is_approve',2)->count();
-        $loan_count = Loan::where('is_status',2)->count();
-        $loan_payment_count = LoanPayment::where('is_status',2)->count();
-        $tax_details = TaxDetail::paginate(10);
-        $tax_count = Tax::count();
-        $mutual_fund_count = MutualFund::count();
-
         $user = Auth::user();
-        $admin_tax = Tax::where('user_id',$user->id)->first();
-        if($admin_tax != NULL){
-            $admin_tax_details = TaxDetail::where('tax_id',$admin_tax->id)->orderBy('id','Desc')->paginate(10);
+        if($user == NULL){
+            return redirect('sign_in');
+
+        }
+        
+        if($user->role_id != '3'){
+            $user_count = User::where('is_active',0)->orWhere('is_profile_verified',0)->count();
+            $smartfinance_count = Smartfinance::where('is_status',2)->count();
+            $payment_count = SmartfinancePayment::where('is_approve',2)->count();
+            $loan_count = Loan::where('is_status',2)->count();
+            $loan_payment_count = LoanPayment::where('is_status',2)->count();
+            $tax_details = TaxDetail::paginate(10);
+            $tax_count = Tax::count();
+            $mutual_fund_count = MutualFund::count();
+
+            $user = Auth::user();
+            $admin_tax = Tax::where('user_id',$user->id)->first();
+            if($admin_tax != NULL){
+                $admin_tax_details = TaxDetail::where('tax_id',$admin_tax->id)->orderBy('id','Desc')->paginate(10);
+            }
+            else{
+                $admin_tax_details = [];
+            }
+            $admin_tax_count = Tax::where('user_id',$user->id)->count();
+            
+
+            return view('tax')->with('tax_details',$tax_details)->with('user_count',$user_count)->with('smartfinance_count',$smartfinance_count)->with('payment_count',$payment_count)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count)->with('mutual_fund_count',$mutual_fund_count)->with('admin_tax_details',$admin_tax_details)->with('admin_tax_count',$admin_tax_count);
         }
         else{
-            $admin_tax_details = [];
-        }
-        $admin_tax_count = Tax::where('user_id',$user->id)->count();
-        
 
-        return view('tax')->with('tax_details',$tax_details)->with('user_count',$user_count)->with('smartfinance_count',$smartfinance_count)->with('payment_count',$payment_count)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count)->with('mutual_fund_count',$mutual_fund_count)->with('admin_tax_details',$admin_tax_details)->with('admin_tax_count',$admin_tax_count);
+            $smartfinance_count = Smartfinance::where([['user_id',$user->id],['is_status',2]])->count();
+            $payment_count = SmartfinancePayment::join('smartfinances','smartfinance_payments.smartfinance_id','=','smartfinances.id')->where('smartfinances.user_id',$user->id)->where('smartfinance_payments.is_approve',2)->count();
+            $loan_count = Loan::where([['user_id',$user->id],['is_status',2]])->count();
+            $loan_payment_count = LoanPayment::join('loans','loan_payments.loan_id','=','loans.id')->where('loans.user_id',$user->id)->where('loan_payments.is_status',2)->count();
+            $tax = Tax::where('user_id',$user->id)->first();
+            if($tax != NULL){            
+                $tax_count = TaxDetail::where('tax_id',$tax->id)->count();
+                $tax_details = TaxDetail::where('tax_id',$tax->id)->paginate(10);
+            }
+            else{
+               $tax_count = 0; 
+               $tax_details = [];
+           }
+
+           return view('user_tax')->with('tax',$tax)->with('tax_details',$tax_details)->with('smartfinance_count',$smartfinance_count)->with('loan_count',$loan_count)->with('payment_count',$payment_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count);
+        }
     }
 
     public function mutual_fund(Request $request) 
     {
-        
-        $user_count = User::where('is_active',0)->orWhere('is_profile_verified',0)->count();
-        $smartfinance_count = Smartfinance::where('is_status',2)->count();
-        $payment_count = SmartfinancePayment::where('is_approve',2)->count();
-        $loan_count = Loan::where('is_status',2)->count();
-        $loan_payment_count = LoanPayment::where('is_status',2)->count();
-        $tax_count = Tax::count();
-        $mutual_funds = MutualFund::paginate(10);
-        $mutual_fund_count = MutualFund::count();
-        
-        
+        $user = Auth::user();
+        if($user == NULL){
+            return redirect('sign_in');
 
-        return view('mutual_fund')->with('mutual_funds',$mutual_funds)->with('user_count',$user_count)->with('smartfinance_count',$smartfinance_count)->with('payment_count',$payment_count)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count)->with('mutual_fund_count',$mutual_fund_count);
+        }
+        
+        if($user->role_id != '3'){
+            $user_count = User::where('is_active',0)->orWhere('is_profile_verified',0)->count();
+            $smartfinance_count = Smartfinance::where('is_status',2)->count();
+            $payment_count = SmartfinancePayment::where('is_approve',2)->count();
+            $loan_count = Loan::where('is_status',2)->count();
+            $loan_payment_count = LoanPayment::where('is_status',2)->count();
+            $tax_count = Tax::count();
+            $mutual_funds = MutualFund::paginate(10);
+            $mutual_fund_count = MutualFund::count();
+
+            return view('mutual_fund')->with('mutual_funds',$mutual_funds)->with('user_count',$user_count)->with('smartfinance_count',$smartfinance_count)->with('payment_count',$payment_count)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count)->with('mutual_fund_count',$mutual_fund_count);
+        }
+        else{
+
+            $smartfinance_count = Smartfinance::where([['user_id',$user->id],['is_status',2]])->count();
+            $payment_count = SmartfinancePayment::join('smartfinances','smartfinance_payments.smartfinance_id','=','smartfinances.id')->where('smartfinances.user_id',$user->id)->where('smartfinance_payments.is_approve',2)->count();
+            $loan_count = Loan::where([['user_id',$user->id],['is_status',2]])->count();
+            $loan_payment_count = LoanPayment::join('loans','loan_payments.loan_id','=','loans.id')->where('loans.user_id',$user->id)->where('loan_payments.is_status',2)->count();
+            $tax = Tax::where('user_id',$user->id)->first();
+            if($tax != NULL){            
+                $tax_count = TaxDetail::where('tax_id',$tax->id)->count();
+            }
+            else{
+               $tax_count = 0; 
+           }
+
+           return view('user_mutual_fund')->with('smartfinance_count',$smartfinance_count)->with('loan_count',$loan_count)->with('payment_count',$payment_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count);
+        }
     }
+    //End
 
     public function get_user(Request $request) 
     { 
@@ -707,7 +1030,7 @@ class UserController extends Controller
         return view('user_profile')->with('user',$user)->with('user_detail',$user_detail)->with('bank_detail',$bank_detail)->with('nominee_detail',$nominee_detail)->with('amount',$amount)->with('investment_count',$investment_count)->with('earning_percentage',$earning_percentage)->with('earning_amount',$earning_amount)->with('refferals',$refferals)->with('refferal_amounts',$refferal_amounts)->with('review_rating',$review_rating);
     }
 
-    public function user($id){
+    public function user($id,$flag){
         $user = User::where('id', $id)->first();
         $user_detail = UserDetail::where('user_id',$user->id)->first();
         $bank_detail = BankDetail::where('user_id',$user->id)->first();
@@ -792,7 +1115,7 @@ class UserController extends Controller
         
 
 
-        return view('user_detail')->with('user',$user)->with('user_detail',$user_detail)->with('bank_detail',$bank_detail)->with('nominee_detail',$nominee_detail)->with('smartfinances',$smartfinances)->with('amount',$amount)->with('investment_count',$investment_count)->with('earning_percentage',$earning_percentage)->with('earning_amount',$earning_amount)->with('refferals',$refferals)->with('refferal_amounts',$refferal_amounts)->with('review_rating',$review_rating);
+        return view('user_detail')->with('user',$user)->with('user_detail',$user_detail)->with('bank_detail',$bank_detail)->with('nominee_detail',$nominee_detail)->with('smartfinances',$smartfinances)->with('amount',$amount)->with('investment_count',$investment_count)->with('earning_percentage',$earning_percentage)->with('earning_amount',$earning_amount)->with('refferals',$refferals)->with('refferal_amounts',$refferal_amounts)->with('review_rating',$review_rating)->with('flag',$flag);
         
     }
 

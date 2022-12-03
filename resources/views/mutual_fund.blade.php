@@ -212,7 +212,7 @@
                                                         @endif
                                                     </div>
                                                     <div class="d-flex justify-content-start flex-column">
-                                                        <a href="{{route('user', ['id' => $mutual_fund->user->id])}}" class="text-dark fw-bolder text-hover-primary fs-6">{{$mutual_fund->user->first_name}} {{$mutual_fund->user->last_name}}</a>
+                                                        <a href="{{route('user', ['id' => $mutual_fund->user->id,'flag' => 'mutual_fund'])}}" class="text-dark fw-bolder text-hover-primary fs-6">{{$mutual_fund->user->first_name}} {{$mutual_fund->user->last_name}}</a>
                                                         <span class="text-muted fw-bold text-muted d-block fs-7">#{{$mutual_fund->user->id}}</span>
                                                     </div>
                                                 </div>

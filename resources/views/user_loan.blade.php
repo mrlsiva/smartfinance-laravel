@@ -2,21 +2,19 @@
 @section('body')
 
 <style> 
-    .parent-active .col {
-        filter: grayscale(100%);
-    }
+.parent-active .col {
+    filter: grayscale(100%);
+}
 
-     .col.active {
-        filter: grayscale(0%);
-    } 
-    body{
-        background-image: url(https://smartfinservice.com/public/assets/img/header-bg.jpg)!important;
-    }
+ .col.active {
+    filter: grayscale(0%);
+} 
+
+.ui-datepicker-calendar {
+   display: none;
+}
 </style>
 
-@php
-    $auth = Auth::guard('web')->user();
-@endphp
 <!--begin::Toolbar-->
     <div class="toolbar py-5 py-lg-15" id="kt_toolbar">
         <!--begin::Container-->
@@ -24,13 +22,13 @@
             <!--begin::Page title-->
             <div class="page-title d-flex flex-column me-3">
                 <!--begin::Title-->
-                <h1 class="d-flex text-white fw-bolder my-1 fs-3">Welcome - {{$auth->first_name}} {{$auth->last_name}}</h1>
+                <h1 class="d-flex text-white fw-bolder my-1 fs-3">Dashboard</h1>
                 <!--end::Title-->
                 <!--begin::Breadcrumb-->
                 <ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
                     
                     <!--begin::Item-->
-                    <li class="breadcrumb-item text-white opacity-75"><i class="fa fa-envelope"></i>{{$auth->email}}&nbsp;&nbsp;<i class="fa fa-phone-square"></i>{{$auth->phone}}</li>
+                    <li class="breadcrumb-item text-white opacity-75"><a class="text-hover-primary text-white opacity-75" href="">Dashboards</a></li>
                     <!--end::Item-->        
                 </ul>
                 <!--end::Breadcrumb-->
@@ -60,23 +58,8 @@
                         <!--begin::Stats-->
                         <div class="card-p mt-n20 position-relative">
                             <!--begin::Row-->
-                            
                             <div class="row g-0 parent-active">
-                                <a href="{{route('user_management')}}"  class="active text-dark fw-bold fs-6 col  border-bottom border-warning bg-light-warning p-6 rounded-2 me-7 mb-7">
-                                    <div class="d-flex flex-stack flex-grow-1">
-                                        <div class="d-flex flex-column me-2">
-                                            <span class="svg-icon svg-icon-3x svg-icon-warning d-block my-2">
-                                                <svg xmlns="http://www.w3.org/2000/svg" style="vertical-align: -0.125em;" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path fill="currentColor" d="M7.5 6.5C7.5 8.981 9.519 11 12 11s4.5-2.019 4.5-4.5S14.481 2 12 2S7.5 4.019 7.5 6.5zM20 21h1v-1c0-3.859-3.141-7-7-7h-4c-3.86 0-7 3.141-7 7v1h17z"></path>
-                                                </svg>
-                                            </span>            
-                                        </div>
-                                        <span class="symbol symbol-50px">
-                                            <span class="px-3 py-1 fs-5 fw-bolder bg-warning text-white">{{$user_count}}</span>
-                                        </span>
-                                    </div>
-                                    User Management
-                                </a>
-                                <a href="{{route('finance')}}" class="text-dark fw-bold fs-6 col border-bottom border-warning bg-light-warning p-6 rounded-2 me-7 mb-7">                                   
+                                <a href="{{route('finance')}}" class="text-dark fw-bold fs-6 col bg-light-warning p-6 rounded-2 me-7 mb-7">                                   
                                     <div class="d-flex flex-stack flex-grow-1">
                                         <div class="d-flex flex-column me-2">       
                                             <span class="svg-icon svg-icon-3x svg-icon-warning d-block my-2">
@@ -84,13 +67,13 @@
                                             </span>            
                                         </div>
                                         <span class="symbol symbol-50px">
-                                            <span class="px-3 py-1 fs-5 fw-bolder bg-warning text-dark">{{$smartfinance_count+$payment_count}}</span>
+                                            <span class="px-3 py-1 fs-5 fw-bolder bg-warning text-dark">{{$smartfinance_count + $payment_count}}</span>
                                         </span>
                                     </div>
                                     Smart Finance
                                 </a>
-                                <a href="{{route('loan')}}" class="text-dark fw-bold fs-6 col border-bottom border-warning bg-light-warning p-6 rounded-2 me-7 mb-7">
-                                                                    
+                                <a href="{{route('loan')}}" class="active text-dark fw-bold fs-6 col bg-light-warning p-6 rounded-2 me-7 mb-7">
+
                                     <div class="d-flex flex-stack flex-grow-1">
                                         <div class="d-flex flex-column me-2">
                                             <span class="svg-icon svg-icon-3x svg-icon-warning d-block my-2">
@@ -98,13 +81,13 @@
                                             </span>         
                                         </div>
                                         <span class="symbol symbol-50px">
-                                            <span class="px-3 py-1 fs-5 fw-bolder bg-warning text-white">{{$loan_count+$loan_payment_count}}</span>
+                                            <span class="px-3 py-1 fs-5 fw-bolder bg-warning text-white">{{$loan_count + $loan_payment_count}}</span>
                                         </span>
                                     </div>
                                     Loan
                                 </a>
-                                <a href="{{route('tax')}}"class="text-dark fw-bold fs-6 col border-bottom border-warning bg-light-warning p-6 rounded-2 me-7 mb-7">
-                                                                    
+                                <a href="{{route('tax')}}" class="text-dark fw-bold fs-6 col bg-light-warning p-6 rounded-2 me-7 mb-7">
+
                                     <div class="d-flex flex-stack flex-grow-1">
                                         <div class="d-flex flex-column me-2">
                                             <span class="svg-icon svg-icon-3x svg-icon-warning d-block my-2">
@@ -117,8 +100,7 @@
                                     </div>
                                     Taxation
                                 </a>
-                                <a href="{{route('mutual_fund')}}" class="text-dark fw-bold fs-6 col border-bottom border-warning bg-light-warning p-6 rounded-2 me-7 mb-7">
-                                                                   
+                                <a href="{{route('mutual_fund')}}" class="text-dark fw-bold fs-6 col bg-light-warning p-6 rounded-2 me-7 mb-7">                                    
                                     <div class="d-flex flex-stack flex-grow-1">
                                         <div class="d-flex flex-column me-2">
                                             <span class="svg-icon svg-icon-3x svg-icon-warning d-block my-2">
@@ -126,20 +108,20 @@
                                             </span>         
                                         </div>
                                         <span class="symbol symbol-50px">
-                                            <span class="px-3 py-1 fs-5 fw-bolder bg-warning text-white">{{$mutual_fund_count}}</span>
+                                            <span class="px-3 py-1 fs-5 fw-bolder bg-warning text-white">0</span>
                                         </span>
                                     </div>
                                     Mutual Fund
                                 </a>
-                                <a href="#" class="text-dark fw-bold fs-6 col border-bottom border-warning bg-light-warning p-6 rounded-2 me-7 mb-7">                            
+                                <a href="#" class="text-dark fw-bold fs-6 col bg-light-success p-6 rounded-2 me-7 mb-7">                                   
                                     <div class="d-flex flex-stack flex-grow-1">
                                         <div class="d-flex flex-column me-2">       
-                                            <span class="svg-icon svg-icon-3x svg-icon-warning d-block my-2">
+                                            <span class="svg-icon svg-icon-3x svg-icon-success d-block my-2">
                                                 <svg xmlns="http://www.w3.org/2000/svg" style="vertical-align: -0.125em;" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 1024 1024"><path fill="currentColor" d="M128 384h768v-64a64 64 0 0 0-64-64H192a64 64 0 0 0-64 64v64zm0 64v320a64 64 0 0 0 64 64h640a64 64 0 0 0 64-64V448H128zm64-256h640a128 128 0 0 1 128 128v448a128 128 0 0 1-128 128H192A128 128 0 0 1 64 768V320a128 128 0 0 1 128-128z"></path><path fill="currentColor" d="M384 128v64h256v-64H384zm0-64h256a64 64 0 0 1 64 64v64a64 64 0 0 1-64 64H384a64 64 0 0 1-64-64v-64a64 64 0 0 1 64-64z"></path></svg>
                                             </span>         
                                         </div>
                                         <span class="symbol symbol-50px">
-                                            <span class="px-3 py-1 fs-5 fw-bolder bg-warning text-white">0</span>
+                                            <span class="px-3 py-1 fs-5 fw-bolder bg-success text-white">0</span>
                                         </span>
                                     </div>
                                     Insurance
@@ -160,432 +142,145 @@
             <!--end::Col-->
         </div>
         <!--end::Row-->
+
         @php
             $user = Auth::guard('web')->user();
             $detail = DB::table('user_details')->where('user_id',$user->id)->first();
+            $loan = DB::table('loans')->where('user_id',$user->id)->first();
+            $tax = DB::table('taxes')->where('user_id',$user->id)->first();
         @endphp
+
         @if($user->is_profile_verified == 1)
-            <input type="hidden" name="base_url" id="base_url" value="{{url('user_management')}}">
-            <!--begin::Row-->
-            <div class="row gy-5 g-xl-8 mt-xl-5">
-                <!--begin::Col-->
-                <!--end::Col-->
-                <!--begin::Col-->
-                <div class="col-xl-12 ">
-                    <!--begin::Tables Widget 9-->
-                    <div class="card card-xl-stretch mb-5 mb-xl-8">
-                        <!--begin::Header-->
-                        <div class="card-header border-0 pt-5">
-                            <h3 class="card-title align-items-start flex-column">
-                                <span class="card-label fw-bolder text-dark">User Management</span>
-                                <!-- <span class="text-gray-400 mt-1 fw-bold fs-6">Avg. 10 customers added per day</span> -->
-                            </h3>
-                            <!--begin::Actions-->
-                            <div class="card-toolbar">
-                                <!--begin::Filters-->
-                                <div class="d-flex flex-stack flex-wrap gap-4">
-                                    <!--begin::Destination-->
-                                    <!--end::Destination-->
-                                    <!--begin::Profile-->
-                                    <div class="d-flex align-items-center fw-bolder">
-                                        <!--begin::Label-->
-                                        <div class="text-muted fs-7 me-2">Role</div>
-                                        <!--end::Label-->
-                                        <input type="hidden" name="role_url" id="role_url" value="{{url('user_role')}}">
-                                        @if($role != NULL)
-                                            <!--begin::Select-->
-                                            <select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Select an option" data-kt-table-widget-4="filter_status" name="role_search" id="role_search" >
-                                                <option></option>
-                                                <option value="null">Show All</option>
-                                                <option value="1" {{ ("1" == $role ) ? "selected":"" }}>Super Admin</option>
-                                                <option value="2" {{ ("2" == $role ) ? "selected":"" }}>Admin</option>
-                                                <option value="3" {{ ("3" == $role ) ? "selected":"" }}>User</option>
-                                            </select>
-                                            <!--end::Select-->
-                                        @else
-                                            <!--begin::Select-->
-                                            <select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Select an option" data-kt-table-widget-4="filter_status" name="role_search" id="role_search" >
-                                                <option></option>
-                                                <option value="null" selected="selected">Show All</option>
-                                                <option value="1">Super Admin</option>
-                                                <option value="2">Admin</option>
-                                                <option value="3">User</option>
-                                            </select>
-                                            <!--end::Select-->
-                                        @endif
-                                    </div>
-                                    <!--end::Profile-->
-                                    <!--begin::Profile-->
-                                    <div class="d-flex align-items-center fw-bolder">
-                                        <!--begin::Label-->
-                                        <div class="text-muted fs-7 me-2">Profile</div>
-                                        <!--end::Label-->
-                                        <input type="hidden" name="profile_url" id="profile_url" value="{{url('user_profile')}}">
-                                        @if($profile != NULL)
-                                            <!--begin::Select-->
-                                            <select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Select an option" data-kt-table-widget-4="filter_status" name="profile_search" id="profile_search" >
-                                                <option></option>
-                                                <option value="null" selected="selected">Show All</option>
-                                                <option value="1" {{ ("1" == $profile ) ? "selected":"" }}>Verified</option>
-                                                <option value="3" {{ ("3" == $profile ) ? "selected":"" }}>Rejected</option>
-                                                <option value="0" {{ ("0" == $profile ) ? "selected":"" }}>Pending</option>
-                                                <option value="2" {{ ("2" == $profile ) ? "selected":"" }}>In Complete</option>
-                                            </select>
-                                            <!--end::Select-->
-                                        @else
-                                            <!--begin::Select-->
-                                            <select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Select an option" data-kt-table-widget-4="filter_status" name="profile_search" id="profile_search" >
-                                                <option></option>
-                                                <option value="null" selected="selected">Show All</option>
-                                                <option value="1">Verified</option>
-                                                <option value="3">Rejected</option>
-                                                <option value="0">Pending</option>
-                                                <option value="2">In Complete</option>
-                                            </select>
-                                            <!--end::Select-->
-                                        @endif
-                                    </div>
-                                    <!--end::Profile-->
-                                    <!--begin::Progress-->
-                                    <div class="d-flex align-items-center fw-bolder">
-                                        <!--begin::Label-->
-                                        <div class="text-muted fs-7 me-2">Progress</div>
-                                        <!--end::Label-->
-                                        <input type="hidden" name="progress_url" id="progress_url" value="{{url('user_progress')}}">
-                                        @if($progress != NULL)
-                                            <!--begin::Select-->
-                                            <select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Select an option" data-kt-table-widget-4="filter_status" name="progress_search" id="progress_search" >
-                                                <option></option>
-                                                <option value="null" selected="selected">Show All</option>
-                                                <option value="1" {{ ("1" == $progress ) ? "selected":"" }}>Approved</option>
-                                                <option value="3" {{ ("3" == $progress ) ? "selected":"" }}>Rejected</option>
-                                                <option value="0" {{ ("0" == $progress ) ? "selected":"" }}>Pending</option>
-                                            </select>
-                                            <!--end::Select-->
-                                        @else
-                                            <!--begin::Select-->
-                                            <select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Select an option" data-kt-table-widget-4="filter_status" name="progress_search" id="progress_search" >
-                                                <option></option>
-                                                <option value="null" selected="selected">Show All</option>
-                                                <option value="1">Approved</option>
-                                                <option value="3">Rejected</option>
-                                                <option value="0">Pending</option>
-                                            </select>
-                                            <!--end::Select-->
-                                        @endif
-                                    </div>
-                                    <!--end::Progress-->
-                                    <!--begin::Status-->
-                                    <div class="d-flex align-items-center fw-bolder">
-                                        <!--begin::Label-->
-                                        <div class="text-muted fs-7 me-2">Status</div>
-                                        <!--end::Label-->
-                                        <input type="hidden" name="status_url" id="status_url" value="{{url('user_status')}}">
-                                        @if($status != NULL)
-                                            <!--begin::Select-->
-                                            <select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Select an option" data-kt-table-widget-4="filter_status" name="status_search" id="status_search" >
-                                                <option></option>
-                                                <option value="null" selected="selected">Show All</option>
-                                                <option value="0" {{ ("0" == $status ) ? "selected":"" }}>Active</option>
-                                                <option value="1" {{ ("1" == $status ) ? "selected":"" }}>Locked</option>
-                                            </select>
-                                            <!--end::Select-->
-                                        @else
-                                            <!--begin::Select-->
-                                            <select class="form-select form-select-transparent text-dark fs-7 lh-1 fw-bolder py-0 ps-3 w-auto" data-control="select2" data-hide-search="true" data-dropdown-css-class="w-150px" data-placeholder="Select an option" data-kt-table-widget-4="filter_status" name="status_search" id="status_search" >
-                                                <option></option>
-                                                <option value="null" selected="selected">Show All</option>
-                                                <option value="0">Active</option>
-                                                <option value="1">Locked</option>
-                                            </select>
-                                            <!--end::Select-->
-                                        @endif
-                                    </div>
-                                    <!--end::Status-->
-                                    @if($search != NULL)
-                                        <!--begin::Search-->
-                                        <div class="position-relative my-1">
-                                            <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
-                                            <span class="svg-icon svg-icon-2 position-absolute top-50 translate-middle-y ms-4">
+            <div class="" id="loan">
+                @if($loan != NULL)
+                    <!--begin::Row-->
+                    <div class="row gy-5 g-xl-8 mt-xl-5" id="finance" >
+                        <!--begin::Col-->
+                        <!--end::Col-->
+                        <!--begin::Col-->
+                        <div class="col-xl-12 ">
+                            <!--begin::Tables Widget 9-->
+                            <div class="card card-xl-stretch mb-5 mb-xl-8">
+                                <!--begin::Header-->
+                                <div class="card-header border-0 pt-5">
+                                    <h3 class="card-title align-items-start flex-column">
+                                        <span class="card-label fw-bolder text-dark">Loan History</span>
+                                    </h3>
+                                    <div class="card-toolbar" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover" title="Next Investment">
+                                        <a class="btn btn-sm btn-light btn-active-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_start_loan">
+                                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
+                                            <span class="svg-icon svg-icon-3">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                                    <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="black" />
-                                                    <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="black" />
+                                                    <rect opacity="0.5" x="11.364" y="20.364" width="16" height="2" rx="1" transform="rotate(-90 11.364 20.364)" fill="black" />
+                                                    <rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="black" />
                                                 </svg>
                                             </span>
-                                            <!--end::Svg Icon-->
-                                            <input type="hidden" name="search_url" id="search_url" value="{{url('user_search')}}">
-                                            <input type="text"  class="form-control w-150px fs-7 ps-12" placeholder="Search" name="search" id="search" value="{{$search}}" />
-                                        </div>
-                                        <!--end::Search-->
-                                    @else
-                                        <!--begin::Search-->
-                                        <div class="position-relative my-1">
-                                            <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
-                                            <span class="svg-icon svg-icon-2 position-absolute top-50 translate-middle-y ms-4">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                                    <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="black" />
-                                                    <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="black" />
-                                                </svg>
-                                            </span>
-                                            <!--end::Svg Icon-->
-                                            <input type="hidden" name="search_url" id="search_url" value="{{url('user_search')}}">
-                                            <input type="text"  class="form-control w-150px fs-7 ps-12" placeholder="Search" name="search" id="search" />
-                                        </div>
-                                        <!--end::Search-->
-                                    @endif
+                                            <!--end::Svg Icon-->Next Loan 
+                                        </a>
+                                    </div>
                                 </div>
-                                <!--begin::Filters-->
-                            </div>
-                            <!--end::Actions-->
-                        </div>
-                        <!--end::Header-->
-                        <!--begin::Body-->
-                        <div class="card-body py-3">
-                            <!--begin::Table container-->
-                            <div class="table-responsive">
-                                <!--begin::Table-->
-                                <table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
-                                    <!--begin::Table head-->
-                                    <thead>
-                                        <tr class="fw-bolder text-muted">
-                                            <th class="">USER</th>
-                                            <th class="">ROLE</th>
-                                            <th class="">NEXT PAYMENT</th>
-                                            <th class="" style="width:17%;">REFFERAL AMOUNT</th>
-                                            <th class="">TOTAL PAYMENT</th>
-                                            <th class="">PROFILE</th>
-                                            <th class="">PROGRESS</th>
-                                            <th class="">STATUS</th>
-                                            <th class="">ACTIONS</th>
-                                        </tr>
-                                    </thead>
-                                    <!--end::Table head-->
-                                    <!--begin::Table body-->
-                                    <tbody class="user_table">
-                                        @foreach($users as $user)
-                                        
-                                            <tr>        
-                                                <td class="">
-
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="symbol symbol-45px me-5">
-                                                            @php
-                                                                $user_detail = App\Models\UserDetail::where('user_id',$user->id)->first();
-                                                            @endphp
-                                                            @if($user_detail != NULL)
-                                                                <img src="{{ $user_detail->avatar}}" alt="" />
-                                                            @else
-                                                            <img src="{{ asset('public/assets/media/avatars/blank.png') }}" alt="" />
-                                                            @endif
-                                                        </div>
-                                                        <div class="d-flex justify-content-start flex-column">
-                                                            <a href="{{route('user', ['id' => $user->id,'flag' => 'user'])}}" class="text-dark fw-bolder text-hover-primary fs-6">{{$user->first_name}} {{$user->last_name}}</a>
-                                                            <span class="text-muted fw-bold text-muted d-block fs-7">#{{$user->id}}</span>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td class="">
-                                                    {{$user->role->name}}
-                                                </td>
-
-                                                @php
-                                                    $result=[];
-                                                    $smartfinance_ids = App\Models\Smartfinance::where('user_id',$user->id)->get();
-                                                    foreach($smartfinance_ids as $smartfinance_id){
-                                                        $result[] = $smartfinance_id->id;
-                                                    }
-                                                    $payment_date = App\Models\SmartfinancePayment::whereIn('smartfinance_id',$result)->where('is_status',0)->orderBy('payment_date', 'asc')->first();
-                                                @endphp
-
-                                                @if($payment_date != Null)
-                                                    <td>
-                                                        @php
-                                                        $payment_amount = 0;
-                                                        $amounts = App\Models\SmartfinancePayment::join('smartfinances','smartfinance_payments.smartfinance_id','=','smartfinances.id')->where('smartfinance_payments.payment_date',$payment_date->payment_date)->where('smartfinances.user_id',$user->id)->where('smartfinances.plan_id','!=',3)->select('smartfinance_payments.*')->get();
-
-                                                        foreach($amounts as $amount){
-                                                            $payment_amount = $payment_amount + $amount->amount;
-                                                        }
-
-                                                        $payment_yms = App\Models\SmartfinancePayment::join('smartfinances','smartfinance_payments.smartfinance_id','=','smartfinances.id')->where('smartfinance_payments.payment_date',$payment_date->payment_date)->where('smartfinances.user_id',$user->id)->where('smartfinances.plan_id','=',3)->groupBy('smartfinance_payments.smartfinance_id')->select('smartfinance_payments.*')->get();
-
-                                                        foreach($payment_yms as $payment_ym){
-
-                                                            $payment_m = App\Models\SmartfinancePayment::where('smartfinance_id',$payment_ym->smartfinance_id)->orderBy('id','Desc')->first();
-                                                            $payment_amount = $payment_amount + $payment_m->next_amount + $payment_m->intrest + $payment_m->balance;
-                                                        }
-
-
-                                                        @endphp
-
-                                                        Rs. {{$user->commafun($payment_amount)}}
-                                                    </td>
-                                                @else
-                                                    <td>-</td>
-                                                @endif
-                                                @php
-                                                    $refferal = App\Models\Refferal::where('user_id',$user->id)->first();
-                                                @endphp
-                                                
-                                                @if($refferal != NULL)
-                                                    @php
-                                                        $refferal_amount = App\Models\UserAmount::where([['user_id',$user->id],['is_status',0]])->orderBy('id','Desc')->first();
-                                                    @endphp
-                                                    @if($refferal_amount != NULL)
-                                                    <td>
-                                                    <div class="row">
-                                                        <div class="col-md-9 text-start">
-                                                            <input type="number" class="form-control form-control-solid" placeholder="Amount" name="refferal_amount" id="refferal_amount{{$user->id}}" value="{{$refferal_amount->amount}}" style="width:100%;" />
-                                                        </div>
-                                                        <div class="col-md-3 text-end">
-                                                            <button type="button" class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary" name="button_reffer" data-system_id="{{$user->id}}">
-                                                                <i class="fa fa-check-circle" style="font-size:14px"></i> 
-                                                            </button>    
-                                                        </div>
-                                                                
-                                                        <div class=" refferal_amount_error{{$user->id}}" id="refferal_amount_error"></div>
-                                                    </div>
-                                                    </td>
-                                                    @else
-                                                    <td>
-                                                    <div class="row">
-                                                        <div class="col-md-9 text-start">
-                                                            <input type="number" class="form-control form-control-solid" placeholder="Amount" name="refferal_amount" id="refferal_amount{{$user->id}}" style="width:100%;" />
-                                                        </div>
-                                                        <div class="col-md-3 text-end">
-                                                            <button type="button" class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary" name="button_reffer" data-system_id="{{$user->id}}">
-                                                                <i class="fa fa-check-circle" style="font-size:14px"></i>
-                                                                        
-                                                            </button>
-                                                        </div>
-                                                                
-                                                        <div class=" refferal_amount_error{{$user->id}}" id="refferal_amount_error"></div>
-                                                    </div>
-                                                    </td>
-                                                    @endif
-                                                @else
-                                                   <td> - </td>
-                                                @endif
-                                                @php
-                                                    $refferal_amount = App\Models\UserAmount::where([['user_id',$user->id],['is_status',0]])->first();
-                                                @endphp
-                                                <td>
-                                                    @if($refferal_amount != NULL)
-                                                        @if($payment_date != Null)
-                                                            @php
-                                                            $payment_amount = 0;
-                                                            $amounts = App\Models\SmartfinancePayment::join('smartfinances','smartfinance_payments.smartfinance_id','=','smartfinances.id')->where('smartfinance_payments.payment_date',$payment_date->payment_date)->where('smartfinances.user_id',$user->id)->where('smartfinances.plan_id','!=',3)->select('smartfinance_payments.*')->get();
-
-                                                            foreach($amounts as $amount){
-                                                                $payment_amount = $payment_amount + $amount->amount;
-                                                            }
-                                                            $payment_yms = App\Models\SmartfinancePayment::join('smartfinances','smartfinance_payments.smartfinance_id','=','smartfinances.id')->where('smartfinance_payments.payment_date',$payment_date->payment_date)->where('smartfinances.user_id',$user->id)->where('smartfinances.plan_id','=',3)->groupBy('smartfinance_payments.smartfinance_id')->select('smartfinance_payments.*')->get();
-
-                                                            foreach($payment_yms as $payment_ym){
-
-                                                                $payment_m = App\Models\SmartfinancePayment::where('smartfinance_id',$payment_ym->smartfinance_id)->orderBy('id','Desc')->first();
-                                                                $payment_amount = $payment_amount + $payment_m->next_amount + $payment_m->intrest + $payment_m->balance;
-                                                            }
-                                                            @endphp
-
-                                                            Rs. {{$user->commafun($payment_amount+$refferal_amount->amount)}}
+                                <!--end::Header-->
+                                <!--begin::Body-->
+                                <div class="card-body py-3">
+                                    <!--begin::Table container-->
+                                    <div class="table-responsive">
+                                        <!--begin::Table-->
+                                        <table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
+                                            <!--begin::Table head-->
+                                            <thead>
+                                                <tr class="fw-bolder text-muted">
+                                                    <th class="">AMOUNT</th>
+                                                    <!-- <th class="">INTEREST</th> -->
+                                                    <th class="">STATUS</th>
+                                                    <th class="">ACTION</th>
+                                                </tr>
+                                            </thead>
+                                            <!--end::Table head-->
+                                            <!--begin::Table body-->
+                                            <tbody>
+                                                @foreach($loans as $loan)
+                                                <tr>
+                                                    <td>Rs. {{$loan->commafun($loan->amount)}}</td>
+                                                    <!-- <td>
+                                                        @if($loan->intrest != NULL)
+                                                            {{$loan->intrest}}
                                                         @else
-                                                            Rs. {{$user->commafun($refferal_amount->amount)}}
+                                                            -
                                                         @endif
-                                                    @elseif($payment_date != Null)
-                                                        @php
-                                                        $payment_amount = 0;
-                                                        $amounts = App\Models\SmartfinancePayment::join('smartfinances','smartfinance_payments.smartfinance_id','=','smartfinances.id')->where('smartfinance_payments.payment_date',$payment_date->payment_date)->where('smartfinances.user_id',$user->id)->where('smartfinances.plan_id','!=',3)->select('smartfinance_payments.*')->get();
-
-                                                        foreach($amounts as $amount){
-                                                            $payment_amount = $payment_amount + $amount->amount;
-                                                        }
-
-                                                        $payment_yms = App\Models\SmartfinancePayment::join('smartfinances','smartfinance_payments.smartfinance_id','=','smartfinances.id')->where('smartfinance_payments.payment_date',$payment_date->payment_date)->where('smartfinances.user_id',$user->id)->where('smartfinances.plan_id','=',3)->groupBy('smartfinance_payments.smartfinance_id')->select('smartfinance_payments.*')->get();
-
-                                                        foreach($payment_yms as $payment_ym){
-
-                                                            $payment_m = App\Models\SmartfinancePayment::where('smartfinance_id',$payment_ym->smartfinance_id)->orderBy('id','Desc')->first();
-                                                            $payment_amount = $payment_amount + $payment_m->next_amount + $payment_m->intrest + $payment_m->balance;
-                                                        }
-                                                        @endphp
-                                                        Rs. {{$user->commafun($payment_amount)}}
+                                                    </td> -->
+                                                    @if($loan->is_close == 1)
+                                                        <td><span class="badge py-3 px-4 fs-7 badge-secondary">Closed</span></td>
                                                     @else
-                                                        -
+                                                        @if($loan->is_status == 2)
+                                                            <td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>
+                                                        @elseif($loan->is_status == 1)
+                                                            <td><span class="badge py-3 px-4 fs-7 badge-light-success">Accepted</span></td>
+                                                        @elseif($loan->is_status == 0)
+                                                            <td><span class="badge py-3 px-4 fs-7 badge-light-danger">Rejected</span></td>
+                                                        @endif
                                                     @endif
-                                                </td>
-                                                <td class="">
-                                                    @if($user->is_profile_verified == 2)
-                                                        <span class="badge py-3 px-4 fs-7 badge-light-primary">Incomplete</span>
-                                                    @elseif($user->is_profile_verified == 0 || $user->is_profile_updated == 1)
-                                                        <span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span>
-                                                    @elseif($user->is_profile_verified == 3)
-                                                        <span class="badge py-3 px-4 fs-7 badge-light-danger">Rejected</span>
-                                                    @else
-                                                        <span class="badge py-3 px-4 fs-7 badge-light-success">Verified</span>
-                                                    @endif
-                                                </td>
-                                                <td class="">
-                                                    @if($user->is_active == 0)
-                                                        <span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span>
-                                                    @elseif($user->is_active == 3)
-                                                        <span class="badge py-3 px-4 fs-7 badge-light-danger">Rejected</span>
-                                                    @else
-                                                        <span class="badge py-3 px-4 fs-7 badge-light-success">Approved</span>
-                                                    @endif
-                                                </td>
-                                                <td class="">
-                                                    @if($user->is_lock == 0)
-                                                        <span class="badge py-3 px-4 fs-7 badge-light-success">Active</span>
-                                                    @else
-                                                        <span class="badge py-3 px-4 fs-7 badge-light-danger">Locked</span>
-                                                    @endif
-                                                </td>
-                                                @php
-                                                    $refferals = App\Models\Refferal::where('user_id',$user->id)->first();
-                                                @endphp
-
-                                                @if($user->role_id == 1)
-                                                    <td class="">
-                                                        <div class=" flex-shrink-0">
-                                                            <button type="button"  class="btn  btn-light mb-5" onclick="super_admin()"><i class="fas fa-pencil-alt" id="fa"></i></button>
-                                                            @if($user->is_reffer == 1)
-                                                                <button type="button" id="kt_sign_in_submit" class="btn  btn-light mb-5" data-system_id="{{$user->id}}" name="reffer"><i class="fa fa-user-plus" id="fa"></i></button>
-                                                            @endif
-                                                        </div>
+                                                    <td>
+                                                        <a class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary" href="{{route('view_loan', ['id' => $loan->id])}}">
+                                                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr064.svg-->
+                                                            <span class="svg-icon svg-icon-2">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                                    <rect opacity="0.5" x="18" y="13" width="13" height="2" rx="1" transform="rotate(-180 18 13)" fill="black"></rect>
+                                                                    <path d="M15.4343 12.5657L11.25 16.75C10.8358 17.1642 10.8358 17.8358 11.25 18.25C11.6642 18.6642 12.3358 18.6642 12.75 18.25L18.2929 12.7071C18.6834 12.3166 18.6834 11.6834 18.2929 11.2929L12.75 5.75C12.3358 5.33579 11.6642 5.33579 11.25 5.75C10.8358 6.16421 10.8358 6.83579 11.25 7.25L15.4343 11.4343C15.7467 11.7467 15.7467 12.2533 15.4343 12.5657Z" fill="black"></path>
+                                                                </svg>
+                                                            </span>
+                                                            <!--end::Svg Icon-->
+                                                        </a>
                                                     </td>
-                                                @else
-                                                    <td class="">
-                                                        <div class=" flex-shrink-0">
-                                                            <button type="button" id="kt_sign_in_submit" class="btn  btn-light mb-5" data-system_id="{{$user->id}}" name="edit"><i class="fas fa-pencil-alt" id="fa"></i></button> 
-                                                            @if($user->is_reffer == 1)
-                                                                <button type="button" id="kt_sign_in_submit" class="btn  btn-light mb-5" data-system_id="{{$user->id}}" name="reffer"><i class="fa fa-user-plus" id="fa" ></i></button>
-                                                            @endif
-                                                        </div>
-                                                    </td>
-                                                @endif
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                    <!--end::Table body-->
-                                </table>
-                                <!--end::Table-->
-                                <div class="d-flex justify-content-end mb-3">
-                                    {{ $users->links() }}
+                                                </tr>
+                                                @endforeach
+                                            </tbody>
+                                            <!--end::Table body-->
+                                        </table>
+                                        <!--end::Table-->
+                                        <div class="d-flex justify-content-end mb-3">
+                                            {{ $loans->links() }}
+                                        </div>
+                                    </div>
+                                    <!--end::Table container-->
                                 </div>
-                                
+                                <!--begin::Body-->
                             </div>
-                            <!--end::Table container-->
+                            <!--end::Tables Widget 9-->
                         </div>
-                        <!--begin::Body-->
+                        <!--end::Col-->
                     </div>
-                    <!--end::Tables Widget 9-->
-                </div>
-                <!--end::Col-->
+                    <!--end::Row-->
+                @else
+                    <div class="row">
+                        <div class="card">
+                            <!--begin::Card body-->
+                            <div class="card-body">
+                                <!--begin::Heading-->
+                                <div class="card-px text-center pt-15 pb-15">
+                                    <!--begin::Title-->
+                                    <h2 class="fs-2x fw-bolder mb-0">Get Your Loan Here </h2>
+                                    <!--end::Title-->
+                                    <!--begin::Description-->
+                                    <p class="text-gray-400 fs-4 fw-bold py-7">Click on the below button to get your loan </p>
+                                    <!--end::Description-->
+                                    <!--begin::Action-->
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_start_loan" style="color: white;">Start Loan</button>
+                                    <!--end::Action-->
+                                </div>
+                                <!--end::Heading-->
+                                <!--begin::Illustration-->
+                                <div class="text-center pb-15 px-5">
+                                    <img src="{{ asset('public/assets/media/illustrations/sigma-1/11.png') }}" alt="" class="mw-100 h-200px h-sm-325px" />
+                                </div>
+                                <!--end::Illustration-->
+                            </div>
+                            <!--end::Card body-->
+                        </div>
+                    </div>
+                @endif
             </div>
-            <!--end::Row-->
             
-        @elseif($detail)
+        @elseif($detail != NULL && $user->is_profile_verified == 0 )
             <div class="row">
                 <div class="card">
                     <!--begin::Card body-->
@@ -598,7 +293,6 @@
                             <!--begin::Description-->
                             <p class="text-gray-400 fs-4 fw-bold py-7">Your profile is under verification</p>
                             <!--end::Description-->
-                            
                         </div>
                         <!--end::Heading-->
                         <!--begin::Illustration-->
@@ -609,7 +303,7 @@
                     </div>
                         <!--end::Card body-->
                 </div>
-            </div> 
+            </div>
         @else
             <div class="row">
                 <div class="card">
@@ -643,10 +337,10 @@
 </div>
 <!--end::Container-->
 
+
 @php
     $user = Auth::guard('web')->user();
 @endphp
-
 <!--begin::Modal - Create Profile-->
 <div class="modal fade" id="kt_modal_create_project" tabindex="-1" aria-hidden="true">
     <!--begin::Modal dialog-->
@@ -887,6 +581,8 @@
                                         <input type="file" class="form-control form-control-solid custom-file-input" id="avatar" placeholder="Avatar" value="" name="avatar" accept="image/*" />
                                         <div class="d-flex justify-content-center mt-3">
                                             <img id="preview-image-avatar" style="max-height: 200px;">
+                                            <a href="#" class="text-hover-primary" onclick="delete_avatar()"  style="display:none;" id="avatar_image">X</a>
+
                                         </div>
                                     
                                         <!--end::Input-->
@@ -904,6 +600,7 @@
                                         <input type="file" class="form-control form-control-solid custom-file-input" id="aadhaar_card" placeholder="Aadhaar Card" value="" name="aadhaar_card" accept="image/*" />
                                         <div class="d-flex justify-content-center mt-3">
                                             <img id="preview-image-aadhaar_card" style="max-height: 200px;">
+                                            <a href="#" class="text-hover-primary" onclick="delete_aadhaar()"  style="display:none;" id="aadhaar_image">X</a>
                                         </div>
                                     
                                         <!--end::Input-->
@@ -921,6 +618,7 @@
                                         <input type="file" class="form-control form-control-solid custom-file-input" id="pan_card" placeholder="Pan Card" value="" name="pan_card" accept="image/*" />
                                         <div class="d-flex justify-content-center mt-3">
                                             <img id="preview-image-pan_card" style="max-height: 200px;">
+                                            <a href="#" class="text-hover-primary" onclick="delete_pan()"  style="display:none;" id="pan_image">X</a>
                                         </div>
                                     
                                         <!--end::Input-->
@@ -953,7 +651,7 @@
                                     <div class="fv-row mb-8">
                                         <!--begin::Label-->
                                         <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
-                                            <span class="required">Bank Account Holder Name</span>
+                                            <span class="required">Account Holder Name</span>
                                             <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Account Holder Name"></i>
                                         </label>
                                         <!--end::Label-->
@@ -1130,6 +828,7 @@
                                         <input type="file" class="form-control form-control-solid custom-file-input" id="nominee_aadhar" placeholder="Nominee Aadhar Card" value="" name="nominee_aadhar" accept="image/*" />
                                         <div class="d-flex justify-content-center mt-3">
                                             <img id="preview-image-nominee_aadhar" style="max-height: 200px;">
+                                            <a href="#" class="text-hover-primary" onclick="delete_nominee_aadhar()"  style="display:none;" id="nominee_aadhar_image">X</a>
                                         </div>
                                     
                                         <!--end::Input-->
@@ -1171,10 +870,10 @@
     </div>
     <!--end::Modal dialog-->
 </div>
-<!--end::Modal - Create Project-->
+<!--end::Modal - Create Profile-->
 
-<!-- begin::user edit Modal -->
-<div class="modal fade" id="edit_modal" tabindex="-1" aria-hidden="true">
+<!-- begin::Modal -loan- -->
+<div class="modal fade" id="kt_modal_start_loan" tabindex="-1" aria-hidden="true">
     <!--begin::Modal dialog-->
     <div class="modal-dialog mw-650px">
         <!--begin::Modal content-->
@@ -1207,158 +906,101 @@
                 <!--begin::Users-->
                 <div class="mb-10">
                     <!--begin::Heading-->
-                    <div class="fs-6 fw-bold mb-2">User Management</div>
+                    <div class="fs-4 fw-bolder mb-2">Loan</div>
                     <!--end::Heading-->
-                    <form class="form w-100" novalidate="novalidate" id="kt_sign_in_form" method="post" action="{{route('change_user_status')}}" enctype="multipart/form-data">
+                    <form class="form w-100" novalidate="novalidate" id="kt_sign_in_form" method="post" action="{{route('save_loan')}}" enctype="multipart/form-data">
                         @csrf
-                        <input type="hidden" name="user_id" id="user_id">
-                        <!--begin::List-->
-                        <div class="mh-300px scroll-y me-n7 pe-7">
-                            <div class="d-flex flex-stack py-4 border-bottom border-gray-300 border-bottom-dashed">
-                                <!--begin::Details-->
-                                <div class="d-flex align-items-center">
-                                    <!--begin::Avatar-->
-                                    <div class="symbol symbol-35px symbol-circle">
-                                        <img alt="Pic" src="{{ asset('public/assets/media/avatars/blank.png') }}" />
-                                    </div>
-                                    <!--end::Avatar-->
-                                    <!--begin::Details-->
-                                    <div class="ms-5">
-                                        <div class=""><input  type="text" readonly="" name="user_name" id="user_name" style="border: none;outline: none;"></div>
-                                        <div class=""><input type="text" readonly="" name="user_email" id="user_email" style="border: none;outline: none;color: #a1a5b7;width: 100%;"></div>
-                                    </div>
-                                    <!--end::Details-->
-                                </div>
-                                <!--end::Details-->
-                                
-                            </div>
-                        </div>
-                        <!--end::List-->
-                        <!--begin::List-->
-                        <div class="mh-300px scroll-y me-n7 pe-7">
-                            <div class="d-flex flex-stack py-4 border-bottom border-gray-300 border-bottom-dashed">
-                                <!--begin::Details-->
-                                <div class="d-flex align-items-center">
-                                    
-                                    <!--begin::Details-->
-                                    <div class="ms-5">
-                                        <span class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">Progress</span>
-                                    </div>
-                                    <!--end::Details-->
-                                </div>
-                                <!--end::Details-->
-                                <!--begin::Access menu-->
-                                <div class="ms-2 w-150px">
-                                    <select class="form-select form-select-solid form-select-sm" data-control="select2" data-hide-search="true" name="progress" id="progress">
-                                        <option value="">Select</option>
-                                    </select>
-                                </div>
-                                <!--end::Access menu-->
-                            </div>
-                        </div>
-                        <!--end::List-->
-                        <!--begin::List-->
-                        <div class="mh-300px scroll-y me-n7 pe-7">
-                            <div class="d-flex flex-stack py-4 border-bottom border-gray-300 border-bottom-dashed">
-                                <!--begin::Details-->
-                                <div class="d-flex align-items-center">
-                                    
-                                    <!--begin::Details-->
-                                    <div class="ms-5">
-                                        <span class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">Profile</span>
-                                    </div>
-                                    <!--end::Details-->
-                                </div>
-                                <!--end::Details-->
-                                <!--begin::Access menu-->
-                                <div class="ms-2 w-150px">
-                                    <select class="form-select form-select-solid form-select-sm" data-control="select2" data-hide-search="true" name="profile" id="profile">
-                                        <option value="">Select</option>
-                                    </select>
-                                </div>
-                                <!--end::Access menu-->
-                            </div>
-                        </div>
-                        <!--end::List-->
-                        <!--begin::List-->
-                        <div class="mh-300px scroll-y me-n7 pe-7">
-                            <div class="d-flex flex-stack py-4 border-bottom border-gray-300 border-bottom-dashed">
-                                <!--begin::Details-->
-                                <div class="d-flex align-items-center">
-                                    
-                                    <!--begin::Details-->
-                                    <div class="ms-5">
-                                        <span class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">Role</span>
-                                    </div>
-                                    <!--end::Details-->
-                                </div>
-                                <!--end::Details-->
-                                <!--begin::Access menu-->
-                                <div class="ms-2 w-150px">
-                                    <select class="form-select form-select-solid form-select-sm" data-control="select2" data-hide-search="true" name="role" id="role">
-                                        <option value="">Select</option>
-                                    </select>
-                                </div>
-                                <!--end::Access menu-->
-                            </div>
-                        </div>
-                        <!--end::List-->
-                        <!--begin::List-->
-                        <div class="mh-300px scroll-y me-n7 pe-7">
-                            <div class="d-flex flex-stack py-4 border-bottom border-gray-300 border-bottom-dashed">
-                                <!--begin::Details-->
-                                <div class="d-flex align-items-center">
-                                   
-                                    <!--begin::Details-->
-                                    <div class="ms-5">
-                                        <span class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">Status</span>
-                                    </div>
-                                    <!--end::Details-->
-                                </div>
-                                <!--end::Details-->
-                                <!--begin::Access menu-->
-                                <div class="ms-2 w-150px">
-                                    <select class="form-select form-select-solid form-select-sm" data-control="select2" data-hide-search="true" name="status" id="status">
-                                        <option value="">Select</option>
-                                    </select>
-                                </div>
-                                <!--end::Access menu-->
-                            </div>
-                        </div>
-                        <!--end::List-->
 
-                        <!--begin::List-->
-                        <div class="mh-300px scroll-y me-n7 pe-7">
-                            <div class="d-flex flex-stack py-4 border-bottom border-gray-300 border-bottom-dashed">
-                                <!--begin::Details-->
-                                <div class="d-flex align-items-center">
-                                    
-                                    <!--begin::Details-->
-                                    <div class="ms-5">
-                                        <span class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">Refferal</span>
-                                    </div>
-                                    <!--end::Details-->
-                                </div>
-                                <!--end::Details-->
-                                <!--begin::Access menu-->
-                                <div class="ms-2 w-150px">
-                                    <select class="form-select form-select-solid form-select-sm" data-control="select2" data-hide-search="true" name="refferal" id="refferal">
-                                        <option value="">Select</option>
-                                        
-                                    </select>
-                                </div>
-                                <!--end::Access menu-->
-                            </div>
+                        <!--begin::Input group-->
+                        <div class="fv-row mb-8">
+                            <!--begin::Label-->
+                            <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                <span class="required">Loan Amount</span>
+                                <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Loan Amount"></i>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="number" class="form-control form-control-solid @error('amount') is-invalid @enderror" placeholder="Loan Amount" value="{{old('amount')}}" name="amount" id="amount" required="true" />
+                            <!--end::Input-->
+                            @error('amount')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
                         </div>
-                        <!--end::List-->
-                        <div class="d-flex justify-content-center">
-                            <button type="submit"  class="btn  btn-primary mt-5 mb-3">Submit</button>
+                        <!--end::Input group-->
+
+                        <!--begin::Input group-->
+                        <div class="fv-row mb-8">
+                            <!--begin::Label-->
+                            <label class="required fs-6 fw-bold mb-2">Property Type</label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" class="form-control form-control-solid @error('property_type') is-invalid @enderror" placeholder="Land/Gold/Etc.." value="{{old('property_type')}}" name="property_type" id="property_type" required="true" />
+                            <!--end::Input-->
+                            @error('property_type')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+
+                        <!--begin::Input group-->
+                        <div class="fv-row mb-8">
+                            <!--begin::Label-->
+                            <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                <span class="">Property Value</span>
+                                <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Property Value"></i>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" class="form-control form-control-solid @error('property_value') is-invalid @enderror" placeholder="Property Value" value="{{old('property_value')}}" name="property_value" id="property_value" required="true"/>
+                            @error('property_value')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+
+                        <!--begin::Input group-->
+                        <div class="fv-row mb-8">
+                            <!--begin::Label-->
+                            <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                                <span class="">Property Copy(*You can choose and upload multiple documents at a same time)</span>
+                                <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Property Copy"></i>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="file" class="form-control form-control-solid custom-file-input @error('property_copy') is-invalid @enderror" id="property_copy" placeholder="Property Copy" value="" name="property_copy[]" required="true" multiple />
+                            @error('property_copy')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                            <!--end::Input-->
+                            <!-- <div class="d-flex justify-content-center mt-3">
+                                <img id="preview-image-property" style="max-height: 200px;">
+                                <a href="#" class="text-hover-primary" onclick="delete_property()"  style="display:none;" id="property_image">X</a>
+                            </div> -->
+                        </div>
+                        <!--end::Input group-->
+
+                        <!--begin::Input group-->
+                        <div class="fv-row mb-10">
+                            <label class="form-check form-check-custom form-check-solid form-check-inline">
+                                <input class="form-check-input @error('terms_and_conditions') is-invalid @enderror" type="checkbox" name="terms_and_conditions" id="terms_and_conditions" required="true" />
+                                <span class="form-check-label fw-bold text-gray-700 fs-6">I Agree
+                                    <a href="{{route('loan_terms_and_condition')}}" target="_blank" class="ms-1 text-hover-primary">Terms and conditions</a>.
+                                </span>
+                            </label>
+                            @error('terms_and_conditions')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <!--end::Input group-->
+                        
+                        <div class="d-flex justify-content-center" >
+                            <button type="submit" class="btn  btn-primary mt-5 mb-3">Submit</button> 
                         </div>
                     </form>
                 </div>
                 <!--end::Users-->
-                <!--begin::Notice-->
-                <!--end::Notice-->
             </div>
             <!--end::Modal body-->
         </div>
@@ -1366,357 +1008,55 @@
     </div>
     <!--end::Modal dialog-->
 </div>
-<!-- end::Modal -->
-
-<!-- refferal_user_modal -->
-<div class="modal fade" id="refferal_modal" tabindex="-1" aria-hidden="true">
-    <!--begin::Modal dialog-->
-    <div class="modal-dialog mw-650px">
-        <!--begin::Modal content-->
-        <div class="modal-content">
-            <!--begin::Modal header-->
-            <div class="modal-header pb-0 border-0 justify-content-end">
-                <!--begin::Close-->
-                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                    <span class="svg-icon svg-icon-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
-                            <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="black" />
-                        </svg>
-                    </span>
-                    <!--end::Svg Icon-->
-                </div>
-                <!--end::Close-->
-            </div>
-            <!--begin::Modal header-->
-            <!--begin::Modal body-->
-            <div class="modal-body scroll-y mx-5 mx-xl-18 pt-0 pb-15">
-                <!--begin::Heading-->
-
-                <!--end::Google Contacts Invite-->
-                <!--begin::Separator-->
-                <!--end::Separator-->
-                <!--begin::Textarea-->
-                <!--end::Textarea-->
-                <!--begin::Users-->
-                <div class="mb-10">
-                    <!--begin::Heading-->
-                    <div class="fs-6 fw-bold mb-2">Refferal</div>
-                    <!--end::Heading-->
-                    <form class="form w-100" novalidate="novalidate" id="kt_sign_in_form" method="post" action="{{route('refferal')}}" enctype="multipart/form-data">
-                        @csrf
-                        <input type="hidden" name="userId" id="userId">
-                        
-                        
-                        <!--begin::List-->
-                        <div class="mh-300px scroll-y me-n7 pe-7">
-                            <div class="d-flex flex-stack py-4 border-bottom border-gray-300 border-bottom-dashed">
-                                <!--begin::Details-->
-                                <div class="d-flex align-items-center">
-                                    
-                                    <!--begin::Details-->
-                                    <div class="ms-5">
-                                        <span class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">User</span>
-                                    </div>
-                                    <!--end::Details-->
-                                </div>
-                                <!--end::Details-->
-                                <!--begin::Access menu-->
-                                <div class="ms-2 w-150px">
-                                    <select class="form-select form-select-solid form-select-sm"  data-hide-search="true" name="user" id="user">
-                                        <option value="">Select</option>
-                                    </select>
-                                </div>
-                                <!--end::Access menu-->
-                            </div>
-                        </div>
-                        <!--end::List-->
-                        
-                        <div class="d-flex justify-content-center">
-                            <button type="submit"  class="btn  btn-primary mt-5 mb-3">Submit</button>
-                        </div>
-                    </form>
-                </div>
-                <!--end::Users-->
-                <!--begin::Notice-->
-                <!--end::Notice-->
-            </div>
-            <!--end::Modal body-->
-        </div>
-            <!--end::Modal content-->
-    </div>
-    <!--end::Modal dialog-->
-</div>
-<!-- end::refferal_modal -->
+<!-- end::Modal -loan- -->
 
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
-<!-- usermanagement Edit -->
+<!-- image delete -->
 <script type="text/javascript">
+    function delete_bill() {
+        document.getElementById('bill').value = null;
+        $("#preview-image-bill").attr("src", '');
+        $('#bill_image').hide();
+    }
 
-    $(document).on('click', 'button[name^="edit"]', function(e) {
-        var system_id = $(this).data("system_id");
-        console.log(system_id);
+    function delete_avatar() {
+        document.getElementById('avatar').value = null;
+        $("#preview-image-avatar").attr("src", '');
+        $('#avatar_image').hide();
+    }
 
-        if(system_id)
-        {
-            jQuery.ajax({
-                url : 'get_user',
-                type: 'GET',
-                dataType: 'json',
-                data: { id: system_id },
-                success:function(data)
-                { 
-                    jQuery('#edit_modal').modal('show');
-                    document.getElementById("user_id").value = data.id;
-                    document.getElementById("user_name").value = data.first_name+ ' '+ data.last_name;
-                    document.getElementById("user_email").value = data.email;
-                    if(data.is_active == 1)
-                    {
-                        jQuery('select[name="progress"]').empty();
-                        $('select[name="progress"]').append('<option value="'+ '1' +'" selected>'+ 'Approved' +'</option>');
-                        $('select[name="progress"]').append('<option value="'+ '0' +'">'+ 'Pending' +'</option>');
-                        $('select[name="progress"]').append('<option value="'+ '3' +'">'+ 'Rejected' +'</option>');
-                    }
-                    else if(data.is_active == 3){
-                        jQuery('select[name="progress"]').empty();
-                        $('select[name="progress"]').append('<option value="'+ '3' +'" selected>'+ 'Rejected' +'</option>');
-                        $('select[name="progress"]').append('<option value="'+ '0' +'">'+ 'Pending' +'</option>');
-                        $('select[name="progress"]').append('<option value="'+ '1' +'">'+ 'Approved' +'</option>');
-                    }
-                    else{
-                        jQuery('select[name="progress"]').empty();
-                        $('select[name="progress"]').append('<option value="'+ '0' +'" selected>'+ 'Pending' +'</option>');
-                        $('select[name="progress"]').append('<option value="'+ '1' +'">'+ 'Approved' +'</option>');
-                        $('select[name="progress"]').append('<option value="'+ '3' +'">'+ 'Rejected' +'</option>');
-                    }
-                    if(data.is_lock == 1)
-                    {
-                        jQuery('select[name="status"]').empty();
-                        $('select[name="status"]').append('<option value="'+ '1' +'" selected>'+ 'Locked' +'</option>');
-                        $('select[name="status"]').append('<option value="'+ '0' +'">'+ 'Active' +'</option>');
-                    }
-                    else{
-                        jQuery('select[name="status"]').empty();
-                        $('select[name="status"]').append('<option value="'+ '0' +'" selected>'+ 'Active' +'</option>');
-                        $('select[name="status"]').append('<option value="'+ '1' +'">'+ 'Locked' +'</option>');
-                    }
-                    if(data.role_id == 1){
-                        jQuery('select[name="role"]').empty();
-                        $('select[name="role"]').append('<option value="'+ '1' +'" selected>'+ 'Super Admin' +'</option>');
-                        $('select[name="role"]').append('<option value="'+ '2' +'">'+ 'Admin' +'</option>');
-                        $('select[name="role"]').append('<option value="'+ '3' +'">'+ 'User' +'</option>');
-                    }
-                    else if (data.role_id == 2) {
-                        jQuery('select[name="role"]').empty();
-                        $('select[name="role"]').append('<option value="'+ '1' +'" >'+ 'Super Admin' +'</option>');
-                        $('select[name="role"]').append('<option value="'+ '2' +'" selected>'+ 'Admin' +'</option>');
-                        $('select[name="role"]').append('<option value="'+ '3' +'">'+ 'User' +'</option>');
-                    }
-                    else{
-                        jQuery('select[name="role"]').empty();
-                        $('select[name="role"]').append('<option value="'+ '1' +'" >'+ 'Super Admin' +'</option>');
-                        $('select[name="role"]').append('<option value="'+ '2' +'">'+ 'Admin' +'</option>');
-                        $('select[name="role"]').append('<option value="'+ '3' +'" selected>'+ 'User' +'</option>');
-                    }
-                    if(data.is_profile_verified == 1 && data.is_profile_updated == 0)
-                    {
-                        jQuery('select[name="profile"]').empty();
-                        $('select[name="profile"]').append('<option value="'+ '1' +'" selected>'+ 'Approved' +'</option>');
-                        $('select[name="profile"]').append('<option value="'+ '0' +'">'+ 'Pending' +'</option>');
-                        $('select[name="profile"]').append('<option value="'+ '3' +'">'+ 'Rejected' +'</option>');
-                    }
-                    else if(data.is_profile_verified == 2){
-                        jQuery('select[name="profile"]').empty();
-                        $('select[name="profile"]').append('<option value="'+ '2' +'" selected>'+ 'Incomplete' +'</option>');
+    function delete_aadhaar() {
+        document.getElementById('aadhaar_card').value = null;
+        $("#preview-image-aadhaar_card").attr("src", '');
+        $('#aadhaar_image').hide();
+    }
 
-                    }
-                    else if(data.is_profile_verified == 3){
-                         $('select[name="profile"]').append('<option value="'+ '3' +'" selected>'+ 'Rejected' +'</option>');
-                        $('select[name="profile"]').append('<option value="'+ '0' +'">'+ 'Pending' +'</option>');
-                        $('select[name="profile"]').append('<option value="'+ '1' +'">'+ 'Approved' +'</option>');
-                    }
-                    else{
-                        jQuery('select[name="profile"]').empty();
-                        $('select[name="profile"]').append('<option value="'+ '0' +'" selected>'+ 'Pending' +'</option>');
-                        $('select[name="profile"]').append('<option value="'+ '1' +'">'+ 'Approved' +'</option>');
-                        $('select[name="profile"]').append('<option value="'+ '3' +'">'+ 'Rejected' +'</option>');
-                    }
-                    if(data.is_reffer == 1)
-                    {
-                        jQuery('select[name="refferal"]').empty();
-                        $('select[name="refferal"]').append('<option value="'+ '1' +'" selected>'+ 'Yes' +'</option>');
-                        $('select[name="refferal"]').append('<option value="'+ '0' +'">'+ 'No' +'</option>');
-                    }
-                    else{
-                        jQuery('select[name="refferal"]').empty();
-                        $('select[name="refferal"]').append('<option value="'+ '0' +'" selected>'+ 'No' +'</option>');
-                        $('select[name="refferal"]').append('<option value="'+ '1' +'">'+ 'Yes' +'</option>');
-                    }
+    function delete_pan() {
+        document.getElementById('pan_card').value = null;
+        $("#preview-image-pan_card").attr("src", '');
+        $('#pan_image').hide();
+    }
 
-                }
-            });
-        }
-        
-    });
+    function delete_nominee_aadhar() {
+        document.getElementById('nominee_aadhar').value = null;
+        $("#preview-image-nominee_aadhar").attr("src", '');
+        $('#nominee_aadhar_image').hide();
+    }
+
+    function delete_property() {
+        document.getElementById('property_copy').value = null;
+        $("#preview-image-property").attr("src", '');
+        $('#property_image').hide();
+    }
 
 </script>
+<!-- image delete end -->
 
-<!-- user search -->
-<script type="application/javascript">
-    jQuery(document).ready(function ()
-    {
-        jQuery('input[name="search"]').on('change',function(){
-            var search = jQuery(this).val();
-            var search_url = jQuery("#search_url").val();
-            var url = search_url+"/"+search+'/';
-            if(search == ''){
-                url = jQuery("#base_url").val();
-            }
-            window.location = url; 
-        });
-    });
-</script>
 
-<!-- user status search -->
-<script type="application/javascript">
-    jQuery(document).ready(function ()
-    {
-        jQuery('select[name="status_search"]').on('change',function(){
-            var status = jQuery(this).val();
-            var status_url = jQuery("#status_url").val();
-            var url = status_url+"/"+status+'/';
-            if(status == 'null'){
-                url = jQuery("#base_url").val();
-            }
-            window.location = url; 
-        });
-    });
-</script>
 
-<!-- user progress search -->
-<script type="application/javascript">
-    jQuery(document).ready(function ()
-    {
-        jQuery('select[name="progress_search"]').on('change',function(){
-            var progress = jQuery(this).val();
-            var progress_url = jQuery("#progress_url").val();
-            var url = progress_url+"/"+progress+'/';
-            if(progress == 'null'){
-                url = jQuery("#base_url").val();
-            }
-            window.location = url; 
-        });
-    });
-</script>
-
-<!-- user profile search -->
-<script type="application/javascript">
-    jQuery(document).ready(function ()
-    {
-        jQuery('select[name="profile_search"]').on('change',function(){
-            var profile = jQuery(this).val();
-            var profile_url = jQuery("#profile_url").val();
-            var url = profile_url+"/"+profile+'/';
-            if(profile == 'null'){
-                url = jQuery("#base_url").val();
-            }
-            window.location = url; 
-        });
-    });
-</script>
-
-<!-- user role search -->
-<script type="application/javascript">
-    jQuery(document).ready(function ()
-    {
-        jQuery('select[name="role_search"]').on('change',function(){
-            var role = jQuery(this).val();
-            var role_url = jQuery("#role_url").val();
-            var url = role_url+"/"+role+'/';
-            if(role == 'null'){
-                url = jQuery("#base_url").val();
-            }
-            window.location = url; 
-        });
-    });
-</script>
-
-<!-- reffer user list -->
-<script type="text/javascript">
-
-    $(document).on('click', 'button[name^="reffer"]', function(e) {
-        var system_id = $(this).data("system_id");
-        console.log(system_id);
-
-        if(system_id)
-        {
-            jQuery.ajax({
-                url : 'get_users',
-                type: 'GET',
-                dataType: 'json',
-                data: { id: system_id },
-                success:function(data)
-                { 
-                    console.log(data);
-                    jQuery('#refferal_modal').modal('show');
-                    document.getElementById("userId").value = system_id;
-                    jQuery('select[name="user"]').empty();
-                    $('select[name="user"]').append('<option value="" selected>'+ 'Select' +'</option>');
-                    
-                    jQuery.each(data, function(key,value){
-                        $('select[name="user"]').append('<option value="'+ value.id +'">'+value.first_name+' '+value.last_name+'</option>');
-                    });
-                }
-            });
-        }
-        
-    });
-
-</script>
-
-<!-- refferal amount -->
-<script type="application/javascript">
-    jQuery(document).ready(function ()
-    {
-        $(document).on('click', 'button[name^="button_reffer"]', function(e) {
-            var system_id = $(this).data("system_id");
-            console.log(system_id);
-            var amount = jQuery("#refferal_amount"+system_id).val();
-            console.log(amount);
-            if(amount < 1){
-                console.log('hai');
-                alertText = "Amount should be greater than 1rs";
-                var div = document.getElementById("refferal_amount_error");
-                div.innerHTML = '';
-                div.style.display = "block";
-                $( ".refferal_amount_error"+system_id).html('');
-                var html ='<div class="text-danger">'+alertText+'</div>';
-                $('.refferal_amount_error'+system_id).html(html);
-
-            }
-            else{
-                $('#refferal_amount_error').hide();
-                jQuery.ajax({
-                    url : 'refferal_amount',
-                    type: 'GET',
-                    dataType: 'json',
-                    data: { "amount": amount,"user_id" : system_id},
-                    success:function(data)
-                    {
-                        console.log(data);
-                        window.location.reload();
-
-                    }
-                });
-            }
-        });
-    });
-</script>
-
-<!-- profile page validation -->
+<!-- profile validation -->
 <script type="text/javascript">
 
     function additional_next() {
@@ -1885,9 +1225,9 @@
             alertText = alertText+"<br>Account Number is required";
         }
         //IFSC code
-        // if (!document.getElementById("ifsc_code").value) {
-        //     alertText = alertText+"<br>IFSC code is required";
-        // }
+        if (!document.getElementById("ifsc_code").value) {
+            alertText = alertText+"<br>IFSC code is required";
+        }
         // var ifsc_code = document.getElementById("ifsc_code").value;
         // if(ifsc_code){
         //     format = /^[A-Z]{4}0[0-9]{6}$/;
@@ -1981,10 +1321,12 @@
     }
 </script>
 
-<!-- avatar image -->
+
+<!-- avatar -->
 <script type="text/javascript">    
     $(document).ready(function (e) { 
-       $('#avatar').change(function(){   
+       $('#avatar').change(function(){ 
+            $('#avatar_image').show();   
             let reader = new FileReader();
             reader.onload = (e) => { 
                 $('#preview-image-avatar').attr('src', e.target.result); 
@@ -1999,7 +1341,8 @@
 <script type="text/javascript">    
     $(document).ready(function (e) {
        
-       $('#aadhaar_card').change(function(){   
+       $('#aadhaar_card').change(function(){
+            $('#aadhaar_image').show();   
             let reader = new FileReader();
             reader.onload = (e) => { 
                 $('#preview-image-aadhaar_card').attr('src', e.target.result); 
@@ -2013,7 +1356,8 @@
 <!-- pan card -->
 <script type="text/javascript">    
     $(document).ready(function (e) {
-       $('#pan_card').change(function(){   
+       $('#pan_card').change(function(){
+            $('#pan_image').show();    
             let reader = new FileReader();
             reader.onload = (e) => { 
                 $('#preview-image-pan_card').attr('src', e.target.result); 
@@ -2024,10 +1368,11 @@
 </script>
 
 
-<!-- nominee_aadhar_card -->
+<!-- nominee_aadhar -->
 <script type="text/javascript">    
     $(document).ready(function (e) {
        $('#nominee_aadhar').change(function(){   
+            $('#nominee_aadhar_image').show();
             let reader = new FileReader();
             reader.onload = (e) => { 
                 $('#preview-image-nominee_aadhar').attr('src', e.target.result); 
@@ -2037,6 +1382,35 @@
     });
 </script>
 
+
+<!-- propery image -->
+<script type="text/javascript">    
+    $(document).ready(function (e) {
+       $('#property_copy').change(function(){ 
+            $('#property_image').show();  
+            let reader = new FileReader();
+            reader.onload = (e) => { 
+                $('#preview-image-property').attr('src', e.target.result); 
+            }
+            reader.readAsDataURL(this.files[0]); 
+       });
+    });
+</script>
+
+
+<!-- loan terms and condition check -->
+<script type="text/javascript">
+
+    $('#terms_and_conditions').change(function () {
+        if (this.checked) {
+            document.getElementById('loan_final').style.display = 'block';
+        }
+        else{
+            document.getElementById('loan_final').style.display = 'none';
+        }
+    });
+</script>
+<!-- loan terms and condition check end -->
 
 
 <!-- SweetAlert2 -->
@@ -2053,18 +1427,6 @@
     @endif
 </script>
 
-<script type="text/javascript">
-    function super_admin() {
-        Swal.fire(
-            'Super Admin Cant be Edit!',
-            ' ',
-            'success'
-        )
-    }
-</script>
 
 @endsection
 
-@section('scripts')
-
-@endsection

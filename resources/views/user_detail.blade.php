@@ -5,10 +5,10 @@
 
 <style type="text/css">
 	body{
-		background-image: url(../public/assets/img/header-bg.jpg)!important;
+		background-image: url(../../public/assets/img/header-bg.jpg)!important;
 	}
 	#notification{
-		background-image: url(../public/assets/media/misc/pattern-1.jpg)!important;
+		background-image: url(../../public/assets/media/misc/pattern-1.jpg)!important;
 	}
 	.scroll {
 		-ms-overflow-style: none; /* for Internet Explorer, Edge */
@@ -74,7 +74,17 @@
 			<ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
 				<!--begin::Item-->
 				<li class="breadcrumb-item text-white opacity-75">
-					<a href="{{route('dashboard')}}" class="text-white text-hover-primary">Dashboard</a>
+					@if($flag == 'user')
+						<a href="{{route('user_management')}}" class="text-white text-hover-primary">Dashboard</a>
+					@elseif($flag == 'finance')
+						<a href="{{route('finance')}}" class="text-white text-hover-primary">Dashboard</a>
+					@elseif($flag == 'loan')
+						<a href="{{route('loan')}}" class="text-white text-hover-primary">Dashboard</a>
+					@elseif($flag == 'tax')
+						<a href="{{route('tax')}}" class="text-white text-hover-primary">Dashboard</a>
+					@elseif($flag == 'mutual_fund')
+						<a href="{{route('mutual_fund')}}" class="text-white text-hover-primary">Dashboard</a>
+					@endif
 				</li>
 				<!--end::Item-->
 				<!--begin::Item-->
@@ -1090,7 +1100,7 @@
 												@endif
 											</div>
 											<div class="d-flex justify-content-start flex-column">
-												<a href="{{route('user', ['id' => $user->id])}}" class="text-dark fw-bolder text-hover-primary fs-6">{{$smartfinance->user->first_name}} {{$smartfinance->user->last_name}}</a>
+												<a href="{{route('user', ['id' => $user->id,'flag' => 'user'])}}" class="text-dark fw-bolder text-hover-primary fs-6">{{$smartfinance->user->first_name}} {{$smartfinance->user->last_name}}</a>
 												<span class="text-muted fw-bold text-muted d-block fs-7">#{{$smartfinance->user->id}}</span>
 											</div>
 										</div>
