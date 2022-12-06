@@ -55,7 +55,7 @@ class taxController extends Controller
 
             $filename = $file->getClientOriginalName(); 
             $filename = time().$filename;
-            $path = $file->storeAs('/public/'.config('path.tax_document'), $filename);
+            $path = $file->storeAs('/public/tax_document/',$filename);
             $filenames .= $filename.",";
 
         }
