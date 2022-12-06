@@ -75,7 +75,7 @@ class taxController extends Controller
             $emailId = $auditor_email->value;
             $subject = $emailsetting->subject;
             $attachments = $tax_detail->document;
-            $mailstatus = SMTPController::send_mail($emailId,$subject,$txt,$attachment);
+            $mailstatus = SMTPController::send_mail($emailId,$subject,$txt,$attachments);
         }
         //End
 
@@ -90,7 +90,7 @@ class taxController extends Controller
             $emailId = $admin_email->value;
             $subject = $emailsetting->subject;
             $attachment = $tax_detail->document;
-            $mailstatus = SMTPController::sendMail($emailId,$subject,$txt,$attachment);
+            $mailstatus = SMTPController::send_mail($emailId,$subject,$txt,$attachments);
         }
         //End
 

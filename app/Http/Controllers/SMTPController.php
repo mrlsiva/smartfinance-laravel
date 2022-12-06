@@ -32,9 +32,9 @@ class SMTPController extends Controller
         return $returndata;
     }
 
-    public static function send_mail($emailId,$subject,$txt=null,$attachment=[]) {
+    public static function send_mail($emailId,$subject,$txt=null,$attachments=[]) {
 
-        Mail::send([], [], function($message) use ($emailId,$subject,$txt,$attachment){
+        Mail::send([], [], function($message) use ($emailId,$subject,$txt,$attachments){
             $cc_email = Setting::where('key','cc_email')->first();
             $message->to($emailId);
             $message->cc($cc_email->value);
