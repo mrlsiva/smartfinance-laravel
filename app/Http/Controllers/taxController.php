@@ -89,7 +89,7 @@ class taxController extends Controller
             $txt = strtr($email_template,$emailContentReplace);
             $emailId = $admin_email->value;
             $subject = $emailsetting->subject;
-            $attachment = $tax_detail->document;
+            $attachments = $tax_detail->document;
             $mailstatus = SMTPController::send_mail($emailId,$subject,$txt,$attachments);
         }
         //End
