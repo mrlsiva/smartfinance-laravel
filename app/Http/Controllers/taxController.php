@@ -72,7 +72,7 @@ class taxController extends Controller
         $auditor_email = Setting::where('key','auditor_email')->first();
 
         foreach(explode(",",$tax_detail->document) as $copy){
-            $attachments[] = Storage::path('/tax_document/'.$copy);
+            $attachments[] = Storage::path('public/tax_document/'.$copy);
         }
         //return $attachments;
 
