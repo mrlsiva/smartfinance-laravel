@@ -113,7 +113,7 @@
                                     </div>
                                     Mutual Fund
                                 </a>
-                                <a href="#" class="text-dark fw-bold fs-6 col bg-light-success p-6 rounded-2 me-7 mb-7">                                   
+                                <a href="{{route('insurance')}}" class="text-dark fw-bold fs-6 col bg-light-success p-6 rounded-2 me-7 mb-7">                                   
                                     <div class="d-flex flex-stack flex-grow-1">
                                         <div class="d-flex flex-column me-2">       
                                             <span class="svg-icon svg-icon-3x svg-icon-success d-block my-2">

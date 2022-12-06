@@ -8,8 +8,8 @@ use App\Http\Controllers\smartfinanceController;
 use App\Http\Controllers\loanController;
 use App\Http\Controllers\taxController;
 use App\Http\Controllers\mutalFundController;
+use App\Http\Controllers\insuranceController;
 use App\Http\Controllers\generalController;
-use App\Http\Middleware\PreventBackHistory;
 
 
 /*
@@ -56,18 +56,15 @@ Route::post('/save_password',[loginController::class, 'save_password'])->name('s
 
 //Login End
 
-//User Management
-
-//Dashboard for admin
+//Dashboard Pages
 Route::get('/user_management',[UserController::class, 'user_management'])->name('user_management');
 Route::get('/finance',[UserController::class, 'finance'])->name('finance');
 Route::get('/loan',[UserController::class, 'loan'])->name('loan');
 Route::get('/tax',[UserController::class, 'tax'])->name('tax');
 Route::get('/mutual_fund',[UserController::class, 'mutual_fund'])->name('mutual_fund');
+Route::get('/insurance',[UserController::class, 'insurance'])->name('insurance');
 
-//Dashboard for user
-//Route::get('/smartfinance',[UserController::class, 'smartfinance'])->name('smartfinance');
-
+//User Management
 Route::get('/dashboard',[UserController::class, 'dashboard'])->name('dashboard');
 Route::get('/get_user',[UserController::class, 'get_user'])->name('get_user');
 Route::post('/change_user_status',[UserController::class, 'change_user_status'])->name('change_user_status');
@@ -167,6 +164,10 @@ Route::post('/update_password',[taxController::class, 'update_password'])->name(
 //Mutal Fund
 Route::post('/send_enquiry',[mutalFundController::class, 'send_enquiry'])->name('send_enquiry');
 //End
+
+//Insurance
+Route::post('/save_insurance',[insuranceController::class, 'save_insurance'])->name('save_insurance');
+Route::get('/view_insurance/{id}',[insuranceController::class, 'view_insurance'])->name('view_insurance');
 
 
 //Logout

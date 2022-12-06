@@ -26,6 +26,7 @@ use App\Models\LoanPayment;
 use App\Models\Tax;
 use App\Models\TaxDetail;
 use App\Models\MutualFund;
+use App\Models\Insurance;
 use Image;
 use DB;
 
@@ -266,7 +267,6 @@ class UserController extends Controller
         }
     }
 
-    //Admin dashboard
     public function user_management(Request $request) 
     {
         $user = Auth::user();
@@ -680,7 +680,34 @@ class UserController extends Controller
            return view('user_mutual_fund')->with('smartfinance_count',$smartfinance_count)->with('loan_count',$loan_count)->with('payment_count',$payment_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count);
         }
     }
-    //End
+
+    public function insurance(Request $request) 
+    {
+
+        $user = Auth::user();
+        if($user == NULL){
+            return redirect('sign_in');
+        }
+        
+        if($user->role_id != '3'){
+        }
+        else{
+            $insurances = Insurance::where('user_id',$user->id)->paginate(10);
+            $smartfinance_count = Smartfinance::where([['user_id',$user->id],['is_status',2]])->count();
+            $payment_count = SmartfinancePayment::join('smartfinances','smartfinance_payments.smartfinance_id','=','smartfinances.id')->where('smartfinances.user_id',$user->id)->where('smartfinance_payments.is_approve',2)->count();
+            $loan_count = Loan::where([['user_id',$user->id],['is_status',2]])->count();
+            $loan_payment_count = LoanPayment::join('loans','loan_payments.loan_id','=','loans.id')->where('loans.user_id',$user->id)->where('loan_payments.is_status',2)->count();
+            $tax = Tax::where('user_id',$user->id)->first();
+            if($tax != NULL){            
+                $tax_count = TaxDetail::where('tax_id',$tax->id)->count();
+            }
+            else{
+               $tax_count = 0; 
+           }
+
+           return view('user_insurance')->with('insurances',$insurances)->with('smartfinance_count',$smartfinance_count)->with('loan_count',$loan_count)->with('payment_count',$payment_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count);
+        }
+    }
 
     public function get_user(Request $request) 
     { 
