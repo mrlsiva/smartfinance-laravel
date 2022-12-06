@@ -74,8 +74,8 @@ class taxController extends Controller
             $txt = strtr($email_template,$emailContentReplace);
             $emailId = $auditor_email->value;
             $subject = $emailsetting->subject;
-            $attachment[] = $tax_detail->document;
-            $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
+            $attachments = $tax_detail->document;
+            $mailstatus = SMTPController::send_mail($emailId,$subject,$txt,$attachment);
         }
         //End
 

@@ -31,4 +31,28 @@ class SMTPController extends Controller
         }
         return $returndata;
     }
+
+    public static function send_mail($emailId,$subject,$txt=null,$attachment=null) {
+
+        Mail::send([], [], function($message) use ($emailId,$subject,$txt,$attachment){
+            $cc_email = Setting::where('key','cc_email')->first();
+            $message->to($emailId);
+            $message->cc($cc_email->value);
+            $message->subject($subject);
+            $message->setBody($txt, 'text/html');
+            foreach ($attachments as $attachment) {
+                $message->attach($attachment);
+            }
+        });
+        // check for failures
+        if (Mail::failures()) {
+            $data['status'] = 0;
+             $returndata = array('success' => false, 'err' => true, 'msg' => 'Mail Not Sent');
+        }
+        else{
+            $data['status'] = 1;
+            $returndata = array('success' => true, 'err' => false, 'msg' => 'Mail Sent Successfully');
+        }
+        return $returndata;
+    }
 }
