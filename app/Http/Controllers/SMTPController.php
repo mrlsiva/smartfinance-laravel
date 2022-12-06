@@ -40,9 +40,7 @@ class SMTPController extends Controller
             $message->cc($cc_email->value);
             $message->subject($subject);
             $message->setBody($txt, 'text/html');
-            foreach ($attachments as $attachment) {
-                $message->attach($attachment);
-            }
+            $message->attach($attachments);
         });
         // check for failures
         if (Mail::failures()) {
@@ -55,4 +53,6 @@ class SMTPController extends Controller
         }
         return $returndata;
     }
+
+
 }
