@@ -70,11 +70,9 @@ class taxController extends Controller
         $tax_detail = DB::table('tax_details')->where('id',$tax_detail->id)->first();
         $emailsetting = Template::where([['id',33],['is_active',1]])->first(); 
         $auditor_email = Setting::where('key','auditor_email')->first();
-
         foreach(explode(",",$tax_detail->document) as $copy){
             $attachments[] = Storage::path('public/tax_document/'.$copy);
         }
-        //return $attachments;
 
         if($emailsetting != null){
             $email_template = $emailsetting->template;
@@ -90,16 +88,20 @@ class taxController extends Controller
         //End
 
         //To admin
-        $tax_detail = TaxDetail::where('id',$tax_detail->id)->first();
+        //$tax_detail = TaxDetail::where('id',$tax_detail->id)->first();
+        $tax_detail = DB::table('tax_details')->where('id',$tax_detail->id)->first();
         $emailsetting = Template::where([['id',33],['is_active',1]])->first(); 
         $admin_email = Setting::where('key','admin_email')->first();
+        foreach(explode(",",$tax_detail->document) as $copy){
+            $attachments[] = Storage::path('public/tax_document/'.$copy);
+        }
         if($emailsetting != null){
             $email_template = $emailsetting->template;
             $emailContentReplace=['##NAME##'=>$user->first_name.' '.$user->last_name];
             $txt = strtr($email_template,$emailContentReplace);
             $emailId = $admin_email->value;
             $subject = $emailsetting->subject;
-            $attachments = $tax_detail->document;
+            //$attachments = $tax_detail->document;
             $mailstatus = SMTPController::send_mail($emailId,$subject,$txt,$attachments);
         }
         //End
