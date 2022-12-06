@@ -34,14 +34,18 @@ class SMTPController extends Controller
 
     public static function send_mail($emailId,$subject,$txt=null,$attachments) {
 
-        Mail::send([], [], function($message) use ($emailId,$subject,$txt,$attachments){
-            $cc_email = Setting::where('key','cc_email')->first();
-            $message->to($emailId);
-            $message->cc($cc_email->value);
-            $message->subject($subject);
-            $message->setBody($txt, 'text/html');
-            $message->attach($attachments);
-        });
+        foreach($attachments as $attachment){
+            Mail::send([], [], function($message) use ($emailId,$subject,$txt,$attachment){
+                $cc_email = Setting::where('key','cc_email')->first();
+                $message->to($emailId);
+                $message->cc($cc_email->value);
+                $message->subject($subject);
+                $message->setBody($txt, 'text/html');
+                $message->attach($attachment);
+            });
+        }
+
+        
         // check for failures
         if (Mail::failures()) {
             $data['status'] = 0;
