@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\SMTPController;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -65,20 +66,25 @@ class taxController extends Controller
         //Mail
 
         //To auditor
-        $tax_detail = TaxDetail::where('id',$tax_detail->id)->first();
+        //$tax_detail = TaxDetail::where('id',$tax_detail->id)->first();
+        $tax_detail = DB::table('tax_details')->where('id',$tax_detail->id)->first();
         $emailsetting = Template::where([['id',33],['is_active',1]])->first(); 
         $auditor_email = Setting::where('key','auditor_email')->first();
+
+        foreach(explode(",",$tax_detail->document) as $copy){
+            $attachments[] = Storage::path('/tax_document/'.$copy);
+        }
+        //return $attachments;
+
         if($emailsetting != null){
             $email_template = $emailsetting->template;
             $emailContentReplace=['##NAME##'=>$user->first_name.' '.$user->last_name];
             $txt = strtr($email_template,$emailContentReplace);
             $emailId = $auditor_email->value;
             $subject = $emailsetting->subject;
-            $attachments = $tax_detail->document;
-            return $attachments;
-            foreach($attachments as $attachment){
-                $mailstatus = SMTPController::sendMail($emailId,$subject,$txt,$attachment);
-            }
+            //$attachments = $tax_detail->document;
+            
+            $mailstatus = SMTPController::send_mail($emailId,$subject,$txt,$attachments);
             
         }
         //End

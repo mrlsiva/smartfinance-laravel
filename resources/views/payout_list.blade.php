@@ -81,7 +81,7 @@
 										@endif
 									</div>
 									<div class="d-flex justify-content-start flex-column">
-										<a href="{{route('user', ['id' => $payout->user->id])}}" class="text-dark fw-bolder text-hover-primary fs-6">{{$payout->user->first_name}} {{$payout->user->last_name}}</a>
+										<a href="{{route('user', ['id' => $payout->user->id,'flag' => 'user'])}}" class="text-dark fw-bolder text-hover-primary fs-6">{{$payout->user->first_name}} {{$payout->user->last_name}}</a>
 										<span class="text-muted fw-bold text-muted d-block fs-7">#{{$payout->user->id}}</span>
 									</div>
 								</div>
