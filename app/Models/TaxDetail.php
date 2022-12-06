@@ -18,7 +18,7 @@ class TaxDetail extends Model
     {
         $document = new Collection();
         foreach(explode(",",$value) as $copy){
-            $document->push(url("storage/app/".config('path.tax_document')."{$copy}"));
+            $document->push(url("storage/app/public".config('path.tax_document')."{$copy}"));
         }
         return $document;
     }

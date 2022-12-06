@@ -12,5 +12,5 @@ return array(
     'property'    => 'public/property/',
     'loan_payment' => 'loan_payment/',
     'approve_payment_copy' => 'public/approve_payment_copy/',
-    'tax_document' => 'public/tax_document/',
+    'tax_document' => 'tax_document/',
 );
