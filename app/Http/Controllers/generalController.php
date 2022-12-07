@@ -184,6 +184,7 @@ class generalController extends Controller
             'mutual_fund_name' => 'required',
             'mutual_fund_phone' => 'required',
             'mutual_fund_email' => 'required|email',
+            'insurance_email' => 'required|email',
         ]);
 
         DB::table('settings')->where('key','project_name')->update(['value' => $request->project_name]);
@@ -196,6 +197,7 @@ class generalController extends Controller
         DB::table('settings')->where('key','mutual_fund_name')->update(['value' => $request->mutual_fund_name]);
         DB::table('settings')->where('key','mutual_fund_phone')->update(['value' => $request->mutual_fund_phone]);
         DB::table('settings')->where('key','mutual_fund_email')->update(['value' => $request->mutual_fund_email]);
+        DB::table('settings')->where('key','insurance_email')->update(['value' => $request->insurance_email]);
 
         return redirect()->back()->with('alert', 'Updated Successfully!!');
 

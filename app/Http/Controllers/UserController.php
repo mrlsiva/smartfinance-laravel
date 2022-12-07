@@ -353,6 +353,7 @@ class UserController extends Controller
         $loan_payment_count = LoanPayment::where('is_status',2)->count();
         $tax_count = Tax::count();
         $mutual_fund_count = MutualFund::count();
+        $insurance_count = Insurance::groupBy('user_id')->select('user_id')->get();
 
         $role = NULL;
         $profile = NULL;
@@ -360,7 +361,7 @@ class UserController extends Controller
         $status = NULL;
         $search = NULL;
 
-        return view('user_management')->with('users',$users)->with('user_count',$user_count)->with('smartfinance_count',$smartfinance_count)->with('payment_count',$payment_count)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count)->with('mutual_fund_count',$mutual_fund_count)->with('role',$role)->with('profile',$profile)->with('progress',$progress)->with('status',$status)->with('search',$search);
+        return view('user_management')->with('users',$users)->with('user_count',$user_count)->with('smartfinance_count',$smartfinance_count)->with('payment_count',$payment_count)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count)->with('mutual_fund_count',$mutual_fund_count)->with('insurance_count',$insurance_count)->with('role',$role)->with('profile',$profile)->with('progress',$progress)->with('status',$status)->with('search',$search);
     }
 
     public function finance(Request $request) 
@@ -451,6 +452,7 @@ class UserController extends Controller
             $loan_payment_count = LoanPayment::where('is_status',2)->count();
             $tax_count = Tax::count();
             $mutual_fund_count = MutualFund::count();
+            $insurance_count = Insurance::groupBy('user_id')->select('user_id')->get();
 
             $user = Auth::user();
             $admin_finances = Smartfinance::where('user_id',$user->id)->orderBy('id','Desc')->paginate(10);
@@ -460,7 +462,7 @@ class UserController extends Controller
             $investment_status = NULL;
             $investment_search = NULL;
 
-            return view('finance')->with('smartfinances',$smartfinances)->with('admin_finances',$admin_finances)->with('admin_finance_count',$admin_finance_count)->with('user_count',$user_count)->with('smartfinance_count',$smartfinance_count)->with('payment_count',$payment_count)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count)->with('mutual_fund_count',$mutual_fund_count)->with('investment_plan',$investment_plan)->with('investment_status',$investment_status)->with('investment_search',$investment_search);
+            return view('finance')->with('smartfinances',$smartfinances)->with('admin_finances',$admin_finances)->with('admin_finance_count',$admin_finance_count)->with('user_count',$user_count)->with('smartfinance_count',$smartfinance_count)->with('payment_count',$payment_count)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count)->with('mutual_fund_count',$mutual_fund_count)->with('insurance_count',$insurance_count)->with('investment_plan',$investment_plan)->with('investment_status',$investment_status)->with('investment_search',$investment_search);
         }
         else{
 
@@ -537,8 +539,9 @@ class UserController extends Controller
                $tax_count = 0; 
 
            }
+           $insurance_count = Insurance::where('user_id',$user->id)->count();
 
-           return view('smart_finance')->with('smartfinances',$smartfinances)->with('smartfinance_count',$smartfinance_count)->with('loan_count',$loan_count)->with('payment_count',$payment_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count);
+           return view('smart_finance')->with('smartfinances',$smartfinances)->with('smartfinance_count',$smartfinance_count)->with('loan_count',$loan_count)->with('payment_count',$payment_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count)->with('insurance_count',$insurance_count);
 
         }
     }
@@ -560,6 +563,8 @@ class UserController extends Controller
             $loan_payment_count = LoanPayment::where('is_status',2)->count();
             $tax_count = Tax::count();
             $mutual_fund_count = MutualFund::count();
+            $insurance_count = Insurance::groupBy('user_id')->select('user_id')->get();
+
 
             $user = Auth::user();
             $admin_loans = Loan::where('user_id',$user->id)->orderBy('id','Desc')->paginate(10);
@@ -569,7 +574,7 @@ class UserController extends Controller
             $loan_status = NULL;
             $loan_search = NULL;
 
-            return view('loan')->with('loans',$loans)->with('admin_loans',$admin_loans)->with('admin_loan_count',$admin_loan_count)->with('user_count',$user_count)->with('smartfinance_count',$smartfinance_count)->with('payment_count',$payment_count)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count)->with('mutual_fund_count',$mutual_fund_count)->with('loan_search',$loan_search)->with('loan_status',$loan_status);
+            return view('loan')->with('loans',$loans)->with('admin_loans',$admin_loans)->with('admin_loan_count',$admin_loan_count)->with('user_count',$user_count)->with('smartfinance_count',$smartfinance_count)->with('payment_count',$payment_count)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count)->with('mutual_fund_count',$mutual_fund_count)->with('insurance_count',$insurance_count)->with('loan_search',$loan_search)->with('loan_status',$loan_status);
         }
         else
         {
@@ -586,8 +591,10 @@ class UserController extends Controller
                $tax_count = 0; 
 
            }
+           $insurance_count = Insurance::where('user_id',$user->id)->count();
 
-           return view('user_loan')->with('loans',$loans)->with('smartfinance_count',$smartfinance_count)->with('loan_count',$loan_count)->with('payment_count',$payment_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count);
+
+           return view('user_loan')->with('loans',$loans)->with('smartfinance_count',$smartfinance_count)->with('loan_count',$loan_count)->with('payment_count',$payment_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count)->with('insurance_count',$insurance_count);
         }
 
     }
@@ -609,6 +616,7 @@ class UserController extends Controller
             $tax_details = TaxDetail::paginate(10);
             $tax_count = Tax::count();
             $mutual_fund_count = MutualFund::count();
+            $insurance_count = Insurance::groupBy('user_id')->select('user_id')->get();
 
             $user = Auth::user();
             $admin_tax = Tax::where('user_id',$user->id)->first();
@@ -621,7 +629,7 @@ class UserController extends Controller
             $admin_tax_count = Tax::where('user_id',$user->id)->count();
             
 
-            return view('tax')->with('tax_details',$tax_details)->with('user_count',$user_count)->with('smartfinance_count',$smartfinance_count)->with('payment_count',$payment_count)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count)->with('mutual_fund_count',$mutual_fund_count)->with('admin_tax_details',$admin_tax_details)->with('admin_tax_count',$admin_tax_count);
+            return view('tax')->with('tax_details',$tax_details)->with('user_count',$user_count)->with('smartfinance_count',$smartfinance_count)->with('payment_count',$payment_count)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count)->with('mutual_fund_count',$mutual_fund_count)->with('insurance_count',$insurance_count)->with('admin_tax_details',$admin_tax_details)->with('admin_tax_count',$admin_tax_count);
         }
         else{
 
@@ -638,8 +646,9 @@ class UserController extends Controller
                $tax_count = 0; 
                $tax_details = [];
            }
+           $insurance_count = Insurance::where('user_id',$user->id)->count();
 
-           return view('user_tax')->with('tax',$tax)->with('tax_details',$tax_details)->with('smartfinance_count',$smartfinance_count)->with('loan_count',$loan_count)->with('payment_count',$payment_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count);
+           return view('user_tax')->with('tax',$tax)->with('tax_details',$tax_details)->with('smartfinance_count',$smartfinance_count)->with('loan_count',$loan_count)->with('payment_count',$payment_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count)->with('insurance_count',$insurance_count);
         }
     }
 
@@ -660,8 +669,9 @@ class UserController extends Controller
             $tax_count = Tax::count();
             $mutual_funds = MutualFund::paginate(10);
             $mutual_fund_count = MutualFund::count();
+            $insurance_count = Insurance::groupBy('user_id')->select('user_id')->get();
 
-            return view('mutual_fund')->with('mutual_funds',$mutual_funds)->with('user_count',$user_count)->with('smartfinance_count',$smartfinance_count)->with('payment_count',$payment_count)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count)->with('mutual_fund_count',$mutual_fund_count);
+            return view('mutual_fund')->with('mutual_funds',$mutual_funds)->with('user_count',$user_count)->with('smartfinance_count',$smartfinance_count)->with('payment_count',$payment_count)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count)->with('mutual_fund_count',$mutual_fund_count)->with('insurance_count',$insurance_count);
         }
         else{
 
@@ -676,8 +686,9 @@ class UserController extends Controller
             else{
                $tax_count = 0; 
            }
+           $insurance_count = Insurance::where('user_id',$user->id)->count();
 
-           return view('user_mutual_fund')->with('smartfinance_count',$smartfinance_count)->with('loan_count',$loan_count)->with('payment_count',$payment_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count);
+           return view('user_mutual_fund')->with('smartfinance_count',$smartfinance_count)->with('loan_count',$loan_count)->with('payment_count',$payment_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count)->with('insurance_count',$insurance_count);
         }
     }
 
@@ -690,6 +701,24 @@ class UserController extends Controller
         }
         
         if($user->role_id != '3'){
+
+            $user_count = User::where('is_active',0)->orWhere('is_profile_verified',0)->count();
+            $smartfinance_count = Smartfinance::where('is_status',2)->count();
+            $payment_count = SmartfinancePayment::where('is_approve',2)->count();
+            $loan_count = Loan::where('is_status',2)->count();
+            $loan_payment_count = LoanPayment::where('is_status',2)->count();
+            $tax_count = Tax::count();
+            $mutual_fund_count = MutualFund::count();
+            $insurances = Insurance::paginate(10);
+            $insurance_count = Insurance::groupBy('user_id')->select('user_id')->get();
+
+            $user = Auth::user();
+            $admin_insurances = Insurance::where('user_id',$user->id)->orderBy('id','Desc')->paginate(10);
+            $admin_insurance_count = Insurance::where('user_id',$user->id)->count();
+            
+        
+            return view('insurance')->with('insurances',$insurances)->with('user_count',$user_count)->with('smartfinance_count',$smartfinance_count)->with('payment_count',$payment_count)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count)->with('mutual_fund_count',$mutual_fund_count)->with('insurance_count',$insurance_count)->with('admin_insurances',$admin_insurances)->with('admin_insurance_count',$admin_insurance_count);
+
         }
         else{
             $insurances = Insurance::where('user_id',$user->id)->paginate(10);
@@ -704,8 +733,9 @@ class UserController extends Controller
             else{
                $tax_count = 0; 
            }
+           $insurance_count = Insurance::where('user_id',$user->id)->count();
 
-           return view('user_insurance')->with('insurances',$insurances)->with('smartfinance_count',$smartfinance_count)->with('loan_count',$loan_count)->with('payment_count',$payment_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count);
+           return view('user_insurance')->with('insurances',$insurances)->with('smartfinance_count',$smartfinance_count)->with('loan_count',$loan_count)->with('payment_count',$payment_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count)->with('insurance_count',$insurance_count);
         }
     }
 

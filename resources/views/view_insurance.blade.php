@@ -23,7 +23,7 @@
 			<ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
 				<!--begin::Item-->
 				<li class="breadcrumb-item text-white opacity-75">
-					<a href="{{route('insurance')}}" class="text-white text-hover-primary">Tax</a>
+					<a href="{{route('insurance')}}" class="text-white text-hover-primary">Insurance</a>
 				</li>
 				<!--end::Item-->
 				<!--begin::Item-->
@@ -46,63 +46,143 @@
 <div id="kt_content_container" class="d-flex flex-column-fluid align-items-start container-xxl">
 	<!--begin::Post-->
 	<div class="content flex-row-fluid" id="kt_content">
-		<!--begin::password_reset_card-->
+		<!--begin::insurance_card-->
 		<div class="card mb-5 mb-xl-10">
 			<div class="card-body pt-9 pb-0">
 				<!--begin::Card header-->
 				<div class="card-header cursor-pointer">
 					<!--begin::Card title-->
 					<div class="card-title m-0">
-						<h3 class="fw-bolder m-0">Insurance</h3>
+						<h3 class="fw-bolder m-0">Insurance Details</h3>
 					</div>
 					<!--end::Card title-->
 				</div>
 				<!--end::Card header-->
 				<br><br>
-
-				<!--begin::Input group-->
-				<div class="row mb-8">
-					<div class="col-md-6">
-						<!--begin::Label-->
-						<label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
-							<span class="required">Pan Card</span>
-							<i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Pan Card"></i>
-						</label>
-						<!--end::Label-->
-						<!--begin::Input-->
-						<input type="text" class="form-control form-control-solid " placeholder="Pan Card" value="{{$tax->pan_card}}" name="pan_card" id="pan_card"  readonly="" />
-						<!--end::Input-->
+				<!--begin::Row-->
+				<div class="row mb-7">
+					<!--begin::Label-->
+					<label class="col-lg-4 fw-bold text-muted">Category</label>
+					<!--end::Label-->
+					<!--begin::Col-->
+					<div class="col-lg-8">
+						<span class="fs-6 text-gray-800">{{$insurance->category}}</span>
 					</div>
-					<div class="col-md-6">
-						<!--begin::Label-->
-						<label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
-							<span class="required">Password</span>
-							<i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Password"></i>
-						</label>
-						<!--end::Label-->
-						<!--begin::Input-->
-						<input type="text" class="form-control form-control-solid" placeholder="Password" value="{{$tax->password}}" name="password" id="password" required />
-						<!--end::Input-->
-					</div>
+					<!--end::Col-->
 				</div>
-				<!--end::Input group-->
+				<!--end::Row-->
+				@if($insurance->sub_category != NULL)
+					<!--begin::Row-->
+					<div class="row mb-7">
+						<!--begin::Label-->
+						<label class="col-lg-4 fw-bold text-muted">Sub Category</label>
+						<!--end::Label-->
+						<!--begin::Col-->
+						<div class="col-lg-8">
+							<span class="fs-6 text-gray-800">{{$insurance->sub_category}}</span>
+						</div>
+						<!--end::Col-->
+					</div>
+					<!--end::Row-->
+				@endif
+				<!--begin::Row-->
+				<div class="row mb-7">
+					<!--begin::Label-->
+					<label class="col-lg-4 fw-bold text-muted">Amount</label>
+					<!--end::Label-->
+					<!--begin::Col-->
+					<div class="col-lg-8">
+						<span class="fs-6 text-gray-800">Rs {{$insurance->commafun($insurance->amount)}}</span>
+					</div>
+					<!--end::Col-->
+				</div>
+				<!--end::Row-->
+				<!--begin::Row-->
+				<div class="row mb-7">
+					<!--begin::Label-->
+					<label class="col-lg-4 fw-bold text-muted">Tenure</label>
+					<!--end::Label-->
+					<!--begin::Col-->
+					<div class="col-lg-8">
+						<span class="fs-6 text-gray-800">{{$insurance->tenure}} Year</span>
+					</div>
+					<!--end::Col-->
+				</div>
+				<!--end::Row-->
+				<!--begin::Row-->
+				<div class="row mb-7">
+					<!--begin::Label-->
+					<label class="col-lg-4 fw-bold text-muted">Start Date</label>
+					<!--end::Label-->
+					<!--begin::Col-->
+					<div class="col-lg-8">
+						@php
+							$date = Carbon\Carbon::parse($insurance->start_date)->formatLocalized('%d %b %Y');
+						@endphp
+						<span class="fs-6 text-gray-800">{{$date}}</span>
+					</div>
+					<!--end::Col-->
+				</div>
+				<!--end::Row-->
+				<!--begin::Row-->
+				<div class="row mb-7">
+					<!--begin::Label-->
+					<label class="col-lg-4 fw-bold text-muted">End Date</label>
+					<!--end::Label-->
+					<!--begin::Col-->
+					<div class="col-lg-8">
+						@php
+							$date = Carbon\Carbon::parse($insurance->end_date)->formatLocalized('%d %b %Y');
+						@endphp
+						<span class="fs-6 text-gray-800">{{$date}}</span>
+					</div>
+					<!--end::Col-->
+				</div>
+				<!--end::Row-->
+				<!--begin::Row-->
+				<div class="row mb-7">
+					<!--begin::Label-->
+					<label class="col-lg-4 fw-bold text-muted">Due</label>
+					<!--end::Label-->
+					<!--begin::Col-->
+					<div class="col-lg-8">
+						<span class="fs-6 text-gray-800">{{$insurance->due}}</span>
+					</div>
+					<!--end::Col-->
+				</div>
+				<!--end::Row-->
+				<!--begin::Row-->
+				<div class="row mb-7">
+					<!--begin::Label-->
+					<label class="col-lg-4 fw-bold text-muted">Due Date</label>
+					<!--end::Label-->
+					<!--begin::Col-->
+					<div class="col-lg-8">
+						@php
+							$date = Carbon\Carbon::parse($insurance->due_date)->formatLocalized('%d %b %Y');
+						@endphp
+						<span class="fs-6 text-gray-800">{{$date}}</span>
+					</div>
+					<!--end::Col-->
+				</div>
+				<!--end::Row-->
 			</div>
 		</div>
-		<!--end::password_reset_card-->
-		<!--begin::tax-document-card-->
+		<!--end::insurance_card-->
+		<!--begin::insurance-document-card-->
 		<div class="card mb-5 mb-xl-10">
 			<div class="card-body pt-9 pb-0">
 				<!--begin::Card header-->
 				<div class="card-header cursor-pointer">
 					<!--begin::Card title-->
 					<div class="card-title m-0">
-						<h3 class="fw-bolder m-0">Tax Details ({{$tax_detail->start_year}} - {{$tax_detail->end_year}})</h3>
+						<h3 class="fw-bolder m-0">Insurance Documents</h3>
 					</div>
 					<!--end::Card title-->
 				</div>
 				<!--end::Card header-->
-				
-				<table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
+				<br><br>
+				<table class="table table-row-gray-300 align-middle gs-0 gy-4">
 					<thead>
 						<tr class="fw-bolder text-muted">
 							<th class="">DOCUMENT</th>
@@ -110,7 +190,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						@foreach($tax_detail->document as $document)
+						@foreach($insurance->document as $document)
 							<tr>
 								<td>
 									Document {{ $loop->index+1 }}
@@ -130,8 +210,7 @@
 				
 			</div>
 		</div>
-		<!--end::tax-document-card-->
-		
+		<!--end::insurance-document-card-->
     </div>
     <!--end::Post-->
 </div>

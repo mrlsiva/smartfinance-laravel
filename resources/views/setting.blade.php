@@ -65,6 +65,7 @@
                 		$mutual_fund_name = App\Models\Setting::where('key','mutual_fund_name')->first();
                 		$mutual_fund_phone = App\Models\Setting::where('key','mutual_fund_phone')->first();
                 		$mutual_fund_email = App\Models\Setting::where('key','mutual_fund_email')->first();
+                		$insurance_email = App\Models\Setting::where('key','insurance_email')->first();
                 	@endphp
 					<!--begin::Input group-->
 					<div class="row mb-8">
@@ -195,6 +196,21 @@
 							<!--end::Label-->
 							<!--begin::Input-->
 							<input type="text" class="form-control form-control-solid" placeholder="Mutual Fund Email" value="{{$mutual_fund_email->value}}" name="mutual_fund_email" id="mutual_fund_email" required />
+							<!--end::Input-->
+						</div>
+					</div>
+					<!--end::Input group-->
+					<!--begin::Input group-->
+					<div class="row mb-8">
+						<div class="col-md-6">
+							<!--begin::Label-->
+							<label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+								<span class="required">Insurance Email</span>
+								<i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Insurance Email"></i>
+							</label>
+							<!--end::Label-->
+							<!--begin::Input-->
+							<input type="email" class="form-control form-control-solid" placeholder="Insurance Email" value="{{$insurance_email->value}}" name="insurance_email" id="insurance_email" required />
 							<!--end::Input-->
 						</div>
 					</div>

@@ -131,7 +131,7 @@
                                     </div>
                                     Mutual Fund
                                 </a>
-                                <a href="#" class="text-dark fw-bold fs-6 col border-bottom border-warning bg-light-warning p-6 rounded-2 me-7 mb-7">                            
+                                <a href="{{route('insurance')}}" class="text-dark fw-bold fs-6 col border-bottom border-warning bg-light-warning p-6 rounded-2 me-7 mb-7">                            
                                     <div class="d-flex flex-stack flex-grow-1">
                                         <div class="d-flex flex-column me-2">       
                                             <span class="svg-icon svg-icon-3x svg-icon-warning d-block my-2">
@@ -139,7 +139,7 @@
                                             </span>         
                                         </div>
                                         <span class="symbol symbol-50px">
-                                            <span class="px-3 py-1 fs-5 fw-bolder bg-warning text-white">0</span>
+                                            <span class="px-3 py-1 fs-5 fw-bolder bg-warning text-white">{{$insurance_count->count()}}</span>
                                         </span>
                                     </div>
                                     Insurance

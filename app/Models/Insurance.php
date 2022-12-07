@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 
 class Insurance extends Model
 {
@@ -12,6 +13,20 @@ class Insurance extends Model
     protected $fillable = [
         'user_id','category','sub_category','amount','tenure','start_date','end_date','due','due_date'
     ];
+
+    public function getDocumentAttribute($value)
+    {
+        $document = new Collection();
+        foreach(explode(",",$value) as $copy){
+            $document->push(url("storage/app/public/policy_document/"."{$copy}"));
+        }
+        return $document;
+    }
+
+    public function user()
+    {
+        return $this->belongsTo('App\Models\User');
+    }
 
     public function commafun($num){
 

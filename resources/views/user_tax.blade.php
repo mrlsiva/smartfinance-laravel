@@ -121,7 +121,7 @@
                                             </span>         
                                         </div>
                                         <span class="symbol symbol-50px">
-                                            <span class="px-3 py-1 fs-5 fw-bolder bg-success text-white">0</span>
+                                            <span class="px-3 py-1 fs-5 fw-bolder bg-success text-white">{{$insurance_count}}</span>
                                         </span>
                                     </div>
                                     Insurance

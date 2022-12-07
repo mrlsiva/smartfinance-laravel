@@ -121,7 +121,7 @@
                                             </span>         
                                         </div>
                                         <span class="symbol symbol-50px">
-                                            <span class="px-3 py-1 fs-5 fw-bolder bg-warning text-white">0</span>
+                                            <span class="px-3 py-1 fs-5 fw-bolder bg-warning text-white">{{$insurance_count}}</span>
                                         </span>
                                     </div>
                                     Insurance
@@ -865,7 +865,7 @@
 </div>
 <!--end::Modal - Create Profile-->
 
-<!-- begin::Modal -tax- -->
+<!-- begin::Modal -insurance- -->
 <div class="modal fade" id="kt_modal_new_insurance" tabindex="-1" aria-hidden="true">
     <!--begin::Modal dialog-->
     <div class="modal-dialog mw-650px">
@@ -996,7 +996,10 @@
                             </label>
                             <!--end::Label-->
                             <!--begin::Input-->
-                            <input type="date" class="form-control form-control-solid" placeholder="Start Date" value="" name="start_date" id="start_date" required="true" />
+                            @php
+                                $today = Carbon\Carbon::now()->format('Y-m-d');
+                            @endphp
+                            <input type="date" class="form-control form-control-solid" placeholder="Start Date" value="" name="start_date" id="start_date" required="true" max="{{$today}}" />
                             <!--end::Input-->
                         </div>
                         <!--end::Input group-->
@@ -1075,7 +1078,7 @@
     </div>
     <!--end::Modal dialog-->
 </div>
-<!-- end::Modal -tax- -->
+<!-- end::Modal -insurance- -->
 
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
