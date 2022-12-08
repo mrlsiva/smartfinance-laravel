@@ -23,7 +23,7 @@ class Loan extends Model
     {
         $property_copy = new Collection();
         foreach(explode(",",$value) as $copy){
-            $property_copy->push(url("storage/app/".config('path.property')."{$copy}"));
+            $property_copy->push(url("storage/app/public/property/"."{$copy}"));
         }
         return $property_copy;
     }
@@ -32,7 +32,7 @@ class Loan extends Model
     {
         $approve_payment_copy = new Collection();
         foreach(explode(",",$value) as $copy){
-            $approve_payment_copy->push(url("storage/app/".config('path.approve_payment_copy')."{$copy}"));
+            $approve_payment_copy->push(url("storage/app/public/approve_payment_copy/"."{$copy}"));
         }
         return $approve_payment_copy;
     }

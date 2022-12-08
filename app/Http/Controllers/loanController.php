@@ -51,7 +51,7 @@ class loanController extends Controller
 
             $filename = $file->getClientOriginalName(); 
             $filename = time().$filename;
-            $path = $file->storeAs(config('path.property'), $filename);
+            $path = $file->storeAs('/public/property/',$filename);
             $filenames .= $filename.",";
 
         }
@@ -129,7 +129,7 @@ class loanController extends Controller
 
                     $filename = $file->getClientOriginalName(); 
                     $filename = time().$filename;
-                    $path = $file->storeAs(config('path.approve_payment_copy'), $filename);
+                    $path = $file->storeAs('/public/approve_payment_copy/',$filename);
                     $filenames .= $filename.",";
 
                 }
