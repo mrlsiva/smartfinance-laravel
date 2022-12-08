@@ -243,7 +243,7 @@ class loanController extends Controller
         $rand_name = time() . Str::random(12);
         $filename = $rand_name . '.jpg';
         $photo = Image::make($image)->encode('jpg', 80);
-        Storage::disk('public')->put(config('path.loan_payment').$filename, $photo);
+        Storage::disk('public')->put('loan_payment/'.$filename, $photo);
 
         $loan = Loan::where('id',$request->loan_id)->first();
         $percentage = $request->amount/$loan->amount*100;
