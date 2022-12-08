@@ -39,7 +39,7 @@ class mutalFundController extends Controller
         //End
 
         //To User
-        $emailsetting = Template::where([['id',33],['is_active',1]])->first(); 
+        $emailsetting = Template::where([['id',35],['is_active',1]])->first(); 
         $mutual_fund_email = Setting::where('key','mutual_fund_email')->first();
         $mutual_fund_phone = Setting::where('key','mutual_fund_phone')->first();
         $mutual_fund_name = Setting::where('key','mutual_fund_name')->first();

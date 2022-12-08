@@ -60,7 +60,7 @@ class insuranceController extends Controller
 
         //Mail
 
-        //To auditor
+        //To insurance
         $insurance = DB::table('insurances')->where('id',$insurance->id)->first();
         $emailsetting = Template::where([['id',36],['is_active',1]])->first(); 
         $insurance_email = Setting::where('key','insurance_email')->first();
