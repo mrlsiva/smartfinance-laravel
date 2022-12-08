@@ -5,6 +5,9 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Insurance;
+use App\Models\Setting;
+use App\Models\Template;
+use DB;
 
 
 class insuranceController extends Controller
