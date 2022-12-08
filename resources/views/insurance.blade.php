@@ -1160,7 +1160,7 @@
                             	<option value="">Select</option>
                             	<option value="Yearly">Yearly</option>
                             	<option value="Monthly">Monthly</option>
-                            	<option value="Term">Quarterly</option>
+                            	<option value="Quarterly">Quarterly</option>
                             	<option value="One Time">One Time</option>
                             </select>
                             <!--end::Input-->

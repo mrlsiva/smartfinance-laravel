@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Models\InsuranceNotification;
 use App\Models\Insurance;
 use App\Models\Setting;
 use App\Models\Template;
+Use \Carbon\Carbon;
 use DB;
 
 
@@ -57,6 +59,40 @@ class insuranceController extends Controller
         }
         $insurance->document = trim($filenames,",");
         $insurance->save();
+
+        if($insurance->due == 'Yearly'){
+            $day = Carbon::parse($insurance->due_date)->format('d');
+            $next_year = Carbon::parse($insurance->start_date)->addYear();
+            $due_date = Carbon::parse($next_year)->setDay($day)->format('Y-m-d');
+            $date = Carbon::parse($due_date)->subDays(5);
+            $insurance_notification = InsuranceNotification::create([
+                'insurance_id' => $insurance->id,
+                'date' => $date,
+                'is_send' => 0,
+            ]);
+        }
+        elseif($insurance->due == 'Monthly'){
+            $day = Carbon::parse($insurance->due_date)->format('d');
+            $next_month = Carbon::parse($insurance->start_date)->addMonths(1);
+            $due_date = Carbon::parse($next_month)->setDay($day)->format('Y-m-d');
+            $date = Carbon::parse($due_date)->subDays(5);
+            $insurance_notification = InsuranceNotification::create([
+                'insurance_id' => $insurance->id,
+                'date' => $date,
+                'is_send' => 0,
+            ]);
+        }
+        elseif($insurance->due == 'Quarterly'){
+            $day = Carbon::parse($insurance->due_date)->format('d');
+            $next_month = Carbon::parse($insurance->start_date)->addMonths(3);
+            $due_date = Carbon::parse($next_month)->setDay($day)->format('Y-m-d');
+            $date = Carbon::parse($due_date)->subDays(5);
+            $insurance_notification = InsuranceNotification::create([
+                'insurance_id' => $insurance->id,
+                'date' => $date,
+                'is_send' => 0,
+            ]);
+        }
 
         //Mail
 
