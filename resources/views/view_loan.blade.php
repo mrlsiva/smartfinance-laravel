@@ -192,7 +192,7 @@ $user = Auth::guard('web')->user();
 										<div class="fw-bold fs-6 text-gray-400">Total Amount</div>
 										<!--end::Label-->
 									</div>
-									@if($user->role_id == 3)
+									@if($loan->user_id == $user->id)
 										@if($loan->approve_payment_copy != NULL)
 										<div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
 											<!--begin::Number-->
