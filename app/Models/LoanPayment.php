@@ -20,6 +20,6 @@ class LoanPayment extends Model
 
     public function getPaymentBillAttribute($value)
     {
-        return $value ? url('storage/app/public/'.config('path.loan_payment').$value ): null;
+        return $value ? url('storage/app/public/loan_payment/'.$value ): null;
     }
 }
