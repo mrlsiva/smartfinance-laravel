@@ -304,7 +304,7 @@
                                                 @php
                                                     $payment = App\Models\LoanPayment::where([['loan_id',$loan->id],['is_status',2]])->first();
                                                 @endphp
-                                                @if($loan->is_status == 2 || $payment->is_status == 2)
+                                                @if($loan->is_status == 2 || $payment != NULL)
                                                     <td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>
                                                 @elseif($loan->is_status == 1)
                                                     <td><span class="badge py-3 px-4 fs-7 badge-light-success">Accepted</span></td>
