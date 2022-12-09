@@ -23,7 +23,7 @@ class CreateInsurancesTable extends Migration
             $table->date('start_date');
             $table->date('end_date');
             $table->string('due');
-            $table->date('due_date');
+            $table->date('next_due_date');
             $table->string('document');
             $table->timestamps();
         });

@@ -11,7 +11,7 @@ class Insurance extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id','category','sub_category','amount','tenure','start_date','end_date','due','due_date'
+        'user_id','category','sub_category','amount','tenure','start_date','end_date','due','next_due_date'
     ];
 
     public function getDocumentAttribute($value)

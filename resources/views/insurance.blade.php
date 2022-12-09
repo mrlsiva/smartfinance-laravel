@@ -1171,12 +1171,12 @@
                         <div class="fv-row mb-8">
                             <!--begin::Label-->
                             <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
-                                <span class="required">Due Date</span>
+                                <span class="required">Next Due Date</span>
                                 <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Due Date"></i>
                             </label>
                             <!--end::Label-->
                             <!--begin::Input-->
-                            <input type="date" class="form-control form-control-solid" placeholder="Due Date" value="" name="due_date" id="due_date" required="true" />
+                            <input type="date" class="form-control form-control-solid" placeholder="Next Due Date" value="" name="next_due_date" id="next_due_date" required="true" />
                             <!--end::Input-->
                         </div>
                         <!--end::Input group-->

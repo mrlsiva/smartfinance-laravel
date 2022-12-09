@@ -28,7 +28,7 @@ class insuranceController extends Controller
                 'start_date' => $request->start_date,
                 'end_date' => $request->end_date,
                 'due' => $request->payment_due,
-                'due_date' => $request->due_date,
+                'next_due_date' => $request->next_due_date,
             ]);
         }
         else{
@@ -42,7 +42,7 @@ class insuranceController extends Controller
                 'start_date' => $request->start_date,
                 'end_date' => $request->end_date,
                 'due' => $request->payment_due,
-                'due_date' => $request->due_date,
+                'next_due_date' => $request->next_due_date,
             ]);
 
         }
@@ -60,39 +60,13 @@ class insuranceController extends Controller
         $insurance->document = trim($filenames,",");
         $insurance->save();
 
-        if($insurance->due == 'Yearly'){
-            $day = Carbon::parse($insurance->due_date)->format('d');
-            $next_year = Carbon::parse($insurance->start_date)->addYear();
-            $due_date = Carbon::parse($next_year)->setDay($day)->format('Y-m-d');
-            $date = Carbon::parse($due_date)->subDays(5);
-            $insurance_notification = InsuranceNotification::create([
-                'insurance_id' => $insurance->id,
-                'date' => $date,
-                'is_send' => 0,
-            ]);
-        }
-        elseif($insurance->due == 'Monthly'){
-            $day = Carbon::parse($insurance->due_date)->format('d');
-            $next_month = Carbon::parse($insurance->start_date)->addMonths(1);
-            $due_date = Carbon::parse($next_month)->setDay($day)->format('Y-m-d');
-            $date = Carbon::parse($due_date)->subDays(5);
-            $insurance_notification = InsuranceNotification::create([
-                'insurance_id' => $insurance->id,
-                'date' => $date,
-                'is_send' => 0,
-            ]);
-        }
-        elseif($insurance->due == 'Quarterly'){
-            $day = Carbon::parse($insurance->due_date)->format('d');
-            $next_month = Carbon::parse($insurance->start_date)->addMonths(3);
-            $due_date = Carbon::parse($next_month)->setDay($day)->format('Y-m-d');
-            $date = Carbon::parse($due_date)->subDays(5);
-            $insurance_notification = InsuranceNotification::create([
-                'insurance_id' => $insurance->id,
-                'date' => $date,
-                'is_send' => 0,
-            ]);
-        }
+        $date = Carbon::parse($insurance->next_due_date)->subDays(5);
+        $insurance_notification = InsuranceNotification::create([
+            'insurance_id' => $insurance->id,
+            'date' => $date,
+            'is_send' => 0,
+        ]);
+
 
         //Mail
 
