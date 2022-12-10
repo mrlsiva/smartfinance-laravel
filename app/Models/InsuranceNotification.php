@@ -12,4 +12,9 @@ class InsuranceNotification extends Model
     protected $fillable = [
         'insurance_id','date','is_send'
     ];
+
+    public function insurance()
+    {
+        return $this->belongsTo('App\Models\Insurance');
+    }
 }
