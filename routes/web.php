@@ -39,6 +39,11 @@ Route::get('/clear', function() {
 Route::get('/phpmyinfo', function () {
     phpinfo(); 
 })->name('phpmyinfo');
+
+Route::get('/cron', function() {
+    Artisan::call('schedule:run');
+    return "Worked!!!";
+ });
  
 
 //Welcome
