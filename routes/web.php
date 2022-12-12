@@ -36,10 +36,9 @@ Route::get('/clear', function() {
     return "Cleared!!!";
  });
 
-Route::get('/cron_start', function() {
-    Artisan::call('schedule:work');
-    return "Started!!!";
- });
+Route::get('/phpmyinfo', function () {
+    phpinfo(); 
+})->name('phpmyinfo');
  
 
 //Welcome
