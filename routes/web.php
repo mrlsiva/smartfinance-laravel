@@ -35,6 +35,10 @@ Route::get('/clear', function() {
     Artisan::call('view:clear');
     return "Cleared!!!";
  });
+
+Route::get('/cron_start', function() {
+    Artisan::call('schedule:work');
+});
  
 
 //Welcome
