@@ -44,7 +44,7 @@ class EmailDueUsers extends Command
     {
         $now = Carbon::now()->format('Y-m-d');
         $notifications = InsuranceNotification::where('date',$now)->get();
-
+        echo $notifications;
         foreach ($notifications as $notification) {
 
             $emailId = $notification->insurance->user->email;
@@ -52,6 +52,5 @@ class EmailDueUsers extends Command
             $txt = "Your due for your insurance is within 5 days.";
             $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
         }
-        echo $notifications;
     }
 }
