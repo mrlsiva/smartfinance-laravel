@@ -38,6 +38,7 @@ Route::get('/clear', function() {
 
 Route::get('/cron_start', function() {
     Artisan::call('schedule:work');
+    return "Started!!!";
 });
  
 
