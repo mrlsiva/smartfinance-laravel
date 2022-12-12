@@ -20,7 +20,7 @@ class Kernel extends ConsoleKernel
 
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('email:users')->everyMinute()->appendOutputTo (storage_path().'/logs/laravel_output.log');
+        $schedule->command('email:users')->everyMinute()->appendOutputTo(storage_path().'/logs/laravel_output.log');
     }
 
     /**
