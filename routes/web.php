@@ -168,6 +168,7 @@ Route::get('/renewal_loan/{id}',[loanController::class, 'renewal_loan'])->name('
 Route::post('/save_tax',[taxController::class, 'save_tax'])->name('save_tax');
 Route::get('/view_tax/{id}',[taxController::class, 'view_tax'])->name('view_tax');
 Route::post('/update_password',[taxController::class, 'update_password'])->name('update_password');
+Route::post('/save_acknowledgement',[taxController::class, 'save_acknowledgement'])->name('save_acknowledgement');
 //Tax End
 
 //Mutal Fund

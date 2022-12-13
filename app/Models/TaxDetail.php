@@ -11,7 +11,7 @@ class TaxDetail extends Model
     use HasFactory;
 
     protected $fillable = [
-        'tax_id','start_year','end_year','document'
+        'tax_id','assessment_year','document','acknowledgement'
     ];
 
     public function getDocumentAttribute($value)
@@ -21,6 +21,11 @@ class TaxDetail extends Model
             $document->push(url("storage/app/public/tax_document/"."{$copy}"));
         }
         return $document;
+    }
+
+    public function getAcknowledgementAttribute($value)
+    {
+        return $value ? url('storage/app/public/acknowledgement/'.$value ): null;
     }
 
     public function tax()

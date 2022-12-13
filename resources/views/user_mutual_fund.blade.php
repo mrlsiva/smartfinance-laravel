@@ -67,7 +67,7 @@
                                             </span>            
                                         </div>
                                         <span class="symbol symbol-50px">
-                                            <span class="px-3 py-1 fs-5 fw-bolder bg-warning text-dark">{{$smartfinance_count + $payment_count}}</span>
+                                            <span class="px-3 py-1 fs-5 fw-bolder bg-warning text-white">{{$smartfinance_count + $payment_count}}</span>
                                         </span>
                                     </div>
                                     Smart Finance

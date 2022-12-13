@@ -25,3 +25,30 @@
 
   2   C:\xampp\htdocs\smartfinservice.com\vendor\swiftmailer\swiftmailer\lib\classes\Swift\Transport\AbstractSmtpTransport.php:148
       Swift_Transport_EsmtpTransport::doHeloCommand()
+[{"id":1,"insurance_id":1,"date":"2022-12-12","is_send":0,"created_at":"2022-12-09T07:49:59.000000Z","updated_at":"2022-12-09T07:49:59.000000Z"}]
+   Swift_TransportException 
+
+  Failed to authenticate on SMTP server with username "slingschool2022@gmail.com" using 3 possible authenticators. Authenticator LOGIN returned Expected response code 235 but got code "534", with message "534-5.7.9 Application-specific password required. Learn more at
+534 5.7.9  https://support.google.com/mail/?p=InvalidSecondFactor d6-20020a170902654600b00186b8752a78sm6180662pln.80 - gsmtp
+". Authenticator PLAIN returned Expected response code 235 but got code "534", with message "534-5.7.9 Application-specific password required. Learn more at
+534 5.7.9  https://support.google.com/mail/?p=InvalidSecondFactor d6-20020a170902654600b00186b8752a78sm6180662pln.80 - gsmtp
+". Authenticator XOAUTH2 returned Expected response code 250 but got code "535", with message "535-5.7.8 Username and Password not accepted. Learn more at
+535 5.7.8  https://support.google.com/mail/?p=BadCredentials d6-20020a170902654600b00186b8752a78sm6180662pln.80 - gsmtp
+".
+
+  at C:\xampp\htdocs\smartfinservice.com\vendor\swiftmailer\swiftmailer\lib\classes\Swift\Transport\Esmtp\AuthHandler.php:191
+    187▕             $message = 'Failed to authenticate on SMTP server with username "'.$this->username.'" using '.$count.' possible authenticators.';
+    188▕             foreach ($errors as $error) {
+    189▕                 $message .= ' Authenticator '.$error[0].' returned '.$error[1].'.';
+    190▕             }
+  ➜ 191▕             throw new Swift_TransportException($message);
+    192▕         }
+    193▕     }
+    194▕ 
+    195▕     /**
+
+  1   C:\xampp\htdocs\smartfinservice.com\vendor\swiftmailer\swiftmailer\lib\classes\Swift\Transport\EsmtpTransport.php:371
+      Swift_Transport_Esmtp_AuthHandler::afterEhlo(Object(Swift_SmtpTransport))
+
+  2   C:\xampp\htdocs\smartfinservice.com\vendor\swiftmailer\swiftmailer\lib\classes\Swift\Transport\AbstractSmtpTransport.php:148
+      Swift_Transport_EsmtpTransport::doHeloCommand()

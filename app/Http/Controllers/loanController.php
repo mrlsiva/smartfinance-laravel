@@ -247,7 +247,7 @@ class loanController extends Controller
 
         $loan = Loan::where('id',$request->loan_id)->first();
         $percentage = $request->amount/$loan->amount*100;
-        $intrest = number_format((float)$percentage, 3, '.', '');
+        $intrest = number_format((float)$percentage, 1, '.', '');
         //return $intrest;
 
         DB::table('loan_payments')->where('id',$request->loan_payment_id)->update(['is_status' => 2,'payment_bill' => $filename,'paid_on' => $request->paid_date,'amount' => $request->amount,'intrest' => $intrest]);

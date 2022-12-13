@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\SMTPController;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Tax;
 use App\Models\TaxDetail;
 use App\Models\Setting;
 use App\Models\Template;
+use Image;
 use DB;
 
 
@@ -22,8 +24,7 @@ class taxController extends Controller
             'pan_card' => 'required',
             'password' => 'required',
             'tax_document' => 'required',
-            'start_year' => 'required',
-            'end_year' => 'required',
+            'assessment_year' => 'required',
         ]);
 
         $user = Auth::user();
@@ -46,8 +47,7 @@ class taxController extends Controller
 
         $tax_detail = TaxDetail::create([
             'tax_id' => $tax->id,
-            'start_year' => $request->start_year,
-            'end_year' => $request->end_year,
+            'assessment_year' => $request->assessment_year,
         ]);
 
         $filenames = "";
@@ -120,6 +120,20 @@ class taxController extends Controller
         $tax = DB::table('taxes')->where('id',$request->tax_id)->update(['password' => $request->password]);
 
         return redirect()->back()->with('alert', 'Password Changed Successfully!!');
+    }
+
+    public function save_acknowledgement(Request $request){
+
+        //Bill
+        $image = $request->file('acknowledgement');
+        $rand_name = time() . Str::random(12);
+        $filename = $rand_name . '.jpg';
+        $photo = Image::make($image)->encode('jpg', 80);
+        Storage::disk('public')->put('acknowledgement/'.$filename, $photo);
+        $tax_detail = DB::table('tax_details')->where('id',$request->tax_detail_id)->update(['acknowledgement' => $filename]);
+
+        return redirect()->back()->with('alert', 'Acknowledgement Updated Successfully!!');
+
     }
     
 }

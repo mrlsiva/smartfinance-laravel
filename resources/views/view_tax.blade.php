@@ -109,7 +109,25 @@
 				<div class="card-header cursor-pointer">
 					<!--begin::Card title-->
 					<div class="card-title m-0">
-						<h3 class="fw-bolder m-0">Tax Details ({{$tax_detail->start_year}} - {{$tax_detail->end_year}})</h3>
+						<h3 class="fw-bolder m-0">Tax Details ({{$tax_detail->assessment_year}})</h3>
+					</div>
+					<div class="text-end">
+						@php
+							$user = Auth::guard('web')->user();
+						@endphp
+						@if($user->id == $tax_detail->tax->user_id)
+							<button type="button" class="btn btn-secondary mb-5" name="acknowledgement_upload" id="acknowledgement_upload" data-bs-toggle="modal" data-bs-target="#kt_modal_acknowledgement_upload">Acknowledgement</button>
+						@else
+							@if($tax_detail->acknowledgement != NULL)
+								<span class="fw-bolder" style="margin-right: 30px;">Acknowledgement </span><br>
+								<a href="{{$tax_detail->acknowledgement}}" target="_blank">
+									<button type="button" class="btn btn-secondary">View</button>
+								</a>
+								<a href="{{$tax_detail->acknowledgement}}" download>
+									<button type="button" class="btn btn-secondary">Download</button>
+								</a><br><br>
+							@endif
+						@endif
 					</div>
 					<!--end::Card title-->
 				</div>
@@ -151,8 +169,118 @@
 <!--end::Container-->
 
 
+<!-- begin::Modal -acknowledgement_upload- -->
+<div class="modal fade" id="kt_modal_acknowledgement_upload" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog mw-650px">
+        <!--begin::Modal content-->
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header pb-0 border-0 justify-content-end">
+                <!--begin::Close-->
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
+                            <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="black" />
+                        </svg>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--begin::Modal header-->
+            <!--begin::Modal body-->
+            <div class="modal-body scroll-y mx-5 mx-xl-18 pt-0 pb-15">
+                <!--begin::Heading-->
+
+                <!--end::Google Contacts Invite-->
+                <!--begin::Separator-->
+                <!--end::Separator-->
+                <!--begin::Textarea-->
+                <!--end::Textarea-->
+                <!--begin::Users-->
+                <div class="mb-10">
+                    <!--begin::Heading-->
+                    @if($tax_detail->acknowledgement != NULL)
+                    	<div class="fs-4 fw-bolder mb-2"><a href="{{ $tax_detail->acknowledgement }}" download class="col-lg-4 fw-bold fs-6 text-start text-muted text-hover-primary">Acknowledgement <i class="fa fa-download"></i></a></div>
+                    @else
+                    	<div class="fs-4 fw-bolder mb-2">Acknowledgement</div>
+                    @endif
+                    <!--end::Heading-->
+                    <form class="form w-100" novalidate="novalidate" id="kt_sign_in_form" method="post" action="{{route('save_acknowledgement')}}" enctype="multipart/form-data">
+                        @csrf
+                        <input type="hidden" name="tax_detail_id" value="{{$tax_detail->id}}">
+
+	                    @if($tax_detail->acknowledgement != NULL)
+	                    	<!--begin::Input group-->
+	                    	<div class="fv-row mb-8">
+                            	<!--begin::Input-->
+                            	<input type="file" class="form-control form-control-solid custom-file-input " id="acknowledgement" placeholder="Acknowledgement" value="" name="acknowledgement" accept="image/*" required="" />
+                            	<!--end::Input-->
+                            	<div class="d-flex justify-content-center mt-3" >
+                            		<img id="preview-image-acknowledgement" style="max-height: 200px;" src="{{$tax_detail->acknowledgement}}">
+                            		<a href="#" class="text-hover-primary" onclick="delete_acknowledgement()"  style="display:none;" id="acknowledgement_image">X</a>
+                            	</div>
+	                    	</div>
+	                    	<!--end::Input group-->
+	                    @else
+	                    	<!--begin::Input group-->
+	                    	<div class="fv-row mb-8">
+                            	<!--begin::Input-->
+                            	<input type="file" class="form-control form-control-solid custom-file-input " id="acknowledgement" placeholder="Acknowledgement" value="" name="acknowledgement" accept="image/*" required="" />
+                            	<!--end::Input-->
+                            	<div class="d-flex justify-content-center mt-3" >
+                            		<img id="preview-image-acknowledgement" style="max-height: 200px;">
+                            		<a href="#" class="text-hover-primary" onclick="delete_acknowledgement()"  style="display:none;" id="acknowledgement_image">X</a>
+                            	</div>
+	                    	</div>
+	                    	<!--end::Input group-->
+	                    @endif
+                        
+                        <div class="d-flex justify-content-center" >
+                            <button type="submit" class="btn  btn-primary mt-5 mb-3">Upload</button> 
+                        </div>
+                    </form>
+                </div>
+                <!--end::Users-->
+            </div>
+            <!--end::Modal body-->
+        </div>
+            <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+</div>
+<!-- end::Modal -loan- -->
+
+
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script src="//cdn.ckeditor.com/4.14.0/standard/ckeditor.js"></script>
+
+<!-- acknowledgement -->
+<script type="text/javascript">    
+    $(document).ready(function (e) { 
+       $('#acknowledgement').change(function(){ 
+            $('#acknowledgement_image').show();   
+            let reader = new FileReader();
+            reader.onload = (e) => { 
+                $('#preview-image-acknowledgement').attr('src', e.target.result); 
+            }
+            reader.readAsDataURL(this.files[0]); 
+       });
+
+    });
+</script>
+
+<!-- acknowledgement delete -->
+<script type="text/javascript">
+    function delete_acknowledgement() {
+    	document.getElementById('acknowledgement').value = null;
+        $("#preview-image-acknowledgement").attr("src", '');
+        $('#acknowledgement_image').hide();
+    }
+</script>
+<!-- image delete end -->
 
 <!-- SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.6/dist/sweetalert2.all.min.js"></script>

@@ -43,7 +43,7 @@
                                 <!--begin::Logo image-->
                                 <a href="">
                                     <img alt="Logo" src="{{ asset('public/assets/img/full-logo.svg') }}" class="logo-default h-25px h-lg-50px" />
-                                    <img alt="Logo" src="{{ asset('public/assets/img/full-logo.svg') }}" class="logo-sticky h-20px h-lg-25px" />
+                                    <img alt="Logo" src="{{ asset('public/assets/img/full-logo.svg') }}" class="logo-sticky h-25px h-lg-50px" />
                                 </a>
                                 <!--end::Logo image-->
                             </div>

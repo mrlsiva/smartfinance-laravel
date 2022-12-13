@@ -84,7 +84,7 @@
                                             </span>            
                                         </div>
                                         <span class="symbol symbol-50px">
-                                            <span class="px-3 py-1 fs-5 fw-bolder bg-warning text-dark">{{$smartfinance_count+$payment_count}}</span>
+                                            <span class="px-3 py-1 fs-5 fw-bolder bg-warning text-white">{{$smartfinance_count+$payment_count}}</span>
                                         </span>
                                     </div>
                                     Smart Finance
@@ -193,7 +193,8 @@
                                     <thead>
                                         <tr class="fw-bolder text-muted">
                                             <th class="">USER</th>
-                                            <th class="">YEAR</th>
+                                            <th class="">ASSESSMENT YEAR</th>
+                                            <th class="">ACKNOWLEDGEMENT</th>
                                             <th class="">ACTIONS</th>
                                         </tr>
                                     </thead>
@@ -218,7 +219,19 @@
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td>{{$tax_detail->start_year}} - {{$tax_detail->end_year}}</td>
+                                            <td>{{$tax_detail->assessment_year}}</td>
+                                            @if($tax_detail->acknowledgement != NULL)
+                                                <td>
+                                                    <a href="{{$tax_detail->acknowledgement}}" target="_blank">
+                                                        <button type="button" class="btn btn-warning">View</button>
+                                                    </a>
+                                                    <a href="{{$tax_detail->acknowledgement}}" download>
+                                                        <button type="button" class="btn btn-success">Download</button>
+                                                    </a>
+                                                </td>
+                                            @else
+                                                <td>-</td>
+                                            @endif
                                             <td>
                                                 <a class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary" href="{{route('view_tax', ['id' => $tax_detail->id])}}">
                                                     <!--begin::Svg Icon | path: icons/duotune/arrows/arr064.svg-->
@@ -477,7 +490,6 @@
                     <!--end::Heading-->
                     <form class="form w-100" novalidate="novalidate" id="kt_sign_in_form" method="post" action="{{route('save_tax')}}" enctype="multipart/form-data">
                         @csrf
-
                         @php
                             $tax = App\Models\Tax::where('user_id',$user->id)->first();
                         @endphp
@@ -546,13 +558,14 @@
                         <div class="fv-row mb-8">
                             <!--begin::Label-->
                             <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
-                                <span class="required">Start Year</span>
-                                <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Start Year"></i>
+                                <span class="required">Assessment Year</span>
+                                <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Assessment Year"></i>
                             </label>
                             <!--end::Label-->
                             <!--begin::Input-->
-                            <input type="text" class="form-control form-control-solid" placeholder="Eg: 2021" value="" name="start_year" id="start_year" required="true" />
+                            <input type="text" class="form-control form-control-solid" placeholder="Eg: 2022-23" value="" name="assessment_year" id="assessment_year" required="true" />
                             <!--end::Input-->
+                            <div class="error" id="error"></div>
                         </div>
                         <!--end::Input group-->
 
@@ -560,25 +573,12 @@
                         <div class="fv-row mb-8">
                             <!--begin::Label-->
                             <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
-                                <span class="required">End Year</span>
-                                <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="End Year"></i>
-                            </label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <input type="text" class="form-control form-control-solid" placeholder="Eg: 2022" value="" name="end_year" id="end_year" required="true" />
-                            <!--end::Input-->
-                        </div>
-                        <!--end::Input group-->
-
-                        <div class="fv-row mb-8">
-                            <!--begin::Label-->
-                            <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
-                                <span class="">Tax Document (*You can choose and upload multiple documents at a same time)</span>
+                                <span class="">Form16 (*You can choose and upload multiple documents at a same time)</span>
                                 <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Tax Document"></i>
                             </label>
                             <!--end::Label-->
                             <!--begin::Input-->
-                            <input type="file" class="form-control form-control-solid custom-file-input @error('tax_document') is-invalid @enderror" id="tax_document" placeholder="Tax Document" value="" name="tax_document[]" required="true" multiple />
+                            <input type="file" class="form-control form-control-solid custom-file-input @error('tax_document') is-invalid @enderror" id="tax_document" placeholder="Form16" value="" name="tax_document[]" required="true" multiple />
                             @error('tax_document')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
@@ -1129,6 +1129,37 @@
 
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+<!-- Assessment Year Validation -->
+<script type="text/javascript">
+    jQuery(document).ready(function ()
+    {
+        jQuery('input[name="assessment_year"]').on('change',function(){
+            var alertText = "";
+            var year = jQuery(this).val();
+            if(year){
+                format = /([0-9]){4}([-]){1}([0-9]){2}$/;
+                if(!format.test(year))
+                {
+                    alertText = alertText+"Assessment year is not valid";
+                } 
+            }
+            if (alertText != "") {
+                var div = document.getElementById("error");
+                div.innerHTML = '';
+                div.style.display = "block";
+                $( ".error" ).html('');
+                var html ='<div class="text-danger" role="alert">'+alertText+'</div>';
+                $('.error').html(html);
+            }
+            else{
+                var div = document.getElementById("error");
+                div.innerHTML = '';
+                div.style.display = "none";
+            }
+        });   
+    });
+</script>
 
 
 <!-- profile page validation -->
