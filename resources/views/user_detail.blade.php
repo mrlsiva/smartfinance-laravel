@@ -84,6 +84,8 @@
 						<a href="{{route('tax')}}" class="text-white text-hover-primary">Dashboard</a>
 					@elseif($flag == 'mutual_fund')
 						<a href="{{route('mutual_fund')}}" class="text-white text-hover-primary">Dashboard</a>
+					@elseif($flag == 'insurance')
+						<a href="{{route('insurance')}}" class="text-white text-hover-primary">Dashboard</a>
 					@endif
 				</li>
 				<!--end::Item-->

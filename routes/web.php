@@ -178,6 +178,7 @@ Route::post('/send_enquiry',[mutalFundController::class, 'send_enquiry'])->name(
 //Insurance
 Route::post('/save_insurance',[insuranceController::class, 'save_insurance'])->name('save_insurance');
 Route::get('/view_insurance/{id}',[insuranceController::class, 'view_insurance'])->name('view_insurance');
+Route::get('/insurance_enquiry',[insuranceController::class, 'insurance_enquiry'])->name('insurance_enquiry');
 
 
 //Logout

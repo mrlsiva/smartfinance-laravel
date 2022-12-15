@@ -266,6 +266,85 @@
             <!--end::Row-->
 
             <!--begin::Row-->
+            <div class="row gy-5 g-xl-8 mt-xl-5">
+                <!--begin::Col-->
+                <!--end::Col-->
+                <!--begin::Col-->
+                <div class="col-xl-12 ">
+                    <!--begin::Tables Widget 9-->
+                    <div class="card card-xl-stretch mb-5 mb-xl-8">
+                        <!--begin::Header-->
+                        <div class="card-header border-0 pt-5">
+                            <h3 class="card-title align-items-start flex-column">
+                                <span class="card-label fw-bolder text-dark">Insurance Enquiry</span>
+                                <!-- <span class="text-gray-400 mt-1 fw-bold fs-6">Avg. 10 customers added per day</span> -->
+                            </h3>
+                            <!--begin::Actions-->
+                            <div class="card-toolbar">
+                                
+                            </div>
+                            <!--end::Actions-->
+                        </div>
+                        <!--end::Header-->
+                        <!--begin::Body-->
+                        <div class="card-body py-3">
+                            <!--begin::Table container-->
+                            <div class="table-responsive">
+                                <!--begin::Table-->
+                                <table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
+                                    <!--begin::Table head-->
+                                    <thead>
+                                        <tr class="fw-bolder text-muted">
+                                            <th class="">USER</th>
+                                            <th class="">ENQUIRED ON</th>
+                                        </tr>
+                                    </thead>
+                                    <!--end::Table head-->
+                                    <!--begin::Table body-->
+                                    <tbody class="user_table">
+                                       @foreach($insurance_enquiries as $insurance_enquiry)
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="symbol symbol-45px me-5">
+                                                        @php
+                                                            $avatar = App\Models\UserDetail::where('user_id',$insurance_enquiry->user->id)->first();
+                                                        @endphp
+                                                        @if($avatar != NULL)
+                                                        <img src="{{ $avatar->avatar}}" alt="" />
+                                                        @endif
+                                                    </div>
+                                                    <div class="d-flex justify-content-start flex-column">
+                                                        <a href="{{route('user', ['id' => $insurance_enquiry->user->id,'flag' => 'insurance'])}}" class="text-dark fw-bolder text-hover-primary fs-6">{{$insurance_enquiry->user->first_name}} {{$insurance_enquiry->user->last_name}}</a>
+                                                        <span class="text-muted fw-bold text-muted d-block fs-7">#{{$insurance_enquiry->user->id}}</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            @php
+                                                $date = Carbon\Carbon::parse($insurance_enquiry->enquired_on)->formatLocalized('%d %b %Y');
+                                            @endphp
+                                            <td>{{$date}}</td>
+                                        </tr>
+                                       @endforeach
+                                    </tbody>
+                                    <!--end::Table body-->
+                                </table>
+                                <!--end::Table-->
+                                <div class="d-flex justify-content-end mb-3">
+                                    {{ $insurance_enquiries->links() }}
+                                </div>
+                            </div>
+                            <!--end::Table container-->
+                        </div>
+                        <!--begin::Body-->
+                    </div>
+                    <!--end::Tables Widget 9-->
+                </div>
+                <!--end::Col-->
+            </div>
+            <!--end::Row-->
+
+            <!--begin::Row-->
             <div id="admin_insurance">
                 @if($admin_insurance_count != 0)
                     <div class="row gy-5 g-xl-8 mt-xl-5" >
@@ -1200,6 +1279,12 @@
                     </form>
                 </div>
                 <!--end::Users-->
+                <hr>
+                <span class="text-warning fs-6 fw-bold text-wrap">If you dont have insurance click on the enquiry button to know<br>about the insurance. You will receive an email about insurance.</span>
+                <div class="d-flex justify-content-center">
+                    <a href="{{route('insurance_enquiry')}}">
+                    <button type="button" class="btn btn-primary mt-5 mb-3">Enquiry</button></a>
+                </div>
             </div>
             <!--end::Modal body-->
         </div>

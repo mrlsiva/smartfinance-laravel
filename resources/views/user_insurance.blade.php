@@ -1071,6 +1071,12 @@
                     </form>
                 </div>
                 <!--end::Users-->
+                <hr>
+                <span class="text-warning fs-6 fw-bold text-wrap">If you dont have insurance click on the enquiry button to know<br>about the insurance. You will receive an email about insurance.</span>
+                <div class="d-flex justify-content-center">
+                    <a href="{{route('insurance_enquiry')}}">
+                    <button type="button" class="btn btn-primary mt-5 mb-3">Enquiry</button></a>
+                </div>
             </div>
             <!--end::Modal body-->
         </div>

@@ -99,9 +99,7 @@ class smartfinanceController extends Controller
 
         //End Mail
 
-        
-
-        return redirect('dashboard');
+        return redirect()->back()->with('alert', 'Investment added successfully.');
 
     }
 
@@ -760,12 +758,13 @@ class smartfinanceController extends Controller
         //End admin
 
         //User
+        $smartfinance = Smartfinance::where('id',$smartfinance_id)->first();
         $emailsetting = Template::where([['id',16],['is_active',1]])->first(); 
         if($emailsetting != null){
             $email_template = $emailsetting->template;
             $emailContentReplace=['##NAME##'=>$smartfinance->user->first_name.' '.$smartfinance->user->last_name,'##PLAN##'=>$smartfinance->plan->name,'##AMOUNT##'=>$amount];
             $txt = strtr($email_template,$emailContentReplace);
-            $emailId = $user->email;
+            $emailId = $smartfinance->user->email;
             $subject = $emailsetting->subject;
             $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
         }

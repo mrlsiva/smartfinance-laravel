@@ -585,7 +585,7 @@
                                                     @endphp
                                                     <td>Rs {{$payment_date->commafun($amount)}}</td>
                                                 @else
-                                                    <td class="">Rs {{$payment_date->commafun($admin_finance->amount)}}</td>
+                                                    <td class="">Rs {{$admin_finance->commafun($admin_finance->amount)}}</td>
                                                 @endif
                                                 <td class="">
                                                     {{$admin_finance->investment_date}}

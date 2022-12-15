@@ -27,6 +27,7 @@ use App\Models\Tax;
 use App\Models\TaxDetail;
 use App\Models\MutualFund;
 use App\Models\Insurance;
+use App\Models\InsuranceEnquiry;
 use Image;
 use DB;
 
@@ -710,6 +711,7 @@ class UserController extends Controller
             $tax_count = Tax::count();
             $mutual_fund_count = MutualFund::count();
             $insurances = Insurance::paginate(10);
+            $insurance_enquiries = InsuranceEnquiry::paginate(10);
             $insurance_count = Insurance::groupBy('user_id')->select('user_id')->get();
 
             $user = Auth::user();
@@ -717,7 +719,7 @@ class UserController extends Controller
             $admin_insurance_count = Insurance::where('user_id',$user->id)->count();
             
         
-            return view('insurance')->with('insurances',$insurances)->with('user_count',$user_count)->with('smartfinance_count',$smartfinance_count)->with('payment_count',$payment_count)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count)->with('mutual_fund_count',$mutual_fund_count)->with('insurance_count',$insurance_count)->with('admin_insurances',$admin_insurances)->with('admin_insurance_count',$admin_insurance_count);
+            return view('insurance')->with('insurances',$insurances)->with('insurance_enquiries',$insurance_enquiries)->with('user_count',$user_count)->with('smartfinance_count',$smartfinance_count)->with('payment_count',$payment_count)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count)->with('mutual_fund_count',$mutual_fund_count)->with('insurance_count',$insurance_count)->with('admin_insurances',$admin_insurances)->with('admin_insurance_count',$admin_insurance_count);
 
         }
         else{

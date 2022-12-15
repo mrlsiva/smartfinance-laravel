@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\InsuranceNotification;
 use App\Models\Insurance;
+use App\Models\InsuranceEnquiry;
 use App\Models\Setting;
 use App\Models\Template;
 Use \Carbon\Carbon;
@@ -115,5 +116,48 @@ class insuranceController extends Controller
 
         $insurance = Insurance::where('id',$id)->first();
         return view('view_insurance')->with('insurance',$insurance);
+    }
+
+    public function insurance_enquiry(Request $request)
+    {
+        $user = Auth::user();
+        $now = Carbon::now()->format('Y-m-d');
+        $insurance = InsuranceEnquiry::create([
+            'user_id' => $user->id,
+            'enquired_on' => $now,
+        ]);
+
+
+        //Mail
+
+        //To Owner
+        $emailsetting = Template::where([['id',37],['is_active',1]])->first(); 
+        $insurance_email = Setting::where('key','insurance_email')->first();
+        if($emailsetting != null){
+            $email_template = $emailsetting->template;
+            $emailContentReplace=['##NAME##'=>$user->first_name.' '.$user->last_name,'##PHONE##'=>$user->phone,'##EMAIL##'=>$user->email];
+            $txt = strtr($email_template,$emailContentReplace);
+            $emailId = $insurance_email->value;
+            $subject = $emailsetting->subject;
+            $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
+        }
+        //End
+
+        //To User
+        $emailsetting = Template::where([['id',38],['is_active',1]])->first(); 
+        $insurance_email = Setting::where('key','insurance_email')->first();
+        $insurance_phone = Setting::where('key','insurance_phone')->first();
+        $insurance_name = Setting::where('key','insurance_name')->first();
+        if($emailsetting != null){
+            $email_template = $emailsetting->template;
+            $emailContentReplace=['##NAME##'=>$mutual_fund_name->value,'##PHONE##'=>$mutual_fund_phone->value,'##EMAIL##'=>$mutual_fund_email->value];
+            $txt = strtr($email_template,$emailContentReplace);
+            $emailId = $user->email;
+            $subject = $emailsetting->subject;
+            $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
+        }
+        //End
+
+        return redirect()->back()->with('alert', 'Insurance details has been send to your mail. Please contact them for more details.');
     }
 }
