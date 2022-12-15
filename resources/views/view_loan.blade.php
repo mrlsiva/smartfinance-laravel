@@ -731,7 +731,7 @@ $user = Auth::guard('web')->user();
                     jQuery('#loan_payment_approve_modal').modal('show');
                     document.getElementById("payment_id").value = system_id;
                     document.getElementById("approve_amount").value = data.amount;
-                    document.getElementById("approve_intrest").value = data.intrest;
+                    document.getElementById("approve_intrest").value = data.intrest +'%';
                     $("#bill_link").prop("href", data.payment_bill);
                     $("#payment_bill").attr("src", data.payment_bill);
                     if(data.is_status == 0)
