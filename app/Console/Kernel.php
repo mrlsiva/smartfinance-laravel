@@ -15,7 +15,7 @@ class Kernel extends ConsoleKernel
      */
 
     protected $commands = [
-        EmailDueUsers::class,
+        \App\Console\Commands\EmailDueUsers::class,
     ];
 
     protected function schedule(Schedule $schedule)
