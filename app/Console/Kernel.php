@@ -20,7 +20,7 @@ class Kernel extends ConsoleKernel
 
     protected function schedule(Schedule $schedule)
     {
-        $filePath = 'public/insurance_cron.txt';
+        //$filePath = 'public/insurance_cron.txt';
         $schedule->command('email:users')->everyMinute();
     }
 
