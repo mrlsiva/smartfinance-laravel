@@ -44,6 +44,7 @@ class EmailDueUsers extends Command
      */
     public function handle()
     {
+        echo "working";
         $now = Carbon::now()->format('Y-m-d');
         $notifications = InsuranceNotification::where([['date',$now],['is_send',0]])->get();
         foreach ($notifications as $notification) {
