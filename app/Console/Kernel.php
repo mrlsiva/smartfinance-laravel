@@ -21,7 +21,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $filePath = 'public/insurance_cron.txt';
-        $schedule->command('email:users')->everyMinute()->emailOutputTo('tena.visansoft@gmail.com');
+        $schedule->command('email:users')->everyMinute()->appendOutputTo('storage/logs/laravel_output.log');
     }
 
     /**
