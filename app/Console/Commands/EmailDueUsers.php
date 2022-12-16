@@ -44,6 +44,7 @@ class EmailDueUsers extends Command
      */
     public function handle()
     {
+        echo "Hello";
         $insurance_notification = DB::table('insurance_notifications')->where('id',7)->update(['is_send' =>1]);
 
         // $now = Carbon::now()->format('Y-m-d');
