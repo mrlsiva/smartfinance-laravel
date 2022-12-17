@@ -1,9 +1,10 @@
 <?php
 
 namespace App\Console;
-use App\Console\Commands\EmailDueUsers;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use App\Console\Commands\WinnerCron;
+use App\Models\User;
 
 class Kernel extends ConsoleKernel
 {
@@ -15,13 +16,13 @@ class Kernel extends ConsoleKernel
      */
 
     protected $commands = [
-        EmailDueUsers::class,
+        \App\Console\Commands\WinnerCron::class,
     ];
 
     protected function schedule(Schedule $schedule)
     {
-        $filePath = 'public/insurance_cron.txt';
-        $schedule->command('email:users')->everyMinute()->appendOutputTo($filePath);
+
+        $schedule->command('winner:cron')->everyMinute();
     }
 
     /**
