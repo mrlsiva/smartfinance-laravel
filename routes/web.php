@@ -9,6 +9,7 @@ use App\Http\Controllers\loanController;
 use App\Http\Controllers\taxController;
 use App\Http\Controllers\mutalFundController;
 use App\Http\Controllers\insuranceController;
+use App\Http\Controllers\cronController;
 use App\Http\Controllers\generalController;
 
 
@@ -179,6 +180,9 @@ Route::post('/send_enquiry',[mutalFundController::class, 'send_enquiry'])->name(
 Route::post('/save_insurance',[insuranceController::class, 'save_insurance'])->name('save_insurance');
 Route::get('/view_insurance/{id}',[insuranceController::class, 'view_insurance'])->name('view_insurance');
 Route::get('/insurance_enquiry',[insuranceController::class, 'insurance_enquiry'])->name('insurance_enquiry');
+
+//Cron
+Route::get('/testing',[cronController::class, 'testing'])->name('testing');
 
 
 //Logout
