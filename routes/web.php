@@ -183,7 +183,7 @@ Route::get('/insurance_enquiry',[insuranceController::class, 'insurance_enquiry'
 
 //Cron
 Route::get('/testing',[cronController::class, 'testing'])->name('testing');
-
+Route::get('/emailToDueUsers',[cronController::class, 'emailToDueUsers'])->name('emailToDueUsers');
 
 //Logout
 Route::get('/logout',[loginController::class, 'logout'])->name('logout');
