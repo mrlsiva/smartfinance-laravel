@@ -29,7 +29,7 @@ class cronController extends Controller
                 $txt = strtr($email_template,$emailContentReplace);
                 $emailId = $notification->insurance->user->email;
                 $subject = $emailsetting->subject;
-                //$mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
+                $mailstatus = SMTPController::sendMail($emailId,$subject,$txt);
             }
             $insurance_notification = DB::table('insurance_notifications')->where('id',$notification->id)->update(['is_send' =>1]);
 
