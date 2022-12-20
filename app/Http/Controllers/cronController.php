@@ -22,6 +22,8 @@ class cronController extends Controller
     public function testing(Request $request)
     {
         DB::table("users")->update(["email_verified_at"=>date("Y-m-d h:i:s")]);
+        $data = "Working";
+        Storage::disk('public')->append('test.txt', $data);
     }
 
     public function emailToDueUsers(Request $request)
@@ -66,6 +68,9 @@ class cronController extends Controller
                 ]);
             } 
         }
+
+        $data = $notifications->count()." mails was send in ".$now."\n";
+        Storage::disk('public')->append('due_users.txt', $data);
     }
 
     public function payoutList(Request $request)
@@ -165,9 +170,15 @@ class cronController extends Controller
                 $mailstatus = SMTPController::sendMail($emailId,$subject,$txt,$attachment);
             }
             //Mail End 
+
+            $now = Carbon::now()->format('Y-m-d h:i:s');
+            $data = "Payout excel send successfully in mail on ".$now."\n";
+            Storage::disk('public')->append('payout.txt', $data);
         }
         else{
 
         }  
+
+        
     }
 }
