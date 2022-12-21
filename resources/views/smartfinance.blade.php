@@ -479,7 +479,7 @@ body{
 									@endif
 									@if($user->role_id != 3)
 										<td>
-											<button class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary"name="approve" data-system_id="{{$smartfinance_payment->id}}" title="Edit"><i class="fas fa-pencil-alt" id="fa"></i></button>
+											<button class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary" name="payment_approve" data-system_id="{{$smartfinance_payment->id}}" title="Edit"><i class="fas fa-pencil-alt" id="fa"></i></button>
 										</td>   
 									@endif
 
@@ -1595,7 +1595,7 @@ body{
 
 <!-- smartfinance -->
 <script type="text/javascript">
-    $(document).on('click', 'button[name^="approve"]', function(e) {
+    $(document).on('click', 'button[name^="payment_approve"]', function(e) {
         var system_id = $(this).data("system_id");
         console.log(system_id);
         

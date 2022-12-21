@@ -1945,7 +1945,7 @@
         if(system_id !== null)
         {
           jQuery.ajax({
-            url : '../get_smart_finance',
+            url : '../../get_smart_finance',
             type: 'GET',
             dataType: 'json',
             data: { id: system_id },
