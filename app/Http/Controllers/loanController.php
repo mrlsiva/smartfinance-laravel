@@ -19,6 +19,7 @@ Use \Carbon\Carbon;
 use App\Models\Tax;
 use App\Models\TaxDetail;
 use App\Models\MutualFund;
+use App\Models\Insurance;
 use Image;
 use DB;
 
@@ -346,6 +347,7 @@ class loanController extends Controller
         $loan_payment_count = LoanPayment::where('is_status',2)->count();
         $tax_count = Tax::count();
         $mutual_fund_count = MutualFund::count();
+        $insurance_count = Insurance::groupBy('user_id')->select('user_id')->get();
 
         $user = Auth::user();
         $admin_loans = Loan::where('user_id',$user->id)->orderBy('id','Desc')->paginate(10);
@@ -355,7 +357,7 @@ class loanController extends Controller
         $loan_status = NULL;
         $loan_search = $type;
 
-        return view('loan')->with('loans',$loans)->with('admin_loans',$admin_loans)->with('admin_loan_count',$admin_loan_count)->with('user_count',$user_count)->with('smartfinance_count',$smartfinance_count)->with('payment_count',$payment_count)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count)->with('mutual_fund_count',$mutual_fund_count)->with('loan_search',$loan_search)->with('loan_status',$loan_status);
+        return view('loan')->with('loans',$loans)->with('admin_loans',$admin_loans)->with('admin_loan_count',$admin_loan_count)->with('user_count',$user_count)->with('smartfinance_count',$smartfinance_count)->with('payment_count',$payment_count)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count)->with('mutual_fund_count',$mutual_fund_count)->with('insurance_count',$insurance_count)->with('loan_search',$loan_search)->with('loan_status',$loan_status);
         
     }
 
@@ -370,6 +372,7 @@ class loanController extends Controller
         $loan_payment_count = LoanPayment::where('is_status',2)->count();
         $tax_count = Tax::count();
         $mutual_fund_count = MutualFund::count();
+        $insurance_count = Insurance::groupBy('user_id')->select('user_id')->get();
 
         $user = Auth::user();
         $admin_loans = Loan::where('user_id',$user->id)->orderBy('id','Desc')->paginate(10);
@@ -379,7 +382,7 @@ class loanController extends Controller
         $loan_status = $type;
         $loan_search = NULL;
 
-        return view('loan')->with('loans',$loans)->with('admin_loans',$admin_loans)->with('admin_loan_count',$admin_loan_count)->with('user_count',$user_count)->with('smartfinance_count',$smartfinance_count)->with('payment_count',$payment_count)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count)->with('mutual_fund_count',$mutual_fund_count)->with('loan_search',$loan_search)->with('loan_status',$loan_status);
+        return view('loan')->with('loans',$loans)->with('admin_loans',$admin_loans)->with('admin_loan_count',$admin_loan_count)->with('user_count',$user_count)->with('smartfinance_count',$smartfinance_count)->with('payment_count',$payment_count)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count)->with('mutual_fund_count',$mutual_fund_count)->with('insurance_count',$insurance_count)->with('loan_search',$loan_search)->with('loan_status',$loan_status);
         
     }
 

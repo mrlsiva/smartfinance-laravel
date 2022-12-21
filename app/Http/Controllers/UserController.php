@@ -346,7 +346,7 @@ class UserController extends Controller
         }
         //End
 
-        $users = User::where('is_delete',0)->orderBy('id','Desc')->paginate(10);
+        $users = User::where('is_delete',0)->orderBy('id','Desc')->paginate(25);
         $user_count = User::where('is_active',0)->orWhere('is_profile_verified',0)->count();
         $smartfinance_count = Smartfinance::where('is_status',2)->count();
         $payment_count = SmartfinancePayment::where('is_approve',2)->count();
@@ -446,7 +446,7 @@ class UserController extends Controller
             //End
 
             $user_count = User::where('is_active',0)->orWhere('is_profile_verified',0)->count();
-            $smartfinances = Smartfinance::orderBy('id','Desc')->paginate(10);
+            $smartfinances = Smartfinance::orderBy('id','Desc')->paginate(25);
             $smartfinance_count = Smartfinance::where('is_status',2)->count();
             $payment_count = SmartfinancePayment::where('is_approve',2)->count();
             $loan_count = Loan::where('is_status',2)->count();
@@ -1577,7 +1577,7 @@ class UserController extends Controller
 
     public function user_search($type,Request $request)
     {
-        $users = User::where('first_name', 'like', '%'.$type.'%')->orWhere('last_name', 'like', '%'.$type.'%')->where('is_delete',0)->orderBy('id','Desc')->paginate(10);
+        $users = User::where('first_name', 'like', '%'.$type.'%')->orWhere('last_name', 'like', '%'.$type.'%')->where('is_delete',0)->orderBy('id','Desc')->paginate(25);
         $user_count = User::where('is_active',0)->orWhere('is_profile_verified',0)->count();
         $smartfinance_count = Smartfinance::where('is_status',2)->count();
         $payment_count = SmartfinancePayment::where('is_approve',2)->count();
@@ -1585,6 +1585,7 @@ class UserController extends Controller
         $loan_payment_count = LoanPayment::where('is_status',2)->count();
         $tax_count = Tax::count();
         $mutual_fund_count = MutualFund::count();
+        $insurance_count = Insurance::groupBy('user_id')->select('user_id')->get();
 
         $role = NULL;
         $profile = NULL;
@@ -1592,12 +1593,12 @@ class UserController extends Controller
         $status = NULL;
         $search = $type;
 
-        return view('user_management')->with('users',$users)->with('user_count',$user_count)->with('smartfinance_count',$smartfinance_count)->with('payment_count',$payment_count)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count)->with('mutual_fund_count',$mutual_fund_count)->with('role',$role)->with('profile',$profile)->with('progress',$progress)->with('status',$status)->with('search',$search);
+        return view('user_management')->with('users',$users)->with('user_count',$user_count)->with('smartfinance_count',$smartfinance_count)->with('payment_count',$payment_count)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count)->with('mutual_fund_count',$mutual_fund_count)->with('insurance_count',$insurance_count)->with('role',$role)->with('profile',$profile)->with('progress',$progress)->with('status',$status)->with('search',$search);
     }
 
     public function user_status($type,Request $request)
     {
-        $users = User::where([['is_delete',0],['is_lock',$type]])->orderBy('id','Desc')->paginate(10);
+        $users = User::where([['is_delete',0],['is_lock',$type]])->orderBy('id','Desc')->paginate(25);
         $user_count = User::where('is_active',0)->orWhere('is_profile_verified',0)->count();
         $smartfinance_count = Smartfinance::where('is_status',2)->count();
         $payment_count = SmartfinancePayment::where('is_approve',2)->count();
@@ -1605,6 +1606,7 @@ class UserController extends Controller
         $loan_payment_count = LoanPayment::where('is_status',2)->count();
         $tax_count = Tax::count();
         $mutual_fund_count = MutualFund::count();
+        $insurance_count = Insurance::groupBy('user_id')->select('user_id')->get();
 
         $role = NULL;
         $profile = NULL;
@@ -1612,13 +1614,13 @@ class UserController extends Controller
         $status = $type;
         $search = NULL;
 
-        return view('user_management')->with('users',$users)->with('user_count',$user_count)->with('smartfinance_count',$smartfinance_count)->with('payment_count',$payment_count)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count)->with('mutual_fund_count',$mutual_fund_count)->with('role',$role)->with('profile',$profile)->with('progress',$progress)->with('status',$status)->with('search',$search);
+        return view('user_management')->with('users',$users)->with('user_count',$user_count)->with('smartfinance_count',$smartfinance_count)->with('payment_count',$payment_count)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count)->with('mutual_fund_count',$mutual_fund_count)->with('insurance_count',$insurance_count)->with('role',$role)->with('profile',$profile)->with('progress',$progress)->with('status',$status)->with('search',$search);
     }
 
     public function user_progress($type,Request $request)
     {
 
-        $users = User::where([['is_delete',0],['is_active',$type]])->orderBy('id','Desc')->paginate(10);
+        $users = User::where([['is_delete',0],['is_active',$type]])->orderBy('id','Desc')->paginate(25);
         $user_count = User::where('is_active',0)->orWhere('is_profile_verified',0)->count();
         $smartfinance_count = Smartfinance::where('is_status',2)->count();
         $payment_count = SmartfinancePayment::where('is_approve',2)->count();
@@ -1626,6 +1628,7 @@ class UserController extends Controller
         $loan_payment_count = LoanPayment::where('is_status',2)->count();
         $tax_count = Tax::count();
         $mutual_fund_count = MutualFund::count();
+        $insurance_count = Insurance::groupBy('user_id')->select('user_id')->get();
 
         $role = NULL;
         $profile = NULL;
@@ -1633,13 +1636,13 @@ class UserController extends Controller
         $status = NULL;
         $search = NULL;
 
-        return view('user_management')->with('users',$users)->with('user_count',$user_count)->with('smartfinance_count',$smartfinance_count)->with('payment_count',$payment_count)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count)->with('mutual_fund_count',$mutual_fund_count)->with('role',$role)->with('profile',$profile)->with('progress',$progress)->with('status',$status)->with('search',$search);
+        return view('user_management')->with('users',$users)->with('user_count',$user_count)->with('smartfinance_count',$smartfinance_count)->with('payment_count',$payment_count)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count)->with('mutual_fund_count',$mutual_fund_count)->with('insurance_count',$insurance_count)->with('role',$role)->with('profile',$profile)->with('progress',$progress)->with('status',$status)->with('search',$search);
     }
 
     public function user_profile($type,Request $request)
     {
         if($type == 2){
-            $users = User::where([['is_delete',0],['is_profile_verified',$type]])->orderBy('id','Desc')->paginate(10);
+            $users = User::where([['is_delete',0],['is_profile_verified',$type]])->orderBy('id','Desc')->paginate(25);
             $user_count = User::where('is_active',0)->orWhere('is_profile_verified',0)->count();
             $smartfinance_count = Smartfinance::where('is_status',2)->count();
             $payment_count = SmartfinancePayment::where('is_approve',2)->count();
@@ -1647,6 +1650,7 @@ class UserController extends Controller
             $loan_payment_count = LoanPayment::where('is_status',2)->count();
             $tax_count = Tax::count();
             $mutual_fund_count = MutualFund::count();
+            $insurance_count = Insurance::groupBy('user_id')->select('user_id')->get();
 
             $role = NULL;
             $profile = $type;
@@ -1654,11 +1658,11 @@ class UserController extends Controller
             $status = NULL;
             $search = NULL;
 
-            return view('user_management')->with('users',$users)->with('user_count',$user_count)->with('smartfinance_count',$smartfinance_count)->with('payment_count',$payment_count)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count)->with('mutual_fund_count',$mutual_fund_count)->with('role',$role)->with('profile',$profile)->with('progress',$progress)->with('status',$status)->with('search',$search);
+            return view('user_management')->with('users',$users)->with('user_count',$user_count)->with('smartfinance_count',$smartfinance_count)->with('payment_count',$payment_count)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count)->with('mutual_fund_count',$mutual_fund_count)->with('insurance_count',$insurance_count)->with('role',$role)->with('profile',$profile)->with('progress',$progress)->with('status',$status)->with('search',$search);
         }
         elseif($type == 1){
 
-            $users = User::where([['is_delete',0],['is_profile_verified',$type]])->orWhere('is_profile_updated','!=',$type)->orderBy('id','Desc')->paginate(10);
+            $users = User::where([['is_delete',0],['is_profile_verified',$type]])->orWhere('is_profile_updated','!=',$type)->orderBy('id','Desc')->paginate(25);
             $user_count = User::where('is_active',0)->orWhere('is_profile_verified',0)->count();
             $smartfinance_count = Smartfinance::where('is_status',2)->count();
             $payment_count = SmartfinancePayment::where('is_approve',2)->count();
@@ -1666,6 +1670,7 @@ class UserController extends Controller
             $loan_payment_count = LoanPayment::where('is_status',2)->count();
             $tax_count = Tax::count();
             $mutual_fund_count = MutualFund::count();
+            $insurance_count = Insurance::groupBy('user_id')->select('user_id')->get();
 
             $role = NULL;
             $profile = $type;
@@ -1673,11 +1678,11 @@ class UserController extends Controller
             $status = NULL;
             $search = NULL;
 
-            return view('user_management')->with('users',$users)->with('user_count',$user_count)->with('smartfinance_count',$smartfinance_count)->with('payment_count',$payment_count)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count)->with('mutual_fund_count',$mutual_fund_count)->with('role',$role)->with('profile',$profile)->with('progress',$progress)->with('status',$status)->with('search',$search);
+            return view('user_management')->with('users',$users)->with('user_count',$user_count)->with('smartfinance_count',$smartfinance_count)->with('payment_count',$payment_count)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count)->with('mutual_fund_count',$mutual_fund_count)->with('insurance_count',$insurance_count)->with('role',$role)->with('profile',$profile)->with('progress',$progress)->with('status',$status)->with('search',$search);
         }
         elseif($type == 0){
 
-            $users = User::where([['is_delete',0],['is_profile_verified',$type]])->orWhere('is_profile_updated','!=',$type)->orderBy('id','Desc')->paginate(10);
+            $users = User::where([['is_delete',0],['is_profile_verified',$type]])->orWhere('is_profile_updated','!=',$type)->orderBy('id','Desc')->paginate(25);
             $user_count = User::where('is_active',0)->orWhere('is_profile_verified',0)->count();
             $smartfinance_count = Smartfinance::where('is_status',2)->count();
             $payment_count = SmartfinancePayment::where('is_approve',2)->count();
@@ -1685,6 +1690,7 @@ class UserController extends Controller
             $loan_payment_count = LoanPayment::where('is_status',2)->count();
             $tax_count = Tax::count();
             $mutual_fund_count = MutualFund::count();
+            $insurance_count = Insurance::groupBy('user_id')->select('user_id')->get();
 
             $role = NULL;
             $profile = $type;
@@ -1692,11 +1698,11 @@ class UserController extends Controller
             $status = NULL;
             $search = NULL;
 
-            return view('user_management')->with('users',$users)->with('user_count',$user_count)->with('smartfinance_count',$smartfinance_count)->with('payment_count',$payment_count)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count)->with('mutual_fund_count',$mutual_fund_count)->with('role',$role)->with('profile',$profile)->with('progress',$progress)->with('status',$status)->with('search',$search);
+            return view('user_management')->with('users',$users)->with('user_count',$user_count)->with('smartfinance_count',$smartfinance_count)->with('payment_count',$payment_count)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count)->with('mutual_fund_count',$mutual_fund_count)->with('insurance_count',$insurance_count)->with('role',$role)->with('profile',$profile)->with('progress',$progress)->with('status',$status)->with('search',$search);
         }
         else{
 
-            $users = User::where([['is_delete',0],['is_profile_verified',$type]])->orderBy('id','Desc')->paginate(10);
+            $users = User::where([['is_delete',0],['is_profile_verified',$type]])->orderBy('id','Desc')->paginate(25);
             $user_count = User::where('is_active',0)->orWhere('is_profile_verified',0)->count();
             $smartfinance_count = Smartfinance::where('is_status',2)->count();
             $payment_count = SmartfinancePayment::where('is_approve',2)->count();
@@ -1704,6 +1710,7 @@ class UserController extends Controller
             $loan_payment_count = LoanPayment::where('is_status',2)->count();
             $tax_count = Tax::count();
             $mutual_fund_count = MutualFund::count();
+            $insurance_count = Insurance::groupBy('user_id')->select('user_id')->get();
 
             $role = NULL;
             $profile = $type;
@@ -1711,7 +1718,7 @@ class UserController extends Controller
             $status = NULL;
             $search = NULL;
 
-            return view('user_management')->with('users',$users)->with('user_count',$user_count)->with('smartfinance_count',$smartfinance_count)->with('payment_count',$payment_count)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count)->with('mutual_fund_count',$mutual_fund_count)->with('role',$role)->with('profile',$profile)->with('progress',$progress)->with('status',$status)->with('search',$search);
+            return view('user_management')->with('users',$users)->with('user_count',$user_count)->with('smartfinance_count',$smartfinance_count)->with('payment_count',$payment_count)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count)->with('mutual_fund_count',$mutual_fund_count)->with('insurance_count',$insurance_count)->with('role',$role)->with('profile',$profile)->with('progress',$progress)->with('status',$status)->with('search',$search);
         }
     }
 
@@ -1719,7 +1726,7 @@ class UserController extends Controller
     {
 
 
-        $users = User::where([['is_delete',0],['role_id',$type]])->orderBy('id','Desc')->paginate(10);
+        $users = User::where([['is_delete',0],['role_id',$type]])->orderBy('id','Desc')->paginate(25);
         $user_count = User::where('is_active',0)->orWhere('is_profile_verified',0)->count();
         $smartfinance_count = Smartfinance::where('is_status',2)->count();
         $payment_count = SmartfinancePayment::where('is_approve',2)->count();
@@ -1727,6 +1734,7 @@ class UserController extends Controller
         $loan_payment_count = LoanPayment::where('is_status',2)->count();
         $tax_count = Tax::count();
         $mutual_fund_count = MutualFund::count();
+        $insurance_count = Insurance::groupBy('user_id')->select('user_id')->get();
 
         $role = $type;
         $profile = NULL;
@@ -1734,7 +1742,7 @@ class UserController extends Controller
         $status = NULL;
         $search = NULL;
 
-        return view('user_management')->with('users',$users)->with('user_count',$user_count)->with('smartfinance_count',$smartfinance_count)->with('payment_count',$payment_count)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count)->with('mutual_fund_count',$mutual_fund_count)->with('role',$role)->with('profile',$profile)->with('progress',$progress)->with('status',$status)->with('search',$search);
+        return view('user_management')->with('users',$users)->with('user_count',$user_count)->with('smartfinance_count',$smartfinance_count)->with('payment_count',$payment_count)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count)->with('mutual_fund_count',$mutual_fund_count)->with('insurance_count',$insurance_count)->with('role',$role)->with('profile',$profile)->with('progress',$progress)->with('status',$status)->with('search',$search);
         
     }
 

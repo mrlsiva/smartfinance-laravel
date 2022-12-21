@@ -25,6 +25,7 @@ use App\Models\LoanPayment;
 use App\Models\Tax;
 use App\Models\TaxDetail;
 use App\Models\MutualFund;
+use App\Models\Insurance;
 use Image;
 use DB;
 
@@ -628,11 +629,12 @@ class smartfinanceController extends Controller
         $user_count = User::where('is_active',0)->orWhere('is_profile_verified',0)->count();
         $smartfinance_count = Smartfinance::where('is_status',2)->count();
         $payment_count = SmartfinancePayment::where('is_approve',2)->count();
-        $smartfinances = Smartfinance::join('users','smartfinances.user_id','=','users.id')->where('users.first_name', 'like', '%'.$type.'%')->orWhere('users.last_name', 'like', '%'.$type.'%')->select('smartfinances.*')->orderBy('id','Desc')->paginate(10);
+        $smartfinances = Smartfinance::join('users','smartfinances.user_id','=','users.id')->where('users.first_name', 'like', '%'.$type.'%')->orWhere('users.last_name', 'like', '%'.$type.'%')->select('smartfinances.*')->orderBy('id','Desc')->paginate(25);
         $loan_count = Loan::where('is_status',2)->count();
         $loan_payment_count = LoanPayment::where('is_status',2)->count();
         $tax_count = Tax::count();
         $mutual_fund_count = MutualFund::count();
+        $insurance_count = Insurance::groupBy('user_id')->select('user_id')->get();
 
         $user = Auth::user();
         $admin_finances = Smartfinance::where('user_id',$user->id)->orderBy('id','Desc')->paginate(10);
@@ -642,7 +644,7 @@ class smartfinanceController extends Controller
         $investment_status = NULL;
         $investment_search = $type;
 
-        return view('finance')->with('smartfinances',$smartfinances)->with('admin_finances',$admin_finances)->with('admin_finance_count',$admin_finance_count)->with('user_count',$user_count)->with('smartfinance_count',$smartfinance_count)->with('payment_count',$payment_count)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count)->with('mutual_fund_count',$mutual_fund_count)->with('investment_plan',$investment_plan)->with('investment_status',$investment_status)->with('investment_search',$investment_search);
+        return view('finance')->with('smartfinances',$smartfinances)->with('admin_finances',$admin_finances)->with('admin_finance_count',$admin_finance_count)->with('user_count',$user_count)->with('smartfinance_count',$smartfinance_count)->with('payment_count',$payment_count)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count)->with('mutual_fund_count',$mutual_fund_count)->with('insurance_count',$insurance_count)->with('investment_plan',$investment_plan)->with('investment_status',$investment_status)->with('investment_search',$investment_search);
         
     }
 
@@ -653,11 +655,12 @@ class smartfinanceController extends Controller
         $user_count = User::where('is_active',0)->orWhere('is_profile_verified',0)->count();
         $smartfinance_count = Smartfinance::where('is_status',2)->count();
         $payment_count = SmartfinancePayment::where('is_approve',2)->count();
-        $smartfinances = Smartfinance::where('is_status',$type)->orderBy('id','Desc')->paginate(10);
+        $smartfinances = Smartfinance::where('is_status',$type)->orderBy('id','Desc')->paginate(25);
         $loan_count = Loan::where('is_status',2)->count();
         $loan_payment_count = LoanPayment::where('is_status',2)->count();
         $tax_count = Tax::count();
         $mutual_fund_count = MutualFund::count();
+        $insurance_count = Insurance::groupBy('user_id')->select('user_id')->get();
 
         $user = Auth::user();
         $admin_finances = Smartfinance::where('user_id',$user->id)->orderBy('id','Desc')->paginate(10);
@@ -667,7 +670,7 @@ class smartfinanceController extends Controller
         $investment_status = $type;
         $investment_search = NULL;
 
-        return view('finance')->with('smartfinances',$smartfinances)->with('admin_finances',$admin_finances)->with('admin_finance_count',$admin_finance_count)->with('user_count',$user_count)->with('smartfinance_count',$smartfinance_count)->with('payment_count',$payment_count)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count)->with('mutual_fund_count',$mutual_fund_count)->with('investment_plan',$investment_plan)->with('investment_status',$investment_status)->with('investment_search',$investment_search);
+        return view('finance')->with('smartfinances',$smartfinances)->with('admin_finances',$admin_finances)->with('admin_finance_count',$admin_finance_count)->with('user_count',$user_count)->with('smartfinance_count',$smartfinance_count)->with('payment_count',$payment_count)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count)->with('mutual_fund_count',$mutual_fund_count)->with('insurance_count',$insurance_count)->with('investment_plan',$investment_plan)->with('investment_status',$investment_status)->with('investment_search',$investment_search);
     }
 
     public function investment_plan($type,Request $request)
@@ -676,11 +679,12 @@ class smartfinanceController extends Controller
         $user_count = User::where('is_active',0)->orWhere('is_profile_verified',0)->count();
         $smartfinance_count = Smartfinance::where('is_status',2)->count();
         $payment_count = SmartfinancePayment::where('is_approve',2)->count();
-        $smartfinances = Smartfinance::where('plan_id',$type)->orderBy('id','Desc')->paginate(10);
+        $smartfinances = Smartfinance::where('plan_id',$type)->orderBy('id','Desc')->paginate(25);
         $loan_count = Loan::where('is_status',2)->count();
         $loan_payment_count = LoanPayment::where('is_status',2)->count();
         $tax_count = Tax::count();
         $mutual_fund_count = MutualFund::count();
+        $insurance_count = Insurance::groupBy('user_id')->select('user_id')->get();
 
         $user = Auth::user();
         $admin_finances = Smartfinance::where('user_id',$user->id)->orderBy('id','Desc')->paginate(10);
@@ -690,7 +694,7 @@ class smartfinanceController extends Controller
         $investment_status = NULL;
         $investment_search = NULL;
 
-        return view('finance')->with('smartfinances',$smartfinances)->with('admin_finances',$admin_finances)->with('admin_finance_count',$admin_finance_count)->with('user_count',$user_count)->with('smartfinance_count',$smartfinance_count)->with('payment_count',$payment_count)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count)->with('mutual_fund_count',$mutual_fund_count)->with('investment_plan',$investment_plan)->with('investment_status',$investment_status)->with('investment_search',$investment_search);
+        return view('finance')->with('smartfinances',$smartfinances)->with('admin_finances',$admin_finances)->with('admin_finance_count',$admin_finance_count)->with('user_count',$user_count)->with('smartfinance_count',$smartfinance_count)->with('payment_count',$payment_count)->with('loan_count',$loan_count)->with('loan_payment_count',$loan_payment_count)->with('tax_count',$tax_count)->with('mutual_fund_count',$mutual_fund_count)->with('insurance_count',$insurance_count)->with('investment_plan',$investment_plan)->with('investment_status',$investment_status)->with('investment_search',$investment_search);
         
     }
 
