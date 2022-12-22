@@ -1876,7 +1876,7 @@
         if(system_id)
         {
             jQuery.ajax({
-                url : 'get_loan',
+                url : "{{route('get_loan')}}",
                 type: 'GET',
                 dataType: 'json',
                 data: { id: system_id },

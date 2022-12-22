@@ -1547,7 +1547,7 @@
         if(system_id)
         {
             jQuery.ajax({
-                url : 'get_user',
+                url : "{{route('get_user')}}",
                 type: 'GET',
                 dataType: 'json',
                 data: { id: system_id },
@@ -1738,7 +1738,7 @@
         if(system_id)
         {
             jQuery.ajax({
-                url : 'get_users',
+                url : "{{route('get_users')}}",
                 type: 'GET',
                 dataType: 'json',
                 data: { id: system_id },
@@ -1784,7 +1784,7 @@
             else{
                 $('#refferal_amount_error').hide();
                 jQuery.ajax({
-                    url : 'refferal_amount',
+                    url : "{{route('refferal_amount')}}",
                     type: 'GET',
                     dataType: 'json',
                     data: { "amount": amount,"user_id" : system_id},

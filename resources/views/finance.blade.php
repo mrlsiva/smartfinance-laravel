@@ -2065,7 +2065,7 @@
         if(system_id)
         {
             jQuery.ajax({
-                url : 'get_smart_finance',
+                url : "{{route('get_smart_finance')}}",
                 type: 'GET',
                 dataType: 'json',
                 data: { id: system_id },
