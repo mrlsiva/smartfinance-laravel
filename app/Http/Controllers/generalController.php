@@ -116,7 +116,7 @@ class generalController extends Controller
 
     public function email_templates(Request $request)
     {
-        $templates = Template::paginate(10);
+        $templates = Template::paginate(24);
         return view('email_template')->with('templates',$templates);
     }
 
@@ -124,6 +124,7 @@ class generalController extends Controller
     {
         $template = Template::create([
             'name' => $request->name,
+            'description' => $request->description,
             'subject' => $request->subject,
             'template' => $request->template,
             'is_active' => 1,
@@ -142,7 +143,7 @@ class generalController extends Controller
     {
         //return $request;
 
-        DB::table('templates')->where('id',$request->id)->update(['name' => $request->name,'subject' => $request->subject,'template' => $request->template,'is_active' => $request->is_active]);
+        DB::table('templates')->where('id',$request->id)->update(['name' => $request->name,'description' => $request->description,'subject' => $request->subject,'template' => $request->template,'is_active' => $request->is_active]);
 
         return redirect()->back()->with('alert', 'Updated Successfully!!');
     }

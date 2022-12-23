@@ -75,12 +75,25 @@ body{
 					<div class="fv-row mb-8">
 						<!--begin::Label-->
 						<label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
-							<span class="required">Name</span>
-							<i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Name"></i>
+							<span class="required">Title</span>
+							<i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Title"></i>
 						</label>
 						<!--end::Label-->
 						<!--begin::Input-->
-						<input type="text" class="form-control form-control-solid" placeholder="Name"  name="name" id="name" value="{{$template->name}}" required />
+						<input type="text" class="form-control form-control-solid" placeholder="Title"  name="name" id="name" value="{{$template->name}}" required />
+						<!--end::Input-->
+					</div>
+					<!--end::Input group-->
+					<!--begin::Input group-->
+					<div class="fv-row mb-8">
+						<!--begin::Label-->
+						<label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+							<span class="required">Description</span>
+							<i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Description"></i>
+						</label>
+						<!--end::Label-->
+						<!--begin::Input-->
+						<textarea type="text" class="form-control form-control-solid" placeholder="Description" name="description"  rows="4" cols="50" >{!! $template->description !!}</textarea>
 						<!--end::Input-->
 					</div>
 					<!--end::Input group-->
