@@ -1192,7 +1192,7 @@ class smartfinanceController extends Controller
                 'user_id' => $payment->smartfinance->user->id,
                 'name' => $payment->smartfinance->user->first_name.' '.$payment->smartfinance->user->last_name,
                 'date' => $payment->payment_date,
-                'next_payout_amount' => $amount
+                'amount' => $amount
             ]);
         }
 
@@ -1212,7 +1212,7 @@ class smartfinanceController extends Controller
                 'user_id' => $user_amount->user->id,
                 'name' =>  $user_amount->user->first_name.' '. $user_amount->user->last_name,
                 'date' => $date,
-                'next_payout_amount' => $user_amount->amount
+                'amount' => $user_amount->amount
             ]);
 
         }
