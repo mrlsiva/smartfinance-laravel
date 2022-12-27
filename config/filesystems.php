@@ -58,6 +58,11 @@ return [
             'root' => storage_path('app/public/excel'),
         ],
 
+        'report' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/report'),
+        ],
+
 
 
     ],

@@ -202,6 +202,9 @@
                                                 <a href="{{route('payout_list')}}" class="menu-link px-5">Next Month Payout List</a>
                                             </div>
                                             <div class="menu-item px-5">
+                                                <a href="{{route('report')}}" class="menu-link px-5">Report</a>
+                                            </div>
+                                            <div class="menu-item px-5">
                                                 <a href="{{route('email_templates')}}" class="menu-link px-5">Email Templates</a>
                                             </div>
                                             <div class="menu-item px-5">
