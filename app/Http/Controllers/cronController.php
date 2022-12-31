@@ -79,7 +79,7 @@ class cronController extends Controller
         $now_time = Carbon::now()->format('H');
         $now = Carbon::now()->format('Y-m-d');
 
-        if($now == $month_end && $now_time == '21'){
+        if($now == $month_end && $now_time == '22'){
 
             $month = Carbon::now()->addMonth()->format('m');
             $year = Carbon::now()->addMonth()->format('Y');
