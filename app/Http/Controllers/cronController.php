@@ -81,8 +81,10 @@ class cronController extends Controller
 
         if($now == $month_end && $now_time == '22'){
 
-            $month = Carbon::now()->addMonth()->format('m');
-            $year = Carbon::now()->addMonth()->format('Y');
+            $month = date('m', strtotime('first day of +1 month'));
+            $year = date('Y', strtotime('first day of +1 month'));
+            //$month = Carbon::now()->addMonth()->format('m');
+            //$year = Carbon::now()->addMonth()->format('Y');
 
             $payout_delete = NextMonthPayout::truncate();
 

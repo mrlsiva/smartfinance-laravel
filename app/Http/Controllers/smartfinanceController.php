@@ -143,7 +143,9 @@ class smartfinanceController extends Controller
                     $date = Carbon::parse($accepted_date)->addMonths(1);
                     $new_date = Carbon::parse($date)->setDay(6)->format('Y-m-d');
                     if($date > $new_date){
-                        $date = Carbon::parse($accepted_date)->addMonths(2);
+                        //$date = Carbon::parse($accepted_date)->addMonths(2);
+                        $date = date('Y-m-d', strtotime('first day of +2 month', strtotime($accepted_date)));
+                        //return $date;
                         $payment_date = Carbon::parse($date)->setDay(6)->format('Y-m-d');
                         // check day
                         $timestamp = strtotime($payment_date);
@@ -375,7 +377,7 @@ class smartfinanceController extends Controller
                 $date = Carbon::parse($accepted_date)->addMonths(1);
                 $new_date = Carbon::parse($date)->setDay(6)->format('Y-m-d');
                 if($date > $new_date){
-                    $date = Carbon::parse($accepted_date)->addMonths(2);
+                    $date = date('Y-m-d', strtotime('first day of +2 month', strtotime($accepted_date)));
                     $payment_date = Carbon::parse($date)->setDay(6)->format('Y-m-d');
                         // check day
                     $timestamp = strtotime($payment_date);
@@ -1069,8 +1071,11 @@ class smartfinanceController extends Controller
 
     public function payout_list(Request $request) 
     {
-        $month = Carbon::now()->addMonth()->format('m');
-        $year = Carbon::now()->addMonth()->format('Y');
+        $month = date('m', strtotime('first day of +1 month'));
+        $year = date('Y', strtotime('first day of +1 month'));
+
+        // $month = Carbon::now()->addMonth()->format('m');
+        // $year = Carbon::now()->addMonth()->format('Y');
 
         $payout_delete = NextMonthPayout::truncate();
 
@@ -1147,8 +1152,11 @@ class smartfinanceController extends Controller
 
     public function report(Request $request) 
     {
-        $month = Carbon::now()->addMonth()->format('m');
-        $year = Carbon::now()->addMonth()->format('Y');
+        $month = date('m', strtotime('first day of +1 month'));
+        $year = date('Y', strtotime('first day of +1 month'));
+
+        // $month = Carbon::now()->addMonth()->format('m');
+        // $year = Carbon::now()->addMonth()->format('Y');
 
         $payout_delete = Report::truncate();
 
