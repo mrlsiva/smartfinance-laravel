@@ -1254,8 +1254,8 @@ class smartfinanceController extends Controller
             foreach($smartfinance_ids as $smartfinance_id){
                 $result[] = $smartfinance_id->id;
             }
-            $next_payment_date = SmartfinancePayment::whereIn('smartfinance_id',$result)->where('is_status',1)->orderBy('payment_date', 'asc')->first();
-            $user_amount = UserAmount::where([['user_id',$user->user_id],['is_status',1]])->whereMonth('date',$month)->whereYear('date', $year)->first();
+            $next_payment_date = SmartfinancePayment::whereIn('smartfinance_id',$result)->where('is_status',0)->orderBy('payment_date', 'asc')->first();
+            $user_amount = UserAmount::where([['user_id',$user->user_id],['is_status',1]])->first();
 
             if($next_payment_date->payment_date == $payment->payment_date )
             {
@@ -1276,7 +1276,7 @@ class smartfinanceController extends Controller
             ]);
         }
 
-        $user_amounts = UserAmount::whereNotIn('user_id',$users)->where('is_status',1)->whereMonth('date',$month)->whereYear('date', $year)->get();
+        $user_amounts = UserAmount::whereNotIn('user_id',$users)->where('is_status',1)->get();
         foreach($user_amounts as $user_amount){
             $date = Carbon::parse($user_amount->date)->addMonths(1);
             $new_date = Carbon::parse($date)->setDay(6)->format('Y-m-d');

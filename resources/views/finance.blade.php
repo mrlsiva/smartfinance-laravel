@@ -915,7 +915,7 @@
                             </label>
                             <!--end::Label-->
                             <!--begin::Input-->
-                            <input type="number" class="form-control form-control-solid @error('amount') is-invalid @enderror" placeholder="Investment Amount" value="" name="amount" id="amount" />
+                            <input type="number" class="form-control form-control-solid @error('amount') is-invalid @enderror" placeholder="Investment Amount" value="" name="amount" id="amount" onkeydown="if(event.key==='.'){event.preventDefault();}" onpaste="let pasteData = event.clipboardData.getData('text'); if(pasteData){pasteData.replace(/[^0-9]*/g,'');} " />
                             <!--end::Input-->
                             <div class=" amount_error" id="amount_error"></div>
                             @error('amount')
