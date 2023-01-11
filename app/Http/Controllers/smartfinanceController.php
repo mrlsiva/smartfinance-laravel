@@ -226,7 +226,8 @@ class smartfinanceController extends Controller
                     $payment_date = Carbon::parse($payment_date)->addMonths(1);
                     $new_date = Carbon::parse($payment_date)->setDay(6)->format('Y-m-d');
                     if($payment_date > $new_date){
-                        $payment_date = Carbon::parse($payment_date)->addMonths(1);
+                        $payment_date = date('Y-m-d', strtotime('first day of +1 month', strtotime($payment_date)));
+                        //$payment_date = Carbon::parse($payment_date)->addMonths(1);
                         $payment_date = Carbon::parse($payment_date)->setDay(6)->format('Y-m-d');
                         // check day
                         $timestamp = strtotime($payment_date);
@@ -281,7 +282,8 @@ class smartfinanceController extends Controller
                     $payment_date = Carbon::parse($payment_date)->addMonths(1);
                     $new_date = Carbon::parse($payment_date)->setDay(6)->format('Y-m-d');
                     if($payment_date > $new_date){
-                        $payment_date = Carbon::parse($payment_date)->addMonths(1);
+                        //$payment_date = Carbon::parse($payment_date)->addMonths(1);
+                        $payment_date = date('Y-m-d', strtotime('first day of +1 month', strtotime($payment_date)));
                         $payment_date = Carbon::parse($payment_date)->setDay(6)->format('Y-m-d');
                         // check day
                         $timestamp = strtotime($payment_date);
@@ -461,7 +463,8 @@ class smartfinanceController extends Controller
                 $payment_date = Carbon::parse($payment_date)->addMonths(1);
                 $new_date = Carbon::parse($payment_date)->setDay(6)->format('Y-m-d');
                 if($payment_date > $new_date){
-                    $payment_date = Carbon::parse($payment_date)->addMonths(1);
+                    //$payment_date = Carbon::parse($payment_date)->addMonths(1);
+                    $payment_date = date('Y-m-d', strtotime('first day of +1 month', strtotime($payment_date)));
                     $payment_date = Carbon::parse($payment_date)->setDay(6)->format('Y-m-d');
                     // check day
                     $timestamp = strtotime($payment_date);
@@ -521,7 +524,8 @@ class smartfinanceController extends Controller
                 $payment_date = Carbon::parse($payment_date)->addMonths(1);
                 $new_date = Carbon::parse($payment_date)->setDay(6)->format('Y-m-d');
                 if($payment_date > $new_date){
-                    $payment_date = Carbon::parse($payment_date)->addMonths(1);
+                    //$payment_date = Carbon::parse($payment_date)->addMonths(1);
+                    $payment_date = date('Y-m-d', strtotime('first day of +1 month', strtotime($payment_date)));
                     $payment_date = Carbon::parse($payment_date)->setDay(6)->format('Y-m-d');
                     // check day
                     $timestamp = strtotime($payment_date);
