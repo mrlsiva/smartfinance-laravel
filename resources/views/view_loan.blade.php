@@ -192,13 +192,13 @@ $user = Auth::guard('web')->user();
 										<div class="fw-bold fs-6 text-gray-400">Total Amount</div>
 										<!--end::Label-->
 									</div>
-									@if($loan->user_id == $user->id)
+									
 										@if($loan->approve_payment_copy != NULL)
 										<div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
 											<!--begin::Number-->
 											<div class="d-flex align-items-center">
 												<button type="button" class="text-hover-primary btn  btn-light" data-system_id="{{$loan->id}}" name="pro_book" >
-													<i class="fa fa-upload" style="font-size:24px;color:black;"></i>
+													<i class="fa fa-download" style="font-size:24px;color:black;"></i>
 												</button>
 											</div>
 											<!--end::Number-->
@@ -207,7 +207,7 @@ $user = Auth::guard('web')->user();
 											<!--end::Label-->
 										</div>
 										@endif
-									@endif
+									
 									@php
 										$user = Auth::guard('web')->user();
 									@endphp
