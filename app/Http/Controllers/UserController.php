@@ -884,6 +884,18 @@ class UserController extends Controller
                     }
                     //Mail to user end
                 }
+                if($is_lock == 1){
+
+                    $finances = Smartfinance::where([['user_id',$id],['is_close',0]])->get();
+                    foreach($finances as $finance){
+                        if($finance->plan_id == 1){
+
+                            $finance_payment = SmartfinancePayment::where([['smartfinance_id',$finance->id],['is_status',0]])->first();
+                            $close_payment = SmartfinancePayment::where('smartfinance_id',$finance->id)->where('id','!=',$finance_payment->id)->update(['is_status' => 1, 'is_close' => 1]);
+                        }
+                    }
+                }
+
                 return redirect()->back()->with('alert', 'Successfully Updated!!');
             }
         }
@@ -997,6 +1009,18 @@ class UserController extends Controller
                 }
                 //Mail to user end
             }
+            if($is_lock == 1){
+
+                $finances = Smartfinance::where([['user_id',$id],['is_close',0]])->get();
+                foreach($finances as $finance){
+                    if($finance->plan_id == 1){
+
+                        $finance_payment = SmartfinancePayment::where([['smartfinance_id',$finance->id],['is_status',0]])->first();
+                        $close_payment = SmartfinancePayment::where('smartfinance_id',$finance->id)->where('id','>',$finance_payment->id)->update(['is_status' => 1, 'is_close' => 1]);
+                    }
+                }
+            }
+
 
             return redirect()->back()->with('alert', 'Successfully Updated!!');
         }

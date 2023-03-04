@@ -354,12 +354,12 @@ body{
 									@if($user->role_id == 1 || $user->role_id == 2)
 									<td>
 										<!--begin::Select-->
-										<select class="form-select form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="Select..." name="payment_status" id="payment_status">
+										<select class="form-select form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="Select..." name="payment_status" id="payment_status" data-system_id="{{$smartfinance_payment->id}}">
 											<option value="0" {{ ("0" == $smartfinance_payment->is_status ) ? "selected":"" }}>Pending</option>
 											<option value="1" {{ ("1" == $smartfinance_payment->is_status ) ? "selected":"" }}>Paid</option>
 										</select>
 										<!--end::Select-->
-										<input type="hidden" name="payment_id" id="payment_id" value="{{$smartfinance_payment->id}}">
+										<input type="hidden" name="payment_id" id="payment_id" value="{{$smartfinance_payment->id}}" >
 									</td>
 									@endif
 								</tr>
@@ -1468,7 +1468,10 @@ body{
 	{
 		jQuery('select[name="payment_status"]').on('change',function(){
 			var payment = jQuery(this).val();
-			var payment_id = jQuery("#payment_id").val();
+			//var payment_id = jQuery("#payment_id").val();
+			var payment_id = $(this).data("system_id");
+			// console.log(payment);
+			// console.log(payment_id);
 			if(payment_id)
 			{
 				jQuery.ajax({
