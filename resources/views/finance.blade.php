@@ -452,13 +452,19 @@
                                             @endif
                                             @php
                                                 $payment_date = App\Models\SmartfinancePayment::where([['smartfinance_id',$smartfinance->id],['is_status',0]])->first();
+
                                                 $date = Carbon\Carbon::now()->format('Y-m-d');
                                             @endphp
 
                                             @if($payment_date != Null)
+                                                @php
+                                                $new_date = Carbon\Carbon::parse($payment_date->payment_date)->subMonths(2)->format('Y-m-d');
+
+                                                $date = Carbon\Carbon::now()->format('Y-m-d');
+                                                @endphp
                                                 <td>
                                                     @if($payment_date->smartfinance->plan->id == 3)
-                                                        @if($date == $payment_date->payment_date)
+                                                        @if($new_date <= $date)
                                                             @php
                                                             $payment_ym = App\Models\SmartfinancePayment::where('smartfinance_id',$smartfinance->id)->orderBy('id','Desc')->first();
                                                             @endphp

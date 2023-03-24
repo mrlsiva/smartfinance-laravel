@@ -345,10 +345,14 @@ body{
 										@endif
 									</td>
 									<td>
-										@if($smartfinance_payment->is_status == 0)
-										<span class="badge py-3 px-4 fs-7 badge-light-warning">Un Paid</span>
-										@elseif($smartfinance_payment->is_status == 1)
-										<span class="badge py-3 px-4 fs-7 badge-light-success">Paid</span>
+										@if($smartfinance_payment->is_close == NULL)
+											@if($smartfinance_payment->is_status == 0)
+											<span class="badge py-3 px-4 fs-7 badge-light-warning">Un Paid</span>
+											@elseif($smartfinance_payment->is_status == 1)
+											<span class="badge py-3 px-4 fs-7 badge-light-success">Paid</span>
+											@endif
+										@else
+											<span class="badge py-3 px-4 fs-7 badge-light-danger">Closed</span>
 										@endif
 									</td>
 									@if($user->role_id == 1 || $user->role_id == 2)
@@ -468,14 +472,16 @@ body{
 											{{$smartfinance_payment->commafun($smartfinance_payment->intrest+$smartfinance_payment->next_amount+$smartfinance_payment->balance)}}
 										@endif
 									</td>
-									@if($smartfinance_payment->is_approve == 1)
-										<td><span class="badge py-3 px-4 fs-7 badge-light-success">Approved</span></td>
-									@elseif($smartfinance_payment->is_approve == 0)
-										<td><span class="badge py-3 px-4 fs-7 badge-light-danger">Rejected</span></td>
-									@elseif($smartfinance_payment->is_approve == 2)
-										<td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>
+									@if($smartfinance_payment->is_close == NULL)
+										@if($smartfinance_payment->is_approve == 1)
+											<td><span class="badge py-3 px-4 fs-7 badge-light-success">Approved</span></td>
+										@elseif($smartfinance_payment->is_approve == 0)
+											<td><span class="badge py-3 px-4 fs-7 badge-light-danger">Rejected</span></td>
+										@elseif($smartfinance_payment->is_approve == 2)
+											<td><span class="badge py-3 px-4 fs-7 badge-light-warning">Pending</span></td>
+										@endif
 									@else
-
+										<td><span class="badge py-3 px-4 fs-7 badge-light-danger">Closed</span></td>
 									@endif
 									@if($user->role_id != 3)
 										<td>
@@ -575,12 +581,18 @@ body{
 										@endif
 										@php
 											$payment_date = App\Models\SmartfinancePayment::where([['smartfinance_id',$finance->id],['is_status',0]])->first();
-											$date = Carbon\Carbon::now()->format('Y-m-d');
+
+                                            $date = Carbon\Carbon::now()->format('Y-m-d');
 										@endphp
 										@if($payment_date != Null)
+											@php
+                                                $new_date = Carbon\Carbon::parse($payment_date->payment_date)->subMonths(2)->format('Y-m-d');
+
+                                                $date = Carbon\Carbon::now()->format('Y-m-d');
+                                            @endphp
 											<td>
 												@if($payment_date->smartfinance->plan->id == 3)
-													@if($date == $payment_date->payment_date)
+													@if($new_date <= $date)
 														@php
                                                             $payment_ym = App\Models\SmartfinancePayment::where('smartfinance_id',$finance->id)->orderBy('id','Desc')->first();
                                                         @endphp
@@ -737,11 +749,18 @@ body{
 									@endif
 									@php
 									$payment_date = App\Models\SmartfinancePayment::where([['smartfinance_id',$finance->id],['is_status',0]])->first();
+
+                                    $date = Carbon\Carbon::now()->format('Y-m-d');
 									@endphp
 									@if($payment_date != Null)
+										@php
+                                            $new_date = Carbon\Carbon::parse($payment_date->payment_date)->subMonths(2)->format('Y-m-d');
+
+                                            $date = Carbon\Carbon::now()->format('Y-m-d');
+                                        @endphp
 									<td>
 										@if($payment_date->smartfinance->plan->id == 3)
-											@if($date == $payment_date->payment_date)
+											@if($new_date <= $date)
 												@php
 													$payment_ym = App\Models\SmartfinancePayment::where('smartfinance_id',$finance->id)->orderBy('id','Desc')->first();
 												@endphp
