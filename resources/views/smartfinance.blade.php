@@ -270,6 +270,9 @@ body{
 
 					@if($payment->smartfinance->plan->id == 1 || $payment->smartfinance->plan->id == 2)
 						@if($user->role_id != 3 )
+							<div class="text-end">
+								<button type="button" class="btn  btn-danger mb-5" name="close_plan" id="close_plan" data-bs-toggle="modal" data-bs-target="#close_plan_modal"><i class="fa fa-times"></i>Close Plan</button>
+							</div>
 							<!-- @php
 	                            $payment_date = App\Models\SmartfinancePayment::where('smartfinance_id',$payment->smartfinance_id)->orderBy('id','Desc')->first();
 
@@ -397,6 +400,8 @@ body{
 									<button type="button" class="btn  btn-success mb-5" ><i class="fa fa-download"></i>Download Excel</button>
 								</a> -->
 								<button type="button" class="btn  btn-success mb-5" name="upload_excel" id="upload_excel" data-bs-toggle="modal" data-bs-target="#excel_upload_modal"><i class="fa fa-upload"></i>Upload Excel</button>
+
+								<button type="button" class="btn  btn-danger mb-5" name="close_plan" id="close_plan" data-bs-toggle="modal" data-bs-target="#close_plan_modal"><i class="fa fa-times"></i>Close Plan</button>
 							</div>
 							@php
 	                            $payment_date = App\Models\SmartfinancePayment::where('smartfinance_id',$payment->smartfinance_id)->orderBy('id','Desc')->first();
@@ -913,6 +918,72 @@ body{
     <!--end::Modal dialog-->
 </div>
 <!-- end::Modal -UploadExcel- -->
+
+<div class="modal fade" id="close_plan_modal" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog mw-650px">
+        <!--begin::Modal content-->
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header pb-0 border-0 justify-content-end">
+                <!--begin::Close-->
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
+                            <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="black" />
+                        </svg>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--begin::Modal header-->
+            <!--begin::Modal body-->
+            <div class="modal-body scroll-y mx-5 mx-xl-18 pt-0 pb-15">
+                <!--begin::Heading-->
+
+                <!--end::Google Contacts Invite-->
+                <!--begin::Separator-->
+                <!--end::Separator-->
+                <!--begin::Textarea-->
+                <!--end::Textarea-->
+                <!--begin::Users-->
+                <div class="mb-10">
+                    <!--begin::Heading-->
+                    <div class="fs-4 fw-bolder mb-2">Close Plan</div>
+                    <!--end::Heading-->
+                    <p class="fs-4">Are you surely want to close the plan</p>
+                    <div class="text-center">
+                    	@if($smartfinance->plan_id == 3)
+	                    	<a href="{{route('close_multi_investment_plan', ['id' => $smartfinance->id])}}" class="text-dark fw-bolder text-hover-primary fs-6">
+	                    		<button type="button" class="btn  btn-success mb-5" >Okay</button>
+	                    	</a>
+	                    @elseif($smartfinance->plan_id == 2)
+	                    	<a href="{{route('close_yearly_plan', ['id' => $smartfinance->id])}}" class="text-dark fw-bolder text-hover-primary fs-6">
+	                    		<button type="button" class="btn  btn-success mb-5" >Okay</button>
+	                    	</a>
+	                    @else
+	                    	<a href="{{route('close_monthly_plan', ['id' => $smartfinance->id])}}" class="text-dark fw-bolder text-hover-primary fs-6">
+	                    		<button type="button" class="btn  btn-success mb-5" >Okay</button>
+	                    	</a>
+	                    @endif
+                    	<button type="button" class="btn  btn-danger mr]l-5 mb-5" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+                <!--end::Users-->
+                <!--begin::Notice-->
+                <!--end::Notice-->
+            </div>
+            <!--end::Modal body-->
+        </div>
+            <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+</div>
+
+
 
 <!-- begin::Modal -investment- -->
 <div class="modal fade" id="kt_modal_new_month_investment" tabindex="-1" aria-hidden="true">
@@ -1657,4 +1728,20 @@ body{
 });
 </script>
 <!-- end-finance -->
+
+
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.6/dist/sweetalert2.all.min.js"></script>
+<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.min.css'>
+
+<script>
+    @if (session('alert'))
+        Swal.fire(
+            "{{ session('alert') }}",
+            ' ',
+            'success'
+        )
+    @endif
+</script>
+
 @endsection

@@ -149,6 +149,9 @@ Route::get('payout_list',[SmartFinanceController::class, 'payout_list'])->name('
 Route::get('export-excel-csv-file/{slug}', [SmartFinanceController::class, 'exportExcelCSV']);
 Route::get('report-excel-csv-file/{slug}/{month}/{year}', [SmartFinanceController::class, 'reportExportExcelCSV'])->name('report-excel-csv-file');
 Route::post('/import_excel',[SmartFinanceController::class, 'import_excel'])->name('import_excel');
+Route::get('close_multi_investment_plan/{id}', [SmartFinanceController::class, 'close_multi_investment_plan'])->name('close_multi_investment_plan');
+Route::get('close_yearly_plan/{id}', [SmartFinanceController::class, 'close_yearly_plan'])->name('close_yearly_plan');
+Route::get('close_monthly_plan/{id}', [SmartFinanceController::class, 'close_monthly_plan'])->name('close_monthly_plan');
 
 //Smart Finance end
 

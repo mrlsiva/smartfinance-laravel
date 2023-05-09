@@ -592,9 +592,6 @@ class smartfinanceController extends Controller
             $smartfinance_payment_status = DB::table('smartfinance_payments')->where('id',$smartfinance_payment->id)->update(['is_status' => 1]);
         }
 
-        
-
-
         $smartfinance = Smartfinance::where('id',$id)->first();
         $amount = 0;
         if($smartfinance->plan_id == 3){
@@ -604,8 +601,6 @@ class smartfinanceController extends Controller
 
                 $amount = $amount + $smartfinance_payment->investment_amount;
             }
-               
-
 
         }
         $smartfinance_payments = SmartfinancePayment::where('smartfinance_id',$id)->get();
@@ -1362,6 +1357,106 @@ class smartfinanceController extends Controller
  
         Excel::import(new SmartfinancePaymentsImport,$request->file('excel'));
         return redirect()->back()->with('alert', 'Excel has been successfully uploaded!');
+    }
+
+    public function close_multi_investment_plan($id) 
+    {
+        
+        $date = Carbon::now()->format('Y-m-d');
+        $new_date = Carbon::parse($date)->setDay(6)->format('Y-m-d');
+        if($date > $new_date){
+            $date = date('Y-m-d', strtotime('first day of +1 month', strtotime($date)));
+            $payment_date = Carbon::parse($date)->setDay(6)->format('Y-m-d');
+            // check day
+            $timestamp = strtotime($payment_date);
+            $day = date('l', $timestamp);
+            if($day == 'Tuesday' ||$day == 'Sunday' ||$day == 'Friday'){
+
+                $payment_date = Carbon::parse($payment_date)->setDay(7)->format('Y-m-d');
+
+            }
+            else{
+
+                $payment_date = Carbon::parse($payment_date)->setDay(6)->format('Y-m-d');
+
+            }
+        }
+        else{
+
+            // check day
+            $timestamp = strtotime($new_date);
+            $day = date('l', $timestamp);
+            if($day == 'Tuesday' ||$day == 'Sunday' ||$day == 'Friday') {
+
+                $payment_date = Carbon::parse($new_date)->setDay(7)->format('Y-m-d');
+
+            }
+            else {
+
+                $payment_date = Carbon::parse($new_date)->setDay(6)->format('Y-m-d');
+
+            }
+        }
+
+        $close_payment = SmartfinancePayment::where('smartfinance_id',$id)->update(['is_close' => 1, 'payment_date' => $payment_date]);
+
+        return redirect()->back()->with('alert', 'Successfully closed the multi investment plan!!');
+    }
+
+    public function close_yearly_plan($id) 
+    {
+        $finance = Smartfinance::where('id',$id)->first();
+        $date = Carbon::now()->format('Y-m-d');
+        $new_date = Carbon::parse($date)->setDay(6)->format('Y-m-d');
+        if($date > $new_date){
+
+            $date = date('Y-m-d', strtotime('first day of +1 month', strtotime($date)));
+            $payment_date = Carbon::parse($date)->setDay(6)->format('Y-m-d');
+            // check day
+            $timestamp = strtotime($payment_date);
+            $day = date('l', $timestamp);
+            if($day == 'Tuesday' ||$day == 'Sunday' ||$day == 'Friday'){
+
+                $payment_date = Carbon::parse($payment_date)->setDay(7)->format('Y-m-d');
+
+            }
+            else{
+
+                $payment_date = Carbon::parse($payment_date)->setDay(6)->format('Y-m-d');
+
+            }
+        }
+        else{
+
+            // check day
+            $timestamp = strtotime($new_date);
+            $day = date('l', $timestamp);
+            if($day == 'Tuesday' ||$day == 'Sunday' ||$day == 'Friday'){
+                $payment_date = Carbon::parse($new_date)->setDay(7)->format('Y-m-d');
+
+            }
+            else{
+
+                $payment_date = Carbon::parse($new_date)->setDay(6)->format('Y-m-d');
+
+            }
+        }
+
+        $close_payment = SmartfinancePayment::where('smartfinance_id',$finance->id)->update(['is_close' => 1, 'amount' => $finance->amount, 'payment_date' => $payment_date]);
+
+        return redirect()->back()->with('alert', 'Successfully closed the yearly plan!!');
+
+    } 
+
+    public function close_monthly_plan($id) 
+    {
+
+        $finance_payment = SmartfinancePayment::where([['smartfinance_id',$id],['is_status',0]])->first();
+        $close_payment = SmartfinancePayment::where('smartfinance_id',$id)->where('id','>=',$finance_payment->id)->update(['is_close' => 1, 'payment_date' => $finance_payment->payment_date]);
+
+        $update_payment = SmartfinancePayment::where('smartfinance_id',$id)->where('id','!=',$finance_payment->id)->update(['is_status' => 1]);
+
+        return redirect()->back()->with('alert', 'Successfully closed the monthly plan!!');
     }
 
 }
